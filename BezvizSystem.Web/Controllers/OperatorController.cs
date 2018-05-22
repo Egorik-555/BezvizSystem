@@ -30,7 +30,9 @@ namespace BezvizSystem.Web.Controllers
                 cfg.CreateMap<CreateOperatorModel, ProfileUserDTO>();
                 cfg.CreateMap<EditOperatorModel, ProfileUserDTO>();
                 cfg.CreateMap<DeleteOperatorModel, ProfileUserDTO>();
-                cfg.RecognizePrefixes("ProfileUser");         
+                cfg.RecognizePrefixes("ProfileUser");
+
+                //cfg.CreateMap<ProfileUserDTO, EditOperatorModel>();            
             }).CreateMapper();
 
             mapper = new MapperConfiguration(cfg =>
