@@ -1,0 +1,43 @@
+﻿@model BezvizSystem.Web.Models.Operator.DeleteOperatorModel
+
+@{
+    ViewBag.Title = "Удаление туроператора";
+}
+
+<h3>Вы действительно хотите удалить @(Model.ProfileUserTranscript)?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProfileUserTranscript)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProfileUserTranscript)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProfileUserUNP)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProfileUserUNP)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" name="ProfileUserTranscript" value="@Model.ProfileUserTranscript" />
+        <input type="hidden" name="ProfileUserUNP" value="@Model.ProfileUserUNP" />
+        <input type="hidden" name="UserName" value="@Model.UserName" />
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-default" /> |
+            @Html.ActionLink("Назад", "Index")
+        </div>
+    }
+</div>

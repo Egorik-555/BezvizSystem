@@ -1,0 +1,61 @@
+﻿@model IEnumerable<BezvizSystem.Web.Models.Anketa.ViewAnketaModel>
+
+@{
+    ViewBag.Title = "Зарегистрированные анкеты";
+}
+
+<h2>Зарегистрированные анкеты</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            № пп
+            @{  int i = 0; }
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateArrival)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DaysOfStay)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CheckPoint)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CountMembers)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Operator)
+        </th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.ActionLink((++i).ToString(), "Edit",  "Anketa", new { id = item.Id, returnUrl = Url.Action() }, null)
+        </td>
+        <td>
+            @(item.DateArrival.HasValue ? item.DateArrival.Value.ToShortDateString() : "")         
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DaysOfStay)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CheckPoint)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CountMembers)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Operator)
+        </td>       
+    </tr>
+}
+</table>

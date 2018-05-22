@@ -1,0 +1,53 @@
+﻿@model BezvizSystem.Web.Models.Anketa.ViewAnketaModel
+
+@{
+    ViewBag.Title = "Удаление";
+}
+
+<h4>Вы действительно хотите удалить @(Model.Group ? "группу туристов" : "туриста")?</h4>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateArrival)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateArrival)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DaysOfStay)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DaysOfStay)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckPoint)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckPoint)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CountMembers)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CountMembers)
+        </dd>       
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-default" /> |
+            @Html.ActionLink("Назад", "Index")
+        </div>
+    }
+</div>
