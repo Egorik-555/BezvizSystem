@@ -106,7 +106,6 @@ namespace BezvizSystem.Web.Controllers
             var user = await UserService.GetByIdAsync(id);
             if (user == null)
                 return RedirectToAction("Index");
-
             var model = mapper.Map<UserDTO, EditOperatorModel>(user);
             return View(model);
         }
