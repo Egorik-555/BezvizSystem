@@ -64,10 +64,8 @@ namespace BezvizSystem.Web.Controllers
                 if (user.Email == null || !user.EmailConfirmed)
                 {                  
                     user.Email = model.Email;                   
-
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { token = user.Id, email = user.Email },
                                                   protocol: Request.Url.Scheme);
-
                     Service.ManagerForChangePass = UserManager;
                     var result = await Service.Registrate(user, callbackUrl, new SimpleGeneratePass());
 
