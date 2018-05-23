@@ -95,7 +95,6 @@ namespace BezvizSystem.Web.Controllers
                 if (user.Email == email)
                 {
                     user.EmailConfirmed = true;
-
                     await Service.Update(user);
                 }
             }
@@ -159,7 +158,6 @@ namespace BezvizSystem.Web.Controllers
             };
 
             var roles = new List<string> { "admin", "operator" };
-
             await Service.SetInitialData(user, roles);
         }
     }
