@@ -23,6 +23,7 @@ namespace BezvizSystem.DAL.EF
         public DbSet<Visitor> Visitors { get; set; }
         public DbSet<GroupVisitor> GroupsVisitor { get; set; }
         public DbSet<Status> Statuses { get; set; }
+        public DbSet<Nationality> Nationalities { get; set; }
     }
 
     public class Initializer : CreateDatabaseIfNotExists<BezvizContext>
@@ -37,6 +38,14 @@ namespace BezvizSystem.DAL.EF
             };
             
             context.Statuses.AddRange(list);
+
+            List<Nationality> nationalities = new List<Nationality>
+            {
+               new Nationality {Code = 1, Name = "Беларусь", ShortName = "BLR" },
+               new Nationality {Code = 2, Name = "Польша", ShortName = "PL" },
+               new Nationality {Code = 3, Name = "Латвия", ShortName = "LTV" }
+            };
+
             context.SaveChanges();
         }
     }

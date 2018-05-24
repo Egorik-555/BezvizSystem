@@ -18,6 +18,8 @@ namespace BezvizSystem.BLL.DTO
         public string SerialAndNumber { get; set; }
         public string Gender { get; set; }
         public DateTime? BithDate { get; set; }
+
+        public int NationalityId { get; set; }
     
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
