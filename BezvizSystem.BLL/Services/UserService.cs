@@ -62,6 +62,7 @@ namespace BezvizSystem.BLL.Services
                     await Database.UserManager.AddToRoleAsync(user.Id, userDto.ProfileUser.Role);
                 // создаем профиль клиента
                 OperatorProfile operatorProfile = mapper.Map<ProfileUserDTO, OperatorProfile>(userDto.ProfileUser);
+                //operatorProfile.BezvizUser = user;
                 operatorProfile.Id = user.Id;
                 Database.OperatorManager.Create(operatorProfile);
                 await Database.SaveAsync();
@@ -117,6 +118,7 @@ namespace BezvizSystem.BLL.Services
 
                 }).CreateMapper();
                 var m = mapper.Map<UserDTO, BezvizUser>(userDto);
+                //m.OperatorProfile.BezvizUser = m;
 
                 //изменить пароль
                 if (!String.IsNullOrEmpty(userDto.Password))

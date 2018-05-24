@@ -13,6 +13,9 @@ namespace BezvizSystem.DAL.Entities
         [Key]
         [ForeignKey("BezvizUser")]
         public string Id { get; set; }
+
+        public virtual BezvizUser BezvizUser { get; set; }
+
         public string UNP { get; set; }
         public string OKPO { get; set; }
         public string Transcript { get; set; }
@@ -20,7 +23,5 @@ namespace BezvizSystem.DAL.Entities
         public bool Active { get; set; }
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
-
-        public virtual BezvizUser BezvizUser { get; set; }
     }
 }

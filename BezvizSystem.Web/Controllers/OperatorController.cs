@@ -69,8 +69,7 @@ namespace BezvizSystem.Web.Controllers
         {
             if (ModelState.IsValid)
             {          
-                var user = mapper.Map<CreateOperatorModel, UserDTO>(model);
-                     
+                var user = mapper.Map<CreateOperatorModel, UserDTO>(model);                   
                 var result = await UserService.Create(user);
                 if (result.Succedeed)
                     return RedirectToAction("Index");

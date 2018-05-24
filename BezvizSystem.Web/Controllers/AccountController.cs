@@ -168,7 +168,7 @@ namespace BezvizSystem.Web.Controllers
             {
                 UserName = "Admin",
                 Password = "qwerty",
-                ProfileUser = new ProfileUserDTO { Role = "admin" }
+                ProfileUser = new ProfileUserDTO { Role = "admin", Active = true }
             };
 
             var roles = new List<string> { "admin", "operator" };

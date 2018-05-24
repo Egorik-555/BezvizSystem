@@ -17,6 +17,8 @@ namespace BezvizSystem.DAL.Entities
         public string SerialAndNumber { get; set; }
         public string Gender { get; set; }
         public DateTime? BithDate { get; set; }
+
+        public Nationality Nationality { get; set; }
     
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }

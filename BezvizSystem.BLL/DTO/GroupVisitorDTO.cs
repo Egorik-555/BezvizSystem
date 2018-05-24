@@ -19,7 +19,6 @@ namespace BezvizSystem.BLL.DTO
         public string StatusName { get; set; }
         public bool Group { get; set; }
 
-
         public DateTime? DateArrival { get; set; }
         public DateTime? DateDeparture { get; set; }
         public int? DaysOfStay { get; set; }

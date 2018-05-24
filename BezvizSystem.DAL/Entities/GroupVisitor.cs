@@ -13,6 +13,7 @@ namespace BezvizSystem.DAL.Entities
         public virtual ICollection<Visitor> Visitors { get; set; }
         public virtual BezvizUser User { get; set; }
         public virtual Status Status { get; set; }
+
         public bool Group { get; set; }
 
         public DateTime? DateArrival { get; set; }
