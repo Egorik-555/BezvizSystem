@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
+using System;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
@@ -59,7 +60,6 @@ namespace BezvizSystem.DAL.Identity
             mail.Subject = message.Subject;
             mail.Body = message.Body;
             mail.IsBodyHtml = true;
-
             return client.SendMailAsync(mail);
         }
     }

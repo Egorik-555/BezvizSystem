@@ -33,6 +33,7 @@ namespace BezvizSystem.BLL.Services
             {
                 cfg.CreateMap<ProfileUserDTO, OperatorProfile>();
                 cfg.CreateMap<OperatorProfile, ProfileUserDTO>();
+                cfg.CreateMap<UserDTO, BezvizUser>();
                 cfg.CreateMap<BezvizUser, UserDTO>().
                     ForMember(dest => dest.ProfileUser, opt => opt.MapFrom(src => src.OperatorProfile));
 
@@ -139,20 +140,33 @@ namespace BezvizSystem.BLL.Services
             }
         }
 
-        public async Task<OperationDetails> Registrate(UserDTO user, string callback, IGeneratePass generator)
+        public async Task<OperationDetails> Registrate(UserDTO userDto, string callback, IGeneratePass generator)
         {
             string pass = generator.Generate();
-            string message = CreateMessage(user, callback, pass);
+            string message = CreateMessage(userDto, callback, pass);
 
             try
             {
-                var resultUpdate = await Update(user);
+                var user = await Database.UserManager.FindByIdAsync(userDto.Id);
+                if (user == null)
+                    return new OperationDetails(false, "Туроператор не найден", "");
+
                 await Database.UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты", message);
 
-                string code = ManagerForChangePass.GeneratePasswordResetToken(user.Id);
-                var result = await ManagerForChangePass.ResetPasswordAsync(user.Id, code, pass);
+                var mapper = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<UserDTO, BezvizUser>().ConstructUsing(v => user).
+                        ForMember(dest => dest.OperatorProfile, opt => opt.MapFrom(src => src.ProfileUser));
+                    cfg.CreateMap<ProfileUserDTO, OperatorProfile>();
 
-                return new OperationDetails(result.Succeeded, result.Errors.Count() == 0 ? "Оператор зарегистрирован" : result.Errors.First(), "");
+                }).CreateMapper();
+                var m = mapper.Map<UserDTO, BezvizUser>(userDto);
+                var result = await Database.UserManager.UpdateAsync(m);
+                           
+                string code = ManagerForChangePass.GeneratePasswordResetToken(user.Id);
+                result = await ManagerForChangePass.ResetPasswordAsync(user.Id, code, pass);
+
+                return new OperationDetails(result.Succeeded, result.Errors.Count() == 0 ? "Туроператор зарегистрирован" : result.Errors.First(), "");
             }
             catch (Exception ex)
             {

@@ -17,9 +17,6 @@ namespace BezvizSystem.Web.Controllers
 {
     public class AccountController : Controller
     {
-        //private IUserService
-
-
         private IUserService Service
         {
             get { return HttpContext.GetOwinContext().Get<IUserService>(); }
@@ -35,9 +32,6 @@ namespace BezvizSystem.Web.Controllers
             get { return HttpContext.GetOwinContext().GetUserManager<BezvizUserManager>(); }
         }
 
-
-
-        // GET: Account
         public ActionResult Login(string returnUrl)
         {
             ViewBag.returnUrl = returnUrl;
@@ -54,28 +48,43 @@ namespace BezvizSystem.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await Service.GetByNameAsync(model.UserName);
+                var user = await Service.GetByNameAsync(model.UNP);
                 if (user == null)
                 {
-                    ModelState.AddModelError("", "Оператор с указанным УНП не найден");
+                    ModelState.AddModelError("", "Туроператор с указанным УНП не найден");
                     return View(model);
                 }
                 // отправка мыла
-                if (user.Email == null || !user.EmailConfirmed)
-                {                  
-                    user.Email = model.Email;                   
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { token = user.Id, email = user.Email },
-                                                  protocol: Request.Url.Scheme);
-                    Service.ManagerForChangePass = UserManager;
-                    var result = await Service.Registrate(user, callbackUrl, new SimpleGeneratePass());
+                if (user.ProfileUser.OKPO == model.OKPO)
+                {
+                    if (user.ProfileUser.Active)
+                    {
+                        if (user.Email == null || !user.EmailConfirmed)
+                        {
+                            user.Email = model.Email;
+                            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { token = user.Id, email = user.Email },
+                                                          protocol: Request.Url.Scheme);
 
-                    if (result.Succedeed)
-                        return View("ConfirmEmail");
-                    else ModelState.AddModelError("", result.Message);
+                            Service.ManagerForChangePass = UserManager;
+                            var result = await Service.Registrate(user, callbackUrl, new SimpleGeneratePass());
+
+                            if (result.Succedeed)
+                                return View("ConfirmEmail");
+                            else ModelState.AddModelError("", result.Message);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Туроператор с УНП " + user.ProfileUser.UNP + " уже зарегистрирован");
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Туроператор с УНП " + user.ProfileUser.UNP + " заблокирован");
+                    }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Оператор с таким УНП зарегистрирован");
+                    ModelState.AddModelError("", "Туроператор с ОКПО " + user.ProfileUser.OKPO + " не найден");
                 }
             }
             return View(model);
@@ -113,21 +122,28 @@ namespace BezvizSystem.Web.Controllers
                 {
                     var findUser = await Service.GetByNameAsync(user.UserName);
 
-                    if ((findUser.ProfileUser.Role == "admin") ||
-                            (findUser.ProfileUser.Role == "operator" && findUser.EmailConfirmed))
+                    if (findUser.ProfileUser.Active)
                     {
-                        Authentication.SignOut();
-                        Authentication.SignIn(new AuthenticationProperties
+                        if ((findUser.ProfileUser.Role == "admin") ||
+                                (findUser.ProfileUser.Role == "operator" && findUser.EmailConfirmed))
                         {
-                            IsPersistent = true,
-                        }, claim);
-                        if (returnUrl != null)
-                            return Redirect(returnUrl);
-                        else return RedirectToAction("Index", "Home");
+                            Authentication.SignOut();
+                            Authentication.SignIn(new AuthenticationProperties
+                            {
+                                IsPersistent = true,
+                            }, claim);
+                            if (returnUrl != null)
+                                return Redirect(returnUrl);
+                            else return RedirectToAction("Index", "Home");
+                        }
+                        else if (findUser.ProfileUser.Role == "operator")
+                        {
+                            ModelState.AddModelError("", "Email не подтвержден");
+                        }
                     }
-                    else if (findUser.ProfileUser.Role == "operator")
+                    else
                     {
-                        ModelState.AddModelError("", "Email не подтвержден");
+                        ModelState.AddModelError("", "Пользователь заблокирован");
                     }
                 }
                 else

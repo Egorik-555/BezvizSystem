@@ -93,6 +93,7 @@
     <Compile Include="Entities\BezvizRole.cs" />
     <Compile Include="Entities\BezvizUser.cs" />
     <Compile Include="Entities\GroupVisitor.cs" />
+    <Compile Include="Entities\Nationality.cs" />
     <Compile Include="Entities\OperatorProfile.cs" />
     <Compile Include="Entities\Status.cs" />
     <Compile Include="Entities\Visitor.cs" />
