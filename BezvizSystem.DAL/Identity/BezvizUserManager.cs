@@ -39,7 +39,7 @@ namespace BezvizSystem.DAL.Identity
 
             manager.EmailService = new EmailService();
             return manager;
-        }
+        }    
     }
 
     public class EmailService : IIdentityMessageService

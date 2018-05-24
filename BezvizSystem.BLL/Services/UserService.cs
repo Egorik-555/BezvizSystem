@@ -150,9 +150,7 @@ namespace BezvizSystem.BLL.Services
                 var user = await Database.UserManager.FindByIdAsync(userDto.Id);
                 if (user == null)
                     return new OperationDetails(false, "Туроператор не найден", "");
-
-                await Database.UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты", message);
-
+             
                 var mapper = new MapperConfiguration(cfg =>
                 {
                     cfg.CreateMap<UserDTO, BezvizUser>().ConstructUsing(v => user).
@@ -162,7 +160,13 @@ namespace BezvizSystem.BLL.Services
                 }).CreateMapper();
                 var m = mapper.Map<UserDTO, BezvizUser>(userDto);
                 var result = await Database.UserManager.UpdateAsync(m);
-                           
+
+                if (!result.Succeeded)
+                    return new OperationDetails(result.Succeeded, "Произошла проблема при обновлении Email пользователя","");
+
+                //отправка почты
+                await Database.UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты", message);
+
                 string code = ManagerForChangePass.GeneratePasswordResetToken(user.Id);
                 result = await ManagerForChangePass.ResetPasswordAsync(user.Id, code, pass);
 
