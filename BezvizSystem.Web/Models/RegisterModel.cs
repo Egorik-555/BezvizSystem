@@ -9,8 +9,12 @@ namespace BezvizSystem.Web.Models
     public class RegisterModel
     {
         [Required]
+        [Display(Name = "ОКПО")]
+        public string OKPO { get; set; }
+
+        [Required]
         [Display(Name = "УНП")]
-        public string UserName { get; set; }
+        public string UNP { get; set; }
 
         [Required]       
         [Display(Name = "Email")]
