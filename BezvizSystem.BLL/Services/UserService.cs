@@ -20,9 +20,9 @@ namespace BezvizSystem.BLL.Services
 {
 
     public class UserService : IUserService
-    {
-        IUnitOfWork Database { get; set; }
+    {    
         public BezvizUserManager ManagerForChangePass { get; set; }
+        IUnitOfWork Database { get; set; }
 
         IMapper mapper;
 
@@ -33,7 +33,11 @@ namespace BezvizSystem.BLL.Services
             {
                 cfg.CreateMap<ProfileUserDTO, OperatorProfile>();
                 cfg.CreateMap<OperatorProfile, ProfileUserDTO>();
-                cfg.CreateMap<UserDTO, BezvizUser>();
+
+                cfg.CreateMap<UserDTO, BezvizUser>().
+                    ForMember(dest => dest.OperatorProfile, opt => opt.MapFrom(src => src.ProfileUser)).
+                    ForMember(dest => dest.Id, opt => opt.MapFrom(src => new BezvizUser().Id));
+
                 cfg.CreateMap<BezvizUser, UserDTO>().
                     ForMember(dest => dest.ProfileUser, opt => opt.MapFrom(src => src.OperatorProfile));
 
@@ -41,29 +45,26 @@ namespace BezvizSystem.BLL.Services
         }
 
         public async Task<OperationDetails> Create(UserDTO userDto)
-        {
-            string userName = null;
+        {     
             if (userDto.ProfileUser.UNP == null && userDto.UserName == null)
                 return new OperationDetails(true, "Пользователь с таким именем не существует", "");
-            else if (userDto.UserName != null)
-                userName = userDto.UserName;
-            else if (userDto.ProfileUser.UNP != null)
-                userName = userDto.ProfileUser.UNP;
+            if (userDto.ProfileUser == null)
+                return new OperationDetails(true, "Профайл пользователя не заполнен", "");
 
-            BezvizUser user = await Database.UserManager.FindByNameAsync(userName);
+            if (userDto.UserName == null)     
+                userDto.UserName = userDto.ProfileUser.UNP;
+
+            BezvizUser user = await Database.UserManager.FindByNameAsync(userDto.UserName);
             if (user == null)
             {
-                user = new BezvizUser { UserName = userName };
+                user = mapper.Map<UserDTO, BezvizUser>(userDto);
+
                 var result = await Database.UserManager.CreateAsync(user, userDto.Password);
                 if (result.Errors.Count() > 0)
                     return new OperationDetails(false, result.Errors.FirstOrDefault(), "");
                 // добавляем роль
                 if (userDto.ProfileUser.Role != null)
-                    await Database.UserManager.AddToRoleAsync(user.Id, userDto.ProfileUser.Role);
-                // создаем профиль клиента
-                OperatorProfile operatorProfile = mapper.Map<ProfileUserDTO, OperatorProfile>(userDto.ProfileUser);
-                operatorProfile.Id = user.Id;
-                Database.OperatorManager.Create(operatorProfile);
+                    await Database.UserManager.AddToRoleAsync(user.Id, userDto.ProfileUser.Role);       
                 await Database.SaveAsync();
                 return new OperationDetails(true, "Регистрация успешно пройдена", "");
             }
@@ -75,20 +76,12 @@ namespace BezvizSystem.BLL.Services
 
         public async Task<OperationDetails> Delete(UserDTO userDto)
         {
-            string userName = null;
-            if (userDto.ProfileUser.UNP == null && userDto.UserName == null)
-                return new OperationDetails(true, "Пользователь с таким логином не существует", "");
-            else if (userDto.UserName != null)
-                userName = userDto.UserName;
-            else if (userDto.ProfileUser.UNP != null)
-                userName = userDto.ProfileUser.UNP;
+            if (userDto.UserName == null)
+                userDto.UserName = userDto.ProfileUser.UNP;
 
-            BezvizUser user = await Database.UserManager.FindByNameAsync(userName);
+            BezvizUser user = await Database.UserManager.FindByNameAsync(userDto.UserName);
             if (user != null)
-            {
-                var operatorUser = Database.OperatorManager.GetById(user.Id);
-                if (operatorUser != null)
-                    Database.OperatorManager.Delete(operatorUser.Id);
+            {              
                 var result = await Database.UserManager.DeleteAsync(user);
                 if (result.Succeeded)
                     return new OperationDetails(true, "Пользователь успешно удален", "");
@@ -130,7 +123,7 @@ namespace BezvizSystem.BLL.Services
                 }
                 //////
 
-                Database.OperatorManager.Update(m.OperatorProfile);
+                //Database.OperatorManager.Update(m.OperatorProfile);
                 var result = await Database.UserManager.UpdateAsync(m);
                 return new OperationDetails(result.Succeeded, result.Succeeded ? "Пользователь успешно изменен" : result.Errors.First(), "");
             }

@@ -12,6 +12,7 @@ using BezvizSystem.DAL.Repositories;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using BezvizSystem.DAL.Entities;
 
 namespace BezvizSystem.BLL.Tests
 {
@@ -19,14 +20,12 @@ namespace BezvizSystem.BLL.Tests
     public class UnitTestUserService
     {
         IUserService service;
-        IUnitOfWork db;
+        IUnitOfWork database;
 
         public UnitTestUserService()
         {
-            IServiceCreator creator = new ServiceCreator();
-            service = creator.CreateUserService("BezvizDB");
-
-            db = new IdentityUnitOfWork("BezvizDB");
+            database = new IdentityUnitOfWork("BezvizConnection");
+            service = new UserService(database);
         }
 
         [TestMethod]
@@ -46,15 +45,21 @@ namespace BezvizSystem.BLL.Tests
             };
 
             await service.SetInitialData(user, list);
-            var roleResult1 = db.RoleManager.FindByName("Admin");
-            var roleResult2 = db.RoleManager.FindByName("Operator");
-            var userUser = db.UserManager.FindByName("Admin");
+            var roleResult1 = database.RoleManager.FindByName("Admin");
+            var roleResult2 = database.RoleManager.FindByName("Operator");
+            var userUser = database.UserManager.FindByName("Admin");
 
             Assert.IsNotNull(roleResult1);
             Assert.IsNotNull(roleResult2);
             Assert.IsNotNull(userUser);
 
             await service.Delete(user);
+
+            var role = database.RoleManager.FindByName(list[0]);
+
+            await database.RoleManager.DeleteAsync(role);
+            role = database.RoleManager.FindByName(list[1]);
+            await database.RoleManager.DeleteAsync(role);
         }
 
         [TestMethod]
@@ -62,12 +67,13 @@ namespace BezvizSystem.BLL.Tests
         {
             UserDTO user = new UserDTO
             {
-                //UserName = "Egor",
                 Password = "qwerty",
-                ProfileUser = new ProfileUserDTO { Role = "Admin", UNP = "test" }
+                ProfileUser = new ProfileUserDTO { OKPO = "okpo", UNP = "unp" }
             };
 
             var result = await service.Create(user);
+
+            Assert.IsTrue(result.Succedeed);
 
             if (!result.Succedeed && result.Property == "UserName")
             {
@@ -75,11 +81,43 @@ namespace BezvizSystem.BLL.Tests
                 result = await service.Create(user);
             }
 
-            var userResult = db.UserManager.FindByName(user.ProfileUser.UNP);
+            var userResult = database.UserManager.FindByName(user.ProfileUser.UNP);
             await service.Delete(user);
 
             Assert.IsTrue(result.Succedeed);
             Assert.IsNotNull(userResult);
+        }
+
+        [TestMethod]
+        public async Task Update_UserAsync()
+        {
+            UserDTO user = new UserDTO
+            {
+                Password = "qwerty",
+                ProfileUser = new ProfileUserDTO { OKPO = "okpo", UNP = "unp" }
+            };
+
+            var findUser = await service.GetByNameAsync(user.ProfileUser.UNP);
+            if(findUser != null)
+            {
+                await service.Delete(findUser);
+            }
+
+            var result = await service.Create(user);
+            if (result.Succedeed)
+            {
+                findUser = await service.GetByNameAsync(user.ProfileUser.UNP);
+                findUser.Email = "test@test.ru";
+                findUser.ProfileUser.Transcript = "transcript";
+                var updateResult = await service.Update(findUser);
+
+                findUser = await service.GetByNameAsync(user.ProfileUser.UNP);
+                await service.Delete(findUser);
+
+                Assert.IsTrue(updateResult.Succedeed);
+                Assert.IsTrue(findUser.Email == "test@test.ru");
+                Assert.IsTrue(findUser.ProfileUser.Transcript == "transcript");
+            }
         }
 
         [TestMethod]
@@ -93,12 +131,10 @@ namespace BezvizSystem.BLL.Tests
             };
 
             var claim = await service.Authenticate(user);
-            var controlUser = await db.UserManager.FindAsync(user.UserName, user.Password);
+            var controlUser = await database.UserManager.FindAsync(user.UserName, user.Password);
 
             if (claim == null && controlUser == null) Assert.IsTrue(true);
             if (claim != null && controlUser != null) Assert.IsTrue(true);
-
-
         }
 
         [TestMethod]
@@ -119,54 +155,64 @@ namespace BezvizSystem.BLL.Tests
         [TestMethod]
         public async Task Get_All_By_Role()
         {
+            BezvizRole role = new BezvizRole { Name = "test" };
+            database.RoleManager.Create(role);
+
             UserDTO user1 = new UserDTO
-            {      
+            {
                 Password = "qwerty111",
-                ProfileUser = new ProfileUserDTO { Role = "operator", UNP = "test" }
+                ProfileUser = new ProfileUserDTO { Role = "test", UNP = "test" }
             };
 
             UserDTO user2 = new UserDTO
-            {              
-                Password = "qwerty111",               
-                ProfileUser = new ProfileUserDTO { Role = "operator", UNP = "unp" }
+            {
+                Password = "qwerty111",
+                ProfileUser = new ProfileUserDTO { Role = "test", UNP = "unp" }
             };
 
             var result1 = await service.Create(user1);
             var result2 = await service.Create(user2);
 
-            var users = service.GetByRole("Operator").ToList();
+            var users = service.GetByRole("test").ToList();
 
             Assert.IsNotNull(users.Where(u => u.UserName == user2.ProfileUser.UNP).FirstOrDefault());
             Assert.IsNotNull(users.Where(u => u.UserName == user1.ProfileUser.UNP).FirstOrDefault());
 
             await service.Delete(user1);
             await service.Delete(user2);
+            var findRole = database.RoleManager.FindByName(role.Name);
+            await database.RoleManager.DeleteAsync(findRole);
         }
 
         [TestMethod]
         public async Task Get_By_Id_And_Name_UserService()
         {
+            BezvizRole role = new BezvizRole { Name = "test" };
+            database.RoleManager.Create(role);
+
             UserDTO user = new UserDTO
             {
-                UserName = "test",
                 Password = "test123",
-                ProfileUser = new ProfileUserDTO { Role = "operator", UNP = "test" }
+                ProfileUser = new ProfileUserDTO { Role = "test", UNP = "test" }
             };
 
-            var findUser = await service.GetByNameAsync(user.UserName);
+            var findUser = await service.GetByNameAsync(user.ProfileUser.UNP);
 
             if (findUser == null)
             {
                 await service.Create(user);
+                findUser = await service.GetByNameAsync(user.UserName);
             }
-                    
-            var user1 = await service.GetByNameAsync(user.UserName);
+
+            var user1 = await service.GetByNameAsync(user.ProfileUser.UNP);
+            var user2 = await service.GetByIdAsync(findUser.Id);
 
             Assert.IsNotNull(user1);
+            Assert.IsNotNull(user2);
 
             await service.Delete(user1);
-            user1 = await service.GetByNameAsync(user1.UserName);
-            Assert.IsNull(user1);
+            var findRole = database.RoleManager.FindByName(role.Name);
+            await database.RoleManager.DeleteAsync(findRole);
         }
     }
 }

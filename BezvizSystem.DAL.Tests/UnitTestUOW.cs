@@ -23,13 +23,12 @@ namespace BezvizSystem.DAL.Tests
         {
             BezvizUser user = new BezvizUser
             {
-                UserName = "Egor"
-            };
-
-            OperatorProfile profile = new OperatorProfile
-            {
-                UNP = "123",
-                OKPO = "123",
+                UserName = "Egor",
+                OperatorProfile = new OperatorProfile
+                {
+                    UNP = "123",
+                    OKPO = "123",
+                }
             };
 
             var result = uow.UserManager.FindByName(user.UserName);
@@ -41,18 +40,52 @@ namespace BezvizSystem.DAL.Tests
                 uow.UserManager.Delete(result);
             }
 
-            uow.UserManager.Create(user);
-            profile.Id = user.Id;
-            profile = uow.OperatorManager.Create(profile);
-
+            uow.UserManager.Create(user);      
             var resultUser = context.Users.Where(u => u.UserName == "Egor").FirstOrDefault();
             var resultProfile = context.OperatorProfiles.Where(p => p.UNP == "123").FirstOrDefault();
 
             Assert.IsNotNull(resultUser);
             Assert.IsNotNull(resultProfile);
 
-            uow.OperatorManager.Delete(profile.Id);
+            uow.OperatorManager.Delete(user.Id);
             uow.UserManager.Delete(user);
+        }
+
+        [TestMethod]
+        public async Task Update_User_UnitOfWork()
+        {
+            BezvizUser user = new BezvizUser
+            {
+                UserName = "Egor",
+                OperatorProfile = new OperatorProfile
+                {
+                    UNP = "123",
+                    OKPO = "123",
+                }
+            };
+
+            var result = uow.UserManager.FindByName(user.UserName);
+            if (result != null)
+            {
+                uow.OperatorManager.Delete(result.Id);
+                uow.UserManager.Delete(result);
+            }
+
+            var createUserResult = uow.UserManager.Create(user);
+
+            if (createUserResult.Succeeded)
+            {
+                var testUser = await uow.UserManager.FindByIdAsync(user.Id);
+
+                testUser.OperatorProfile.Transcript = "Transcript";
+                testUser.Email = "test@test.ru";
+                var updateResult = await uow.UserManager.UpdateAsync(testUser);
+
+                Assert.IsTrue(updateResult.Succeeded);
+
+                uow.OperatorManager.Delete(user.Id);
+                uow.UserManager.Delete(user);
+            }
         }
 
         [TestMethod]
@@ -102,7 +135,7 @@ namespace BezvizSystem.DAL.Tests
             };
             list.Add(visitor2);
 
-            GroupVisitor group = new GroupVisitor { PlaceOfRecidense = "test place"};
+            GroupVisitor group = new GroupVisitor { PlaceOfRecidense = "test place" };
             group.Visitors = list;
             uow.GroupManager.Create(group);
 
