@@ -19,7 +19,7 @@ namespace BezvizSystem.BLL.DTO
         public string Gender { get; set; }
         public DateTime? BithDate { get; set; }
 
-        public int NationalityId { get; set; }
+        public string Nationality { get; set; }
     
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }

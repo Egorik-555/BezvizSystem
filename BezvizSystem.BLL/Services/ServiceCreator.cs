@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BezvizSystem.BLL.DTO.Dictionary;
 
 namespace BezvizSystem.BLL.Services
 {
@@ -35,6 +36,11 @@ namespace BezvizSystem.BLL.Services
         public IService<AnketaDTO> CreateAnketaService(string connection)
         {
             return new AnketaService(new IdentityUnitOfWork(connection));
+        }
+
+        public IDictionaryService<DictionaryDTO> CreateDictionaryService(string connection)
+        {
+            return new DictionaryService<DictionaryDTO>(new IdentityUnitOfWork(connection));
         }
     }
 }

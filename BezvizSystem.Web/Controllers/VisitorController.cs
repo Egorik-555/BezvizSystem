@@ -43,7 +43,8 @@ namespace BezvizSystem.Web.Controllers
         public ActionResult Create(string returnUrl)
         {
             ViewBag.Genders = Gender();
-            ViewBag.CheckPoints = CheckPoints();
+            //TODO LIST of chekpoints
+            //ViewBag.CheckPoints = CheckPoints();
             ViewBag.returnUrl = returnUrl;
             return View();
         }
@@ -67,22 +68,8 @@ namespace BezvizSystem.Web.Controllers
                 else ModelState.AddModelError("", result.Message);
             }
             ViewBag.Genders = Gender();
-            ViewBag.CheckPoints = CheckPoints();
+           // ViewBag.CheckPoints = CheckPoints();
             return View(model);
-        }
-
-        private SelectList CheckPoints()
-        {
-            string[] list = new string[]
-            {
-                "",
-                "Брест (Тересполь)",
-                "Домачево (Словатичи)",
-                "Песчатка (Половцы)",
-                "Переров (Беловежа)",
-                "Аэропорт Брест"
-            };
-            return new SelectList(list);
         }
 
         private SelectList Gender()

@@ -123,7 +123,7 @@ namespace BezvizSystem.BLL.Services
                 }
                 //////
 
-                //Database.OperatorManager.Update(m.OperatorProfile);
+                Database.OperatorManager.Update(m.OperatorProfile);
                 var result = await Database.UserManager.UpdateAsync(m);
                 return new OperationDetails(result.Succeeded, result.Succeeded ? "Пользователь успешно изменен" : result.Errors.First(), "");
             }

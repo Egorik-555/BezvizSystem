@@ -1,4 +1,5 @@
 ﻿using BezvizSystem.BLL.DTO;
+using BezvizSystem.BLL.DTO.Dictionary;
 using BezvizSystem.DAL.EF;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,6 @@ namespace BezvizSystem.BLL.Interfaces
         IService<VisitorDTO> CreateVisitorService(string connection);
         IService<GroupVisitorDTO> CreateGroupService(string connection);
         IService<AnketaDTO> CreateAnketaService(string connection);
+        IDictionaryService<DictionaryDTO> CreateDictionaryService(string connection);
     }
 }

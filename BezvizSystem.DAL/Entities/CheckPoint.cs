@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace BezvizSystem.DAL.Entities
 {
-    public class Nationality
+    public class CheckPoint
     {
-        public int Id { get; set; }
-        public int Code { get; set; }
+        public int Id { get; set; }      
         public string Name { get; set; }
-        public string ShortName { get; set; }
 
         public bool Active { get; set; }
         public DateTime DateInSystem { get; set; }

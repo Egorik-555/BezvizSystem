@@ -92,6 +92,7 @@
     <Compile Include="EF\BezvizContext.cs" />
     <Compile Include="Entities\BezvizRole.cs" />
     <Compile Include="Entities\BezvizUser.cs" />
+    <Compile Include="Entities\CheckPoint.cs" />
     <Compile Include="Entities\GroupVisitor.cs" />
     <Compile Include="Entities\Nationality.cs" />
     <Compile Include="Entities\OperatorProfile.cs" />
@@ -103,8 +104,10 @@
     <Compile Include="Interfaces\IOperatorManager.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\CheckPointManager.cs" />
     <Compile Include="Repositories\GroupManager.cs" />
     <Compile Include="Repositories\IdentityUnitOfWork.cs" />
+    <Compile Include="Repositories\NationalityManager.cs" />
     <Compile Include="Repositories\OperatorManager.cs" />
     <Compile Include="Repositories\StatusManager.cs" />
     <Compile Include="Repositories\VisitorManager.cs" />

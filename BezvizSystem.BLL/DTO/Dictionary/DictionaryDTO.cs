@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BezvizSystem.DAL.Entities
+namespace BezvizSystem.BLL.DTO.Dictionary
 {
-    public class Nationality
+    public abstract class DictionaryDTO
     {
         public int Id { get; set; }
-        public int Code { get; set; }
         public string Name { get; set; }
-        public string ShortName { get; set; }
 
         public bool Active { get; set; }
         public DateTime DateInSystem { get; set; }

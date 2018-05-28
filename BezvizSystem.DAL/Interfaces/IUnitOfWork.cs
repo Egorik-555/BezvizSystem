@@ -17,7 +17,8 @@ namespace BezvizSystem.DAL.Interfaces
         IRepository<Visitor, int> VisitorManager { get; }
         IRepository<GroupVisitor, int> GroupManager { get; }
         IRepository<Status, int> StatusManager { get; }
-
+        IRepository<Nationality, int> NationalityManager { get; }
+        IRepository<CheckPoint, int> CheckPointManager { get; }
         Task SaveAsync();
     }
 }

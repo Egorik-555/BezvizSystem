@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
+using BezvizSystem.BLL.DTO.Dictionary;
 
 [assembly: OwinStartup(typeof(BezvizSystem.Web.App_Start.Startup))]
 
@@ -33,6 +34,7 @@ namespace BezvizSystem.Web.App_Start
             app.CreatePerOwinContext<IService<VisitorDTO>>(CreateVisitorService);
             app.CreatePerOwinContext<IService<GroupVisitorDTO>>(CreateGroupService);
             app.CreatePerOwinContext<IService<AnketaDTO>>(CreateAnketaService);
+            app.CreatePerOwinContext<IDictionaryService<DictionaryDTO>>(CreateDictionaryService);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
@@ -64,6 +66,11 @@ namespace BezvizSystem.Web.App_Start
         private IService<AnketaDTO> CreateAnketaService()
         {
             return serviceCreator.CreateAnketaService(CONNECTION);
+        }
+
+        private IDictionaryService<DictionaryDTO> CreateDictionaryService()
+        {
+            return serviceCreator.CreateDictionaryService(CONNECTION);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace BezvizSystem.DAL.Entities
         public DateTime? DateArrival { get; set; }
         public DateTime? DateDeparture { get; set; }
         public int? DaysOfStay { get; set; }
-        public string CheckPoint { get; set; }
+        public virtual CheckPoint CheckPoint { get; set; }
         public string PlaceOfRecidense { get; set; }
 
         public string ProgramOfTravel { get; set; }

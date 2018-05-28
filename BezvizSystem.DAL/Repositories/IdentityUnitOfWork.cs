@@ -21,6 +21,8 @@ namespace BezvizSystem.DAL.Repositories
         private IRepository<Visitor, int> visitorManager;
         private IRepository<GroupVisitor, int> groupManager;
         private IRepository<Status, int> statusManager;
+        private IRepository<CheckPoint, int> checkPointManager;
+        private IRepository<Nationality, int> nationalityManager;
 
         public IdentityUnitOfWork(string connection)
         {
@@ -31,6 +33,8 @@ namespace BezvizSystem.DAL.Repositories
             visitorManager = new VisitorManager(context);
             groupManager = new GroupManager(context);
             statusManager = new StatusManager(context);
+            checkPointManager = new CheckPointManager(context);
+            nationalityManager = new NationalityManager(context);
         }
 
         public BezvizUserManager UserManager => userManager;
@@ -39,6 +43,8 @@ namespace BezvizSystem.DAL.Repositories
         public IRepository<Visitor, int> VisitorManager => visitorManager;
         public IRepository<GroupVisitor, int> GroupManager => groupManager;
         public IRepository<Status, int> StatusManager => statusManager;
+        public IRepository<CheckPoint, int> CheckPointManager => checkPointManager;
+        public IRepository<Nationality, int> NationalityManager => nationalityManager;
 
         private bool disposed = false;
 
@@ -54,6 +60,8 @@ namespace BezvizSystem.DAL.Repositories
                     visitorManager.Dispose();
                     groupManager.Dispose();
                     statusManager.Dispose();
+                    checkPointManager.Dispose();
+                    nationalityManager.Dispose();
                 }
             }
         }

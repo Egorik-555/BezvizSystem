@@ -30,13 +30,13 @@ namespace BezvizSystem.BLL.Tests
             listGroups = new List<GroupVisitor>()
             {
                 new GroupVisitor { Id = 1,
-                    CheckPoint = "test1",
+                   // CheckPoint = "test1",
                     DateArrival = DateTime.Now,
                     User = user1,
                     Visitors = new List<Visitor>{ new Visitor {Id = 1,  Name = "testVisitor1" } } },
 
                 new GroupVisitor { Id = 2,
-                    CheckPoint = "test2",
+                   // CheckPoint = "test2",
                     DateArrival = DateTime.Now,
                     User = user2,
                     Visitors = new List<Visitor>{ new Visitor {Id = 2, Name = "testVisitor21"} ,
