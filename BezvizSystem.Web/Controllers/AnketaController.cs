@@ -74,9 +74,9 @@ namespace BezvizSystem.Web.Controllers
             }).CreateMapper();
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var anketas = AnketaService.GetAll();
+            var anketas = await AnketaService.GetForUserAsync(User.Identity.Name);
             var model = mapper.Map<IEnumerable<AnketaDTO>, IEnumerable<ViewAnketaModel>>(anketas);
             return View(model);
         }

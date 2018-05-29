@@ -78,6 +78,7 @@
     <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="DTO\VisitorDTO.cs" />
     <Compile Include="Infrastructure\OperationDetails.cs" />
+    <Compile Include="Interfaces\IExcel.cs" />
     <Compile Include="Interfaces\IGeneratePass.cs" />
     <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Interfaces\IServiceCreator.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Services\ServiceCreator.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Services\VisitorService.cs" />
+    <Compile Include="Utils\Excel.cs" />
     <Compile Include="Utils\SimpleGeneratePass.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -41,6 +41,21 @@ namespace BezvizSystem.BLL.Services
             return result;
         }
 
+        public async Task<IEnumerable<AnketaDTO>> GetForUserAsync(string username)
+        {                   
+            var user = await Database.UserManager.FindByNameAsync(username);
+            if (user != null)
+            {
+                var groups = Database.GroupManager.GetAll();
+                if (user.OperatorProfile.Role.ToUpper() != "ADMIN")
+                    groups = groups.Where(g => g.User.OperatorProfile.UNP == user.OperatorProfile.UNP);
+
+                var anketaGroup = mapper.Map<IEnumerable<GroupVisitor>, IEnumerable<AnketaDTO>>(groups.ToList());
+                return anketaGroup;
+            }
+            else return null;
+        }
+
         public AnketaDTO GetById(int id)
         {
             var group = Database.GroupManager.GetById(id);
@@ -75,5 +90,7 @@ namespace BezvizSystem.BLL.Services
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }

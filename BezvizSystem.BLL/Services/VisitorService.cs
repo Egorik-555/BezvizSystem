@@ -108,5 +108,10 @@ namespace BezvizSystem.BLL.Services
             var visitorDto = mapper.Map<Visitor, VisitorDTO>(visitor);
             return visitorDto;
         }
+
+        public Task<IEnumerable<VisitorDTO>> GetForUserAsync(string username)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
