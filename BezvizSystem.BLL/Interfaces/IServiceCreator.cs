@@ -16,6 +16,8 @@ namespace BezvizSystem.BLL.Interfaces
         IService<VisitorDTO> CreateVisitorService(string connection);
         IService<GroupVisitorDTO> CreateGroupService(string connection);
         IService<AnketaDTO> CreateAnketaService(string connection);
-        IDictionaryService<DictionaryDTO> CreateDictionaryService(string connection);
+        IDictionaryService<StatusDTO> CreateStatusService(string connection);
+        IDictionaryService<NationalityDTO> CreateNationalityService(string connection);
+        IDictionaryService<CheckPointDTO> CreateCheckPointService(string connection);
     }
 }

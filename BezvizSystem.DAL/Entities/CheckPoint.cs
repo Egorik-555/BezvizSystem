@@ -12,7 +12,7 @@ namespace BezvizSystem.DAL.Entities
         public string Name { get; set; }
 
         public bool Active { get; set; }
-        public DateTime DateInSystem { get; set; }
+        public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
     }
 }

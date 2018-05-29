@@ -19,6 +19,8 @@ namespace BezvizSystem.Web.Models.Visitor
         [Display(Name = "Дата рождения")]
         [DataType(DataType.Date)]
         public DateTime? BithDate { get; set; }
+        [Display(Name = "Гражданство")]
+        public string Nationality { get; set; }
 
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }

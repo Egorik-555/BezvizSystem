@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
+using BezvizSystem.BLL.DTO.Dictionary;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.Web.Models.Anketa;
 using BezvizSystem.Web.Models.Group;
@@ -27,6 +28,16 @@ namespace BezvizSystem.Web.Controllers
             get { return HttpContext.GetOwinContext().Get<IService<GroupVisitorDTO>>(); }
         }
 
+        private IDictionaryService<CheckPointDTO> CheckPointService
+        {
+            get { return HttpContext.GetOwinContext().Get<IDictionaryService<CheckPointDTO>>(); }
+        }
+
+        private IDictionaryService<NationalityDTO> NationalityService
+        {
+            get { return HttpContext.GetOwinContext().Get<IDictionaryService<NationalityDTO>>(); }
+        }
+
         public AnketaController()
         {
             IMapper visitorMapper = new MapperConfiguration(cfg =>
@@ -44,6 +55,7 @@ namespace BezvizSystem.Web.Controllers
                 cfg.CreateMap<GroupVisitorDTO, CreateVisitorModel>().
                     ForMember(dest => dest.Info, opt => opt.MapFrom(src =>
                                         visitorMapper.Map<IEnumerable<VisitorDTO>, IEnumerable<InfoVisitorModel>>(src.Visitors).FirstOrDefault()));
+
                 cfg.CreateMap<CreateVisitorModel, GroupVisitorDTO>().
                     ForMember(dest => dest.Visitors, opt => opt.MapFrom(src => 
                         new List<VisitorDTO> { visitorMapper.Map<InfoVisitorModel, VisitorDTO>(src.Info)}));
@@ -79,6 +91,7 @@ namespace BezvizSystem.Web.Controllers
 
             ViewBag.Genders = Gender();
             ViewBag.CheckPoints = CheckPoints();
+            ViewBag.Nationalities = Nationalities();
             ViewBag.VisitorsList = group.Visitors;
 
             if (!group.Group)
@@ -88,8 +101,7 @@ namespace BezvizSystem.Web.Controllers
             }
             else
             {
-                var model = mapper.Map<GroupVisitorDTO, CreateGroupModel>(group);
-                //ViewBag.Infoes = mapper.Map<ICollection<VisitorDTO>, ICollection<InfoVisitorModel>>(group.Visitors);
+                var model = mapper.Map<GroupVisitorDTO, CreateGroupModel>(group);             
                 return View("EditGroup", model);
             }
         }
@@ -111,6 +123,7 @@ namespace BezvizSystem.Web.Controllers
 
             ViewBag.Genders = Gender();
             ViewBag.CheckPoints = CheckPoints();
+            ViewBag.Nationalities = Nationalities();           
             return View(model);
         }
 
@@ -131,7 +144,7 @@ namespace BezvizSystem.Web.Controllers
 
             ViewBag.Genders = Gender();
             ViewBag.CheckPoints = CheckPoints();
-            //SViewBag.Infoes = infoes;
+            ViewBag.Nationalities = Nationalities();
             return View(model);
         }
 
@@ -155,16 +168,16 @@ namespace BezvizSystem.Web.Controllers
 
         private SelectList CheckPoints()
         {
-            string[] list = new string[]
-            {
-                "",
-                "Брест (Тересполь)",
-                "Домачево (Словатичи)",
-                "Песчатка (Половцы)",
-                "Переров (Беловежа)",
-                "Аэропорт Брест"
-            };
-            return new SelectList(list);
+            List<string> list = new List<string>(CheckPointService.Get().Select(c => c.Name));
+            list.Insert(0, "");
+            return new SelectList(list, "");
+        }
+
+        private SelectList Nationalities()
+        {
+            List<string> list = new List<string>(NationalityService.Get().Select(c => c.Name));
+            list.Insert(0, "");
+            return new SelectList(list, "");
         }
 
         private SelectList Gender()

@@ -37,15 +37,15 @@ namespace BezvizSystem.BLL.Services
         {
             if (typeof(T).Name == "StatusDTO")
             {
-                return (IEnumerable<T>)mapper.Map<IEnumerable<Status>, IEnumerable<StatusDTO>>(Database.StatusManager.GetAll());
+                return (IEnumerable<T>)mapper.Map<IEnumerable<Status>, IEnumerable<StatusDTO>>(Database.StatusManager.GetAll().Where(s => s.Active));
             }
             else if (typeof(T).Name == "NationalityDTO")
             {
-                return (IEnumerable<T>)mapper.Map<IEnumerable<Nationality>, IEnumerable<NationalityDTO>>(Database.NationalityManager.GetAll());
+                return (IEnumerable<T>)mapper.Map<IEnumerable<Nationality>, IEnumerable<NationalityDTO>>(Database.NationalityManager.GetAll().Where(n => n.Active));
             }
             else if (typeof(T).Name == "CheckPointDTO")
             {
-                return (IEnumerable<T>)mapper.Map<IEnumerable<CheckPoint>, IEnumerable<CheckPointDTO>>(Database.CheckPointManager.GetAll());
+                return (IEnumerable<T>)mapper.Map<IEnumerable<CheckPoint>, IEnumerable<CheckPointDTO>>(Database.CheckPointManager.GetAll().Where(c => c.Active));
             }
             else return null;
         }      

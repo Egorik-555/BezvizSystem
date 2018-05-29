@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
+using BezvizSystem.BLL.DTO.Dictionary;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.Web.Models.Visitor;
 using Microsoft.AspNet.Identity.Owin;
@@ -20,12 +21,21 @@ namespace BezvizSystem.Web.Controllers
             get { return HttpContext.GetOwinContext().Get<IService<GroupVisitorDTO>>(); }
         }
 
+        private IDictionaryService<CheckPointDTO> CheckPointService
+        {
+            get { return HttpContext.GetOwinContext().Get<IDictionaryService<CheckPointDTO>>(); }
+        }
+
+        private IDictionaryService<NationalityDTO> NationalityService
+        {
+            get { return HttpContext.GetOwinContext().Get<IDictionaryService<NationalityDTO>>(); }
+        }
+
         IMapper mapper;
 
         public VisitorController()
         {
             IMapper visitorMapper = new MapperConfiguration(cfg => cfg.CreateMap<InfoVisitorModel, VisitorDTO>()).CreateMapper();
-
 
             mapper = new MapperConfiguration(cfg =>
             {
@@ -43,8 +53,8 @@ namespace BezvizSystem.Web.Controllers
         public ActionResult Create(string returnUrl)
         {
             ViewBag.Genders = Gender();
-            //TODO LIST of chekpoints
-            //ViewBag.CheckPoints = CheckPoints();
+            ViewBag.CheckPoints = CheckPoints();
+            ViewBag.Nationalities = Nationalities();
             ViewBag.returnUrl = returnUrl;
             return View();
         }
@@ -68,8 +78,23 @@ namespace BezvizSystem.Web.Controllers
                 else ModelState.AddModelError("", result.Message);
             }
             ViewBag.Genders = Gender();
-           // ViewBag.CheckPoints = CheckPoints();
+            ViewBag.CheckPoints = CheckPoints();
+            ViewBag.Nationalities = Nationalities();
             return View(model);
+        }
+
+        private SelectList CheckPoints()
+        {
+            List<string> list = new List<string>(CheckPointService.Get().Select(c => c.Name));
+            list.Insert(0, "");
+            return  new SelectList(list, "");
+        }
+
+        private SelectList Nationalities()
+        {
+            List<string> list = new List<string>(NationalityService.Get().Select(c => c.Name));
+            list.Insert(0, "");
+            return new SelectList(list, "");
         }
 
         private SelectList Gender()

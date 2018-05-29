@@ -27,7 +27,8 @@ namespace BezvizSystem.BLL.Services
                     ForMember(dest => dest.CountMembers, opt => opt.MapFrom(src => src.Visitors.Count())).                  
                     ForMember(dest => dest.DateArrival, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date : src.DateArrival)).
                     ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Name)).
-                    ForMember(dest => dest.Operator, opt => opt.MapFrom(src => src.User.OperatorProfile.Transcript));
+                    ForMember(dest => dest.Operator, opt => opt.MapFrom(src => src.User.OperatorProfile.Transcript)).
+                    ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name));
             }
             ).CreateMapper();
         }

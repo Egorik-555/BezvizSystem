@@ -23,10 +23,15 @@ namespace BezvizSystem.BLL.Services
 
             mapper = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<GroupVisitorDTO, GroupVisitor>();
-                cfg.CreateMap<VisitorDTO, Visitor>();
-                cfg.CreateMap<GroupVisitor, GroupVisitorDTO>();
-                cfg.CreateMap<Visitor, VisitorDTO>();
+                cfg.CreateMap<GroupVisitorDTO, GroupVisitor>().
+                     ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => Database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault()));
+                cfg.CreateMap<VisitorDTO, Visitor>().
+                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => Database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault()));
+                               
+                cfg.CreateMap<GroupVisitor, GroupVisitorDTO>().
+                    ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name));
+                cfg.CreateMap<Visitor, VisitorDTO>().
+                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name)); 
 
             }).CreateMapper();
         }
@@ -83,8 +88,10 @@ namespace BezvizSystem.BLL.Services
                
                     var mapper = new MapperConfiguration(cfg =>
                     {
-                        cfg.CreateMap<GroupVisitorDTO, GroupVisitor>().ConstructUsing(v => model);
-                        cfg.CreateMap<VisitorDTO, Visitor>();
+                        cfg.CreateMap<GroupVisitorDTO, GroupVisitor>().ConstructUsing(v => model).
+                            ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => Database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault()));
+                        cfg.CreateMap<VisitorDTO, Visitor>().
+                            ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => Database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())); 
                     }
                     ).CreateMapper();
 
@@ -95,7 +102,6 @@ namespace BezvizSystem.BLL.Services
                     {
                         item.UserInSystem = group.UserInSystem;
                         item.DateInSystem = DateTime.Now;
-                    //    Database.VisitorManager.Create(item);
                     }
 
                     var user = await Database.UserManager.FindByNameAsync(group.UserInSystem);
