@@ -1,24 +1,26 @@
-﻿using System;
+﻿using BezvizSystem.BLL.Infrastructure;
+using BezvizSystem.BLL.Interfaces;
+using Calabonga.Xml.Exports;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BezvizSystem.BLL.Utils
 {
-    class Excel
+    public class Excel : IExcel
     {
         Workbook wb = new Workbook();
         Worksheet ws;
 
-        public XmlPrint()
+        public Excel()
         {
             wb.ExcelWorkbook.ActiveSheet = 1;
             wb.ExcelWorkbook.DisplayInkNotes = false;
             wb.ExcelWorkbook.FirstVisibleSheet = 1;
             wb.ExcelWorkbook.ProtectStructure = false;
 
-            ws = new Worksheet("Данные");
+            ws = new Worksheet("Анкеты");
             wb.AddWorksheet(ws);
         }
 
@@ -42,7 +44,7 @@ namespace BezvizSystem.BLL.Utils
             }
         }
 
-        public string PrintListInFile<T>(IEnumerable<T> list) where T : class
+        public string InExcel<T>(IEnumerable<T> list)
         {
             Type t = typeof(T);
             MakeHead<T>(list.FirstOrDefault());

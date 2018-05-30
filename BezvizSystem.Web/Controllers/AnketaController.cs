@@ -2,6 +2,8 @@
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.DTO.Dictionary;
 using BezvizSystem.BLL.Interfaces;
+using BezvizSystem.BLL.Utils;
+using BezvizSystem.Web.Infrustructure;
 using BezvizSystem.Web.Models.Anketa;
 using BezvizSystem.Web.Models.Group;
 using BezvizSystem.Web.Models.Visitor;
@@ -80,6 +82,14 @@ namespace BezvizSystem.Web.Controllers
             var model = mapper.Map<IEnumerable<AnketaDTO>, IEnumerable<ViewAnketaModel>>(anketas);
             return View(model);
         }
+
+        public ActionResult InExcel(IEnumerable<ViewAnketaModel> list)
+        {
+            IExcel print = new Excel();
+            string workString = print.InExcel<ViewAnketaModel>(list);
+            return new ExcelResult("Зарегистрированные анкеты.xls", workString);
+        }
+
 
         public async Task<ActionResult> Edit(int id)
         {

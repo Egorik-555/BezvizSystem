@@ -188,6 +188,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Exstentions.cs" />
+    <Compile Include="Infrustructure\ExcelResult.cs" />
     <Compile Include="Models\Anketa\ViewAnketaModel.cs" />
     <Compile Include="Models\Operator\EditOperatorModel.cs" />
     <Compile Include="Models\Operator\CreateOperatorModel.cs" />
@@ -216,6 +217,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -250,6 +253,7 @@
     <Content Include="Views\Shared\EditorTemplates\InfoVisitorModel.cshtml" />
     <Content Include="Views\Anketa\Delete.cshtml" />
     <Content Include="Views\Operator\Edit.cshtml" />
+    <Content Include="Views\Anketa\GetData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

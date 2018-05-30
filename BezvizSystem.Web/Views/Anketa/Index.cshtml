@@ -2,60 +2,99 @@
 
 @{
     ViewBag.Title = "Зарегистрированные анкеты";
+
+    int i = 0;
 }
 
 <h2>Зарегистрированные анкеты</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            № пп
-            @{  int i = 0; }
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateArrival)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DaysOfStay)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CheckPoint)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CountMembers)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Operator)
-        </th>
-    </tr>
-
-@foreach (var item in Model)
+@using (Html.BeginForm())
 {
-    <tr>
-        <td>
-            @Html.ActionLink((++i).ToString(), "Edit",  "Anketa", new { id = item.Id, returnUrl = Url.Action() }, null)
-        </td>
-        <td>
-            @(item.DateArrival.HasValue ? item.DateArrival.Value.ToShortDateString() : "")         
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DaysOfStay)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CheckPoint)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CountMembers)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Operator)
-        </td>       
-    </tr>
+    <div style="float: right">
+        <button id="export">Экспортировать</button>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    № пп
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateArrival)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DaysOfStay)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CheckPoint)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CountMembers)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Operator)
+                </th>
+            </tr>
+        </thead>
+
+        <tbody id="tabledata">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink((++i).ToString(), "Edit", "Anketa", new { id = item.Id, returnUrl = Url.Action() }, null)
+                    </td>
+                    <td>
+                        @(item.DateArrival.HasValue ? item.DateArrival.Value.ToShortDateString() : "")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DaysOfStay)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CheckPoint)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CountMembers)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Operator)
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
 }
-</table>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+    <script>
+        $(function () {
+            $("#export").click(function () {
+                makeRequest();
+            });
+
+            function makeRequest() {
+                // Отправка асинхронного запроса на сервер.
+                // url - адрес ресурса, которому направляется запрос.
+                // type - HTTP метод используемый для отправки запроса.
+                // data - данные передаваемые на сервер.
+                // success - функция, которая запустится при успешной обработке запроса.
+                $.ajax({
+                    url: "@Url.Action("InExcel")",
+                    type: "GET",
+                    data: "list=" + Model
+                });
+            }
+        });
+    </script>
+}

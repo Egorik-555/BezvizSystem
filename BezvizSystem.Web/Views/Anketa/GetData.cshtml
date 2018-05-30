@@ -1,0 +1,32 @@
+﻿@model IEnumerable<BezvizSystem.Web.Models.Anketa.ViewAnketaModel>
+
+@{
+    int i = 0;
+}
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.ActionLink((++i).ToString(), "Edit", "Anketa", new { id = item.Id, returnUrl = Url.Action() }, null)
+        </td>
+        <td>
+            @(item.DateArrival.HasValue ? item.DateArrival.Value.ToShortDateString() : "")
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DaysOfStay)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CheckPoint)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CountMembers)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Operator)
+        </td>
+    </tr>
+}

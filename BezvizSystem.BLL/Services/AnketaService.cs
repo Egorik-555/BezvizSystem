@@ -55,7 +55,7 @@ namespace BezvizSystem.BLL.Services
             }
             else return null;
         }
-
+   
         public AnketaDTO GetById(int id)
         {
             var group = Database.GroupManager.GetById(id);
@@ -89,8 +89,6 @@ namespace BezvizSystem.BLL.Services
         public Task<OperationDetails> Delete(int id)
         {
             throw new NotImplementedException();
-        }
-
-        
+        }       
     }
 }

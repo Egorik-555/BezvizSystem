@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace BezvizSystem.BLL.Interfaces
 {
     public interface IExcel
-    {   
-        OperationDetails InExcel(IEnumerable);
+    {
+        string InExcel<T>(IEnumerable<T> list);
     }
 }
