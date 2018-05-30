@@ -17,6 +17,7 @@ using System.Web.Mvc;
 
 namespace BezvizSystem.Web.Controllers
 {
+    [Authorize]
     public class AnketaController : Controller
     {
         IMapper mapper;
