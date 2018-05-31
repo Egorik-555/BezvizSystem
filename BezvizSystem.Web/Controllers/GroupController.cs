@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
+using BezvizSystem.BLL.DTO.Dictionary;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.Web.Models.Group;
 using BezvizSystem.Web.Models.Visitor;
@@ -13,6 +14,7 @@ using System.Web.Mvc;
 
 namespace BezvizSystem.Web.Controllers
 {
+    [Authorize]
     public class GroupController : Controller
     {
         private IService<GroupVisitorDTO> GroupService
@@ -20,8 +22,18 @@ namespace BezvizSystem.Web.Controllers
             get { return HttpContext.GetOwinContext().Get<IService<GroupVisitorDTO>>(); }
         }
 
-        IMapper mapper;
+        private IDictionaryService<CheckPointDTO> CheckPointService
+        {
+            get { return HttpContext.GetOwinContext().Get<IDictionaryService<CheckPointDTO>>(); }
+        }
 
+        private IDictionaryService<NationalityDTO> NationalityService
+        {
+            get { return HttpContext.GetOwinContext().Get<IDictionaryService<NationalityDTO>>(); }
+        }
+
+        IMapper mapper;
+     
         public GroupController()
         {
             mapper = new MapperConfiguration(cfg =>
@@ -36,8 +48,12 @@ namespace BezvizSystem.Web.Controllers
         {
             ViewBag.Genders = Gender();
             ViewBag.CheckPoints = CheckPoints();
+            ViewBag.Nationalities = Nationalities();
             ViewBag.returnUrl = returnUrl;
-            return View();
+
+            var model = new CreateGroupModel();
+            model.Infoes.Add(new InfoVisitorModel());
+            return View(model);
         }
 
         [HttpPost]
@@ -62,21 +78,20 @@ namespace BezvizSystem.Web.Controllers
             ViewBag.CheckPoints = CheckPoints();
             ViewBag.returnUrl = returnUrl;
             return View();
-        }     
+        }
 
         private SelectList CheckPoints()
         {
-            string[] list = new string[]
-            {
-                "",
-                "Брест (Тересполь)",
-                "Домачево (Словатичи)",
-                "Песчатка (Половцы)",
-                "Переров (Беловежа)",
-                "Аэропорт Брест"
-            };
+            List<string> list = new List<string>(CheckPointService.Get().Select(c => c.Name));
+            list.Insert(0, "");
+            return new SelectList(list, "");
+        }
 
-            return new SelectList(list);
+        private SelectList Nationalities()
+        {
+            List<string> list = new List<string>(NationalityService.Get().Select(c => c.Name));
+            list.Insert(0, "");
+            return new SelectList(list, "");
         }
 
         private SelectList Gender()

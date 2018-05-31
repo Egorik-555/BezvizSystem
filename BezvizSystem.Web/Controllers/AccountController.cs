@@ -51,7 +51,7 @@ namespace BezvizSystem.Web.Controllers
                 var user = await Service.GetByNameAsync(model.UNP);
                 if (user == null)
                 {
-                    ModelState.AddModelError("", "Туроператор с указанным УНП не найден");
+                    ModelState.AddModelError("", "Туроператор с УНП - " + model.UNP + " не найден");
                     return View(model);
                 }
                 // отправка мыла
@@ -74,17 +74,17 @@ namespace BezvizSystem.Web.Controllers
                         }
                         else
                         {
-                            ModelState.AddModelError("", "Туроператор с УНП " + user.ProfileUser.UNP + " уже зарегистрирован");
+                            ModelState.AddModelError("", "Туроператор с УНП - " + user.ProfileUser.UNP + " уже зарегистрирован");
                         }
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Туроператор с УНП " + user.ProfileUser.UNP + " заблокирован");
+                        ModelState.AddModelError("", "Туроператор с УНП - " + user.ProfileUser.UNP + " заблокирован");
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Туроператор с ОКПО " + user.ProfileUser.OKPO + " не найден");
+                    ModelState.AddModelError("", "Туроператор с ОКПО - " + model.OKPO + " не найден");
                 }
             }
             return View(model);

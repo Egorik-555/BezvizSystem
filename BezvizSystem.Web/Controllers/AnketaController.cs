@@ -103,7 +103,7 @@ namespace BezvizSystem.Web.Controllers
             ViewBag.Genders = Gender();
             ViewBag.CheckPoints = CheckPoints();
             ViewBag.Nationalities = Nationalities();
-            ViewBag.VisitorsList = group.Visitors;
+            //ViewBag.VisitorsList = group.Visitors;
 
             if (!group.Group)
             {

@@ -13,6 +13,7 @@ using System.Web.Mvc;
 
 namespace BezvizSystem.Web.Controllers
 {
+    [Authorize]
     public class VisitorController : Controller
     {
 

@@ -56,7 +56,15 @@
 
     @* Добавить кнопку добавить туриста *@
 
-    <hr />
+    <div class="form-group">
+        @*@Html.LabelFor(model => model.Infoes, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Infoes)
+            @Html.ValidationMessageFor(model => model.Infoes, "")
+        </div>
+    </div>
+
+    @*<hr />
         <div class="form-group">
             @Html.Label("Фамилия", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -91,12 +99,12 @@
                 @Html.Editor("Infoes[0].BithDate", new { htmlAttributes = new { type = "date", @class = "form-control" } })
                 @Html.ValidationMessage("Дата рождения", "", new { @class = "text-danger" })
             </div>
-        </div>
+        </div>*@
     @* ------------------------ *@
-    <hr />
+    @*<hr />*@
 
     @* Добавить кнопку добавить туриста *@
-    <div class="form-group">
+    @*<div class="form-group">
             @Html.Label("Фамилия", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.Editor("Infoes[1].Surname", new { htmlAttributes = new { @class = "form-control" } })
@@ -131,7 +139,7 @@
                 @Html.ValidationMessage("BithDate", "", new { @class = "text-danger" })
             </div>
         </div>
-        <hr />
+        <hr />*@
     @* ------------------------ *@
 
     <div class="form-group">
