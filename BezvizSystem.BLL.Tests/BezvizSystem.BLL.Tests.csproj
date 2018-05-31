@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="DictionaryTest.cs" />
     <Compile Include="TestUnitOfWork.cs" />
+    <Compile Include="ExcelTest.cs" />
     <Compile Include="UnitTestAnketaService.cs" />
     <Compile Include="UnitTestGroupService.cs" />
     <Compile Include="UnitTestVisitorService.cs" />
