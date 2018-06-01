@@ -20,15 +20,20 @@ namespace BezvizSystem.BLL.Services
         public AnketaService(IUnitOfWork db)
         {
             Database = db;
-
+     
             mapper = new MapperConfiguration(cfg =>
-            {            
+            {
                 cfg.CreateMap<GroupVisitor, AnketaDTO>().
-                    ForMember(dest => dest.CountMembers, opt => opt.MapFrom(src => src.Visitors.Count())).                  
+                    ForMember(dest => dest.CountMembers, opt => opt.MapFrom(src => src.Visitors.Count())).
                     ForMember(dest => dest.DateArrival, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date : src.DateArrival)).
                     ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Name)).
                     ForMember(dest => dest.Operator, opt => opt.MapFrom(src => src.User.OperatorProfile.Transcript)).
                     ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name));
+                    //ForMember(dest => dest.Visitors, opt => opt.MapFrom(src => src.Visitors));
+
+                 cfg.CreateMap<Visitor, VisitorDTO>().
+                    ForMember(dest => dest.Group, opt => opt.Ignore()).
+                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name));
             }
             ).CreateMapper();
         }
@@ -45,12 +50,13 @@ namespace BezvizSystem.BLL.Services
         {                   
             var user = await Database.UserManager.FindByNameAsync(username);
             if (user != null)
-            {
-                var groups = Database.GroupManager.GetAll();
-                if (user.OperatorProfile.Role.ToUpper() != "ADMIN")
-                    groups = groups.Where(g => g.User.OperatorProfile.UNP == user.OperatorProfile.UNP);
+            {             
+                var groups = Database.GroupManager.GetAll().ToList();
 
-                var anketaGroup = mapper.Map<IEnumerable<GroupVisitor>, IEnumerable<AnketaDTO>>(groups.ToList());
+                if (user.OperatorProfile.Role.ToUpper() != "ADMIN")
+                    groups = groups.Where(g => g.User.OperatorProfile.UNP == user.OperatorProfile.UNP).ToList();              
+
+                var anketaGroup = mapper.Map<IEnumerable<GroupVisitor>, IEnumerable<AnketaDTO>>(groups);
                 return anketaGroup;
             }
             else return null;
@@ -68,8 +74,7 @@ namespace BezvizSystem.BLL.Services
             var group = await Database.GroupManager.GetByIdAsync(id);
             var anketa = mapper.Map<GroupVisitor, AnketaDTO>(group);
             return anketa;
-        }
-
+        }  
 
         public void Dispose()
         {
@@ -89,6 +94,8 @@ namespace BezvizSystem.BLL.Services
         public Task<OperationDetails> Delete(int id)
         {
             throw new NotImplementedException();
-        }       
+        }
+
+        
     }
 }

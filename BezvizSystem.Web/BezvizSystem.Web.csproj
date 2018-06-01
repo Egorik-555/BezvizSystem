@@ -187,6 +187,7 @@
     </Compile>
     <Compile Include="Helpers\Exstentions.cs" />
     <Compile Include="Infrustructure\ExcelResult.cs" />
+    <Compile Include="Models\Anketa\ViewAnketaExcel.cs" />
     <Compile Include="Models\Anketa\ViewAnketaModel.cs" />
     <Compile Include="Models\Operator\EditOperatorModel.cs" />
     <Compile Include="Models\Operator\CreateOperatorModel.cs" />

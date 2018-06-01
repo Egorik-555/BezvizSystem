@@ -8,10 +8,10 @@
 
 <h2>Зарегистрированные анкеты</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("InExcel","Anketa"))
 {
     <div style="float: right">
-        <button id="export">Экспортировать</button>
+        <input type="submit" value="Экспортировать" />
     </div>
 
     <table class="table">

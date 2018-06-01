@@ -10,5 +10,6 @@ namespace BezvizSystem.BLL.Interfaces
     public interface IExcel
     {
         string InExcel<T>(IEnumerable<T> list);
+        Task<string> InExcelAsync<T>(IEnumerable<T> list);
     }
 }

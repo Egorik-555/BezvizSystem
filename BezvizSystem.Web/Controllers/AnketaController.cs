@@ -74,9 +74,12 @@ namespace BezvizSystem.Web.Controllers
                 cfg.CreateMap<GroupVisitorDTO, ViewAnketaModel>().
                     ForMember(dest => dest.CountMembers, opt => opt.MapFrom(src => src.Visitors.Count()));
                 cfg.CreateMap<ViewAnketaModel, GroupVisitorDTO>();
+
+                cfg.CreateMap<AnketaDTO, ViewAnketaExcel>();
+
             }).CreateMapper();
         }
-
+    
         public async Task<ActionResult> Index()
         {
             var anketas = await AnketaService.GetForUserAsync(User.Identity.Name);
@@ -84,10 +87,31 @@ namespace BezvizSystem.Web.Controllers
             return View(model);
         }
 
-        public ActionResult InExcel(IEnumerable<ViewAnketaModel> list)
+        [HttpPost]
+        public async Task<ActionResult> InExcel()
         {
+            var anketas = await AnketaService.GetForUserAsync(User.Identity.Name);
+
+            //список всех туристов
+            var visitors = new List<ViewAnketaExcel>();
+            foreach (var item in anketas)
+            {
+                foreach (var visitor in item.Visitors)
+                {
+                    var v = mapper.Map<AnketaDTO, ViewAnketaExcel>(item);
+                    v.Surname = visitor.Surname;
+                    v.Name = visitor.Name;
+                    v.SerialAndNumber = visitor.SerialAndNumber;
+                    v.Nationality = visitor.Nationality;
+                    v.Gender = visitor.Gender;
+                    v.BithDate = visitor.BithDate;
+                    visitors.Add(v);
+                }
+            }
+                  
             IExcel print = new Excel();
-            string workString = print.InExcel<ViewAnketaModel>(list);
+            string workString = await print.InExcelAsync<ViewAnketaExcel>(visitors);
+
             return new ExcelResult("Зарегистрированные анкеты.xls", workString);
         }
 

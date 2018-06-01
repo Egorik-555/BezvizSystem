@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BezvizSystem.BLL.Utils
 {
@@ -46,8 +47,12 @@ namespace BezvizSystem.BLL.Utils
 
         public string InExcel<T>(IEnumerable<T> list)
         {
+            if (list == null) return null; 
+
             Type t = typeof(T);
             MakeHead<T>(list.FirstOrDefault());
+
+            if (list.Count() == 0) return wb.ExportToXML();
 
             int r = 1;
             foreach (var item in list)
@@ -63,6 +68,14 @@ namespace BezvizSystem.BLL.Utils
                 r++;
             }
             return wb.ExportToXML();
+        }
+
+        public Task<string> InExcelAsync<T>(IEnumerable<T> list)
+        {
+            return Task.Run(() =>
+            {
+               return InExcel(list);
+            });
         }
     }
 }

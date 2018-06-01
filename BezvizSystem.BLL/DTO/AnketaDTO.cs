@@ -15,10 +15,17 @@ namespace BezvizSystem.BLL.DTO
         public string CheckPoint { get; set; }
         public int CountMembers { get; set; }
 
+        public ICollection<VisitorDTO> Visitors { get; set; }
+
         public string Status { get; set; }
         public string Operator { get; set; }
 
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
+
+        public AnketaDTO()
+        {
+            Visitors = new List<VisitorDTO>();
+        }
     }
 }
