@@ -1,0 +1,101 @@
+﻿@model IEnumerable<BezvizSystem.Web.Models.Mark.ViewMarkModel>
+
+@{
+    ViewBag.Title = "Зарегистрированные анкеты";
+
+    int i = 0;
+}
+
+<h2>Зарегистрированные анкеты</h2>
+
+@using (Html.BeginForm("InExcel","Anketa"))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    № пп
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateArrival)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DaysOfStay)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CheckPoint)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CountMembers)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Operator)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Arrived)
+                </th>
+            </tr>
+        </thead>
+
+        <tbody id="tabledata">
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.ActionLink((++i).ToString(), "Edit", "Anketa", new { id = item.Id, returnUrl = Url.Action() }, null)
+                </td>
+                <td>
+                    @(item.DateArrival.HasValue ? item.DateArrival.Value.ToShortDateString() : "")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DaysOfStay)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckPoint)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CountMembers)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Operator)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Arrived)
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+    <script>
+        $(function () {
+            $("#export").click(function () {
+                makeRequest();
+            });
+
+            function makeRequest() {
+                // Отправка асинхронного запроса на сервер.
+                // url - адрес ресурса, которому направляется запрос.
+                // type - HTTP метод используемый для отправки запроса.
+                // data - данные передаваемые на сервер.
+                // success - функция, которая запустится при успешной обработке запроса.
+                $.ajax({
+                    url: "@Url.Action("InExcel")",
+                    type: "GET",
+                    data: "list=" + Model
+                });
+            }
+        });
+    </script>
+}

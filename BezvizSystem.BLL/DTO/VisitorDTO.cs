@@ -20,6 +20,7 @@ namespace BezvizSystem.BLL.DTO
         public DateTime? BithDate { get; set; }
 
         public string Nationality { get; set; }
+        public bool Arrived { get; set; }
     
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }

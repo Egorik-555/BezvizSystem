@@ -43,7 +43,7 @@ namespace BezvizSystem.BLL.Services
                 var model = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
                 var user = await Database.UserManager.FindByNameAsync(group.UserInSystem);
                 model.User = user;
-                model.Status = Database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
+                model.Status = await Database.StatusManager.GetByIdAsync(1);
                 Database.GroupManager.Create(model);
                 return new OperationDetails(true, "Группа туристов создана", "");
             }

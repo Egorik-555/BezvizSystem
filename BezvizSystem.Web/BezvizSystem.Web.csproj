@@ -180,6 +180,7 @@
     <Compile Include="Controllers\AnketaController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MarkController.cs" />
     <Compile Include="Controllers\OperatorController.cs" />
     <Compile Include="Controllers\VisitorController.cs" />
     <Compile Include="Global.asax.cs">
@@ -189,6 +190,7 @@
     <Compile Include="Infrustructure\ExcelResult.cs" />
     <Compile Include="Models\Anketa\ViewAnketaExcel.cs" />
     <Compile Include="Models\Anketa\ViewAnketaModel.cs" />
+    <Compile Include="Models\Mark\ViewMarkModel.cs" />
     <Compile Include="Models\Operator\EditOperatorModel.cs" />
     <Compile Include="Models\Operator\CreateOperatorModel.cs" />
     <Compile Include="Models\Operator\DeleteOperatorModel.cs" />
@@ -297,6 +299,7 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Mark\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

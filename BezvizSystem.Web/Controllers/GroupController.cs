@@ -62,7 +62,14 @@ namespace BezvizSystem.Web.Controllers
             if (ModelState.IsValid)
             {
                 var group = mapper.Map<CreateGroupModel, GroupVisitorDTO>(model);
-              
+
+                //пометить всех туристов что они пока не приехали
+                foreach (var item in group.Visitors)
+                {
+                    item.Arrived = false;
+                }
+                ///
+
                 var result = await GroupService.Create(group);
                 if (result.Succedeed)
                 {
@@ -76,8 +83,9 @@ namespace BezvizSystem.Web.Controllers
             }
             ViewBag.Genders = Gender();
             ViewBag.CheckPoints = CheckPoints();
+            ViewBag.Nationalities = Nationalities();
             ViewBag.returnUrl = returnUrl;
-            return View();
+            return View(model);
         }
 
         private SelectList CheckPoints()

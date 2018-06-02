@@ -27,16 +27,19 @@ namespace BezvizSystem.BLL.Tests
             BezvizUser user1 = new BezvizUser { Id = "aaa", UserName = "Admin", OperatorProfile = new OperatorProfile { UNP = "UNPAdmin", Transcript = "Oper1" } };
             BezvizUser user2 = new BezvizUser { Id = "bbb", UserName = "Test", OperatorProfile = new OperatorProfile { UNP = "UNPTest", Transcript = "Oper2" } };
 
+            CheckPoint point1 = new CheckPoint { Name = "point1" };
+            CheckPoint point2 = new CheckPoint { Name = "point2" };
+
             listGroups = new List<GroupVisitor>()
             {
                 new GroupVisitor { Id = 1,
-                   // CheckPoint = "test1",
+                    CheckPoint = point1,
                     DateArrival = DateTime.Now,
                     User = user1,
                     Visitors = new List<Visitor>{ new Visitor {Id = 1,  Name = "testVisitor1" } } },
 
                 new GroupVisitor { Id = 2,
-                   // CheckPoint = "test2",
+                    CheckPoint = point2,
                     DateArrival = DateTime.Now,
                     User = user2,
                     Visitors = new List<Visitor>{ new Visitor {Id = 2, Name = "testVisitor21"} ,
@@ -57,7 +60,7 @@ namespace BezvizSystem.BLL.Tests
             var group = anketas.Where(v => v.Id == 2).First();
 
             Assert.IsTrue(anketas.Count() == 2);
-            Assert.IsTrue(group.CheckPoint == "test2");
+            Assert.IsTrue(group.CheckPoint == "point2");
             Assert.IsTrue(group.Operator == "Oper2");
         }
 
@@ -67,7 +70,7 @@ namespace BezvizSystem.BLL.Tests
             var anketa = anketaService.GetById(2);
 
             Assert.IsTrue(anketa.CountMembers == 2);
-            Assert.IsTrue(anketa.CheckPoint == "test2");
+            Assert.IsTrue(anketa.CheckPoint == "point2");
             Assert.IsTrue(anketa.Operator == "Oper2");
         }
     }
