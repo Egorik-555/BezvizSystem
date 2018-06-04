@@ -191,6 +191,7 @@
     <Compile Include="Models\Anketa\ViewAnketaExcel.cs" />
     <Compile Include="Models\Anketa\ViewAnketaModel.cs" />
     <Compile Include="Models\Mark\ViewMarkModel.cs" />
+    <Compile Include="Models\Mark\ViewVisitorModel.cs" />
     <Compile Include="Models\Operator\EditOperatorModel.cs" />
     <Compile Include="Models\Operator\CreateOperatorModel.cs" />
     <Compile Include="Models\Operator\DeleteOperatorModel.cs" />
@@ -300,6 +301,7 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Mark\Index.cshtml" />
+    <Content Include="Views\Mark\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

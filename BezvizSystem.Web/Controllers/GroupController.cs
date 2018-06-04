@@ -53,6 +53,7 @@ namespace BezvizSystem.Web.Controllers
 
             var model = new CreateGroupModel();
             model.Infoes.Add(new InfoVisitorModel());
+            model.Infoes.Add(new InfoVisitorModel());
             return View(model);
         }
 

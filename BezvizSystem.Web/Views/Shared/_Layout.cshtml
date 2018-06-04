@@ -35,9 +35,9 @@
                     {
                         <li>@Html.ActionLink(User.Identity.Name + ", выход", "Logout", "Account")</li>
                         <li>@Html.ActionLink("Операторы", "Index", "Operator")</li>
-                        <li>@Html.ActionLink("Регистрация туриста", "Create", "Visitor", new { returnUrl = Url.Action() }, null)</li>
-                        <li>@Html.ActionLink("Регистрация группы туристов", "Create", "Group", new { returnUrl = Url.Action() }, null)</li>
-                        <li>@Html.ActionLink("Зарегистрированные анкеты", "Index", "Anketa")</li>
+                        <li>@Html.ActionLink("Рег. туриста", "Create", "Visitor", new { returnUrl = Url.Action() }, null)</li>
+                        <li>@Html.ActionLink("Рег. группы", "Create", "Group", new { returnUrl = Url.Action() }, null)</li>
+                        <li>@Html.ActionLink("Зарег. анкеты", "Index", "Anketa")</li>
                         <li>@Html.ActionLink("Отметка о прибытии", "Index", "Mark")</li>
                     }
                 </ul>
