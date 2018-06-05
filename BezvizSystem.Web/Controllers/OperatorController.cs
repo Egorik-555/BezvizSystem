@@ -36,7 +36,7 @@ namespace BezvizSystem.Web.Controllers
             mapper = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<UserDTO, ViewOperatorModel>();
-                
+
                 cfg.CreateMap<CreateOperatorModel, UserDTO>().
                    ForMember(dest => dest.ProfileUser, opt => opt.MapFrom(src => mapperProfile.Map<CreateOperatorModel, ProfileUserDTO>(src)));
 
@@ -53,10 +53,25 @@ namespace BezvizSystem.Web.Controllers
         }
 
         public ActionResult Index()
+        {     
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Index(string id)
         {
-            var usersDto = UserService.GetByRole("operator");           
-            var model = mapper.Map<IEnumerable<UserDTO>, IEnumerable<ViewOperatorModel>>(usersDto);
-            return View(model);
+            return View((object)id);
+        }
+
+        public ActionResult DataOperators(string id)
+        {
+            var usersDto = UserService.GetByRole("operator");
+            var model = mapper.Map<IEnumerable<UserDTO>, IEnumerable<ViewOperatorModel>>(usersDto);         
+            if (!string.IsNullOrEmpty(id))
+            {
+                model = model.Where(m => m.ProfileUserTranscript.ToUpper().Contains(id.ToUpper()));
+            }
+            return PartialView(model);
         }
 
         public ActionResult Create()

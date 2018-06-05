@@ -1,0 +1,16 @@
+﻿@model IEnumerable<BezvizSystem.Web.Models.Operator.ViewOperatorModel>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.ActionLink(item.ProfileUserTranscript == null ? "Туроператор" : item.ProfileUserTranscript, "Edit", new { id = item.Id })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProfileUserUNP)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProfileUserOKPO)
+        </td>
+    </tr>
+}

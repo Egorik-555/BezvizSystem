@@ -1,39 +1,50 @@
-﻿@model IEnumerable<BezvizSystem.Web.Models.Operator.ViewOperatorModel>
-
-@{
+﻿@{
     ViewBag.Title = "Туроператоры";
+    AjaxOptions opt = new AjaxOptions
+    {
+        UpdateTargetId = "tabledata",
+        Url = Url.Action("DataOperators")
+    };
 }
 
 <h2>Туроператоры</h2>
 
 <p>@Html.ActionLink("Добавить", "Create")</p>
 
-<table class="table">
-    <tr>
-    
-        <th>
-            @Html.DisplayNameFor(model => model.ProfileUserTranscript)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProfileUserUNP)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProfileUserOKPO)
-        </th>      
-        <th></th>
-    </tr>
+@using (Ajax.BeginForm(opt)) {
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.ActionLink(item.ProfileUserTranscript == null ? "Туроператор" : item.ProfileUserTranscript, "Edit", new { id = item.Id })
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProfileUserUNP)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProfileUserOKPO)
-        </td>     
-    </tr>
-}
+    <div>
+        <label>Наименование</label>
+        <input type="text" name="id"/>
+    </div>
+    <input type="submit" value="Найти" />
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Наименование туроператара")
+            </th>
+            <th>
+                @Html.DisplayName("УНП")
+            </th>
+            <th>
+                @Html.DisplayName("ОКПО")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody id="tabledata">
+        @Html.Action("DataOperators", new { id = Model })
+    </tbody>
+
 </table>
+
+}
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}
