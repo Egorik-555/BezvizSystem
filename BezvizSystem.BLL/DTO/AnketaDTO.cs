@@ -23,6 +23,8 @@ namespace BezvizSystem.BLL.DTO
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
 
+        public string Arrived { get; set; }
+
         public AnketaDTO()
         {
             Visitors = new List<VisitorDTO>();

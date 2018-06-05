@@ -9,10 +9,10 @@ namespace BezvizSystem.Web.Models.Mark
 {
     public class ViewVisitorModel
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "Номер группы")]
-        public string GroupId { get; set; }
+        public int GroupId { get; set; }
         //[Display(Name = "Дата прибытия")]
         //public string DateArrived { get; set; }
         [Display(Name = "Фамилия")]

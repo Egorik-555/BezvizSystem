@@ -23,41 +23,20 @@ namespace BezvizSystem.Web.Controllers
         private IService<GroupVisitorDTO> GroupService
         {
             get { return HttpContext.GetOwinContext().Get<IService<GroupVisitorDTO>>(); }
-        }
+        }   
 
         public MarkController()
         {
             mapper = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<AnketaDTO, ViewMarkModel>().
-                    ForMember(dest => dest.DateArrival, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date : src.DateArrival)).
-                    ForMember(dest => dest.Arrived, opt => opt.MapFrom(src => CheckAllArrivals(src.Visitors)));
-
+                    ForMember(dest => dest.DateArrival, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date : src.DateArrival));
+                   
                 cfg.CreateMap<VisitorDTO, ViewVisitorModel>().
                     ForMember(dest => dest.GroupId, opt => opt.MapFrom(src => src.Group.Id));
-                //ForMember(dest => dest.DateArrived, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date : src.DateArrival));
-                //ForMember(dest => dest.Operator, opt => opt.MapFrom(src => src.))
 
             }).CreateMapper();
-        }
-
-        private string CheckAllArrivals(IEnumerable<VisitorDTO> list)
-        {
-            int count = 0;
-            foreach (var item in list)
-            {
-                if (item.Arrived)
-                {
-                    count++;
-                }
-            }
-
-            if (count == list.Count())
-                return "V";
-            else if (count != 0)
-                return "Частично";
-            else return "X";
-        }
+        }       
 
         public async Task<ActionResult> Index()
         {
@@ -80,10 +59,29 @@ namespace BezvizSystem.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(IEnumerable<ViewVisitorModel> model)
+        public async Task<ActionResult> Edit(ICollection<ViewVisitorModel> visitors)
         {
+            if (visitors.Count != 0)
+            {
+                var group = await GroupService.GetByIdAsync(visitors.First().GroupId);
+                if (group != null)
+                {
+                    foreach (var visitor in group.Visitors)
+                    {
+                        foreach (var item in visitors)
+                        {
+                            if (visitor.Id == item.Id)
+                                visitor.Arrived = item.Arrived;
+                        }
+                    }
 
-            return View();
+                    await GroupService.Update(group);
+                }
+            }
+
+            var anketas = await AnketaService.GetForUserAsync(User.Identity.Name);
+            var model = mapper.Map<IEnumerable<AnketaDTO>, IEnumerable<ViewMarkModel>>(anketas);
+            return View("Index", model);
         }
     }
 }

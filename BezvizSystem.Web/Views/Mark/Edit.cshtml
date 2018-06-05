@@ -9,6 +9,7 @@
 
 @using (Html.BeginForm("Edit", "Mark", new { model = Model }))
 {
+
     <table class="table">
         <tr>
             <th>
@@ -35,9 +36,9 @@
         {
             <tr>
                 <td>
-                    <input type="hidden" name="model[@i++].Id" value="@item.Id" />
-
                     @Html.DisplayFor(modelItem => item.GroupId)
+                    <input type="hidden" name="[@(i)].Id" value="@item.Id" />  
+                    <input type="hidden" name="[@(i)].GroupId" value="@item.GroupId" />  
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Surname)
@@ -52,9 +53,11 @@
                     @Html.DisplayFor(modelItem => item.SerialAndNumber)
                 </td>
                 <td>
-                    @Html.EditorFor(modelItem => item.Arrived)
+                    @Html.CheckBox("["+ @i +"].Arrived", item.Arrived)
                 </td>
             </tr>
+
+            i++;
         }
 
     </table>
@@ -64,7 +67,6 @@
             <input type="submit" value="Сохранить" class="btn btn-default" />
         </div>
     </div>
-
 }
 
 <div>

@@ -25,7 +25,7 @@ namespace BezvizSystem.BLL.Services
             mapper = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<VisitorDTO, Visitor>();
-                cfg.CreateMap<Visitor, VisitorDTO>();
+                cfg.CreateMap<Visitor, VisitorDTO>().ForMember(dest => dest.Group, opt => opt.Ignore());
 
             }).CreateMapper();
         }
@@ -70,7 +70,10 @@ namespace BezvizSystem.BLL.Services
                 if (model != null)
                 {
                     var mapper = new MapperConfiguration(cfg => cfg.CreateMap<VisitorDTO, Visitor>().
-                                                         ConstructUsing(v => model)).CreateMapper();
+                                                         ConstructUsing(v => model)
+                                                         
+                                                         ).CreateMapper();
+
                     var m = mapper.Map<VisitorDTO, Visitor>(visitor);
                     Database.VisitorManager.Update(m);
                     return new OperationDetails(true, "Турист изменен", "");
