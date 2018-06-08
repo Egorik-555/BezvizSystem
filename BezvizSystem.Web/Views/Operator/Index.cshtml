@@ -11,17 +11,17 @@
 
 <p>@Html.ActionLink("Добавить", "Create")</p>
 
-@using (Ajax.BeginForm(opt)) {
+@using (Ajax.BeginForm(opt))
+{
 
     <div>
-        <label>Наименование</label>
-        <input type="text" name="id"/>
+        <label>Наименование туроператара</label>
+        <input type="text" name="id" />
     </div>
     <input type="submit" value="Найти" />
 
-<table class="table">
+    <table class="table">
 
-    <thead>
         <tr>
             <th>
                 @Html.DisplayName("Наименование туроператара")
@@ -34,13 +34,12 @@
             </th>
             <th></th>
         </tr>
-    </thead>
 
-    <tbody id="tabledata">
-        @Html.Action("DataOperators", new { id = Model })
-    </tbody>
+        <tbody id="tabledata">
+            @Html.Action("DataOperators", new { id = Model })
+        </tbody>
 
-</table>
+    </table>
 
 }
 
