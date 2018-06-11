@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EF\BezvizContext.cs" />
+    <Compile Include="EF\IContext.cs" />
     <Compile Include="Entities\BezvizRole.cs" />
     <Compile Include="Entities\BezvizUser.cs" />
     <Compile Include="Entities\CheckPoint.cs" />

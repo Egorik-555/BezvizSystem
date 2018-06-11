@@ -12,9 +12,9 @@ namespace BezvizSystem.DAL.Repositories
 
     public class CheckPointManager : IRepository<CheckPoint, int>
     {
-        public BezvizContext Database { get; set; }
+        private IContext Database { get; set; }
 
-        public CheckPointManager(BezvizContext db)
+        public CheckPointManager(IContext db)
         {
             Database = db;
         }

@@ -6,7 +6,7 @@ using System.Data.Entity;
 
 namespace BezvizSystem.DAL.EF
 {
-    public class BezvizContext : IdentityDbContext<BezvizUser>
+    public class BezvizContext : IdentityDbContext<BezvizUser>, IContext
     {
         static BezvizContext()
         {
@@ -25,6 +25,7 @@ namespace BezvizSystem.DAL.EF
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Nationality> Nationalities { get; set; }
         public DbSet<CheckPoint> CheckPoints { get; set; }
+       
     }
 
     public class Initializer : CreateDatabaseIfNotExists<BezvizContext>
