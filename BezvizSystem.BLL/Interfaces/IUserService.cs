@@ -22,7 +22,7 @@ namespace BezvizSystem.BLL.Interfaces
         Task<OperationDetails> Registrate(UserDTO user, string callback, IGeneratePass generator);
         Task<ClaimsIdentity> Authenticate(UserDTO userDto);
 
-        Task SetInitialData(UserDTO adminDto, List<string> roles);
+        Task<OperationDetails> SetInitialData(UserDTO adminDto, List<string> roles);
 
         Task<UserDTO> GetByIdAsync(string id);
         Task<UserDTO> GetByNameAsync(string name);

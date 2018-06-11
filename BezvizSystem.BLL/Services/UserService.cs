@@ -57,16 +57,23 @@ namespace BezvizSystem.BLL.Services
             BezvizUser user = await Database.UserManager.FindByNameAsync(userDto.UserName);
             if (user == null)
             {
-                user = mapper.Map<UserDTO, BezvizUser>(userDto);
+                try
+                {
+                    user = mapper.Map<UserDTO, BezvizUser>(userDto);
 
-                var result = await Database.UserManager.CreateAsync(user, userDto.Password);
-                if (result.Errors.Count() > 0)
-                    return new OperationDetails(false, result.Errors.FirstOrDefault(), "");
-                // добавляем роль
-                if (userDto.ProfileUser.Role != null)
-                    await Database.UserManager.AddToRoleAsync(user.Id, userDto.ProfileUser.Role);       
-                await Database.SaveAsync();
-                return new OperationDetails(true, "Регистрация успешно пройдена", "");
+                    var result = await Database.UserManager.CreateAsync(user, userDto.Password);
+                    if (result.Errors.Count() > 0)
+                        return new OperationDetails(false, result.Errors.FirstOrDefault(), "");
+                    // добавляем роль
+                    if (userDto.ProfileUser.Role != null)
+                        await Database.UserManager.AddToRoleAsync(user.Id, userDto.ProfileUser.Role);
+                    await Database.SaveAsync();
+                    return new OperationDetails(true, "Регистрация успешно пройдена", "");
+                }
+                catch(Exception ex)
+                {
+                    return new OperationDetails(false, ex.Message, "");
+                }
             }
             else
             {
@@ -81,7 +88,8 @@ namespace BezvizSystem.BLL.Services
 
             BezvizUser user = await Database.UserManager.FindByNameAsync(userDto.UserName);
             if (user != null)
-            {              
+            {             
+                
                 var result = await Database.UserManager.DeleteAsync(user);
                 if (result.Succeeded)
                     return new OperationDetails(true, "Пользователь успешно удален", "");
@@ -196,7 +204,7 @@ namespace BezvizSystem.BLL.Services
         }
 
         // начальная инициализация бд
-        public async Task SetInitialData(UserDTO adminDto, List<string> roles)
+        public async Task<OperationDetails> SetInitialData(UserDTO adminDto, List<string> roles)
         {
             foreach (string roleName in roles)
             {
@@ -204,10 +212,12 @@ namespace BezvizSystem.BLL.Services
                 if (role == null)
                 {
                     role = new BezvizRole { Name = roleName };
-                    await Database.RoleManager.CreateAsync(role);
+                    var result = await Database.RoleManager.CreateAsync(role);
+                    if (!result.Succeeded)
+                        return new OperationDetails(false, result.Errors.FirstOrDefault(),"");
                 }
             }
-            await Create(adminDto);
+            return await Create(adminDto);
         }
 
         public void Dispose()

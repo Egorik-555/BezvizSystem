@@ -45,7 +45,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DictionaryTest.cs" />
+    <Compile Include="DictionaryService_Test.cs" />
     <Compile Include="TestUnitOfWork.cs" />
     <Compile Include="ExcelTest.cs" />
     <Compile Include="UnitTestAnketaService.cs" />

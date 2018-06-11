@@ -12,9 +12,9 @@ namespace BezvizSystem.DAL.Repositories
 
     public class CheckPointManager : IRepository<CheckPoint, int>
     {
-        private IContext Database { get; set; }
+        private BezvizContext Database { get; set; }
 
-        public CheckPointManager(IContext db)
+        public CheckPointManager(BezvizContext db)
         {
             Database = db;
         }
@@ -25,6 +25,11 @@ namespace BezvizSystem.DAL.Repositories
         }
 
         public CheckPoint Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CheckPoint Update(CheckPoint item)
         {
             throw new NotImplementedException();
         }
@@ -47,11 +52,6 @@ namespace BezvizSystem.DAL.Repositories
         public Task<CheckPoint> GetByIdAsync(int id)
         {
             return Database.CheckPoints.FindAsync(id);
-        }
-
-        public CheckPoint Update(CheckPoint item)
-        {
-            throw new NotImplementedException();
-        }
+        }      
     }
 }

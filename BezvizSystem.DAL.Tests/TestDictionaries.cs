@@ -8,48 +8,72 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Linq;
+using System.Data.Entity;
 
 namespace BezvizSystem.DAL.Tests
 {
     [TestClass]
     public class TestDictionaries
     {
+        const string CONNECT = "BezvizConnection";
 
-        //IContext context = new BezvizContext("BezvizConnection");
-        Mock<IContext> context;
-        CheckPointManager checkPointmng;
+        CheckPointManager checkPointMng;
+        StatusManager statusMng;
+        NationalityManager nationalitiesMng;
 
         public TestDictionaries()
         {
-            Mock<IContext> context = new Mock<IContext>();
-
-            List<CheckPoint> checkPoints = new List<CheckPoint>()
-                {
-                    new CheckPoint{ Id = 1, Name = "check1", Active = true, UserInSystem = "test1"},
-                    new CheckPoint{ Id = 2, Name = "check2", Active = true, UserInSystem = "test1"},
-                    new CheckPoint{ Id = 3, Name = "check3", Active = false, UserInSystem = "test2"},
-                    new CheckPoint{ Id = 4, Name = "check4", Active = true, UserInSystem = "test1"}
-                };
-
-
-            context.Setup(m => m.CheckPoints).Returns(checkPoints.AsQueryable());
-
+            checkPointMng = new CheckPointManager(new BezvizContext(CONNECT));
+            statusMng = new StatusManager(new BezvizContext(CONNECT));
+            nationalitiesMng = new NationalityManager(new BezvizContext(CONNECT));
         }
 
-
-
         [TestMethod]
-        public async Task CheckPoint()
-        {
-            checkPointmng = new CheckPointManager(context);
-            CheckPoint checkPoint1 = checkPointmng.GetById(1);
-          
-            CheckPoint checkPoint2 = await checkPointmng.GetByIdAsync(1);
+        public async Task CheckPoint_Dictionary()
+        {        
+            CheckPoint checkPoint1 = checkPointMng.GetById(1);
+            CheckPoint checkPoint2 = await checkPointMng.GetByIdAsync(1);
+            var checkPoints = checkPointMng.GetAll();
 
             Assert.IsNotNull(checkPoint1);
             Assert.IsTrue(checkPoint1.Active);
             Assert.IsNotNull(checkPoint2);
             Assert.IsTrue(checkPoint2.Name.Contains("Брест"));
+            Assert.IsTrue(checkPoints.Count() != 0);
+            Assert.IsTrue(checkPoints.Contains(checkPoint1));
+            Assert.IsTrue(checkPoints.Contains(checkPoint2));
+        }
+
+        [TestMethod]
+        public async Task Status_Dictionary()
+        {
+            Status status1 = statusMng.GetById(1);
+            Status status2 = await statusMng.GetByIdAsync(1);
+            var statuses = statusMng.GetAll();
+
+            Assert.IsNotNull(status1);
+            Assert.IsTrue(status1.Active);
+            Assert.IsNotNull(status2);
+            Assert.IsTrue(status2.Name.Contains("Сохранено"));
+            Assert.IsTrue(statuses.Count() != 0);
+            Assert.IsTrue(statuses.Contains(status1));
+            Assert.IsTrue(statuses.Contains(status2));
+        }
+
+        [TestMethod]
+        public async Task Nationalities_Dictionary()
+        {
+            Nationality nat1 = nationalitiesMng.GetById(1);
+            Nationality nat2 = await nationalitiesMng.GetByIdAsync(1);
+            var nationalities = nationalitiesMng.GetAll();
+
+            Assert.IsNotNull(nat1);
+            Assert.IsTrue(nat1.Active);
+            Assert.IsNotNull(nat2);
+            Assert.IsTrue(nat2.Name.Contains("Польша"));
+            Assert.IsTrue(nationalities.Count() != 0);
+            Assert.IsTrue(nationalities.Contains(nat1));
+            Assert.IsTrue(nationalities.Contains(nat2));
         }
     }
 }

@@ -33,30 +33,31 @@ namespace BezvizSystem.BLL.Tests
         {
             UserDTO user = new UserDTO
             {
-                UserName = "Admin",
+                UserName = "Test",
                 Password = "qwerty",
-                ProfileUser = new ProfileUserDTO { Role = "Admin" }
+                ProfileUser = new ProfileUserDTO { Role = "Test1" }
             };
 
             List<string> list = new List<string>
             {
-                "Admin",
-                "Operator"
+                "Test1",
+                "Test2"
             };
 
-            await service.SetInitialData(user, list);
-            var roleResult1 = database.RoleManager.FindByName("Admin");
-            var roleResult2 = database.RoleManager.FindByName("Operator");
-            var userUser = database.UserManager.FindByName("Admin");
+            var result = await service.SetInitialData(user, list);
+            var roleResult1 = database.RoleManager.FindByName("Test1");
+            var roleResult2 = database.RoleManager.FindByName("Test2");
+            var userUser = await service.GetByNameAsync("Test");
 
+            Assert.IsTrue(result.Succedeed);
             Assert.IsNotNull(roleResult1);
             Assert.IsNotNull(roleResult2);
             Assert.IsNotNull(userUser);
 
+
             await service.Delete(user);
 
             var role = database.RoleManager.FindByName(list[0]);
-
             await database.RoleManager.DeleteAsync(role);
             role = database.RoleManager.FindByName(list[1]);
             await database.RoleManager.DeleteAsync(role);

@@ -6,7 +6,7 @@ using System.Data.Entity;
 
 namespace BezvizSystem.DAL.EF
 {
-    public class BezvizContext : IdentityDbContext<BezvizUser>, IContext
+    public class BezvizContext : IdentityDbContext<BezvizUser>
     {
         static BezvizContext()
         {
