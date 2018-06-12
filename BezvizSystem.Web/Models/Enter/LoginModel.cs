@@ -8,11 +8,11 @@ namespace BezvizSystem.Web.Models
 {
     public class LoginModel
     {
-        [Required]
-        [Display(Name="Логинy")]
+        [Required(ErrorMessage = "Логин не введён")]
+        [Display(Name="Логин")]
         public string Name { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Пароль не введён")]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
         public string Password { get; set; }

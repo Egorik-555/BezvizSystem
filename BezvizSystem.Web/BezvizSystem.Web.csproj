@@ -196,8 +196,8 @@
     <Compile Include="Models\Operator\CreateOperatorModel.cs" />
     <Compile Include="Models\Operator\DeleteOperatorModel.cs" />
     <Compile Include="Models\Group\CreateGroupModel.cs" />
-    <Compile Include="Models\LoginModel.cs" />
-    <Compile Include="Models\RegisterModel.cs" />
+    <Compile Include="Models\Enter\LoginModel.cs" />
+    <Compile Include="Models\Enter\RegisterModel.cs" />
     <Compile Include="Models\Operator\ViewOperatorModel.cs" />
     <Compile Include="Models\Visitor\InfoVisitorModel.cs" />
     <Compile Include="Models\Visitor\CreateVisitorModel.cs" />

@@ -17,14 +17,15 @@ namespace BezvizSystem.Web.Models.Operator
         [Display(Name = "Наименование")]
         public string Transcript { get; set; }
 
-        [Required(ErrorMessage = "УНП не был введён")]
+        [Required(ErrorMessage = "УНП не введён")]
         [StringLength(9, MinimumLength = 9, ErrorMessage = "Длина строки должна быть 9 символов")]
-        [RegularExpression(@"[0-9]{3,10}", ErrorMessage = "Только цифровые значения")]
+        [RegularExpression(@"[0-9]*", ErrorMessage = "Допустимы только цифровые символы")]
         [Display(Name = "УНП")]
         public string UNP { get; set; }
 
-        [Required(ErrorMessage = "ОКПО не был введён")]
-        [RegularExpression(@"\d{3,10}", ErrorMessage = "Только цифровые значения")]
+        [Required(ErrorMessage = "ОКПО не введён")]
+        [StringLength(10, MinimumLength = 3, ErrorMessage = "Длина строки должна быть от 3 до 10 символов")]
+        [RegularExpression(@"[0-9]*", ErrorMessage = "Допустимы только цифровые символы")]
         [Display(Name = "ОКПО")]
         public string OKPO { get; set; }
 

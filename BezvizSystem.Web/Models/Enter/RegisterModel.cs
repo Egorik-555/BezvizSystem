@@ -9,14 +9,14 @@ namespace BezvizSystem.Web.Models
     public class RegisterModel
     {
         [Required(ErrorMessage = "ОКПО не введён")]
-        //[StringLength(MaximumLength = 10, MinimumLength = 3, ErrorMessage = "Длина строки должна быть от 3 до 10 символов")]
-        [RegularExpression(@"\d", ErrorMessage = "Допустимы только цифровые символы")]
+        [RegularExpression(@"[0-9]*", ErrorMessage = "Допустимы только цифровые символы")]
+        [StringLength(10, MinimumLength = 3, ErrorMessage = "Длина строки должна быть от 3 до 10 символов")]      
         [Display(Name = "ОКПО")]
         public string OKPO { get; set; }
 
         [Required(ErrorMessage = "УНП не введён")]
-       // [StringLength(MaximumLength = 9, MinimumLength = 9, ErrorMessage = "Длина строки должна быть 9 символов")]
-        [RegularExpression(@"[0-9]{3,10}", ErrorMessage = "Допустимы только цифровые символы")]
+        [StringLength(9, MinimumLength = 9, ErrorMessage = "Длина строки должна быть 9 символов")]
+        [RegularExpression(@"[0-9]*", ErrorMessage = "Допустимы только цифровые символы")]
         [Display(Name = "УНП")]
         public string UNP { get; set; }
 
