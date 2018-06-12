@@ -9,7 +9,7 @@ namespace BezvizSystem.Web.Models
     public class LoginModel
     {
         [Required]
-        [Display(Name="Логинyy")]
+        [Display(Name="Логинy")]
         public string Name { get; set; }
 
         [Required]
