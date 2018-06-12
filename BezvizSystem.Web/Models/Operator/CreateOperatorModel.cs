@@ -13,13 +13,18 @@ namespace BezvizSystem.Web.Models.Operator
         public string Id { get; set; }
         [HiddenInput(DisplayValue = false)]
         public string UserName { get; set; }
-        [Required]
-        [Display(Name ="Наименование")]
+        [Required(ErrorMessage = "Наименование не введено")]
+        [Display(Name = "Наименование")]
         public string Transcript { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "УНП не был введён")]
+        [StringLength(9, MinimumLength = 9, ErrorMessage = "Длина строки должна быть 9 символов")]
+        [RegularExpression(@"[0-9]{3,10}", ErrorMessage = "Только цифровые значения")]
         [Display(Name = "УНП")]
         public string UNP { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "ОКПО не был введён")]
+        [RegularExpression(@"\d{3,10}", ErrorMessage = "Только цифровые значения")]
         [Display(Name = "ОКПО")]
         public string OKPO { get; set; }
 

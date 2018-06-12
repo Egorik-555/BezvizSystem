@@ -14,28 +14,43 @@ namespace BezvizSystem.Web.Models.Operator
         [HiddenInput(DisplayValue = false)]
         public string UserName { get; set; }
         [Required]
-        [Display(Name ="Туроператор")]
+        [Display(Name = "Туроператор")]
         public string ProfileUserTranscript { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "УНП не был введён")]
+        [StringLength(9, MinimumLength = 9, ErrorMessage = "Длина строки должна быть 9 символов")]
+        [RegularExpression(@"[0-9]{3,10}", ErrorMessage = "Только цифровые значения")]
         [Display(Name = "УНП")]
         public string ProfileUserUNP { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "ОКПО не был введён")]
+        [RegularExpression(@"\d{3,10}", ErrorMessage = "Только цифровые значения")]
         [Display(Name = "ОКПО")]
         public string ProfileUserOKPO { get; set; }
 
+        [Required(ErrorMessage = "Email не был введён")]
+        [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "Некорректный адрес")]
         [Display(Name = "E-mail")]
         public string Email { get; set; }
+
+
+        // [Required(ErrorMessage = "Email не был введён")]
+        //  [System.ComponentModel.DataAnnotations.Compare("Email")]
+        // [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "Некорректный адрес")]
         [Display(Name = "E-mail подтвержден")]
         public bool EmailConfirmed { get; set; }
 
         public string ProfileUserRole { get; set; }
-        [Display(Name ="Пароль")]
+        [Required]
+        [Display(Name = "Пароль")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        [Required]
         [System.ComponentModel.DataAnnotations.Compare("Password")]
         [Display(Name = "Подтверждение пароля")]
         [DataType(DataType.Password)]
         public string ConfirmePassword { get; set; }
+
         [Display(Name = "Активный")]
         public bool ProfileUserActive { get; set; }
 
