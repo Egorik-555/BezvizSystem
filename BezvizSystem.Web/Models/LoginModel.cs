@@ -8,14 +8,14 @@ namespace BezvizSystem.Web.Models
 {
     public class LoginModel
     {
-        [Required(ErrorMessage = "Логин не был введён ")]
-        [StringLength(50, MinimumLength = 4, ErrorMessage = "Длина строки должна быть более 6 символов")]
+        [Required(ErrorMessage = "Логин не введён")]
+        //[StringLength(50, MinimumLength = 4, ErrorMessage = "Длина строки должна быть более 6 символов")]
         [Display(Name = "Логин")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Парол не был введён")]
+        [Required(ErrorMessage = "Парол не введён")]
         [DataType(DataType.Password)]
-        [StringLength(50, MinimumLength = 4, ErrorMessage = "Длина строки должна быть более 6 символов")]
+        //[StringLength(50, MinimumLength = 4, ErrorMessage = "Длина строки должна быть более 6 символов")]
         [Display(Name = "Пароль")]
         public string Password { get; set; }
     }
