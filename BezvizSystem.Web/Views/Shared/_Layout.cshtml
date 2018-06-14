@@ -12,48 +12,78 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Без виз", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+    @*<div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Без виз", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
 
-                    <li>@Html.ActionLink("Регистрация", "Register", "Account")</li>
+                        <li>@Html.ActionLink("Регистрация", "Register", "Account")</li>
 
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <li>@Html.ActionLink("Вход", "Login", "Account")</li>
-                    }
-                    else
-                    {
-                        <li>@Html.ActionLink(User.Identity.Name + ", выход", "Logout", "Account")</li>
-                        <li>@Html.ActionLink("Операторы", "Index", "Operator")</li>
-                        <li>@Html.ActionLink("Рег. туриста", "Create", "Visitor", new { returnUrl = Url.Action() }, null)</li>
-                        <li>@Html.ActionLink("Рег. группы", "Create", "Group", new { returnUrl = Url.Action() }, null)</li>
-                        <li>@Html.ActionLink("Зарег. анкеты", "Index", "Anketa")</li>
-                        <li>@Html.ActionLink("Отметка о прибытии", "Index", "Mark")</li>
-                    }
-                </ul>
+                       @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li>@Html.ActionLink("Вход", "Login", "Account")</li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink(User.Identity.Name + ", выход", "Logout", "Account")</li>
+                            <li>@Html.ActionLink("Операторы", "Index", "Operator")</li>
+                            <li>@Html.ActionLink("Рег. туриста", "Create", "Visitor", new { returnUrl = Url.Action() }, null)</li>
+                            <li>@Html.ActionLink("Рег. группы", "Create", "Group", new { returnUrl = Url.Action() }, null)</li>
+                            <li>@Html.ActionLink("Зарег. анкеты", "Index", "Anketa")</li>
+                            <li>@Html.ActionLink("Отметка о прибытии", "Index", "Mark")</li>
+                          }
+                    </ul>
+                </div>
             </div>
+        </div>*@
+
+    <div style="float:left; width: 200px; border: 1px solid black">
+        <input type="button" value="Главная" id="btn1" onclick="" />
+        @if (User.IsInRole("admin"))
+        {
+            <input type="button" id="btn2" value="Регистрация туроператора" onclick="location.href='@Url.Action("Index", "Operator")'" />
+        }
+        <input type="button" value="Регистрация индивидуального туриста" onclick="" />
+        <input type="button" value="Регистрация группы" onclick="" />
+        <input type="button" value="Зарегистрированные анкеты" onclick="" />
+        <input type="button" value="Отметка о прибытии" onclick="" />
+        <input type="button" value="Отчеты" onclick="" />
+    </div>
+
+    <div style="margin-left:210px;  border: 1px solid black">
+        <div class="container body-content">
+            @RenderBody()
+            @*<hr />
+            <footer>
+                    <p>&copy; @DateTime.Now.Year - Без виз</p>
+                </footer>*@
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Без виз</p>
-        </footer>
-    </div>
+
+
+   
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script>
+
+        function clickButton(id) {
+            $('#btn2').live('click', function () {
+                $.get('@Url.Action("Index", "Operator")')
+            });
+        }
+     
+
+    </script>
 </body>
 </html>
