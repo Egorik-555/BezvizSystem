@@ -8,6 +8,17 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+
+    <h4>Система регистрации анкет иностранных туристов</h4>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" value="Вход" onclick="location.href='@Url.Action("Login", "Account")'" class="btn btn-default" />
+
+            <input type="button" value="Регистрация туроператора" onclick="location.href='@Url.Action("Register", "Account")'" class="btn btn-default" />
+        </div>
+    </div>
+
     <div class="container body-content">
         @RenderBody()
         <hr />

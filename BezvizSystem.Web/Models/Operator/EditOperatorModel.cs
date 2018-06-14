@@ -23,35 +23,31 @@ namespace BezvizSystem.Web.Models.Operator
         [Display(Name = "УНП")]
         public string ProfileUserUNP { get; set; }
 
-        [Required(ErrorMessage = "ОКПО не был введён")]
-        [RegularExpression(@"\d{3,10}", ErrorMessage = "Только цифровые значения")]
+        [Required(ErrorMessage = "ОКПО не введён")]
+        [RegularExpression(@"[0-9]*", ErrorMessage = "Допустимы только цифровые символы")]
         [Display(Name = "ОКПО")]
         public string ProfileUserOKPO { get; set; }
-
-        [Required(ErrorMessage = "Email не был введён")]
+     
         [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "Некорректный адрес")]
         [Display(Name = "E-mail")]
         public string Email { get; set; }
 
 
-        // [Required(ErrorMessage = "Email не был введён")]
-        //  [System.ComponentModel.DataAnnotations.Compare("Email")]
-        // [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "Некорректный адрес")]
         [Display(Name = "E-mail подтвержден")]
         public bool EmailConfirmed { get; set; }
 
         public string ProfileUserRole { get; set; }
-        [Required]
+
         [Display(Name = "Пароль")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        [Required]
+
         [System.ComponentModel.DataAnnotations.Compare("Password")]
         [Display(Name = "Подтверждение пароля")]
         [DataType(DataType.Password)]
         public string ConfirmePassword { get; set; }
 
-        [Display(Name = "Активный")]
+        [Display(Name = "Активен")]
         public bool ProfileUserActive { get; set; }
 
         [HiddenInput(DisplayValue = false)]

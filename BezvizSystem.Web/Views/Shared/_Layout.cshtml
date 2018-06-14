@@ -46,16 +46,17 @@
         </div>*@
 
     <div style="float:left; width: 200px; border: 1px solid black">
-        <input type="button" value="Главная" id="btn1" onclick="" />
+        <input type="button" value="Главная" id="btn1" onclick="'@Url.Action("Index", "Home")'" />
         @if (User.IsInRole("admin"))
         {
             <input type="button" id="btn2" value="Регистрация туроператора" onclick="location.href='@Url.Action("Index", "Operator")'" />
         }
-        <input type="button" value="Регистрация индивидуального туриста" onclick="" />
-        <input type="button" value="Регистрация группы" onclick="" />
-        <input type="button" value="Зарегистрированные анкеты" onclick="" />
-        <input type="button" value="Отметка о прибытии" onclick="" />
+        <input type="button" value="Регистрация индивидуального туриста" onclick="location.href='@Url.Action("Create", "Visitor")'" />
+        <input type="button" value="Регистрация группы" onclick="location.href='@Url.Action("Create", "Group")'" />
+        <input type="button" value="Зарегистрированные анкеты" onclick="location.href='@Url.Action("Index", "Anketa")'" />
+        <input type="button" value="Отметка о прибытии" onclick="location.href='@Url.Action("Index", "Mark")'" />
         <input type="button" value="Отчеты" onclick="" />
+        <input type="button" value="Выход" onclick="location.href='@Url.Action("Logout", "Account")'" />
     </div>
 
     <div style="margin-left:210px;  border: 1px solid black">
