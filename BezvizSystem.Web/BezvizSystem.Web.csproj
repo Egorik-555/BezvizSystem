@@ -303,6 +303,7 @@
     <Content Include="Views\Mark\Index.cshtml" />
     <Content Include="Views\Mark\Edit.cshtml" />
     <Content Include="Views\Operator\DataOperators.cshtml" />
+    <Content Include="Views\Shared\_LayoutEnter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

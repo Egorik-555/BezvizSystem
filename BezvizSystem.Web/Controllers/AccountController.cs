@@ -130,7 +130,7 @@ namespace BezvizSystem.Web.Controllers
                             Authentication.SignOut();
                             Authentication.SignIn(new AuthenticationProperties
                             {
-                                IsPersistent = true,
+                                IsPersistent = model.RememberMe,
                             }, claim);
                             if (returnUrl != null)
                                 return Redirect(returnUrl);

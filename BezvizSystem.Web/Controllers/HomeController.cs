@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace BezvizSystem.Web.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private IUserService Service
