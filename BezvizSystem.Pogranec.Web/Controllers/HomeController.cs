@@ -25,8 +25,8 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         public HomeController(IUserService service)
         {
             _userService = service;
-        } 
-       
+        }
+
 
         public ActionResult Login()
         {
@@ -48,19 +48,11 @@ namespace BezvizSystem.Pogranec.Web.Controllers
 
                     if (findUser.ProfileUser.Active)
                     {
-                        if ((findUser.ProfileUser.Role == "admin") ||
-                                (findUser.ProfileUser.Role == "operator" && findUser.EmailConfirmed))
+                        Authentication.SignOut();
+                        Authentication.SignIn(new AuthenticationProperties
                         {
-                            Authentication.SignOut();
-                            Authentication.SignIn(new AuthenticationProperties
-                            {
-                                IsPersistent = true,
-                            }, claim);
-                        }
-                        else if (findUser.ProfileUser.Role == "operator")
-                        {
-                            ModelState.AddModelError("", "Email не подтвержден");
-                        }
+                            IsPersistent = model.RememberMe,
+                        }, claim);
                     }
                     else
                     {
