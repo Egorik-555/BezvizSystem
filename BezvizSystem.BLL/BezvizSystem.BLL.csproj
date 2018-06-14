@@ -156,7 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BezvizSystem.DAL\BezvizSystem.DAL.csproj">
-      <Project>{C01E9E88-181D-4A27-9741-D82C26A29CDA}</Project>
+      <Project>{c01e9e88-181d-4a27-9741-d82c26a29cda}</Project>
       <Name>BezvizSystem.DAL</Name>
     </ProjectReference>
   </ItemGroup>

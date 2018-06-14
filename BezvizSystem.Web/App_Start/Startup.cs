@@ -24,7 +24,6 @@ namespace BezvizSystem.Web.App_Start
         IServiceCreator serviceCreator = new ServiceCreator();
         string CONNECTION = "BezvizContext";
 
-
         public void Configuration(IAppBuilder app)
         {
             app.CreatePerOwinContext<BezvizContext>(CreateContext);

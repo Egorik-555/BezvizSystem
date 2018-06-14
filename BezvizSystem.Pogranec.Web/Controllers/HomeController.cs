@@ -8,17 +8,19 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 
 namespace BezvizSystem.Pogranec.Web.Controllers
 {
     public class HomeController : Controller
     {
-        //private IUserService Service
-        //{
-        //    get { return HttpContext.GetOwinContext().Get<IUserService>(); }
-        //}
+        private IAuthenticationManager Authentication
+        {
+            get { return HttpContext.GetOwinContext().Authentication; }
+        }
 
         private IUserService _userService;
+
 
         public HomeController(IUserService service)
         {
@@ -46,19 +48,19 @@ namespace BezvizSystem.Pogranec.Web.Controllers
 
                     if (findUser.ProfileUser.Active)
                     {
-                        //if ((findUser.ProfileUser.Role == "admin") ||
-                        //        (findUser.ProfileUser.Role == "operator" && findUser.EmailConfirmed))
-                        //{
-                        //    Authentication.SignOut();
-                        //    Authentication.SignIn(new AuthenticationProperties
-                        //    {
-                        //        IsPersistent = true,
-                        //    }, claim);                         
-                        //}
-                        //else if (findUser.ProfileUser.Role == "operator")
-                        //{
-                        //    ModelState.AddModelError("", "Email не подтвержден");
-                        //}
+                        if ((findUser.ProfileUser.Role == "admin") ||
+                                (findUser.ProfileUser.Role == "operator" && findUser.EmailConfirmed))
+                        {
+                            Authentication.SignOut();
+                            Authentication.SignIn(new AuthenticationProperties
+                            {
+                                IsPersistent = true,
+                            }, claim);
+                        }
+                        else if (findUser.ProfileUser.Role == "operator")
+                        {
+                            ModelState.AddModelError("", "Email не подтвержден");
+                        }
                     }
                     else
                     {
@@ -80,10 +82,10 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             {
                 UserName = "Pogranec",
                 Password = "qwerty",
-                ProfileUser = new ProfileUserDTO { Role = "admin", Active = true, DateInSystem = DateTime.Now, UserInSystem = "Autoinitilize" }
+                ProfileUser = new ProfileUserDTO { Role = "pogranecAdmin", Active = true, DateInSystem = DateTime.Now, UserInSystem = "Autoinitilize" }
             };
 
-            var roles = new List<string> { "admin", "operator" };
+            var roles = new List<string> { "pogranecAdmin", "pogranec" };
             await _userService.SetInitialData(user, roles);
         }
     }

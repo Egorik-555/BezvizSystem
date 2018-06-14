@@ -89,6 +89,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IOperatorManager.cs" />
+    <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="EF\BezvizContext.cs" />
     <Compile Include="Entities\BezvizRole.cs" />
     <Compile Include="Entities\BezvizUser.cs" />
@@ -100,9 +103,6 @@
     <Compile Include="Entities\Visitor.cs" />
     <Compile Include="Identity\BezvizRoleManager.cs" />
     <Compile Include="Identity\BezvizUserManager.cs" />
-    <Compile Include="Interfaces\IRepository.cs" />
-    <Compile Include="Interfaces\IOperatorManager.cs" />
-    <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CheckPointManager.cs" />
     <Compile Include="Repositories\GroupManager.cs" />
