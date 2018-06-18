@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
-using Microsoft.Owin.Builder;
-using Microsoft.Owin.Security.Cookies;
 using Owin;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.AspNet.Identity;
 
 [assembly: OwinStartup(typeof(BezvizSystem.Pogranec.Web.App_Start.Startup))]
 

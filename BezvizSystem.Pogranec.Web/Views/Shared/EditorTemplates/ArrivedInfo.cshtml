@@ -1,0 +1,44 @@
+﻿@model  IEnumerable<BezvizSystem.Pogranec.Web.Models.Anketa.ArrivedInfo>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.)
+            </th>
+        </tr>
+    </thead>
+
+    <tbody id="tabledata">
+        @foreach (var item in Model.Infoes)
+            {
+            <tr>
+                <td>
+                    @Html.ActionLink((++i).ToString(), "Edit", "Anketa", new { id = item.Id, returnUrl = Url.Action() }, null)
+                </td>
+                <td>
+                    @(item.DateArrival.HasValue ? item.DateArrival.Value.ToShortDateString() : "")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DaysOfStay)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckPoint)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CountMembers)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Operator)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

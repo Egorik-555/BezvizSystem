@@ -1,6 +1,4 @@
-﻿
-@using BezvizSystem.Web.Helpers
-@using BezvizSystem.BLL.Interfaces
+﻿@using BezvizSystem.BLL.Interfaces
 
 <!DOCTYPE html>
 <html>
@@ -15,9 +13,10 @@
     
 
     <div style="float:left; width: 200px; border: 1px solid black">
+
         <input type="button" value="Главная" onclick="'@Url.Action("Index", "Home")'" />
-        <input type="button" value="Анкеты" onclick="location.href='@Url.Action("Create", "Visitor")'" />
-        <input type="button" value="Отчеты" onclick="location.href='@Url.Action("Create", "Group")'" />
+        <input type="button" value="Анкеты" onclick="location.href='@Url.Action("Index", "Anketa")'" />
+        <input type="button" value="Отчеты" onclick="location.href='@Url.Action("Index", "Report")'" />
 
         @if (User.IsInRole("pogranecAdmin"))
         {
@@ -25,7 +24,7 @@
             <input type="button" value="Администрирование пользователей" onclick="" />
         }
 
-        <input type="button" value="Выход" onclick="location.href='@Url.Action("Logout", "Account")'" />
+        <input type="button" value="Выход" onclick="location.href='@Url.Action("Logout", "Home")'" />
     </div>
 
     <div style="margin-left:210px;  border: 1px solid black">
@@ -43,14 +42,5 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 
-    <script>
-
-        function clickButton(id) {
-            $('#btn2').live('click', function () {
-                $.get('@Url.Action("Index", "Operator")')
-            });
-        }     
-
-    </script>
 </body>
 </html>

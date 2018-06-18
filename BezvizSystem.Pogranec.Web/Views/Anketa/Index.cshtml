@@ -1,0 +1,35 @@
+﻿@model BezvizSystem.Pogranec.Web.Models.Anketa.ArrivedPerson
+
+@{
+    ViewBag.Title = "Анкета";
+}
+
+Ожидается к прибытию на @DateTime.Now.ToShortDateString(): @Model.Count
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("1")
+            </th>
+            <th>
+                @Html.DisplayName("2")
+            </th>
+        </tr>
+    </thead>
+
+    <tbody id="tabledata">
+        @foreach (var item in Model.Infoes)
+            {
+            <tr>            
+                <td>
+                    @Html.DisplayFor(item => item.)
+                </td>         
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+

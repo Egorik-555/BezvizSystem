@@ -34,6 +34,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginModel model)
         {
             if (ModelState.IsValid)
@@ -54,7 +55,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                             IsPersistent = model.RememberMe,
                         }, claim);
 
-                        return Redirect
+                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {
@@ -67,8 +68,15 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                 }
 
             }
-            return View();
+            return View(model);
         }
+
+        public ActionResult Logout()
+        {
+            Authentication.SignOut();
+            return RedirectToAction("Index", "Home");
+        }
+
 
         [Authorize(Roles = "pogranecAdmin, pogranec") ]
         public ActionResult Index()
