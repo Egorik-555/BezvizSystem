@@ -12,7 +12,7 @@ namespace BezvizSystem.Pogranec.Web.App_Start
 {
     public class Startup
     {
-        public void Configuration(AppBuilder app)
+        public void Configuration(IAppBuilder app)
         {
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {

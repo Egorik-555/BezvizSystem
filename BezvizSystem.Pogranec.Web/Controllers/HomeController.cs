@@ -53,6 +53,8 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                         {
                             IsPersistent = model.RememberMe,
                         }, claim);
+
+                        return Redirect
                     }
                     else
                     {
@@ -65,6 +67,12 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                 }
 
             }
+            return View();
+        }
+
+        [Authorize(Roles = "pogranecAdmin, pogranec") ]
+        public ActionResult Index()
+        {
             return View();
         }
 
