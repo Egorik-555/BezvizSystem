@@ -48,6 +48,7 @@
     <Compile Include="DictionaryService_Test.cs" />
     <Compile Include="TestUnitOfWork.cs" />
     <Compile Include="ExcelTest.cs" />
+    <Compile Include="ReportTest.cs" />
     <Compile Include="UnitTestAnketaService.cs" />
     <Compile Include="UnitTestGroupService.cs" />
     <Compile Include="UnitTestVisitorService.cs" />
@@ -75,13 +76,13 @@
       <Version>2.2.1</Version>
     </PackageReference>
     <PackageReference Include="Moq">
-      <Version>4.8.2</Version>
+      <Version>4.8.3</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestAdapter">
-      <Version>1.3.1</Version>
+      <Version>1.3.2</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestFramework">
-      <Version>1.3.1</Version>
+      <Version>1.3.2</Version>
     </PackageReference>
     <PackageReference Include="System.Threading.Tasks.Extensions">
       <Version>4.5.0</Version>

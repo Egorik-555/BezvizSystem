@@ -17,7 +17,7 @@ namespace BezvizSystem.Pogranec.Web.Models.Anketa
 
     public class ArrivedPerson
     {
-        public int Count { get; set; }
+        public int? Count { get; set; }
 
         public IEnumerable<ArrivedInfo> Infoes { get; set; }
 

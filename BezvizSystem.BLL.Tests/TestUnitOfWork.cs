@@ -16,6 +16,8 @@ namespace BezvizSystem.BLL.Tests
         Mock<IRepository<Nationality, int>> nationalityManager;
         Mock<IRepository<CheckPoint, int>> checkPointManager;
 
+        Mock<IRepository<GroupVisitor, int>> groupManger;
+
         List<Status> statuses = new List<Status>
         {
             new Status{ Code = 1, Name = "Status1", Active = true},
@@ -39,6 +41,14 @@ namespace BezvizSystem.BLL.Tests
             new CheckPoint{ Name = "checkPoint4"}
         };
 
+        List<GroupVisitor> groups = new List<GroupVisitor>
+        {
+            new GroupVisitor{ Visitors = new List<Visitor>{ new Visitor { Surname = "surname1_group1", Arrived = true}, new Visitor { Surname = "surname2_group1" } },  DateArrival = DateTime.Now },
+            new GroupVisitor{ Visitors = new List<Visitor>{ new Visitor { Surname = "surname1_visitor1", Arrived = true} },  DateArrival = DateTime.Parse("26.06.2018") },
+            new GroupVisitor{ Visitors = new List<Visitor>{ new Visitor { Surname = "surname2_visitor2"} },  DateArrival = DateTime.Now },
+            new GroupVisitor{ Visitors = new List<Visitor>{ new Visitor { Surname = "surname1_group2"}, new Visitor { Surname = "surname2_group2" } },  DateArrival = DateTime.Now }
+        };
+
         public TestUnitOfWork()
         {
             statusManager = new Mock<IRepository<Status, int>>();
@@ -49,15 +59,17 @@ namespace BezvizSystem.BLL.Tests
 
             checkPointManager = new Mock<IRepository<CheckPoint, int>>();
             checkPointManager.Setup(m => m.GetAll()).Returns(checkPoints);
+
+            groupManger = new Mock<IRepository<GroupVisitor, int>>();
+            groupManger.Setup(m => m.GetAll()).Returns(groups);
         }
 
         public BezvizUserManager UserManager => throw new NotImplementedException();
-
         public BezvizRoleManager RoleManager => throw new NotImplementedException();
 
         public IRepository<OperatorProfile, string> OperatorManager => throw new NotImplementedException();
         public IRepository<Visitor, int> VisitorManager => throw new NotImplementedException();
-        public IRepository<GroupVisitor, int> GroupManager => throw new NotImplementedException();
+        public IRepository<GroupVisitor, int> GroupManager => groupManger.Object;
         public IRepository<Status, int> StatusManager => statusManager.Object;
         public IRepository<Nationality, int> NationalityManager => nationalityManager.Object;
         public IRepository<CheckPoint, int> CheckPointManager => checkPointManager.Object;
