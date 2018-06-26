@@ -1,4 +1,5 @@
-﻿using BezvizSystem.Web.Models.Visitor;
+﻿using BezvizSystem.Web.Infrustructure;
+using BezvizSystem.Web.Models.Visitor;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,6 +8,7 @@ using System.Web;
 
 namespace BezvizSystem.Web.Models.Group
 {
+    [DateArrivalGroupLess(ErrorMessage = "Дата прибытия больше даты убытия")]
     public class CreateGroupModel
     {
         public CreateGroupModel()
@@ -20,20 +22,18 @@ namespace BezvizSystem.Web.Models.Group
         //[Required(ErrorMessage = "Информация о туристах не была введена")]
         [Display(Name = "Информация о туристах")]
         public ICollection<InfoVisitorModel> Infoes { get; set; }
-
-        [Required(ErrorMessage = "Дата прибытия не введена")]
+      
         [Display(Name = "Дата прибытия")]
-        [Range(typeof(DateTime), "1/1/2000", "1/1/3000", ErrorMessage = "Неверный формат даты")]
+        [Required(ErrorMessage = "Дата прибытия не введена")]
+        [FutureDate(ErrorMessage = "Дата прибытия не может быть прошедшей")]
         [DataType(DataType.Date)]
         public DateTime? DateArrival { get; set; }
 
-        [Required(ErrorMessage = "Дата убывания не введена")]
-        [Display(Name = "Дата убывания")]
-        [Range(typeof(DateTime), "1/1/2000", "1/1/3000", ErrorMessage = "Неверный формат даты")]
+        [Required(ErrorMessage = "Дата убытия не введена")]
+        [Display(Name = "Дата убытия")]      
         [DataType(DataType.Date)]
         public DateTime? DateDeparture { get; set; }
 
-        //[Required(ErrorMessage = "Количество дней пребывания не была введено")]
         [RegularExpression(@"[0-9]{1,3}", ErrorMessage = "Только цифровые значения")]
         [Display(Name = "Количество дней пребывания")]
         public int? DaysOfStay { get; set; }

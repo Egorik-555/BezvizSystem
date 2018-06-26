@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.DAL.Interfaces;
+using BezvizSystem.DAL.Entities;
 
 namespace BezvizSystem.BLL.Services
 {
@@ -15,6 +16,7 @@ namespace BezvizSystem.BLL.Services
         IUnitOfWork _database;
         DateTime _dateFrom;
         DateTime _dateTo;
+        IEnumerable<GroupVisitor> _groups;
 
         public ReportService(IUnitOfWork database)
         {
@@ -40,10 +42,8 @@ namespace BezvizSystem.BLL.Services
         {
             _dateFrom = dateFrom;
             _dateTo = dateTo;
-
-            //var groups = _database.GroupManager.GetAll();
-            //int? count = GetAllTouristInGroup();
-
+            _groups = _database.GroupManager.GetAll().Where(g => g.DateArrival >= _dateFrom && g.DateArrival <= _dateTo).ToList();
+           
             return new ReportDTO
             {
                 DateFrom = _dateFrom.ToShortDateString(),
@@ -59,46 +59,42 @@ namespace BezvizSystem.BLL.Services
         }
 
         private int? GetAllArrived()
-        {
-            var groups = _database.GroupManager.GetAll().Where(g => g.DateArrival >= _dateFrom && g.DateArrival <= _dateTo);
-            return groups.Select(a => a.Visitors.Where(v => v.Arrived).Count()).Sum();
+        {        
+            return _groups.Select(a => a.Visitors.Where(v => v.Arrived).Count()).Sum();
         }
 
         private int? GetAllGroup()
         {
-            var groups = _database.GroupManager.GetAll().Where(g => g.Group).Where(g => g.DateArrival >= _dateFrom && g.DateArrival <= _dateTo).ToList();
+            var groups = _groups.Where(g => g.Group);
             return groups.Select(a => a.Id).Count();
         }
 
         private int? GetAllRegistrated()
         {
-            var groups = _database.GroupManager.GetAll().Where(g => g.DateArrival >= _dateFrom && g.DateArrival <= _dateTo);
-            return groups.Select(a => a.Visitors.Count).Sum();
+            return _groups.Select(a => a.Visitors.Count).Sum();
         }
 
         private int? GetAllTourist()
         {
-            var groups = _database.GroupManager.GetAll().Where(g => !g.Group).Where(g => g.DateArrival >= _dateFrom && g.DateArrival <= _dateTo);
+            var groups = _groups.Where(g => !g.Group);
             return groups.Select(a => a.Visitors.Count()).Sum();
         }
 
         private int? GetAllTouristInGroup()
         {
-            var groups = _database.GroupManager.GetAll().Where(g => g.Group).Where(g => g.DateArrival >= _dateFrom && g.DateArrival <= _dateTo);
+            var groups = _groups.Where(g => g.Group);
             return groups.Select(a => a.Visitors.Count()).Sum();
         }
 
         private int? GetNotArrived()
-        {
-            var groups = _database.GroupManager.GetAll().Where(g => g.DateArrival >= _dateFrom && g.DateArrival <= _dateTo);
-            groups = groups.Where(g => g.DateArrival < DateTime.Now).ToList();
+        {          
+            var groups = _groups.Where(g => g.DateArrival < DateTime.Now);
             return groups.Select(a => a.Visitors.Where(v => !v.Arrived).Count()).Sum();
         }
 
         private int? GetWaitArrived()
         {
-            var groups = _database.GroupManager.GetAll().Where(g => g.DateArrival >= _dateFrom && g.DateArrival <= _dateTo);
-            groups = groups.Where(g => g.DateArrival >= DateTime.Now).ToList();
+            var groups = _groups.Where(g => g.DateArrival >= DateTime.Now).ToList();
             return groups.Select(a => a.Visitors.Where(v => !v.Arrived).Count()).Sum();
         }
     }

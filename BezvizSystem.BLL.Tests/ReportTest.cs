@@ -21,7 +21,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(r.AllArrived == "2");
             Assert.IsTrue(r.WaitArrived == "1");
             Assert.IsTrue(r.NotArriverd == "1");
-            Assert.IsTrue(r.AllTourist == "2");
+            Assert.IsTrue(r.AllTourist == "2 чел.");
             Assert.IsTrue(r.AllGroup == "1 (2 чел.)");
 
         }
