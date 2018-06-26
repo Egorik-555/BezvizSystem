@@ -43,10 +43,10 @@ namespace BezvizSystem.BLL.Tests
 
         List<GroupVisitor> groups = new List<GroupVisitor>
         {
-            new GroupVisitor{ Visitors = new List<Visitor>{ new Visitor { Surname = "surname1_group1", Arrived = true}, new Visitor { Surname = "surname2_group1" } },  DateArrival = DateTime.Now },
+            new GroupVisitor{ Visitors = new List<Visitor>{ new Visitor { Surname = "surname1_group1", Arrived = true}, new Visitor { Surname = "surname2_group1" } }, Group = true,  DateArrival = DateTime.Parse("25.06.2018") },
             new GroupVisitor{ Visitors = new List<Visitor>{ new Visitor { Surname = "surname1_visitor1", Arrived = true} },  DateArrival = DateTime.Parse("26.06.2018") },
-            new GroupVisitor{ Visitors = new List<Visitor>{ new Visitor { Surname = "surname2_visitor2"} },  DateArrival = DateTime.Now },
-            new GroupVisitor{ Visitors = new List<Visitor>{ new Visitor { Surname = "surname1_group2"}, new Visitor { Surname = "surname2_group2" } },  DateArrival = DateTime.Now }
+            new GroupVisitor{ Visitors = new List<Visitor>{ new Visitor { Surname = "surname2_visitor2"} },  DateArrival = DateTime.Parse("30.06.2018") },
+            new GroupVisitor{ Visitors = new List<Visitor>{ new Visitor { Surname = "surname1_group2"}, new Visitor { Surname = "surname2_group2"} },  Group = true,  DateArrival = DateTime.Parse("01.07.2018") }
         };
 
         public TestUnitOfWork()

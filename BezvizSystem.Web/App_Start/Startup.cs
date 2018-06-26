@@ -36,6 +36,7 @@ namespace BezvizSystem.Web.App_Start
             app.CreatePerOwinContext<IDictionaryService<StatusDTO>>(CreateStatusService);
             app.CreatePerOwinContext<IDictionaryService<CheckPointDTO>>(CreateCheckPointService);
             app.CreatePerOwinContext<IDictionaryService<NationalityDTO>>(CreateNationalityService);
+            app.CreatePerOwinContext<IReport>(CreateReportService);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
@@ -82,6 +83,11 @@ namespace BezvizSystem.Web.App_Start
         private IDictionaryService<CheckPointDTO> CreateCheckPointService()
         {
             return serviceCreator.CreateCheckPointService(CONNECTION);
+        }
+
+        private IReport CreateReportService()
+        {
+            return serviceCreator.CreateReport(CONNECTION);
         }
     }
 }

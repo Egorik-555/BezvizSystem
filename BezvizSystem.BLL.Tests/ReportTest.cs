@@ -15,7 +15,14 @@ namespace BezvizSystem.BLL.Tests
             IUnitOfWork testBase = new TestUnitOfWork();
             IReport report = new ReportService(testBase);
 
-            report.GetReport(DateTime.Now, DateTime.Now);
+            var r = report.GetReport(DateTime.Parse("25.06.2018"), DateTime.Parse("30.06.2018"));
+
+            Assert.IsTrue(r.AllRegistrated == "4");
+            Assert.IsTrue(r.AllArrived == "2");
+            Assert.IsTrue(r.WaitArrived == "1");
+            Assert.IsTrue(r.NotArriverd == "1");
+            Assert.IsTrue(r.AllTourist == "2");
+            Assert.IsTrue(r.AllGroup == "1 (2 чел.)");
 
         }
     }

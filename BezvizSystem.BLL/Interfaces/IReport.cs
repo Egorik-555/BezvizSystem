@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace BezvizSystem.BLL.Interfaces
 {
-    public interface IReport
+    public interface IReport : IDisposable
     {
+        ReportDTO GetReport();
+        ReportDTO GetReport(DateTime dateFrom);
         ReportDTO GetReport(DateTime dateFrom, DateTime dateTo);       
     }
 }

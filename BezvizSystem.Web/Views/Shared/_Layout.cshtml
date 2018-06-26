@@ -12,39 +12,7 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    @*<div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink("Без виз", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-
-                        <li>@Html.ActionLink("Регистрация", "Register", "Account")</li>
-
-                       @if (!User.Identity.IsAuthenticated)
-                        {
-                            <li>@Html.ActionLink("Вход", "Login", "Account")</li>
-                        }
-                        else
-                        {
-                            <li>@Html.ActionLink(User.Identity.Name + ", выход", "Logout", "Account")</li>
-                            <li>@Html.ActionLink("Операторы", "Index", "Operator")</li>
-                            <li>@Html.ActionLink("Рег. туриста", "Create", "Visitor", new { returnUrl = Url.Action() }, null)</li>
-                            <li>@Html.ActionLink("Рег. группы", "Create", "Group", new { returnUrl = Url.Action() }, null)</li>
-                            <li>@Html.ActionLink("Зарег. анкеты", "Index", "Anketa")</li>
-                            <li>@Html.ActionLink("Отметка о прибытии", "Index", "Mark")</li>
-                          }
-                    </ul>
-                </div>
-            </div>
-        </div>*@
-
+    
     <div style="float:left; width: 200px; border: 1px solid black">
         <input type="button" value="Главная" id="btn1" onclick="'@Url.Action("Index", "Home")'" />
         @if (User.IsInRole("admin"))
@@ -55,7 +23,7 @@
         <input type="button" value="Регистрация группы" onclick="location.href='@Url.Action("Create", "Group")'" />
         <input type="button" value="Зарегистрированные анкеты" onclick="location.href='@Url.Action("Index", "Anketa")'" />
         <input type="button" value="Отметка о прибытии" onclick="location.href='@Url.Action("Index", "Mark")'" />
-        <input type="button" value="Отчеты" onclick="" />
+        <input type="button" value="Отчеты" onclick="location.href='@Url.Action("Index", "Report")'" />
         <input type="button" value="Выход" onclick="location.href='@Url.Action("Logout", "Account")'" />
     </div>
 
@@ -68,23 +36,11 @@
                 </footer>*@
         </div>
     </div>
-
-
-   
+  
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 
-    <script>
-
-        function clickButton(id) {
-            $('#btn2').live('click', function () {
-                $.get('@Url.Action("Index", "Operator")')
-            });
-        }
-     
-
-    </script>
 </body>
 </html>

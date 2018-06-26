@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace BezvizSystem.BLL.DTO
+namespace BezvizSystem.Web.Models.Report
 {
-    public class ReportDTO
+    public class ReportModel
     {
         public string DateFrom { get; set; }
         public string DateTo { get; set; }
