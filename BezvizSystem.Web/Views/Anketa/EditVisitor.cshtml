@@ -16,9 +16,11 @@
     @Html.HiddenFor(model => model.Id)
 
     <div class="form-group">
-        @Html.LabelFor(model => model.DateArrival, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.DateArrival, htmlAttributes: new {@class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.DateArrival, new { htmlAttributes = new {@readonly = "readonly", @class = "form-control" } })
+            @Html.EditorFor(model => model.DateArrival, new { htmlAttributes = new { id = "dateArrival", @readonly = "readonly", @class = "form-control" } })
+
+
             @Html.ValidationMessageFor(model => model.DateArrival, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -122,3 +124,9 @@
 <div>
     @Html.ActionLink("Назад", "Index")
 </div>
+
+@section Scripts{
+
+  //  var dateArrival = document.getElement
+
+}

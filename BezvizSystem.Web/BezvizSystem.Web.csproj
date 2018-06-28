@@ -294,7 +294,7 @@
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Group\Create.cshtml" />
     <Content Include="Views\Anketa\Index.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Date_.cshtml" />
     <Content Include="Views\Anketa\EditVisitor.cshtml" />
     <Content Include="Views\Anketa\EditGroup.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InfoVisitorModel.cshtml" />
@@ -315,6 +315,7 @@
     <Content Include="Views\Operator\DataOperators.cshtml" />
     <Content Include="Views\Shared\_LayoutEnter.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

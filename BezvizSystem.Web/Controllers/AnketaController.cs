@@ -57,7 +57,8 @@ namespace BezvizSystem.Web.Controllers
 
                 cfg.CreateMap<GroupVisitorDTO, EditVisitorModel>().
                     ForMember(dest => dest.Info, opt => opt.MapFrom(src =>
-                                        visitorMapper.Map<IEnumerable<VisitorDTO>, IEnumerable<InfoVisitorModel>>(src.Visitors).FirstOrDefault()));
+                                        visitorMapper.Map<IEnumerable<VisitorDTO>, IEnumerable<InfoVisitorModel>>(src.Visitors).FirstOrDefault())).
+                    ForMember(dest => dest.DateArrival, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date : src.DateArrival));
 
                 cfg.CreateMap<EditVisitorModel, GroupVisitorDTO>().
                     ForMember(dest => dest.Visitors, opt => opt.MapFrom(src => 

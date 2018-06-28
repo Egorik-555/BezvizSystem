@@ -1,5 +1,4 @@
 ﻿@model DateTime?
-
 @{
     IDictionary<string, object> htmlAttributes;
     object objAttributes;
@@ -11,10 +10,21 @@
     {
         htmlAttributes = new RouteValueDictionary();
     }
-
     htmlAttributes.Add("type", "date");
 
+    String format = "{0:d}";
+    if (Request.UserAgent != null){
 
-    Html.TextBox("", (Model.HasValue ? Model.Value.ToShortDateString() : string.Empty), htmlAttributes);
+        if (Request.UserAgent.Contains("Chrome"))
+        {
+            format = "{0:yyyy-MM-dd}";
+        }
+        else if (Request.UserAgent.Contains("Firefox"))
+        {
+            format = "{0:MM/dd/yyyy}";
+        }
 
+    }
+    @Html.TextBox("", Model, format, htmlAttributes)
 }
+
