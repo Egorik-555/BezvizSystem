@@ -7,8 +7,8 @@ using System.Web;
 
 namespace BezvizSystem.Web.Models.Visitor
 {
-    [DateArrivalLess(ErrorMessage = "Дата прибытия позже даты убытия")]
-    public class CreateVisitorModel
+    [DateArrivalLess(ErrorMessage = "Дата прибытия больше даты убытия")]
+    public class EditVisitorModel
     {
         public int Id { get; set; }
         public bool Group { get; set; }
@@ -18,15 +18,13 @@ namespace BezvizSystem.Web.Models.Visitor
         [Required(ErrorMessage = "Дата прибытия не введена")]
         [Display(Name = "Дата прибытия")]
         [DataType(DataType.Date)]
-        [FutureDate(ErrorMessage = "Дата прибытия не может быть прошедшей")]
         public DateTime? DateArrival { get; set; }
 
         [Required(ErrorMessage = "Дата убытия не введена")]
-        [Display(Name = "Дата убытия")]      
+        [Display(Name = "Дата убытия")]
         [DataType(DataType.Date)]
         public DateTime? DateDeparture { get; set; }
 
-        [RegularExpression(@"[0-9]{1,3}", ErrorMessage = "Только цифровые значения")]
         [Display(Name = "Количество дней пребывания")]
         public int? DaysOfStay { get; set; }
 
@@ -42,19 +40,19 @@ namespace BezvizSystem.Web.Models.Visitor
         [DataType(DataType.MultilineText)]
         public string ProgramOfTravel { get; set; }
 
-       // [Required(ErrorMessage = "Время работы пунктов пропуска не было введено")]
+        // [Required(ErrorMessage = "Время работы пунктов пропуска не было введено")]
         [Display(Name = "Время работы пунктов пропуска")]
         public string TimeOfWork { get; set; }
 
-       // [Required(ErrorMessage = "Ссылка на сайт не была введена")]
+        // [Required(ErrorMessage = "Ссылка на сайт не была введена")]
         [Display(Name = "Ссылка на сайт")]
         public string SiteOfOperator { get; set; }
 
-       // [Required(ErrorMessage = "Телефон не был введен")]
+        // [Required(ErrorMessage = "Телефон не был введен")]
         [Display(Name = "Телефон")]
         public string TelNumber { get; set; }
 
-       // [Required(ErrorMessage = "E-mail не был введен")]
+        // [Required(ErrorMessage = "E-mail не был введен")]
         [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "Некорректный адрес")]
         [Display(Name = "E-mail")]
         public string Email { get; set; }

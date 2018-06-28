@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BezvizSystem.Web.Infrustructure;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace BezvizSystem.Web.Models.Visitor
         public string Surname { get; set; }
 
         [Required]
-        //[RegularExpression(@"[а-яА-Яa-zA-Z]{3,50}", ErrorMessage = "Только цифровые значения")]
+       //[RegularExpression(@"[а-яА-Яa-zA-Z]{3,50}", ErrorMessage = "Только цифровые значения")]
         [Display(Name = "Имя")]
         public string Name { get; set; }
 
@@ -29,6 +30,7 @@ namespace BezvizSystem.Web.Models.Visitor
         [Required]
         [Display(Name = "Дата рождения")]
         [DataType(DataType.Date)]
+        [PastDate(ErrorMessage = "Дата рождения не может быть будущей")]
         public DateTime? BithDate { get; set; }
 
         [Required]

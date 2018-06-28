@@ -55,19 +55,19 @@ namespace BezvizSystem.Web.Controllers
                 cfg.CreateMap<AnketaDTO, ViewAnketaModel>().
                     ForMember(dest => dest.DateArrival, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date : src.DateArrival));
 
-                cfg.CreateMap<GroupVisitorDTO, CreateVisitorModel>().
+                cfg.CreateMap<GroupVisitorDTO, EditVisitorModel>().
                     ForMember(dest => dest.Info, opt => opt.MapFrom(src =>
                                         visitorMapper.Map<IEnumerable<VisitorDTO>, IEnumerable<InfoVisitorModel>>(src.Visitors).FirstOrDefault()));
 
-                cfg.CreateMap<CreateVisitorModel, GroupVisitorDTO>().
+                cfg.CreateMap<EditVisitorModel, GroupVisitorDTO>().
                     ForMember(dest => dest.Visitors, opt => opt.MapFrom(src => 
                         new List<VisitorDTO> { visitorMapper.Map<InfoVisitorModel, VisitorDTO>(src.Info)}));
 
-                cfg.CreateMap<GroupVisitorDTO, CreateGroupModel>().
+                cfg.CreateMap<GroupVisitorDTO, EditGroupModel>().
                     ForMember(dest => dest.Infoes, opt => opt.MapFrom(src => src.Visitors));
                 cfg.CreateMap<VisitorDTO, InfoVisitorModel>();
 
-                cfg.CreateMap<CreateGroupModel, GroupVisitorDTO>().
+                cfg.CreateMap<EditGroupModel, GroupVisitorDTO>().
                     ForMember(dest => dest.Visitors, opt => opt.MapFrom(src => src.Infoes));
                 cfg.CreateMap<InfoVisitorModel, VisitorDTO>();
 
@@ -130,22 +130,22 @@ namespace BezvizSystem.Web.Controllers
 
             if (!group.Group)
             {
-                var model = mapper.Map<GroupVisitorDTO, CreateVisitorModel>(group);
+                var model = mapper.Map<GroupVisitorDTO, EditVisitorModel>(group);
                 return View("EditVisitor", model);
             }
             else
             {
-                var model = mapper.Map<GroupVisitorDTO, CreateGroupModel>(group);             
+                var model = mapper.Map<GroupVisitorDTO, EditGroupModel>(group);             
                 return View("EditGroup", model);
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditVisitor(CreateVisitorModel model)
+        public async Task<ActionResult> EditVisitor(EditVisitorModel model)
         {
             if (ModelState.IsValid)
             {
-                var visitor = mapper.Map<CreateVisitorModel, GroupVisitorDTO>(model);
+                var visitor = mapper.Map<EditVisitorModel, GroupVisitorDTO>(model);
                 var result = await GroupService.Update(visitor);
 
                 if (result.Succedeed)
@@ -162,11 +162,11 @@ namespace BezvizSystem.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditGroup(CreateGroupModel model, ICollection<InfoVisitorModel> infoes)
+        public async Task<ActionResult> EditGroup(EditGroupModel model, ICollection<InfoVisitorModel> infoes)
         {
             if (ModelState.IsValid)
             {
-                var visitor = mapper.Map<CreateGroupModel, GroupVisitorDTO>(model);
+                var visitor = mapper.Map<EditGroupModel, GroupVisitorDTO>(model);
                 var result = await GroupService.Update(visitor);
 
                 if (result.Succedeed)

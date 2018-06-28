@@ -191,12 +191,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Exstentions.cs" />
-    <Compile Include="Infrustructure\DateArrivalGroupLessAttribute.cs" />
-    <Compile Include="Infrustructure\DateArrivalVisitorLessAttribute.cs" />
+    <Compile Include="Infrustructure\DateArrivalLessAttribute.cs" />
     <Compile Include="Infrustructure\ExcelResult.cs" />
     <Compile Include="Infrustructure\FutureDateAttribute.cs" />
+    <Compile Include="Infrustructure\PastDateAttribute.cs" />
     <Compile Include="Models\Anketa\ViewAnketaExcel.cs" />
     <Compile Include="Models\Anketa\ViewAnketaModel.cs" />
+    <Compile Include="Models\Group\EditGroupModel.cs" />
     <Compile Include="Models\Mark\ViewMarkModel.cs" />
     <Compile Include="Models\Mark\ViewVisitorModel.cs" />
     <Compile Include="Models\Operator\EditOperatorModel.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="Models\Enter\RegisterModel.cs" />
     <Compile Include="Models\Operator\ViewOperatorModel.cs" />
     <Compile Include="Models\Report\ReportModel.cs" />
+    <Compile Include="Models\Visitor\EditVisitorModel.cs" />
     <Compile Include="Models\Visitor\InfoVisitorModel.cs" />
     <Compile Include="Models\Visitor\CreateVisitorModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
