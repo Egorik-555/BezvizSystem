@@ -45,17 +45,23 @@ namespace BezvizSystem.Web.Controllers
             return View(model);
         }
 
-        public async Task<ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(int? id)
         {
-            var group = await GroupService.GetByIdAsync(id);
-            if (group == null)
+            if (id != null)
             {
-                return RedirectToAction("Index");
-            }
+                var group = await GroupService.GetByIdAsync(id.Value);
+                if (group == null)
+                {
+                    return RedirectToAction("Index");
+                }
 
-            var visitors = group.Visitors;
-            var model = mapper.Map<IEnumerable<VisitorDTO>, IEnumerable<ViewVisitorModel>>(visitors);
-            return View(model);
+                var visitors = group.Visitors;
+                var model = mapper.Map<IEnumerable<VisitorDTO>, IEnumerable<ViewVisitorModel>>(visitors);
+                //return View(model);
+
+                return PartialView("VisitorData", model);
+            }
+            else return new EmptyResult();
         }
 
         [HttpPost]
@@ -74,14 +80,13 @@ namespace BezvizSystem.Web.Controllers
                                 visitor.Arrived = item.Arrived;
                         }
                     }
-
                     await GroupService.Update(group);
                 }
             }
 
             var anketas = await AnketaService.GetForUserAsync(User.Identity.Name);
             var model = mapper.Map<IEnumerable<AnketaDTO>, IEnumerable<ViewMarkModel>>(anketas);
-            return View("Index", model);
+            return View("Index", model);          
         }
     }
 }

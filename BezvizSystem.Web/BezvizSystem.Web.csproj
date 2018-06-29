@@ -220,6 +220,7 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\myStyle.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -294,7 +295,7 @@
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Group\Create.cshtml" />
     <Content Include="Views\Anketa\Index.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Date_.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
     <Content Include="Views\Anketa\EditVisitor.cshtml" />
     <Content Include="Views\Anketa\EditGroup.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InfoVisitorModel.cshtml" />
@@ -310,12 +311,13 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Mark\Index.cshtml" />
+    <Content Include="Views\Mark\Index__.cshtml" />
     <Content Include="Views\Mark\Edit.cshtml" />
     <Content Include="Views\Operator\DataOperators.cshtml" />
     <Content Include="Views\Shared\_LayoutEnter.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
+    <Content Include="Views\Mark\VisitorData.cshtml" />
+    <Content Include="Views\Mark\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

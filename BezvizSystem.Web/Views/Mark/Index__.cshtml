@@ -2,11 +2,12 @@
 
 @{
     ViewBag.Title = "Отметка о прибытии";
+    int i = 0;
 
-    var ajaxOptions = new AjaxOptions()
+    var options = new AjaxOptions()
     {
         UpdateTargetId = "visitorTable",
-        Url = Url.Action("Edit")
+        Url = Url.Action("OrdersData")
     };
 }
 
@@ -47,7 +48,7 @@
             {
             <tr>
                 <td>
-                    @Ajax.ActionLink(item.Id.ToString(), "Edit", "Mark", new { id = item.Id }, new AjaxOptions { UpdateTargetId = "visitorTable" })
+                    @Html.ActionLink((++i).ToString(), "Edit", "Mark", new { id = item.Id, returnUrl = Url.Action() }, null)
                 </td>
                 <td>
                     @(item.DateArrival.HasValue ? item.DateArrival.Value.ToShortDateString() : "")
@@ -74,19 +75,6 @@
         }
     </tbody>
 </table>
-
-
-@using (Ajax.BeginForm(ajaxOptions))
-{
-    <div id="visitorTable">
-        @Html.Action("Edit", new { id = Model })
-    </div>       
-}
-
-@section scripts
-{
-    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-}
 
 
 
