@@ -20,26 +20,52 @@
                 return elem.querySelectorAll('input[type=checkbox]')
         }
 
-        function allCheckBoxesChecked(elem) {
+        function allMark(elem) {
 
             var list = listCheckBoxes(elem);
+            var checked = 0;
 
             for (var i = 0; i < list.length; i++) {
-                if (!list[i].checked) {
-                    return false;
+                if (list[i].checked) {
+                    checked++;
                 }
             }
-            return true;
+
+            if (checked == list.length)
+                return "V";
+            else if (checked < list.length && checked > 0)
+                return "Частично";
+            else return "X";
         }
+
+        function getPreviousTr(elem) {
+            var td = elem.parentNode;
+            var tr = td.parentNode;
+            var previousTr = tr.previousElementSibling;
+            return previousTr;
+        }
+
+        function checkMark(divInfo) {
+            //var allChecked = allCheckBoxesChecked(divInfo);
+            var tr = getPreviousTr(divInfo);
+            var mark = allMark(divInfo);
+
+            //alert(mark);
+
+            var tdMark = tr.querySelector('td[name=mark]');
+            tdMark.innerHTML = mark;
+           // alert(mark.innerHTML)
+        }
+
    
         function onClickInfo (e) {
 
             var target = e.target;
             if (target.tagName == 'INPUT') {
 
-                var divInfo = document.getElementById("visitorInfo");
-                var allChecked = allCheckBoxesChecked(divInfo);
-
+                var divInfo = document.getElementById("visitorInfo");            
+                var mark = checkMark(divInfo);
+           
                 var id = target.getAttribute("dataId");
                 var value = target.checked;
 
