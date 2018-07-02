@@ -2,90 +2,102 @@
 
 @{
     ViewBag.Title = "Отметка о прибытии";
-
-    var ajaxOptions = new AjaxOptions()
-    {
-        UpdateTargetId = "visitorTable",
-        Url = Url.Action("Edit")
-    };
 }
 
 <h2>Отметка о прибытии</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                № пп
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateArrival)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DaysOfStay)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckPoint)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CountMembers)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Operator)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Arrived)
-            </th>
-        </tr>
-    </thead>
+@{ Html.RenderPartial("GroupData", Model); }
 
-    <tbody id="tabledata">
-        @foreach (var item in Model)
-            {
-            <tr>
-                <td>
-                    @Ajax.ActionLink(item.Id.ToString(), "Edit", "Mark", new { id = item.Id }, new AjaxOptions { UpdateTargetId = "visitorTable" })
-                </td>
-                <td>
-                    @(item.DateArrival.HasValue ? item.DateArrival.Value.ToShortDateString() : "")
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DaysOfStay)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CheckPoint)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CountMembers)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Operator)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Arrived)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-
-@using (Ajax.BeginForm(ajaxOptions))
-{
-    <div id="visitorTable">
-        @Html.Action("Edit", new { id = Model })
-    </div>       
-}
 
 @section scripts
 {
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script>
+     
+        function listCheckBoxes(elem) {
+            if (elem)
+                return elem.querySelectorAll('input[type=checkbox]')
+        }
+
+        function allCheckBoxesChecked(elem) {
+
+            var list = listCheckBoxes(elem);
+
+            for (var i = 0; i < list.length; i++) {
+                if (!list[i].checked) {
+                    return false;
+                }
+            }
+            return true;
+        }
+   
+        function onClickInfo (e) {
+
+            var target = e.target;
+            if (target.tagName == 'INPUT') {
+
+                var divInfo = document.getElementById("visitorInfo");
+                var allChecked = allCheckBoxesChecked(divInfo);
+
+                var id = target.getAttribute("dataId");
+                var value = target.checked;
+
+                $.ajax({
+                    url: '@Url.Action("Edit")?id=' + id + "&arrived=" + value
+                });          
+            }           
+        };
+
+
+        var mainTable = document.getElementById('mainTable');
+       
+        mainTable.onclick = function (e) {
+
+            var data = mainTable.getElementsByTagName('tbody')[0]; 
+         
+            var target = e.target;
+            if (target.tagName == "A") {
+
+                var divInfo = document.getElementById("visitorInfo");
+                if (divInfo) {
+                    var td = divInfo.parentNode;
+                    var tr = td.parentNode;
+                    if (tr) data.removeChild(tr);
+                }
+
+                var tr = target.parentNode;
+                while (tr.tagName != "TR") {
+                    tr = tr.parentNode;
+                    if (tr.tagName == "TABLE") break;
+                }
+                if (tr.tagName == "TR") {
+                  
+                    var newTr = document.createElement('tr');
+                    var newTd = document.createElement('td');
+                    var newDiv = document.createElement('div');
+
+                    newTd.setAttribute("colspan", "8");
+                    newDiv.setAttribute("id", "visitorInfo");
+
+                    newTd.appendChild(newDiv);
+                    newTr.appendChild(newTd);
+                    data.insertBefore(newTr, tr.nextElementSibling);
+
+                    newDiv.onclick = onClickInfo;
+
+                    $.ajax({
+                        url: '@Url.Action("ShowVisitors")?id=' + target.innerHTML,
+                        dataType: "html",
+                        success: function (data) {
+                            $("#visitorInfo").html(data)
+                        }
+                    });
+                }
+            }
+        }
+
+    </script>
 }
 
 

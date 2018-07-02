@@ -318,6 +318,7 @@
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="Views\Mark\VisitorData.cshtml" />
     <Content Include="Views\Mark\Index.cshtml" />
+    <Content Include="Views\Mark\GroupData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -30,9 +30,7 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.GroupId)
-                <input type="hidden" name="[@(i)].Id" value="@item.Id" />
-                <input type="hidden" name="[@(i)].GroupId" value="@item.GroupId" />
+                @Html.DisplayFor(modelItem => item.GroupId)             
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Surname)
@@ -47,7 +45,7 @@
                 @Html.DisplayFor(modelItem => item.SerialAndNumber)
             </td>
             <td>
-                @Html.CheckBox("[" + @i + "].Arrived", item.Arrived)
+                @Html.CheckBox("[" + @i + "].Arrived", item.Arrived, new { dataId = item.Id})
             </td>
         </tr>
 
@@ -55,8 +53,3 @@
     }
 </table>
 
-@section Scripts{
-
-
-
-}

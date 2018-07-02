@@ -68,11 +68,13 @@ namespace BezvizSystem.BLL.Services
             {
                 var model = await Database.VisitorManager.GetByIdAsync(visitor.Id);
                 if (model != null)
-                {
-                    var mapper = new MapperConfiguration(cfg => cfg.CreateMap<VisitorDTO, Visitor>().
-                                                         ConstructUsing(v => model)
-                                                         
-                                                         ).CreateMapper();
+                {                  
+                    var mapper = new MapperConfiguration(cfg => 
+                    {
+                        cfg.CreateMap<VisitorDTO, Visitor>().ConstructUsing(v => model).
+                            ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => Database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault()));
+
+                    }).CreateMapper();
 
                     var m = mapper.Map<VisitorDTO, Visitor>(visitor);
                     Database.VisitorManager.Update(m);

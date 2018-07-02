@@ -1,0 +1,64 @@
+﻿@model IEnumerable<BezvizSystem.Web.Models.Mark.ViewMarkModel>
+
+<table id="mainTable" class="table">
+    <thead>
+        <tr>
+            <th>
+                №
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateArrival)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DaysOfStay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckPoint)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CountMembers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Operator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Arrived)
+            </th>
+        </tr>
+    </thead>
+
+    <tbody id="tabledata">
+        @foreach (var item in Model)
+        {
+            <tr id="@item.Id">
+                <td>                
+                    <a style="cursor:pointer">@item.Id.ToString()</a>
+                </td>
+                <td>
+                    @(item.DateArrival.HasValue ? item.DateArrival.Value.ToShortDateString() : "")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DaysOfStay)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckPoint)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CountMembers)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Operator)
+                </td>
+                <td name="mark">
+                    @Html.DisplayFor(modelItem => item.Arrived)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

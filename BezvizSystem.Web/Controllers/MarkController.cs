@@ -23,7 +23,12 @@ namespace BezvizSystem.Web.Controllers
         private IService<GroupVisitorDTO> GroupService
         {
             get { return HttpContext.GetOwinContext().Get<IService<GroupVisitorDTO>>(); }
-        }   
+        }
+
+        private IService<VisitorDTO> VisitorService
+        {
+            get { return HttpContext.GetOwinContext().Get<IService<VisitorDTO>>(); }
+        }
 
         public MarkController()
         {
@@ -36,8 +41,8 @@ namespace BezvizSystem.Web.Controllers
                     ForMember(dest => dest.GroupId, opt => opt.MapFrom(src => src.Group.Id));
 
             }).CreateMapper();
-        }       
-
+        }   
+        
         public async Task<ActionResult> Index()
         {
             var anketas = await AnketaService.GetForUserAsync(User.Identity.Name);
@@ -45,10 +50,11 @@ namespace BezvizSystem.Web.Controllers
             return View(model);
         }
 
-        public async Task<ActionResult> Edit(int? id)
+        public async Task<ActionResult> ShowVisitors(int? id)
         {
             if (id != null)
             {
+
                 var group = await GroupService.GetByIdAsync(id.Value);
                 if (group == null)
                 {
@@ -57,36 +63,25 @@ namespace BezvizSystem.Web.Controllers
 
                 var visitors = group.Visitors;
                 var model = mapper.Map<IEnumerable<VisitorDTO>, IEnumerable<ViewVisitorModel>>(visitors);
-                //return View(model);
-
                 return PartialView("VisitorData", model);
+
             }
             else return new EmptyResult();
         }
 
-        [HttpPost]
-        public async Task<ActionResult> Edit(ICollection<ViewVisitorModel> visitors)
+        public async Task Edit(int? id, bool arrived)
         {
-            if (visitors.Count != 0)
+            if (id.HasValue)
             {
-                var group = await GroupService.GetByIdAsync(visitors.First().GroupId);
-                if (group != null)
+                var visitor = await VisitorService.GetByIdAsync(id.Value);
+                if (visitor != null)
                 {
-                    foreach (var visitor in group.Visitors)
-                    {
-                        foreach (var item in visitors)
-                        {
-                            if (visitor.Id == item.Id)
-                                visitor.Arrived = item.Arrived;
-                        }
-                    }
-                    await GroupService.Update(group);
+                    visitor.Arrived = arrived;
+                    var result = await VisitorService.Update(visitor);
                 }
+          
             }
-
-            var anketas = await AnketaService.GetForUserAsync(User.Identity.Name);
-            var model = mapper.Map<IEnumerable<AnketaDTO>, IEnumerable<ViewMarkModel>>(anketas);
-            return View("Index", model);          
+                   
         }
     }
 }
