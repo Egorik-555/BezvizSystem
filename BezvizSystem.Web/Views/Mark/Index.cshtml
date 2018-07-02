@@ -12,118 +12,129 @@
 @section scripts
 {
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-
     <script>
-     
+
         function listCheckBoxes(elem) {
-            if (elem)
-                return elem.querySelectorAll('input[type=checkbox]')
+    if (elem)
+        return elem.querySelectorAll('input[type=checkbox]')
+}
+
+function allMark(elem) {
+
+    var list = listCheckBoxes(elem);
+    var checked = 0;
+
+    for (var i = 0; i < list.length; i++) {
+        if (list[i].checked) {
+            checked++;
         }
+    }
 
-        function allMark(elem) {
+    if (checked == list.length)
+        return "V";
+    else if (checked < list.length && checked > 0)
+        return "Частично";
+    else return "X";
+}
 
-            var list = listCheckBoxes(elem);
-            var checked = 0;
+function getPreviousTr(elem) {
+    if (elem) {
+        var td = elem.parentNode;
+        var tr = td.parentNode;
+        var previousTr = tr.previousElementSibling;
+        return previousTr;
+    }
+}
 
-            for (var i = 0; i < list.length; i++) {
-                if (list[i].checked) {
-                    checked++;
-                }
-            }
+function checkMark(divInfo) {
+    var tr = getPreviousTr(divInfo);
+    var mark = allMark(divInfo);
 
-            if (checked == list.length)
-                return "V";
-            else if (checked < list.length && checked > 0)
-                return "Частично";
-            else return "X";
-        }
+    var tdMark = tr.querySelector('td[name=mark]');
+    tdMark.innerHTML = mark;
+}
 
-        function getPreviousTr(elem) {
-            var td = elem.parentNode;
+function visitorInfoAfterA(elem) {
+    elem.getElementById('visitorInfo');
+    if (elem) return true;
+}
+
+
+function onClickInfo(e) {
+
+    var target = e.target;
+    if (target.tagName == 'INPUT') {
+
+        var divInfo = document.getElementById("visitorInfo");
+        var mark = checkMark(divInfo);
+
+        var id = target.getAttribute("dataId");
+        var value = target.checked;
+
+        $.ajax({
+            url: '@Url.Action("Edit")?id=' + id + "&arrived=" + value
+        });
+    }
+};
+
+
+var mainTable = document.getElementById('mainTable');
+
+mainTable.onclick = function (e) {
+
+    var data = mainTable.getElementsByTagName('tbody')[0];
+
+    var target = e.target;
+
+    var tr = target.parentNode;
+    while (tr.tagName != "TR") {
+        tr = tr.parentNode;
+        if (tr.tagName == "BODY") return;
+    }
+    target = tr;
+
+    var attr = target.getAttribute("class");
+    if (attr == 'infoTableRow') return;
+
+    if (target.tagName == "TR") {
+
+        var divInfo = document.getElementById("visitorInfo");
+        var previosTr = getPreviousTr(divInfo);
+
+        if (divInfo) {
+            var td = divInfo.parentNode;
             var tr = td.parentNode;
-            var previousTr = tr.previousElementSibling;
-            return previousTr;
+            if (tr) data.removeChild(tr);
         }
 
-        function checkMark(divInfo) {
-            //var allChecked = allCheckBoxesChecked(divInfo);
-            var tr = getPreviousTr(divInfo);
-            var mark = allMark(divInfo);
+        if (target === previosTr) return;
 
-            //alert(mark);
+        var newTr = document.createElement('tr');
+        var newTd = document.createElement('td');
+        var newDiv = document.createElement('div');
 
-            var tdMark = tr.querySelector('td[name=mark]');
-            tdMark.innerHTML = mark;
-           // alert(mark.innerHTML)
-        }
+        newTd.setAttribute("colspan", "8");
+        newDiv.setAttribute("id", "visitorInfo");
 
-   
-        function onClickInfo (e) {
+        newTd.appendChild(newDiv);
+        newTr.appendChild(newTd);
+        data.insertBefore(newTr, target.nextElementSibling);
 
-            var target = e.target;
-            if (target.tagName == 'INPUT') {
+        newDiv.onclick = onClickInfo;
 
-                var divInfo = document.getElementById("visitorInfo");            
-                var mark = checkMark(divInfo);
-           
-                var id = target.getAttribute("dataId");
-                var value = target.checked;
+        var id = target.getElementsByTagName('A')[0];
 
-                $.ajax({
-                    url: '@Url.Action("Edit")?id=' + id + "&arrived=" + value
-                });          
-            }           
-        };
-
-
-        var mainTable = document.getElementById('mainTable');
-       
-        mainTable.onclick = function (e) {
-
-            var data = mainTable.getElementsByTagName('tbody')[0]; 
-         
-            var target = e.target;
-            if (target.tagName == "A") {
-
-                var divInfo = document.getElementById("visitorInfo");
-                if (divInfo) {
-                    var td = divInfo.parentNode;
-                    var tr = td.parentNode;
-                    if (tr) data.removeChild(tr);
-                }
-
-                var tr = target.parentNode;
-                while (tr.tagName != "TR") {
-                    tr = tr.parentNode;
-                    if (tr.tagName == "TABLE") break;
-                }
-                if (tr.tagName == "TR") {
-                  
-                    var newTr = document.createElement('tr');
-                    var newTd = document.createElement('td');
-                    var newDiv = document.createElement('div');
-
-                    newTd.setAttribute("colspan", "8");
-                    newDiv.setAttribute("id", "visitorInfo");
-
-                    newTd.appendChild(newDiv);
-                    newTr.appendChild(newTd);
-                    data.insertBefore(newTr, tr.nextElementSibling);
-
-                    newDiv.onclick = onClickInfo;
-
-                    $.ajax({
-                        url: '@Url.Action("ShowVisitors")?id=' + target.innerHTML,
-                        dataType: "html",
-                        success: function (data) {
-                            $("#visitorInfo").html(data)
-                        }
-                    });
-                }
+        $.ajax({
+            url: '@Url.Action("ShowVisitors")?id=' + id.innerHTML,
+            dataType: "html",
+            success: function (data) {
+                $("#visitorInfo").html(data)
             }
-        }
+        });
+    }
+}
 
-    </script>
+</script>  
 }
 
 

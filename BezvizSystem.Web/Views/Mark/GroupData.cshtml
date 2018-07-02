@@ -33,9 +33,9 @@
     <tbody id="tabledata">
         @foreach (var item in Model)
         {
-            <tr id="@item.Id">
+            <tr id="@item.Id" class="mainTableRow">
                 <td>                
-                    <a style="cursor:pointer">@item.Id.ToString()</a>
+                    <a>@item.Id.ToString()</a>
                 </td>
                 <td>
                     @(item.DateArrival.HasValue ? item.DateArrival.Value.ToShortDateString() : "")

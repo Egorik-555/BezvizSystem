@@ -11,11 +11,12 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <link href="~/Content/myStyle.css" rel="stylesheet" />
+    <link href="~/Content/MyStyle/Mark.css" rel="stylesheet" />
 </head>
 <body>
     
     <div style="float:left; width: 200px; border: 1px solid black">
-        <input type="button" value="Главная" id="btn1" onclick="'@Url.Action("Index", "Home")'" />
+        <input type="button" value="Главная" id="btn1" onclick="location.href='@Url.Action("Index", "Home")'" />
 
         <input type="button" value="Регистрация индивидуального туриста" onclick="location.href='@Url.Action("Create", "Visitor")'" />
         <input type="button" value="Регистрация группы" onclick="location.href='@Url.Action("Create", "Group")'" />
