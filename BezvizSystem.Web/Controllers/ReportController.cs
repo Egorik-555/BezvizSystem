@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace BezvizSystem.Web.Controllers
 {
+    [Authorize(Roles = "admin, operator")]
     public class ReportController : Controller
     {
         private IReport _reportService

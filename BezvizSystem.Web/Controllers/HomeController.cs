@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace BezvizSystem.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin, operator")]
     public class HomeController : Controller
     {
         private IUserService Service

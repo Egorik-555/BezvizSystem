@@ -14,7 +14,7 @@ using System.Web.Mvc;
 
 namespace BezvizSystem.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin, operator")]
     public class GroupController : Controller
     {
         private IService<GroupVisitorDTO> GroupService

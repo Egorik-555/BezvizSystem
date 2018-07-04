@@ -74,5 +74,26 @@ if (addButton){
 }
 
 
+//количество дней пребывания
+var form = document.forms[0];
+var dateArrival = form.DateArrival;
+var dateDeparture = form.DateDeparture;
+
+dateArrival.addEventListener("change", changeHandler);
+dateDeparture.addEventListener("change", changeHandler);
+
+function changeHandler() {
+
+    var form = document.forms[0];
+    var dateArrival = form.DateArrival;
+    var dateDeparture = form.DateDeparture;
+
+    var date1 = new Date(dateArrival.value);
+    var date2 = new Date(dateDeparture.value);
+
+    alert(date1 - date2);
+}
+
+
 
 
