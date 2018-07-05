@@ -1,4 +1,5 @@
 var addButton = document.getElementById('addVisitorBut');
+var deleteButton = document.getElementById('deleteVisitorBut');
 
 function changeAttributeSub(elem, nameTag, nameAttLabels){
     var labels = elem.getElementsByTagName(nameTag);
@@ -69,8 +70,21 @@ function onClickAdd(){
 };
 
 
+function onClickDelete() {
+    var infoVisitors = document.querySelectorAll('div[name=infoVisitor]');
+    var count = infoVisitors.length;
+
+    if (count > 1){
+        document.removeChild(infoVisitors.item(count - 1));
+    }
+}
+
+
 if (addButton){
     addButton.onclick = onClickAdd;
+}
+if (deleteButton){
+    deleteButton.onclick = onClickDelete;
 }
 
 
@@ -90,8 +104,9 @@ function changeHandler() {
 
     var date1 = new Date(dateArrival.value);
     var date2 = new Date(dateDeparture.value);
-
-    alert(date1 - date2);
+    var divDate = date2 - date1;
+    var daysLag = Math.ceil(Math.abs(divDate) / (1000 * 3600 * 24)) + 1;
+    form.DaysOfStay.value = daysLag;
 }
 
 
