@@ -194,6 +194,7 @@
     <Compile Include="Infrustructure\DateArrivalLessAttribute.cs" />
     <Compile Include="Infrustructure\ExcelResult.cs" />
     <Compile Include="Infrustructure\FutureDateAttribute.cs" />
+    <Compile Include="Infrustructure\JSONDeserialise.cs" />
     <Compile Include="Infrustructure\PastDateAttribute.cs" />
     <Compile Include="Models\Anketa\ViewAnketaExcel.cs" />
     <Compile Include="Models\Anketa\ViewAnketaModel.cs" />
@@ -313,7 +314,6 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Mark\Index__.cshtml" />
     <Content Include="Views\Mark\Edit.cshtml" />
     <Content Include="Views\Operator\DataOperators.cshtml" />
     <Content Include="Views\Shared\_LayoutEnter.cshtml" />
@@ -321,6 +321,7 @@
     <Content Include="Views\Mark\VisitorData.cshtml" />
     <Content Include="Views\Mark\Index.cshtml" />
     <Content Include="Views\Mark\GroupData.cshtml" />
+    <Content Include="Views\Anketa\GroupData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

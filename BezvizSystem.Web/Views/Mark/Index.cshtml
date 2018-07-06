@@ -122,10 +122,10 @@ mainTable.onclick = function (e) {
 
         newDiv.onclick = onClickInfo;
 
-        var id = target.getElementsByTagName('A')[0];
+        var id = target.getAttribute('id');
 
         $.ajax({
-            url: '@Url.Action("ShowVisitors")?id=' + id.innerHTML,
+            url: '@Url.Action("ShowVisitors")?id=' + id,
             dataType: "html",
             success: function (data) {
                 $("#visitorInfo").html(data)

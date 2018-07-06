@@ -35,7 +35,7 @@
         {
             <tr id="@item.Id" class="mainTableRow">
                 <td>                
-                    <a>@item.Id.ToString()</a>
+                    @Html.DisplayFor(modelItem => item.Id)
                 </td>
                 <td>
                     @(item.DateArrival.HasValue ? item.DateArrival.Value.ToShortDateString() : "")

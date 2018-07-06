@@ -1,23 +1,13 @@
-﻿@model IEnumerable<BezvizSystem.Web.Models.Mark.ViewMarkModel>
+﻿@model IEnumerable<BezvizSystem.Web.Models.Anketa.ViewAnketaModel>
 
-@{
-    ViewBag.Title = "Отметка о прибытии";
-    int i = 0;
-
-    var options = new AjaxOptions()
-    {
-        UpdateTargetId = "visitorTable",
-        Url = Url.Action("OrdersData")
-    };
-}
-
-<h2>Отметка о прибытии</h2>
-
-<table class="table">
+<table id="mainTable" class="table">
     <thead>
         <tr>
+            @{ 
+                int i = 0;
+            }
             <th>
-                № пп
+                №
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DateArrival)
@@ -37,18 +27,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.Operator)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Arrived)
-            </th>
         </tr>
     </thead>
 
     <tbody id="tabledata">
         @foreach (var item in Model)
-            {
-            <tr>
+        {
+            <tr id="@item.Id" class="mainTableRow">
                 <td>
-                    @Html.ActionLink((++i).ToString(), "Edit", "Mark", new { id = item.Id, returnUrl = Url.Action() }, null)
+                    @(++i)
                 </td>
                 <td>
                     @(item.DateArrival.HasValue ? item.DateArrival.Value.ToShortDateString() : "")
@@ -68,13 +55,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Operator)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Arrived)
-                </td>
             </tr>
         }
     </tbody>
 </table>
-
-
-

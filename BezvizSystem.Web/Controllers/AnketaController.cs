@@ -88,9 +88,9 @@ namespace BezvizSystem.Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<ActionResult> InExcel()
-        {
+        {         
             var anketas = await AnketaService.GetForUserAsync(User.Identity.Name);
 
             //список всех туристов
@@ -144,7 +144,6 @@ namespace BezvizSystem.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> EditVisitor(EditVisitorModel model)
         {
-
 
             if (ModelState.IsValid)
             {
