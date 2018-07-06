@@ -32,7 +32,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.DaysOfStay, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.DaysOfStay, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control" } })
+                @Html.EditorFor(model => model.DaysOfStay, new { htmlAttributes = new { disabled = "disabled", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.DaysOfStay, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -53,14 +53,17 @@
             </div>
         </div>
 
-        <div class="form-group">          
+        <div class="form-group">
             @Html.EditorFor(model => model.Infoes)
             @Html.ValidationMessageFor(model => model.Infoes, "")
         </div>
 
-        <input type="button" id="addVisitorBut" value="Добавить туриста" />
+        <hr />
 
-        <hr/>
+        <input type="button" id="addVisitorBut" value="Добавить туриста" />
+        <input type="button" id="deleteVisitorBut" value="Удалить туриста">
+
+        <hr />
 
         <div class="form-group">
             @Html.LabelFor(model => model.ProgramOfTravel, htmlAttributes: new { @class = "control-label col-md-2" })

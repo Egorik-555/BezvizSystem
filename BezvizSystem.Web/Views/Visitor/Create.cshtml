@@ -32,7 +32,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.DaysOfStay, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.DaysOfStay, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control" } })
+                @Html.EditorFor(model => model.DaysOfStay, new { htmlAttributes = new { disabled = "disabled", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.DaysOfStay, "", new { @class = "text-danger" })
             </div>
         </div>

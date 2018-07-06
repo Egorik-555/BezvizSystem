@@ -60,22 +60,24 @@ function onClickAdd(){
         changeAttributeBracket(newInfoVisitor, 'select', 'name');
 
         clearField(newInfoVisitor);
-
-        var hr = infoVisitor.nextElementSibling;
-        var parent = hr.parentNode;
-
-        parent.insertBefore(newInfoVisitor, hr.nextElementSibling);
-        parent.insertBefore(document.createElement('hr'), newInfoVisitor.nextElementSibling)
+        var parent = infoVisitor.parentNode;
+        parent.insertBefore(newInfoVisitor, infoVisitor.nextElementSibling);
     }
-};
+}
 
 
 function onClickDelete() {
     var infoVisitors = document.querySelectorAll('div[name=infoVisitor]');
+    //var hrs = document.querySelectorAll('div[name=infoVisitor] + hr');
     var count = infoVisitors.length;
 
     if (count > 1){
-        document.removeChild(infoVisitors.item(count - 1));
+        var parent = infoVisitors.item(count - 1).parentNode;
+        var delElem = infoVisitors.item(count - 1);
+        //var delHr = hrs.item(count - 1);
+
+        parent.removeChild(delElem);
+        //parent.removeChild(delHr)
     }
 }
 

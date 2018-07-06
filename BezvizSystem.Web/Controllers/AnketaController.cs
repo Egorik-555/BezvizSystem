@@ -144,6 +144,8 @@ namespace BezvizSystem.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> EditVisitor(EditVisitorModel model)
         {
+
+
             if (ModelState.IsValid)
             {
                 var visitor = mapper.Map<EditVisitorModel, GroupVisitorDTO>(model);
