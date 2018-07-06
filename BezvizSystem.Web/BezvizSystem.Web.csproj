@@ -314,7 +314,6 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Mark\Edit.cshtml" />
     <Content Include="Views\Operator\DataOperators.cshtml" />
     <Content Include="Views\Shared\_LayoutEnter.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />

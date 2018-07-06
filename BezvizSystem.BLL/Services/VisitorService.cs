@@ -24,8 +24,11 @@ namespace BezvizSystem.BLL.Services
             Database = uow;
             mapper = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<VisitorDTO, Visitor>();
-                cfg.CreateMap<Visitor, VisitorDTO>().ForMember(dest => dest.Group, opt => opt.Ignore());
+                cfg.CreateMap<VisitorDTO, Visitor>().
+                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => Database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault()));
+                cfg.CreateMap<Visitor, VisitorDTO>().ForMember(dest => dest.Group, opt => opt.Ignore()).
+                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name));
+
 
             }).CreateMapper();
         }

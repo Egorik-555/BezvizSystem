@@ -39,9 +39,13 @@ function changeAttributeBracket(elem, nameTag, nameAttLabels){
 
 function clearField(nameElem) {
     var inputs = nameElem.getElementsByTagName('input');
-
     for (var i = 0; i < inputs.length; i++) {
         inputs[i].value = '';
+    }
+
+    var selects = nameElem.getElementsByTagName('select');
+    for (var i = 0; i < selects.length; i++) {
+        selects[i].value = '';
     }
 }
 
