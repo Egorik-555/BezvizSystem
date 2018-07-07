@@ -26,7 +26,9 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         {
             var date = DateTime.Now.Date;
             var list = _anketaService.GetAll();
-            var group = list.GroupBy(a => a.CheckPoint, a => a.CountMembers).Select(a => new ArrivedInfo { CheckPoint = a.Key, Count = a.Sum()}).ToList();
+            var group = list.Where(g => g.DateArrival.Value.Date == date).
+                             GroupBy(a => a.CheckPoint, a => a.CountMembers).
+                             Select(a => new ArrivedInfo { CheckPoint = a.Key, Count = a.Sum()}).ToList();
 
             var model = new ArrivedPerson { Infoes = group, Count = group.Sum(a => a.Count) };
 

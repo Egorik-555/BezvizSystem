@@ -4,35 +4,46 @@
     ViewBag.Title = "Анкета";
 }
 
-Ожидается к прибытию на @DateTime.Now.ToShortDateString(): <b>@Model.Count</b>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayName("Пункт пропуска")
-            </th>
-            <th>
-                @Html.DisplayName("Количество прибывающих")
-            </th>
-        </tr>
-    </thead>
 
-    <tbody id="tabledata">
-        @foreach (var item in Model.Infoes)
-            {
-            <tr>            
-                <td>
-                    @Html.DisplayFor(modelItem => item.CheckPoint)
-                </td>   
-                <td>
-                    @Html.DisplayFor(modelItem => item.Count)
-                </td>  
+<div style="float:left">
+
+    Ожидается к прибытию на @DateTime.Now.ToShortDateString(): <b>@Model.Count</b>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayName("Пункт пропуска")
+                </th>
+                <th>
+                    @Html.DisplayName("Количество прибывающих")
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
 
+        <tbody id="tabledata">
+            @foreach (var item in Model.Infoes)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CheckPoint)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Count)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
+</div>
 
+<div style="float:left; border: 1px solid black">
+
+    <p style="background-color: bisque;"> <a href="#">Получение анкеты</a> </p>
+    <p> <a href="#">Экстренное получение анкеты</a> </p>
+    <p> <a href="#">Сверка контрольной суммы</a> </p>
+
+</div>
 
