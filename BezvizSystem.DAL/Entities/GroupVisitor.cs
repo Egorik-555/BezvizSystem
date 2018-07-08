@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BezvizSystem.DAL.Entities.Loging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,12 @@ namespace BezvizSystem.DAL.Entities
 {
     public class GroupVisitor
     {
+        public GroupVisitor()
+        {
+            Visitors = new List<Visitor>();
+            Unloads = new List<Unload>();
+        }
+
         public int Id { get; set; }
 
         public virtual ICollection<Visitor> Visitors { get; set; }
@@ -38,10 +45,9 @@ namespace BezvizSystem.DAL.Entities
 
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
+        public DateTime? DateEdit { get; set; }
+        public string UserEdit { get; set; }
 
-        public GroupVisitor()
-        {
-            Visitors = new List<Visitor>();
-        }
+        public ICollection<Unload> Unloads { get; set; }
     }
 }

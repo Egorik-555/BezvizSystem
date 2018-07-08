@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DictionaryService_Test.cs" />
+    <Compile Include="TestServises\CreateTestRepositories.cs" />
     <Compile Include="TestUnitOfWork.cs" />
     <Compile Include="ExcelTest.cs" />
     <Compile Include="ReportTest.cs" />

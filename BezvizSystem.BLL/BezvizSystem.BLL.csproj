@@ -137,6 +137,7 @@
     <Compile Include="DTO\Dictionary\NationalityDTO.cs" />
     <Compile Include="DTO\Dictionary\StatusDTO.cs" />
     <Compile Include="DTO\GroupVisitorDTO.cs" />
+    <Compile Include="DTO\Loging\UnloadDTO.cs" />
     <Compile Include="DTO\ProfileUserDTO.cs" />
     <Compile Include="DTO\ReportDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />

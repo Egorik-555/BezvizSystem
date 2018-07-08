@@ -9,6 +9,11 @@ namespace BezvizSystem.BLL.DTO
 {
     public class GroupVisitorDTO
     {
+        public GroupVisitorDTO()
+        {
+            Visitors = new List<VisitorDTO>();
+        }
+
         public int Id { get; set; }
 
         public virtual ICollection<VisitorDTO> Visitors { get; set; }
@@ -34,10 +39,7 @@ namespace BezvizSystem.BLL.DTO
 
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
-
-        public GroupVisitorDTO()
-        {
-            Visitors = new List<VisitorDTO>();
-        }
+        public DateTime? DateEdit { get; set; }
+        public string UserEdit { get; set; }
     }
 }

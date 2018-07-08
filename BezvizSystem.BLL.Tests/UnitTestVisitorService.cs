@@ -6,6 +6,7 @@ using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Services;
+using BezvizSystem.BLL.Tests.TestServises;
 using BezvizSystem.DAL;
 using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Identity;
@@ -21,65 +22,23 @@ namespace BezvizSystem.BLL.Tests
     public class UnitTestVisitorService
     {
         IService<VisitorDTO> Service;
-        Mock<IUnitOfWork> mockDB = new Mock<IUnitOfWork>();
-        BezvizUserManager UserManager;
-
-        List<Visitor> list;
-
+              
         public UnitTestVisitorService()
         {
-            BezvizUser user1 = new BezvizUser { Id = "aaa", UserName = "Admin", OperatorProfile = new OperatorProfile { UNP = "UNPAdmin" } };
-            BezvizUser user2 = new BezvizUser { Id = "bbb", UserName = "Test", OperatorProfile = new OperatorProfile { UNP = "UNPTest" } };
-            List<BezvizUser> userList = new List<BezvizUser> { user1, user2 };
-
-            Mock<IUserStore<BezvizUser>> userStore = new Mock<IUserStore<BezvizUser>>();
-            userStore.Setup(m => m.FindByNameAsync(It.IsAny<string>())).Returns<string>(id =>
-                                                                            Task<BezvizUser>.FromResult<BezvizUser>(
-                                                                                userList.Where(u => u.UserName == id).FirstOrDefault()));
-
-            UserManager = new BezvizUserManager(userStore.Object);
-
-            list = new List<Visitor> {new Visitor {Id = 1, Surname = "surname1", BithDate = DateTime.Now },
-                                      new Visitor { Id = 2, Surname = "surname2", Name = "Name2" },
-                                      new Visitor { Id = 3, Surname = "surname3" },
-                                      new Visitor { Id = 4, Surname = "surname4"}};
-
-
-            Mock<IRepository<Visitor, int>> mockVisitors = new Mock<IRepository<Visitor, int>>();
-            mockVisitors.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.Where(v => v.Id == id).FirstOrDefault());
-            mockVisitors.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
-                                                                                        Task<Visitor>.FromResult<Visitor>(
-                                                                                        list.Where(v => v.Id == id).FirstOrDefault()));
-
-            mockVisitors.Setup(m => m.GetAll()).Returns(list);
-            mockVisitors.Setup(m => m.Create(It.IsAny<Visitor>())).Returns<Visitor>(v => { list.Add(v); return v; });
-            mockVisitors.Setup(m => m.Delete(It.IsAny<int>())).Returns<int>(id =>
-            {
-                list.RemoveAt(id - 1);
-                return null;
-            });
-            mockVisitors.Setup(m => m.Update(It.IsAny<Visitor>())).Returns<Visitor>(v =>
-            {
-                list.RemoveAt(v.Id - 1);
-                list.Insert(v.Id-1, v);
-                return v;
-            });
-
-            mockDB.Setup(m => m.VisitorManager).Returns(mockVisitors.Object);
-            mockDB.Setup(m => m.UserManager).Returns(UserManager);
-
-            Service = new VisitorService(mockDB.Object);
+            CreateTestRepositories repoes = new CreateTestRepositories();
+            Service = new VisitorService(repoes.CreateIoWManager());
         }
 
         [TestMethod]
         public async Task Create_Visitor()
         {
-            VisitorDTO visitor = new VisitorDTO { Name = "test", UserInSystem = "Admin" };
+            VisitorDTO visitor = new VisitorDTO { Name = "newTest", Nationality = "nat1", UserInSystem = "Test1" };
 
             var result = await Service.Create(visitor);
+            var count = Service.GetAll().Count();
 
             Assert.IsTrue(result.Succedeed);
-            Assert.IsTrue(list.Count == 5);
+            Assert.IsTrue(count == 5);
         }
 
         [TestMethod]
@@ -87,23 +46,27 @@ namespace BezvizSystem.BLL.Tests
         {
             var result = await Service.Delete(1);
             var visitor = await Service.GetByIdAsync(1);
+            var count = Service.GetAll().Count();
 
             Assert.IsNull(visitor);
             Assert.IsTrue(result.Succedeed);
-            Assert.IsTrue(list.Count == 3);
+            Assert.IsTrue(count == 3);
         }
 
         [TestMethod]
         public async Task Update_Visitor()
         {
-            VisitorDTO visitor = new VisitorDTO {Id = 2, Name = "new Name", UserInSystem = "Admin" };
+            VisitorDTO visitor = new VisitorDTO {Id = 2, Name = "new Name", UserInSystem = "user", UserEdit = "new user", DateEdit = DateTime.Now };
 
             var result = await Service.Update(visitor);
             var resVisitor = await Service.GetByIdAsync(2);
-     
+            var count = Service.GetAll().Count();
+
             Assert.IsTrue(result.Succedeed);
-            Assert.IsTrue(list.Count == 4);
+            Assert.IsTrue(count == 4);
             Assert.IsTrue(resVisitor.Name == "new Name");
+            Assert.IsTrue(resVisitor.UserInSystem == "user");
+            Assert.IsTrue(resVisitor.UserEdit == "new user");
         }
 
         [TestMethod]

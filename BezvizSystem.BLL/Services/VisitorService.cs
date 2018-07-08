@@ -37,7 +37,7 @@ namespace BezvizSystem.BLL.Services
         {
             try
             {              
-                var model = mapper.Map<VisitorDTO, Visitor>(visitor);               
+                var model = mapper.Map<VisitorDTO, Visitor>(visitor);
                 Database.VisitorManager.Create(model);
                 return new OperationDetails(true, "Турист создан", "");
             }
@@ -79,7 +79,7 @@ namespace BezvizSystem.BLL.Services
 
                     }).CreateMapper();
 
-                    var m = mapper.Map<VisitorDTO, Visitor>(visitor);
+                    var m = mapper.Map<VisitorDTO, Visitor>(visitor);              
                     Database.VisitorManager.Update(m);
                     return new OperationDetails(true, "Турист изменен", "");
                 }
