@@ -1,4 +1,5 @@
 ﻿using BezvizSystem.DAL.Entities;
+using BezvizSystem.DAL.Entities.Loging;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -22,10 +23,14 @@ namespace BezvizSystem.DAL.EF
         public DbSet<OperatorProfile> OperatorProfiles { get; set; }
         public DbSet<Visitor> Visitors { get; set; }
         public DbSet<GroupVisitor> GroupsVisitor { get; set; }
+        public DbSet<UserActivity> UserActivities { get; set; }
+
+
+        // Dictionaries
+        public DbSet<CheckPoint> CheckPoints { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Nationality> Nationalities { get; set; }
-        public DbSet<CheckPoint> CheckPoints { get; set; }
-       
+        public DbSet<TypeOfOperation> TypeOfOperations { get; set; }
     }
 
     public class Initializer : CreateDatabaseIfNotExists<BezvizContext>
@@ -55,6 +60,13 @@ namespace BezvizSystem.DAL.EF
                new CheckPoint { Name = "Песчатка (Половцы)", Active = true},
                new CheckPoint { Name = "Переров (Беловежа)", Active = true},
                new CheckPoint { Name = "Аэропорт Брест", Active = true}
+            };
+            context.CheckPoints.AddRange(checkPoints);
+
+            List<TypeOfOperation> activities = new List<TypeOfOperation>
+            {
+               new TypeOfOperation {Code = 1, Name = "Вход в систему", Active = true},
+               new TypeOfOperation {Code = 2, Name = "Выгрузка данных", Active = true}            
             };
             context.CheckPoints.AddRange(checkPoints);
 
