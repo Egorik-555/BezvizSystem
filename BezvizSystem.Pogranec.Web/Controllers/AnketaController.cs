@@ -12,10 +12,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
 {
     public class AnketaController : Controller
     {
-
         IService<AnketaDTO> _anketaService;
-
-        //IMapper mapper;
 
         public AnketaController(IService<AnketaDTO> service)
         {

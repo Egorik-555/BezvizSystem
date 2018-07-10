@@ -1,4 +1,5 @@
 ﻿using BezvizSystem.DAL.Entities;
+using BezvizSystem.DAL.Entities.Log;
 using BezvizSystem.DAL.Identity;
 using BezvizSystem.DAL.Repositories;
 using System;
@@ -19,6 +20,9 @@ namespace BezvizSystem.DAL.Interfaces
         IRepository<Status, int> StatusManager { get; }
         IRepository<Nationality, int> NationalityManager { get; }
         IRepository<CheckPoint, int> CheckPointManager { get; }
+        IRepository<UserActivity, int> UserActivities { get; }
+        IRepository<TypeOfOperation, int> TypeOfOperations { get; }
+
         Task SaveAsync();
     }
 }

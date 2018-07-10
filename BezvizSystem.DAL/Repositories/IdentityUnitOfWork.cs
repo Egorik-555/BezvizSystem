@@ -1,5 +1,6 @@
 ﻿using BezvizSystem.DAL.EF;
 using BezvizSystem.DAL.Entities;
+using BezvizSystem.DAL.Entities.Log;
 using BezvizSystem.DAL.Identity;
 using BezvizSystem.DAL.Interfaces;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -23,6 +24,9 @@ namespace BezvizSystem.DAL.Repositories
         private IRepository<Status, int> statusManager;
         private IRepository<CheckPoint, int> checkPointManager;
         private IRepository<Nationality, int> nationalityManager;
+        private IRepository<UserActivity, int> userActivities;
+        private IRepository<TypeOfOperation, int> typeOfOperations;
+
 
         public IdentityUnitOfWork(string connection)
         {
@@ -35,6 +39,8 @@ namespace BezvizSystem.DAL.Repositories
             statusManager = new StatusManager(context);
             checkPointManager = new CheckPointManager(context);
             nationalityManager = new NationalityManager(context);
+            userActivities = new UserActivityManager(context);
+            typeOfOperations = new TypeOfOperationManager(context);
         }
 
         public BezvizUserManager UserManager => userManager;
@@ -45,6 +51,8 @@ namespace BezvizSystem.DAL.Repositories
         public IRepository<Status, int> StatusManager => statusManager;
         public IRepository<CheckPoint, int> CheckPointManager => checkPointManager;
         public IRepository<Nationality, int> NationalityManager => nationalityManager;
+        public IRepository<UserActivity, int> UserActivities => userActivities;
+        public IRepository<TypeOfOperation, int> TypeOfOperations => typeOfOperations;
 
         private bool disposed = false;
 
@@ -62,6 +70,8 @@ namespace BezvizSystem.DAL.Repositories
                     statusManager.Dispose();
                     checkPointManager.Dispose();
                     nationalityManager.Dispose();
+                    userActivities.Dispose();
+                    typeOfOperations.Dispose();
                 }
             }
         }

@@ -89,9 +89,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Loging\TypeOfOperation.cs" />
-    <Compile Include="Entities\Loging\Unload.cs" />
-    <Compile Include="Entities\Loging\UserActivity.cs" />
+    <Compile Include="Entities\Log\TypeOfOperation.cs" />
+    <Compile Include="Entities\Log\Unload.cs" />
+    <Compile Include="Entities\Log\UserActivity.cs" />
     <Compile Include="Interfaces\IOperatorManager.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />

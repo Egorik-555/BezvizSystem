@@ -137,7 +137,9 @@
     <Compile Include="DTO\Dictionary\NationalityDTO.cs" />
     <Compile Include="DTO\Dictionary\StatusDTO.cs" />
     <Compile Include="DTO\GroupVisitorDTO.cs" />
-    <Compile Include="DTO\Loging\UnloadDTO.cs" />
+    <Compile Include="DTO\Log\TypeOfOperationDTO.cs" />
+    <Compile Include="DTO\Log\UnloadDTO.cs" />
+    <Compile Include="DTO\Log\UserActivityDTO.cs" />
     <Compile Include="DTO\ProfileUserDTO.cs" />
     <Compile Include="DTO\ReportDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
@@ -145,6 +147,7 @@
     <Compile Include="Infrastructure\OperationDetails.cs" />
     <Compile Include="Interfaces\IExcel.cs" />
     <Compile Include="Interfaces\IGeneratePass.cs" />
+    <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="Interfaces\IReport.cs" />
     <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Interfaces\IServiceCreator.cs" />
@@ -154,6 +157,7 @@
     <Compile Include="Services\DictionaryService.cs" />
     <Compile Include="Services\GroupService.cs" />
     <Compile Include="Interfaces\IDictionaryService.cs" />
+    <Compile Include="Services\ActivityLoggerService.cs" />
     <Compile Include="Services\ReportService.cs" />
     <Compile Include="Services\ServiceCreator.cs" />
     <Compile Include="Services\UserService.cs" />

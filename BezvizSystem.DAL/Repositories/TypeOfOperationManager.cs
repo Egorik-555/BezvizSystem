@@ -1,6 +1,6 @@
 ﻿using BezvizSystem.DAL.EF;
 using BezvizSystem.DAL.Entities;
-using BezvizSystem.DAL.Entities.Loging;
+using BezvizSystem.DAL.Entities.Log;
 using BezvizSystem.DAL.Interfaces;
 using System;
 using System.Collections.Generic;

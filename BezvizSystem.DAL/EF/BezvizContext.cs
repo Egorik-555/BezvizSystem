@@ -1,5 +1,7 @@
 ﻿using BezvizSystem.DAL.Entities;
+using BezvizSystem.DAL.Entities.Log;
 using BezvizSystem.DAL.Entities.Loging;
+using BezvizSystem.DAL.Interfaces;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -25,12 +27,13 @@ namespace BezvizSystem.DAL.EF
         public DbSet<GroupVisitor> GroupsVisitor { get; set; }
         public DbSet<UserActivity> UserActivities { get; set; }
 
-
         // Dictionaries
         public DbSet<CheckPoint> CheckPoints { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Nationality> Nationalities { get; set; }
         public DbSet<TypeOfOperation> TypeOfOperations { get; set; }
+
+        
     }
 
     public class Initializer : CreateDatabaseIfNotExists<BezvizContext>
