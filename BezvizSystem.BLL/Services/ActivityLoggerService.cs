@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BezvizSystem.BLL.Services
 {
-    class ActivityLoggerService : ILogger<UserActivityDTO>
+    public class ActivityLoggerService : ILogger<UserActivityDTO>
     {
         IUnitOfWork Database;
         IMapper mapper;
@@ -22,8 +22,11 @@ namespace BezvizSystem.BLL.Services
             Database = db;
             mapper = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<UserActivity, UserActivityDTO>();
-                cfg.CreateMap<UserActivityDTO, UserActivity>();
+                cfg.CreateMap<UserActivity, UserActivityDTO>().
+                    ForMember(dest => dest.Operation, opt => opt.MapFrom(src => src.Operation.Name));
+                cfg.CreateMap<UserActivityDTO, UserActivity>().
+                    ForMember(dest => dest.Operation, opt => opt.MapFrom(src => 
+                                                      db.TypeOfOperations.GetAll().Where(t => t.Active && t.Name.ToUpper() == src.Operation.ToUpper()).FirstOrDefault()));
 
             }).CreateMapper();
         }
@@ -38,7 +41,7 @@ namespace BezvizSystem.BLL.Services
             return mapper.Map<IEnumerable<UserActivity>, IEnumerable<UserActivityDTO>>(Database.UserActivities.GetAll());
         }
 
-        public IEnumerable<UserActivityDTO> GetByLoginAsync(string login)
+        public IEnumerable<UserActivityDTO> GetByLogin(string login)
         {
             var source = Database.UserActivities.GetAll().Where(s => s.Login.ToUpper() == login.ToUpper());
             return mapper.Map<IEnumerable<UserActivity>, IEnumerable<UserActivityDTO>>(source);

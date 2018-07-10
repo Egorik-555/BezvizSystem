@@ -11,7 +11,7 @@ namespace BezvizSystem.BLL.Interfaces
     {
         OperationDetails Insert(T item);
 
-        IEnumerable<T> GetByLoginAsync(string login);
+        IEnumerable<T> GetByLogin(string login);
         IEnumerable<T> GetAll();
     }
 }

@@ -1,4 +1,4 @@
-﻿using BezvizSystem.DAL.Entities.Loging;
+﻿using BezvizSystem.DAL.Entities.Log;
 using System;
 using System.Collections.Generic;
 using System.Linq;

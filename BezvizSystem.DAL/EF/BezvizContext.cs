@@ -1,6 +1,5 @@
 ﻿using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Entities.Log;
-using BezvizSystem.DAL.Entities.Loging;
 using BezvizSystem.DAL.Interfaces;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;

@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using BezvizSystem.BLL.DTO.Log;
 
 namespace BezvizSystem.Pogranec.Web.Controllers
 {
@@ -20,11 +21,13 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         }
 
         private IUserService _userService;
+        private ILogger<UserActivityDTO> _logger;
 
 
-        public HomeController(IUserService service)
+        public HomeController(IUserService service, ILogger<UserActivityDTO> logger)
         {
             _userService = service;
+            _logger = logger;
         }
 
 
@@ -54,6 +57,8 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                         {
                             IsPersistent = model.RememberMe,
                         }, claim);
+
+                        _logger.Insert(new UserActivityDTO { Login = User.Identity.Name, });
 
                         return RedirectToAction("Index", "Home");
                     }

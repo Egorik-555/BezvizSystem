@@ -50,6 +50,7 @@
     <Compile Include="TestUnitOfWork.cs" />
     <Compile Include="ExcelTest.cs" />
     <Compile Include="ReportTest.cs" />
+    <Compile Include="UnitTestLoggerTest.cs" />
     <Compile Include="UnitTestAnketaService.cs" />
     <Compile Include="UnitTestGroupService.cs" />
     <Compile Include="UnitTestVisitorService.cs" />

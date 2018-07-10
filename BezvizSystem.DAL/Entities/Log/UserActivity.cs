@@ -14,7 +14,6 @@ namespace BezvizSystem.DAL.Entities.Log
         public TypeOfOperation Operation { get; set; }
         public string Ip { get; set; }
 
-        DateTime? TimeActivityFrom { get; set; }
-        DateTime? TimeActivityTo { get; set; }
+        public DateTime? TimeActivity { get; set; }
     }
 }

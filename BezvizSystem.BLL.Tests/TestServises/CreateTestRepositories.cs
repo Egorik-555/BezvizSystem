@@ -1,5 +1,6 @@
 ﻿using BezvizSystem.DAL;
 using BezvizSystem.DAL.Entities;
+using BezvizSystem.DAL.Entities.Log;
 using BezvizSystem.DAL.Identity;
 using BezvizSystem.DAL.Interfaces;
 using Microsoft.AspNet.Identity;
@@ -37,6 +38,15 @@ namespace BezvizSystem.BLL.Tests.TestServises
         GroupVisitor group4;
         GroupVisitor group5;
 
+        UserActivity activity1;
+        UserActivity activity2;
+        UserActivity activity3;
+        UserActivity activity4;
+
+        TypeOfOperation operation1 = new TypeOfOperation { Code = 1, Name = "Enter", Active = true };
+        TypeOfOperation operation2 = new TypeOfOperation { Code = 2, Name = "Exit", Active = true };
+        TypeOfOperation operation3 = new TypeOfOperation { Code = 3, Name = "ErrorEnter" };
+
         Status status1 = new Status { Code = 1, Name = "status1" };
         Status status2 = new Status { Code = 2, Name = "status2" };
         Status status3 = new Status { Code = 3, Name = "status3" };
@@ -61,6 +71,11 @@ namespace BezvizSystem.BLL.Tests.TestServises
             group3 = new GroupVisitor { Id = 3, CheckPoint = check3, PlaceOfRecidense = "place3", Visitors = new List<Visitor> { visitor4, visitor5, visitor6, visitor7 } };
             group4 = new GroupVisitor { Id = 4, CheckPoint = check4, PlaceOfRecidense = "place4", Visitors = new List<Visitor> { visitor2 } };
             group5 = new GroupVisitor { Id = 5, CheckPoint = check2, PlaceOfRecidense = "place5", Visitors = new List<Visitor> { visitor3 } };
+
+            activity1 = new UserActivity { Id = 1, Login = "login1", Ip = "Ip1", TimeActivity = DateTime.Now, Operation = operation1 };
+            activity2 = new UserActivity { Id = 2, Login = "login2", Ip = "Ip2", TimeActivity = DateTime.Now, Operation = operation2 };
+            activity3 = new UserActivity { Id = 3, Login = "login1", Ip = "Ip3", TimeActivity = DateTime.Now, Operation = operation3 };
+            activity4 = new UserActivity { Id = 4, Login = "login3", Ip = "Ip4", TimeActivity = DateTime.Now, Operation = operation1 };
         }
 
 
@@ -155,6 +170,34 @@ namespace BezvizSystem.BLL.Tests.TestServises
             return mockNat.Object;
         }
 
+        private IRepository<TypeOfOperation, int> CreateTypeOfOperationManager()
+        {
+            List<TypeOfOperation> list = new List<TypeOfOperation> { operation1, operation2, operation3};
+            Mock<IRepository<TypeOfOperation, int>> mockNat = new Mock<IRepository<TypeOfOperation, int>>();
+            mockNat.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.Where(v => v.Id == id).FirstOrDefault());
+            mockNat.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
+                                                                                  Task<TypeOfOperation>.FromResult<TypeOfOperation>(
+                                                                                  list.Where(v => v.Id == id).FirstOrDefault()));
+            mockNat.Setup(m => m.GetAll()).Returns(list);
+            return mockNat.Object;
+        }
+
+        private IRepository<UserActivity, int> CreateUserActivityManager()
+        {
+            List<UserActivity> list = new List<UserActivity> { activity1, activity2, activity3, activity4};
+            Mock<IRepository<UserActivity, int>> mock = new Mock<IRepository<UserActivity, int>>();
+
+            mock.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.Where(v => v.Id == id).FirstOrDefault());
+            mock.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
+                                                                               Task<UserActivity>.FromResult<UserActivity>(
+                                                                               list.Where(v => v.Id == id).FirstOrDefault()));
+
+            mock.Setup(m => m.GetAll()).Returns(list);
+            mock.Setup(m => m.Create(It.IsAny<UserActivity>())).Returns<UserActivity>(v => { list.Add(v); return v; });    
+
+            return mock.Object;
+        }
+
         public IUnitOfWork CreateIoWManager()
         {
             BezvizUserManager userManager = CreateUserManager();
@@ -167,6 +210,8 @@ namespace BezvizSystem.BLL.Tests.TestServises
             mockDB.Setup(m => m.StatusManager).Returns(CreateStatusManager());
             mockDB.Setup(m => m.CheckPointManager).Returns(CreateCheckPointManager());
             mockDB.Setup(m => m.GroupManager).Returns(CreateGroupVisitorManager());
+            mockDB.Setup(m => m.TypeOfOperations).Returns(CreateTypeOfOperationManager());
+            mockDB.Setup(m => m.UserActivities).Returns(CreateUserActivityManager());
 
             return mockDB.Object;
         }

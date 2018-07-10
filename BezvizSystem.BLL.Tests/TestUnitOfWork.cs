@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Identity;
 using Moq;
+using BezvizSystem.DAL.Entities.Log;
 
 namespace BezvizSystem.BLL.Tests
 {
@@ -23,6 +24,13 @@ namespace BezvizSystem.BLL.Tests
             new Status{ Code = 1, Name = "Status1", Active = true},
             new Status{ Code = 2, Name = "Status2"},
             new Status{ Code = 3, Name = "Status3", Active = true}
+        };
+
+        List<TypeOfOperation> operations = new List<TypeOfOperation>
+        {
+            new TypeOfOperation{ Code = 1, Name = "Enter", Active = true},
+            new TypeOfOperation{ Code = 2, Name = "Exit"},
+            new TypeOfOperation{ Code = 3, Name = "ErrorEnter", Active = true}
         };
 
         List<Nationality> nationalities = new List<Nationality>
@@ -73,6 +81,9 @@ namespace BezvizSystem.BLL.Tests
         public IRepository<Status, int> StatusManager => statusManager.Object;
         public IRepository<Nationality, int> NationalityManager => nationalityManager.Object;
         public IRepository<CheckPoint, int> CheckPointManager => checkPointManager.Object;
+
+        public IRepository<UserActivity, int> UserActivities => throw new NotImplementedException();
+        public IRepository<TypeOfOperation, int> TypeOfOperations => throw new NotImplementedException();
 
         public void Dispose()
         {
