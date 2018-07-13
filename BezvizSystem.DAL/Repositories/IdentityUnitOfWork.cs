@@ -26,6 +26,7 @@ namespace BezvizSystem.DAL.Repositories
         private IRepository<Nationality, int> nationalityManager;
         private IRepository<UserActivity, int> userActivities;
         private IRepository<TypeOfOperation, int> typeOfOperations;
+        private IRepository<Gender, int> genders;
 
 
         public IdentityUnitOfWork(string connection)
@@ -41,6 +42,7 @@ namespace BezvizSystem.DAL.Repositories
             nationalityManager = new NationalityManager(context);
             userActivities = new UserActivityManager(context);
             typeOfOperations = new TypeOfOperationManager(context);
+            genders = new GenderManager(context);
         }
 
         public BezvizUserManager UserManager => userManager;
@@ -53,6 +55,7 @@ namespace BezvizSystem.DAL.Repositories
         public IRepository<Nationality, int> NationalityManager => nationalityManager;
         public IRepository<UserActivity, int> UserActivities => userActivities;
         public IRepository<TypeOfOperation, int> TypeOfOperations => typeOfOperations;
+        public IRepository<Gender, int> Genders => genders;
 
         private bool disposed = false;
 
@@ -72,6 +75,7 @@ namespace BezvizSystem.DAL.Repositories
                     nationalityManager.Dispose();
                     userActivities.Dispose();
                     typeOfOperations.Dispose();
+                    genders.Dispose();
                 }
             }
         }

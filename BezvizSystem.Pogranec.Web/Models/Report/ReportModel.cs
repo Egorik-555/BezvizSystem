@@ -7,6 +7,9 @@ namespace BezvizSystem.Pogranec.Web.Models.Report
 {
     public class ReportModel
     {
+        public string DateFrom { get; set; }
+        public string DateTo { get; set; }
+
         public string AllRegistrated { get; set; }
         public string AllArrived { get; set; }
         public string WaitArrived { get; set; }

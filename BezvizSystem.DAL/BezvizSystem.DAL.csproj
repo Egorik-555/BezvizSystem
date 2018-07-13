@@ -89,6 +89,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Gender.cs" />
     <Compile Include="Entities\Log\TypeOfOperation.cs" />
     <Compile Include="Entities\Log\Unload.cs" />
     <Compile Include="Entities\Log\UserActivity.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Identity\BezvizRoleManager.cs" />
     <Compile Include="Identity\BezvizUserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\GenderManager.cs" />
     <Compile Include="Repositories\TypeOfOperationManager.cs" />
     <Compile Include="Repositories\CheckPointManager.cs" />
     <Compile Include="Repositories\GroupManager.cs" />

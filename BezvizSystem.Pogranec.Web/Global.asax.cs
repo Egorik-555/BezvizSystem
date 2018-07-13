@@ -5,6 +5,9 @@ using Ninject.Modules;
 using BezvizSystem.BLL.DI;
 using Ninject;
 using Ninject.Web.Mvc;
+using BezvizSystem.Pogranec.Web.Infrastructure.Log;
+using BezvizSystem.BLL.Interfaces;
+using BezvizSystem.BLL.DTO.Log;
 
 namespace BezvizSystem.Pogranec.Web
 {
@@ -20,6 +23,8 @@ namespace BezvizSystem.Pogranec.Web
             NinjectModule registrations = new NinjectRegistrations();
             var kernel = new StandardKernel(registrations);
             DependencyResolver.SetResolver(new NinjectDependencyResolver(kernel));
+
+           // GlobalFilters.Filters.Add(new TrackLoginFilter(kernel.Get<ILogger<UserActivityDTO>>()));
         }
     }
 }

@@ -1,0 +1,44 @@
+﻿@model BezvizSystem.Pogranec.Web.Models.Report.ReportModel
+
+@{
+    ViewBag.Title = "Отчеты";
+}
+
+<div>
+    <input type="button" id="dates" name="dates" value="Выбор диапазона дат" />
+
+    <div id="panelDates" style="display: none">
+        @using (Html.BeginForm())
+        {
+            <input type="date" name="dateFrom" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            <input type="date" name="dateTo" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+
+            <input type="submit" value="Отобрать"/>
+        }
+
+    </div>
+</div>
+
+<div>
+    <p> Зарегистрированные туристы (с @Model.DateFrom по @Model.DateTo):</p>
+    <p> Всего зарегистрировано: @Model.AllRegistrated</p>
+    <p> Прибыло: @Model.AllArrived</p>
+    <p> Ожидается к прибытию: @Model.WaitArrived</p>
+    <p> Не прибыло: @Model.NotArriverd</p>
+    <p> Индивидуальные туристы: @Model.AllTourist</p>
+    <p> Группы: @Model.AllGroup</p>
+</div>
+
+@section scripts{
+
+    <script>
+        var button = document.getElementById('dates');
+        var panel = document.getElementById('panelDates');
+
+        button.onclick = function () {
+            if (panel.style.display != 'none')
+                panel.style.display = 'none';
+            else panel.style.display = '';
+        }
+    </script>
+}

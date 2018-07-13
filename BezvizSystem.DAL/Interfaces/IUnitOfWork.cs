@@ -22,6 +22,7 @@ namespace BezvizSystem.DAL.Interfaces
         IRepository<CheckPoint, int> CheckPointManager { get; }
         IRepository<UserActivity, int> UserActivities { get; }
         IRepository<TypeOfOperation, int> TypeOfOperations { get; }
+        IRepository<Gender, int> Genders { get; }
 
         Task SaveAsync();
     }

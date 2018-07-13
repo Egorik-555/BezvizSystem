@@ -12,6 +12,7 @@ namespace BezvizSystem.BLL.DTO.Log
 
         public string Login { get; set; }
         public string Operation { get; set; }
+        public string Messsage { get; set; }
         public string Ip { get; set; }
 
         public DateTime? TimeActivity { get; set; }

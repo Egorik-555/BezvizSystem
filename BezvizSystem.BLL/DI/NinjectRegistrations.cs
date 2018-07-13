@@ -19,6 +19,7 @@ namespace BezvizSystem.BLL.DI
             Bind<IUserService>().To<UserService>();
             Bind<IService<AnketaDTO>>().To<AnketaService>();
             Bind<ILogger<UserActivityDTO>>().To<ActivityLoggerService>();
+            Bind<IReport>().To<ReportService>();
             Unbind<ModelValidatorProvider>();
         }
     }

@@ -40,6 +40,8 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginModel model)
         {
+            string errorMsg = null;
+
             if (ModelState.IsValid)
             {
                 await SetInitDataAsync();
@@ -55,29 +57,56 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                         Authentication.SignOut();
                         Authentication.SignIn(new AuthenticationProperties
                         {
-                            IsPersistent = model.RememberMe,
+                            IsPersistent = false,
                         }, claim);
 
-                        _logger.Insert(new UserActivityDTO { Login = User.Identity.Name, });
+                        //_logger.Insert(new UserActivityDTO {
+                        //    Login = model.Name,
+                        //    Ip = HttpContext.Request.UserHostAddress,
+                        //    Operation = "Вход",
+                        //    TimeActivity = DateTime.Now
+                        //});
 
                         return RedirectToAction("Index", "Home");
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Пользователь заблокирован");
+                        errorMsg = "Пользователь заблокирован";
+                        ModelState.AddModelError("", errorMsg);
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Неверный логин или пароль");
+                    errorMsg = "Неверный логин или пароль";
+                    ModelState.AddModelError("", errorMsg);
                 }
 
             }
+
+            if (!string.IsNullOrEmpty(errorMsg))
+            {
+                _logger.Insert(new UserActivityDTO
+                {
+                    Login = model.Name,
+                    Ip = HttpContext.Request.UserHostAddress,
+                    Operation = "Вход",
+                    Messsage = errorMsg,
+                    TimeActivity = DateTime.Now
+                });
+            }
+
             return View(model);
         }
 
         public ActionResult Logout()
         {
+            _logger.Insert(new UserActivityDTO
+            {
+                Login = User.Identity.Name,
+                Ip = HttpContext.Request.UserHostAddress,
+                Operation = "Выход",            
+                TimeActivity = DateTime.Now
+            });
             Authentication.SignOut();
             return RedirectToAction("Index", "Home");
         }

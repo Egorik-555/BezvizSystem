@@ -65,12 +65,13 @@ namespace BezvizSystem.DAL.EF
             };
             context.CheckPoints.AddRange(checkPoints);
 
-            List<TypeOfOperation> activities = new List<TypeOfOperation>
+            List<TypeOfOperation> operations = new List<TypeOfOperation>
             {
-               new TypeOfOperation {Code = 1, Name = "Вход в систему", Active = true},
-               new TypeOfOperation {Code = 2, Name = "Выгрузка данных", Active = true}            
+               new TypeOfOperation {Code = 1, Name = "Вход", Active = true},
+               new TypeOfOperation {Code = 2, Name = "Выход", Active = true},
+               new TypeOfOperation {Code = 3, Name = "Выгрузка данных", Active = true}            
             };
-            context.CheckPoints.AddRange(checkPoints);
+            context.TypeOfOperations.AddRange(operations);
 
             context.SaveChanges();
         }
