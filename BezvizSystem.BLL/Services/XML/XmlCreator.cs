@@ -19,7 +19,7 @@ namespace BezvizSystem.BLL.Services.XML
         }
 
 
-        private IEnumerable<>
+       // private IEnumerable<>
 
         public void Save(string name, SaveOptions options)
         {

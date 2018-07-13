@@ -31,8 +31,8 @@ namespace BezvizSystem.DAL.EF
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Nationality> Nationalities { get; set; }
         public DbSet<TypeOfOperation> TypeOfOperations { get; set; }
+        public DbSet<Gender> Genders { get; set; }
 
-        
     }
 
     public class Initializer : CreateDatabaseIfNotExists<BezvizContext>
@@ -72,6 +72,13 @@ namespace BezvizSystem.DAL.EF
                new TypeOfOperation {Code = 3, Name = "Выгрузка данных", Active = true}            
             };
             context.TypeOfOperations.AddRange(operations);
+
+            List<Gender> genders = new List<Gender>
+            {
+               new Gender {Code = 1, Name = "Мужчина", Active = true},
+               new Gender {Code = 2, Name = "Женщина", Active = true}
+            };
+            context.Genders.AddRange(genders);
 
             context.SaveChanges();
         }

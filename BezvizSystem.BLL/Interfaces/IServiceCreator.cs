@@ -19,6 +19,7 @@ namespace BezvizSystem.BLL.Interfaces
         IDictionaryService<StatusDTO> CreateStatusService(string connection);
         IDictionaryService<NationalityDTO> CreateNationalityService(string connection);
         IDictionaryService<CheckPointDTO> CreateCheckPointService(string connection);
+        IDictionaryService<GenderDTO> CreateGenderService(string connection);
         IReport CreateReport(string connection);
     }
 }

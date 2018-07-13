@@ -134,6 +134,7 @@
     <Compile Include="DTO\AnketaDTO.cs" />
     <Compile Include="DTO\Dictionary\CheckPointDTO.cs" />
     <Compile Include="DTO\Dictionary\DictionaryDTO.cs" />
+    <Compile Include="DTO\Dictionary\GenderDTO.cs" />
     <Compile Include="DTO\Dictionary\NationalityDTO.cs" />
     <Compile Include="DTO\Dictionary\StatusDTO.cs" />
     <Compile Include="DTO\GroupVisitorDTO.cs" />

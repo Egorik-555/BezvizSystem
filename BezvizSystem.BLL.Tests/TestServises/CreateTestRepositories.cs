@@ -20,9 +20,12 @@ namespace BezvizSystem.BLL.Tests.TestServises
         BezvizUser user3 = new BezvizUser { Id = "ccc", UserName = "Test3", OperatorProfile = new OperatorProfile { UNP = "UnpTest3", OKPO = "OKPO3", Role = "Operator" } };
         BezvizUser user4 = new BezvizUser { Id = "ddd", UserName = "Admin", OperatorProfile = new OperatorProfile { UNP = "UnpAdmin", OKPO = "OKPO4", Role = "Operator" } };
 
-        Nationality nat1 = new Nationality { Id = 1, Name = "nat1" };
-        Nationality nat2 = new Nationality { Id = 2, Name = "nat2" };
-        Nationality nat3 = new Nationality { Id = 3, Name = "nat3" };
+        Nationality nat1 = new Nationality { Id = 1, Name = "nat1", ShortName = "n1", Active = true };
+        Nationality nat2 = new Nationality { Id = 2, Name = "nat2", Active = true };
+        Nationality nat3 = new Nationality { Id = 3, Name = "nat3", Active = true };
+
+        Gender gender1 = new Gender { Id = 1, Code = 1, Name = "Мужчина", Active = true };
+        Gender gender2 = new Gender { Id = 2, Code = 2, Name = "Жунщина", Active = true };  
 
         Visitor visitor1;
         Visitor visitor2;
@@ -47,14 +50,14 @@ namespace BezvizSystem.BLL.Tests.TestServises
         TypeOfOperation operation2 = new TypeOfOperation { Code = 2, Name = "Exit", Active = true };
         TypeOfOperation operation3 = new TypeOfOperation { Code = 3, Name = "ErrorEnter" };
 
-        Status status1 = new Status { Code = 1, Name = "status1" };
-        Status status2 = new Status { Code = 2, Name = "status2" };
-        Status status3 = new Status { Code = 3, Name = "status3" };
+        Status status1 = new Status { Code = 1, Name = "status1", Active = true };
+        Status status2 = new Status { Code = 2, Name = "status2", Active = true };
+        Status status3 = new Status { Code = 3, Name = "status3", Active = false };
 
-        CheckPoint check1 = new CheckPoint { Id = 1, Name = "check1"};
+        CheckPoint check1 = new CheckPoint { Id = 1, Name = "check1", Active = true};
         CheckPoint check2 = new CheckPoint { Id = 2, Name = "check2" };
-        CheckPoint check3 = new CheckPoint { Id = 3, Name = "check3" };
-        CheckPoint check4 = new CheckPoint { Id = 4, Name = "check4" };
+        CheckPoint check3 = new CheckPoint { Id = 3, Name = "check3", Active = true };
+        CheckPoint check4 = new CheckPoint { Id = 4, Name = "check4", Active = true };
 
         public CreateTestRepositories()
         {
@@ -182,6 +185,18 @@ namespace BezvizSystem.BLL.Tests.TestServises
             return mockNat.Object;
         }
 
+        private IRepository<Gender, int> CreateGenderManager()
+        {
+            List<Gender> list = new List<Gender> { gender1, gender2 };
+            Mock<IRepository<Gender, int>> mockNat = new Mock<IRepository<Gender, int>>();
+            mockNat.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.Where(v => v.Id == id).FirstOrDefault());
+            mockNat.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
+                                                                                  Task<Gender>.FromResult<Gender>(
+                                                                                  list.Where(v => v.Id == id).FirstOrDefault()));
+            mockNat.Setup(m => m.GetAll()).Returns(list);
+            return mockNat.Object;
+        }
+
         private IRepository<UserActivity, int> CreateUserActivityManager()
         {
             List<UserActivity> list = new List<UserActivity> { activity1, activity2, activity3, activity4};
@@ -212,6 +227,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
             mockDB.Setup(m => m.GroupManager).Returns(CreateGroupVisitorManager());
             mockDB.Setup(m => m.TypeOfOperations).Returns(CreateTypeOfOperationManager());
             mockDB.Setup(m => m.UserActivities).Returns(CreateUserActivityManager());
+            mockDB.Setup(m => m.Genders).Returns(CreateGenderManager());
 
             return mockDB.Object;
         }

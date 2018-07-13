@@ -16,8 +16,9 @@ namespace BezvizSystem.BLL.Tests
         Mock<IRepository<Status, int>> statusManager;
         Mock<IRepository<Nationality, int>> nationalityManager;
         Mock<IRepository<CheckPoint, int>> checkPointManager;
-
         Mock<IRepository<GroupVisitor, int>> groupManger;
+        Mock<IRepository<TypeOfOperation, int>> typeOfOperationManger;
+        Mock<IRepository<Gender, int>> genderManger;
 
         List<Status> statuses = new List<Status>
         {
@@ -68,6 +69,12 @@ namespace BezvizSystem.BLL.Tests
             checkPointManager = new Mock<IRepository<CheckPoint, int>>();
             checkPointManager.Setup(m => m.GetAll()).Returns(checkPoints);
 
+            //typeOfOperation = new Mock<IRepository<CheckPoint, int>>();
+            //checkPointManager.Setup(m => m.GetAll()).Returns(checkPoints);
+
+            //checkPointManager = new Mock<IRepository<CheckPoint, int>>();
+            //checkPointManager.Setup(m => m.GetAll()).Returns(checkPoints);
+
             groupManger = new Mock<IRepository<GroupVisitor, int>>();
             groupManger.Setup(m => m.GetAll()).Returns(groups);
         }
@@ -78,13 +85,15 @@ namespace BezvizSystem.BLL.Tests
         public IRepository<OperatorProfile, string> OperatorManager => throw new NotImplementedException();
         public IRepository<Visitor, int> VisitorManager => throw new NotImplementedException();
         public IRepository<GroupVisitor, int> GroupManager => groupManger.Object;
+        public IRepository<UserActivity, int> UserActivities => throw new NotImplementedException();
+
+        //Dictionaries
         public IRepository<Status, int> StatusManager => statusManager.Object;
         public IRepository<Nationality, int> NationalityManager => nationalityManager.Object;
         public IRepository<CheckPoint, int> CheckPointManager => checkPointManager.Object;
-
-        public IRepository<UserActivity, int> UserActivities => throw new NotImplementedException();
         public IRepository<TypeOfOperation, int> TypeOfOperations => throw new NotImplementedException();
-
+        public IRepository<Gender, int> Genders => throw new NotImplementedException();
+     
         public void Dispose()
         {
             throw new NotImplementedException();

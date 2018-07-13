@@ -53,6 +53,11 @@ namespace BezvizSystem.BLL.Services
             return new DictionaryService<CheckPointDTO>(new IdentityUnitOfWork(connection));
         }
 
+        public IDictionaryService<GenderDTO> CreateGenderService(string connection)
+        {
+            return new DictionaryService<GenderDTO>(new IdentityUnitOfWork(connection));
+        }
+
         public IReport CreateReport(string connection)
         {
             return new ReportService(new IdentityUnitOfWork(connection));
