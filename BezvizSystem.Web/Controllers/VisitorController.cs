@@ -54,19 +54,18 @@ namespace BezvizSystem.Web.Controllers
             }
             ).CreateMapper();
         }
-    
 
-        public ActionResult Create(string returnUrl)
+
+        public ActionResult Create()
         {
             ViewBag.Genders = Gender();
             ViewBag.CheckPoints = CheckPoints();
             ViewBag.Nationalities = Nationalities();
-            ViewBag.returnUrl = returnUrl;
             return View();
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(string returnUrl, CreateVisitorModel model)
+        public async Task<ActionResult> Create(CreateVisitorModel model)
         {
             if (ModelState.IsValid)
             {
@@ -75,11 +74,7 @@ namespace BezvizSystem.Web.Controllers
 
                 if (result.Succedeed)
                 {
-                    if (returnUrl == null)
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else return Redirect(returnUrl);
+                    return RedirectToAction("Index", "Home");
                 }
                 else ModelState.AddModelError("", result.Message);
             }
@@ -93,7 +88,7 @@ namespace BezvizSystem.Web.Controllers
         {
             List<string> list = new List<string>(CheckPointService.Get().Select(c => c.Name));
             list.Insert(0, "");
-            return  new SelectList(list, "");
+            return new SelectList(list, "");
         }
 
         private SelectList Nationalities()

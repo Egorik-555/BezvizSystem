@@ -46,7 +46,6 @@ namespace BezvizSystem.BLL.Services
                 var user = await Database.UserManager.FindByNameAsync(group.UserInSystem);
                 model.User = user;
                 model.DateInSystem = DateTime.Now;
-                model.Group = true;
                 model.Status = await Database.StatusManager.GetByIdAsync(1);
 
                 //data of visitors
@@ -93,9 +92,9 @@ namespace BezvizSystem.BLL.Services
                 var model = await Database.GroupManager.GetByIdAsync(group.Id);
                 if (model != null)
                 {
-                    //delete old visitors
-                    //var visitors = model.Visitors.ToList();
-                    foreach (var item in model.Visitors)
+                    //delete old visitors             
+                    var visitors = model.Visitors.ToList();
+                    foreach (var item in visitors)
                         Database.VisitorManager.Delete(item.Id);
                
                     var mapper = new MapperConfiguration(cfg =>
@@ -114,6 +113,8 @@ namespace BezvizSystem.BLL.Services
                     //add new visitors
                     foreach (var item in m.Visitors)
                     {
+                        item.UserInSystem = group.UserInSystem;
+                        item.DateInSystem = group.DateInSystem;
                         item.UserEdit = group.UserEdit;
                         item.DateEdit = DateTime.Now;
                     }

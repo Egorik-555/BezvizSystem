@@ -132,8 +132,8 @@ namespace BezvizSystem.BLL.Tests
             var group = Service.GetById(2);
             Assert.IsNotNull(group);
             Assert.IsTrue(group.PlaceOfRecidense == "place2");
-            Assert.IsTrue(group.UserOperatorProfileUNP == "UnpTest1");
-            Assert.IsTrue(group.UserUserName == "Test1");
+            Assert.IsTrue(group.UserOperatorProfileUNP == "UnpAdmin");
+            Assert.IsTrue(group.UserUserName == "Admin");
             Assert.IsTrue(group.Visitors.Count() == 2);
         }
     }

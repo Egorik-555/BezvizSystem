@@ -67,14 +67,7 @@ namespace BezvizSystem.Web.Controllers
             if (ModelState.IsValid)
             {
                 var group = mapper.Map<CreateGroupModel, GroupVisitorDTO>(model);
-
-                //пометить всех туристов что они пока не приехали
-                foreach (var item in group.Visitors)
-                {
-                    item.Arrived = false;
-                }
-                ///
-
+                group.Group = true;            
                 var result = await GroupService.Create(group);
                 if (result.Succedeed)
                 {

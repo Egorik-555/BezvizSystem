@@ -31,11 +31,21 @@ namespace BezvizSystem.BLL.DTO
         public string PlaceOfRecidense { get; set; }
 
         public string ProgramOfTravel { get; set; }
+
+        //part of visitor only
+        public string TimeOfWork { get; set; }
+        public string SiteOfOperator { get; set; }
+        public string TelNumber { get; set; }
+        public string Email { get; set; }
+        //
+
+        //part of visitor group only
         public string OrganizeForm { get; set; }
         public string Name { get; set; }
         public string NumberOfContract { get; set; }
         public DateTime? DateOfContract { get; set; }
         public string OtherInfo { get; set; }
+        //
 
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
