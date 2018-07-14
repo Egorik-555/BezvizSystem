@@ -26,12 +26,14 @@ namespace BezvizSystem.BLL.Services
                 cfg.CreateMap<GroupVisitorDTO, GroupVisitor>().
                      ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => Database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault()));
                 cfg.CreateMap<VisitorDTO, Visitor>().
-                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => Database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault()));
-                               
+                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => Database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
+                    ForMember(dest => dest.Gender, opt => opt.MapFrom(src => Database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
+
                 cfg.CreateMap<GroupVisitor, GroupVisitorDTO>().
                     ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name));
                 cfg.CreateMap<Visitor, VisitorDTO>().
-                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name)); 
+                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name)).
+                    ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Name));
 
             }).CreateMapper();
         }
@@ -43,7 +45,17 @@ namespace BezvizSystem.BLL.Services
                 var model = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
                 var user = await Database.UserManager.FindByNameAsync(group.UserInSystem);
                 model.User = user;
+                model.DateInSystem = DateTime.Now;
+                model.Group = true;
                 model.Status = await Database.StatusManager.GetByIdAsync(1);
+
+                //data of visitors
+                foreach(var visitor in model.Visitors)
+                {
+                    visitor.DateInSystem = model.DateInSystem;
+                    visitor.UserInSystem = model.UserInSystem;
+                }
+
                 Database.GroupManager.Create(model);
                 return new OperationDetails(true, "Группа туристов создана", "");
             }
@@ -81,9 +93,9 @@ namespace BezvizSystem.BLL.Services
                 var model = await Database.GroupManager.GetByIdAsync(group.Id);
                 if (model != null)
                 {
-                    //удаляем старые visitors
-                    var visitors = model.Visitors.ToList();
-                    foreach (var item in visitors)
+                    //delete old visitors
+                    //var visitors = model.Visitors.ToList();
+                    foreach (var item in model.Visitors)
                         Database.VisitorManager.Delete(item.Id);
                
                     var mapper = new MapperConfiguration(cfg =>
@@ -91,21 +103,21 @@ namespace BezvizSystem.BLL.Services
                         cfg.CreateMap<GroupVisitorDTO, GroupVisitor>().ConstructUsing(v => model).
                             ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => Database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault()));
                         cfg.CreateMap<VisitorDTO, Visitor>().
-                            ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => Database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())); 
+                            ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => Database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
+                            ForMember(dest => dest.Gender, opt => opt.MapFrom(src => Database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
                     }
                     ).CreateMapper();
 
                     var m = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
+                    m.DateEdit = DateTime.Now;
 
-                    //добавляем новые visitors
+                    //add new visitors
                     foreach (var item in m.Visitors)
                     {
-                        item.UserInSystem = group.UserInSystem;
-                        item.DateInSystem = DateTime.Now;
+                        item.UserEdit = group.UserEdit;
+                        item.DateEdit = DateTime.Now;
                     }
-
-                    var user = await Database.UserManager.FindByNameAsync(group.UserInSystem);
-                    m.User = user;              
+                         
                     Database.GroupManager.Update(m);
 
                     return new OperationDetails(true, "Группа туристов изменена", "");

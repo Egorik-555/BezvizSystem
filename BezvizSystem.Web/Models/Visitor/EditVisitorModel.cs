@@ -61,5 +61,7 @@ namespace BezvizSystem.Web.Models.Visitor
 
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
+        public DateTime? DateEdit { get; set; }
+        public string UserEdit { get; set; }
     }
 }

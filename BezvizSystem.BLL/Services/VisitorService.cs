@@ -25,10 +25,11 @@ namespace BezvizSystem.BLL.Services
             mapper = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<VisitorDTO, Visitor>().
-                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => Database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault()));
+                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => Database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
+                    ForMember(dest => dest.Gender, opt => opt.MapFrom(src => Database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
                 cfg.CreateMap<Visitor, VisitorDTO>().ForMember(dest => dest.Group, opt => opt.Ignore()).
-                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name));
-
+                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name)).
+                    ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Name));
 
             }).CreateMapper();
         }
@@ -38,6 +39,7 @@ namespace BezvizSystem.BLL.Services
             try
             {              
                 var model = mapper.Map<VisitorDTO, Visitor>(visitor);
+                model.DateInSystem = DateTime.Now;
                 Database.VisitorManager.Create(model);
                 return new OperationDetails(true, "Турист создан", "");
             }
@@ -53,7 +55,7 @@ namespace BezvizSystem.BLL.Services
             {
                 var visitor = await Database.VisitorManager.GetByIdAsync(id);
                 if (visitor != null)
-                {
+                {                
                     Database.VisitorManager.Delete(visitor.Id);
                     return new OperationDetails(true, "Турист удален", "");
                 }
@@ -75,11 +77,13 @@ namespace BezvizSystem.BLL.Services
                     var mapper = new MapperConfiguration(cfg => 
                     {
                         cfg.CreateMap<VisitorDTO, Visitor>().ConstructUsing(v => model).
-                            ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => Database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault()));
+                            ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => Database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
+                            ForMember(dest => dest.Gender, opt => opt.MapFrom(src => Database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
 
                     }).CreateMapper();
 
-                    var m = mapper.Map<VisitorDTO, Visitor>(visitor);              
+                    var m = mapper.Map<VisitorDTO, Visitor>(visitor);
+                    m.DateEdit = DateTime.Now;
                     Database.VisitorManager.Update(m);
                     return new OperationDetails(true, "Турист изменен", "");
                 }

@@ -62,7 +62,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
         public CreateTestRepositories()
         {
             visitor1 = new Visitor { Id = 1, Surname = "surname1", BithDate = DateTime.Now, Nationality = nat1};
-            visitor2 = new Visitor { Id = 2, Surname = "surname2", Name = "Name2", UserInSystem = "user", Nationality = nat2 };
+            visitor2 = new Visitor { Id = 2, Surname = "surname2", Gender = gender2, Name = "Name2", UserInSystem = "user", Nationality = nat2, DateInSystem = new DateTime(2018, 07, 01) };
             visitor3 = new Visitor { Id = 3, Surname = "surname3", Nationality = nat3 };
             visitor4 = new Visitor { Id = 4, Surname = "surname4", Nationality = nat1 };
             visitor5 = new Visitor { Id = 5, Surname = "surname5", Nationality = nat3 };
@@ -70,7 +70,9 @@ namespace BezvizSystem.BLL.Tests.TestServises
             visitor7 = new Visitor { Id = 7, Surname = "surname7", Nationality = nat3 };
 
             group1 = new GroupVisitor { Id = 1, CheckPoint = check1, PlaceOfRecidense = "place1", Visitors = new List<Visitor> { visitor1, visitor2 }, User = user4 };
-            group2 = new GroupVisitor { Id = 2, CheckPoint = check2, PlaceOfRecidense = "place2", Visitors = new List<Visitor> { visitor2, visitor3 }, User = user1, UserInSystem = "Test1" };
+            group2 = new GroupVisitor { Id = 2, CheckPoint = check2, PlaceOfRecidense = "place2",
+                                        Visitors = new List<Visitor> { visitor2, visitor3 },
+                                        User = user4, UserInSystem = "Admin", DateInSystem = new DateTime(2018, 07, 01) };
             group3 = new GroupVisitor { Id = 3, CheckPoint = check3, PlaceOfRecidense = "place3", Visitors = new List<Visitor> { visitor4, visitor5, visitor6, visitor7 } };
             group4 = new GroupVisitor { Id = 4, CheckPoint = check4, PlaceOfRecidense = "place4", Visitors = new List<Visitor> { visitor2 } };
             group5 = new GroupVisitor { Id = 5, CheckPoint = check2, PlaceOfRecidense = "place5", Visitors = new List<Visitor> { visitor3 } };
@@ -111,7 +113,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
 
         private IRepository<Visitor, int> CreateVisitorManager()
         {
-            List<Visitor> list = new List<Visitor> { visitor1, visitor2, visitor3, visitor4 };
+            List<Visitor> list = new List<Visitor> { visitor1, visitor2, visitor3, visitor4, visitor5, visitor6, visitor7 };
             Mock<IRepository<Visitor, int>> mockVisitors = new Mock<IRepository<Visitor, int>>();
             mockVisitors.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.Where(v => v.Id == id).FirstOrDefault());
             mockVisitors.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>

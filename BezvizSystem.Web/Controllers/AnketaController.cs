@@ -41,6 +41,11 @@ namespace BezvizSystem.Web.Controllers
             get { return HttpContext.GetOwinContext().Get<IDictionaryService<NationalityDTO>>(); }
         }
 
+        private IDictionaryService<GenderDTO> GenderService
+        {
+            get { return HttpContext.GetOwinContext().Get<IDictionaryService<GenderDTO>>(); }
+        }
+
         public AnketaController()
         {
             IMapper visitorMapper = new MapperConfiguration(cfg =>
@@ -52,6 +57,9 @@ namespace BezvizSystem.Web.Controllers
 
             mapper = new MapperConfiguration(cfg =>
             {
+                cfg.CreateMap<VisitorDTO, InfoVisitorModel>(); 
+                
+
                 cfg.CreateMap<AnketaDTO, ViewAnketaModel>().
                     ForMember(dest => dest.DateArrival, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date : src.DateArrival));
 
@@ -218,13 +226,9 @@ namespace BezvizSystem.Web.Controllers
 
         private SelectList Gender()
         {
-            string[] list = new string[]
-            {
-                "",
-                "Мужчина",
-                "Женщина",
-            };
-            return new SelectList(list);
+            List<string> list = new List<string>(GenderService.Get().Select(c => c.Name));
+            list.Insert(0, "");
+            return new SelectList(list, "");
         }
     }
 }

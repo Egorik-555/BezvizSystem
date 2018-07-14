@@ -34,24 +34,31 @@ namespace BezvizSystem.BLL.Tests
         [TestMethod]
         public async Task Create_Group()
         {
-            GroupVisitorDTO group = new GroupVisitorDTO { Id = 6, PlaceOfRecidense = "testPlace", UserOperatorProfileUNP = "UNPTest", UserInSystem = "Admin" };
+            GroupVisitorDTO group = new GroupVisitorDTO { Id = 6, PlaceOfRecidense = "testPlace", UserInSystem = "Admin" };
             List<VisitorDTO> visitors = new List<VisitorDTO> {
-                new VisitorDTO{ Name="test1"},
+                new VisitorDTO{ Name="test1", Gender = "Мужчина", Nationality = "nat1", UserInSystem = "Admin"},
                 new VisitorDTO{ Name="test2"},
                 new VisitorDTO{ Name="test3"},
             };
             group.Visitors = visitors;
             var result = await Service.Create(group);
+            var findGroup = Service.GetById(6);
+            var visitor = findGroup.Visitors.ToList()[0];
 
             Assert.IsTrue(result.Succedeed);
             Assert.IsTrue(Service.GetAll().Count() == 6);
-
-            var findGroup = Service.GetById(6);
-
+            
             Assert.IsTrue(findGroup.PlaceOfRecidense == "testPlace");
+            Assert.IsTrue(findGroup.UserInSystem == "Admin");
+            Assert.IsTrue(findGroup.DateInSystem.Value.Date == DateTime.Now.Date);     
             Assert.IsTrue(findGroup.UserOperatorProfileUNP == "UnpAdmin");
-            Assert.IsTrue(findGroup.Visitors.ToList()[0].Name == "test1");
             Assert.IsTrue(findGroup.Visitors.Count() == 3);
+
+            Assert.IsTrue(visitor.Name == "test1");
+            Assert.IsTrue(visitor.Gender == "Мужчина");
+            Assert.IsTrue(visitor.Nationality == "nat1");
+            Assert.IsTrue(visitor.DateInSystem.Value.Date == DateTime.Now.Date);
+            Assert.IsTrue(visitor.UserInSystem == "Admin");
         }
 
         [TestMethod]
@@ -74,24 +81,37 @@ namespace BezvizSystem.BLL.Tests
                 Id = 2,
                 PlaceOfRecidense = "new Place",
                 Visitors = new List<VisitorDTO> {
-                    new VisitorDTO { Id = 1, Surname = "newSurname1", Name = "newName1" },
-                     new VisitorDTO { Id = 2, Surname = "newSurname2", Name = "newName2" },
-                      new VisitorDTO { Id = 3, Surname = "newSurname3", Name = "newName3" },
+                    new VisitorDTO{Id = 1, Name="new name", Gender = "Мужчина", Nationality = "nat1", UserInSystem = "Admin", DateInSystem = new DateTime(2018, 07, 01)},
+                    new VisitorDTO { Id = 2, Surname = "newSurname2", Name = "newName2" },
+                    new VisitorDTO { Id = 3, Surname = "newSurname3", Name = "newName3" },
                 },
 
-                UserInSystem = "Admin"
+                UserInSystem = "Admin",
+                DateInSystem = new DateTime(2018, 07, 01),
+                UserEdit = "Test1",
+                DateEdit = DateTime.Now
             };
 
-            var oldGroup = await Service.GetByIdAsync(2);
             var result = await Service.Update(group);
             var findGroup = await Service.GetByIdAsync(2);
-
-            Assert.IsTrue(oldGroup.UserOperatorProfileUNP == "UnpTest1");
-
+            var visitor = findGroup.Visitors.ToList()[0];
+ 
             Assert.IsTrue(findGroup.PlaceOfRecidense == "new Place");
             Assert.IsTrue(findGroup.UserUserName == "Admin");
             Assert.IsTrue(findGroup.UserOperatorProfileUNP == "UnpAdmin");
             Assert.IsTrue(findGroup.Visitors.Count() == 3);
+            Assert.IsTrue(findGroup.UserInSystem == "Admin");
+            Assert.IsTrue(findGroup.DateInSystem == new DateTime(2018, 07, 01));
+            Assert.IsTrue(findGroup.UserEdit == "Test1");
+            Assert.IsTrue(findGroup.DateEdit.Value.Date == DateTime.Now.Date);
+
+            Assert.IsTrue(visitor.Name == "new name");
+            Assert.IsTrue(visitor.UserInSystem == "Admin");
+            Assert.IsTrue(visitor.DateInSystem == new DateTime(2018, 07, 01));
+            Assert.IsTrue(visitor.UserEdit == "Test1");
+            Assert.IsTrue(visitor.DateEdit.Value.Date == DateTime.Now.Date);
+            Assert.IsTrue(visitor.Gender == "Мужчина");
+            Assert.IsTrue(visitor.Nationality == "nat1");
         }
 
         [TestMethod]

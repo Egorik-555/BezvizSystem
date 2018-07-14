@@ -32,6 +32,11 @@ namespace BezvizSystem.Web.Controllers
             get { return HttpContext.GetOwinContext().Get<IDictionaryService<NationalityDTO>>(); }
         }
 
+        private IDictionaryService<GenderDTO> GenderService
+        {
+            get { return HttpContext.GetOwinContext().Get<IDictionaryService<GenderDTO>>(); }
+        }
+
         IMapper mapper;
      
         public GroupController()
@@ -104,14 +109,9 @@ namespace BezvizSystem.Web.Controllers
 
         private SelectList Gender()
         {
-            string[] list = new string[]
-            {
-                "",
-                "Мужчина",
-                "Женщина",
-            };
-
-            return new SelectList(list);
+            List<string> list = new List<string>(GenderService.Get().Select(c => c.Name));
+            list.Insert(0, "");
+            return new SelectList(list, "");
         }
     }
 }

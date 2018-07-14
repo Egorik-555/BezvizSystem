@@ -112,11 +112,8 @@
                 @Html.ValidationMessageFor(model => model.OtherInfo, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        <input hidden="hidden" name="DateInSystem" value="@DateTime.Now" />
+      
         <input hidden="hidden" name="UserInSystem" value="@User.Identity.Name" />
-        <input hidden="hidden" name="Group" value="true" />
-
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

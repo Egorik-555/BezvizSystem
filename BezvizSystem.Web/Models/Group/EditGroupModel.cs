@@ -68,5 +68,7 @@ namespace BezvizSystem.Web.Models.Group
 
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
+        public DateTime? DateEdit { get; set; }
+        public string UserEdit { get; set; }
     }
 }
