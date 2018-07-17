@@ -23,11 +23,15 @@ namespace BezvizSystem.BLL.Tests
     public class UnitTestGroupService
     {
         IService<GroupVisitorDTO> Service;
+        IService<VisitorDTO> ServiceVisitor;
 
         public UnitTestGroupService()
-        {
+        {         
             CreateTestRepositories repoes = new CreateTestRepositories();
-            Service = new GroupService(repoes.CreateIoWManager());
+            var database = repoes.CreateIoWManager();
+
+            Service = new GroupService(database);
+            ServiceVisitor = new VisitorService(database);
         }
 
 
@@ -53,24 +57,48 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(findGroup.DateInSystem.Value.Date == DateTime.Now.Date);     
             Assert.IsTrue(findGroup.UserOperatorProfileUNP == "UnpAdmin");
             Assert.IsTrue(findGroup.Visitors.Count() == 3);
+            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == 1).Count() == 3);
 
             Assert.IsTrue(visitor.Name == "test1");
             Assert.IsTrue(visitor.Gender == "Мужчина");
             Assert.IsTrue(visitor.Nationality == "nat1");
             Assert.IsTrue(visitor.DateInSystem.Value.Date == DateTime.Now.Date);
             Assert.IsTrue(visitor.UserInSystem == "Admin");
+            Assert.IsTrue(visitor.StatusOfOperation == 1);
         }
 
         [TestMethod]
         public async Task Delete_Group_Test()
         {
+            // test delete item have status code 1 (new)
+            var listOfVisitors1 = ServiceVisitor.GetAll();
             var result = await Service.Delete(2);
+            var listOfVisitors2 = ServiceVisitor.GetAll();
             var list = Service.GetAll();
             var group = await Service.GetByIdAsync(2);
 
+
+            Assert.IsTrue(listOfVisitors1.Count() == 7);
+            Assert.IsTrue(listOfVisitors2.Count() == 5);
             Assert.IsTrue(result.Succedeed);
+            Assert.IsTrue(result.Message == "Группа туристов удалена");
             Assert.IsTrue(list.Count() == 4);
             Assert.IsNull(group);
+
+            // test delete item have status code 2, 3 (send to pogran)
+            result = await Service.Delete(1);
+            list = Service.GetAll();
+            group = await Service.GetByIdAsync(1);
+            var visitors = group.Visitors;
+
+            Assert.IsTrue(result.Succedeed);
+            Assert.IsNotNull(group);
+            Assert.IsTrue(group.StatusName == "status1");
+            Assert.IsTrue(result.Message == "Группа туристов помечена к удалению");
+            Assert.IsTrue(list.Count() == 4);
+
+            Assert.IsTrue(visitors.Count() == 2);
+            Assert.IsTrue(visitors.Where(v => v.StatusOfOperation == 3).Count() == 2);
         }
 
         [TestMethod]
@@ -123,7 +151,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(groups.Where(g => g.Id == 1).FirstOrDefault().UserOperatorProfileUNP == "UnpAdmin");
             Assert.IsTrue(groups.Where(g => g.Id == 1).FirstOrDefault().UserUserName == "Admin");
             Assert.IsTrue(groups.Where(g => g.Id == 1).FirstOrDefault().Visitors.Count() == 2);
-            Assert.IsTrue(groups.Where(g => g.Id == 3).FirstOrDefault().Visitors.Count() == 4);
+            Assert.IsTrue(groups.Where(g => g.Id == 3).FirstOrDefault().Visitors.Count() == 3);
         }
 
         [TestMethod]

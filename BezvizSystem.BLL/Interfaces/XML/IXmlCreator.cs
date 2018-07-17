@@ -7,8 +7,9 @@ using System.Xml.Linq;
 
 namespace BezvizSystem.BLL.Interfaces.XML
 {
-    interface IXmlCreator
+    public interface IXmlCreator
     {
         void Save(string name, SaveOptions options);
+        void Save(string name);
     }
 }

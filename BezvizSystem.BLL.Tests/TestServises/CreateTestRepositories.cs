@@ -40,6 +40,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
         GroupVisitor group3;
         GroupVisitor group4;
         GroupVisitor group5;
+        GroupVisitor groupForVisitor;
 
         UserActivity activity1;
         UserActivity activity2;
@@ -61,21 +62,29 @@ namespace BezvizSystem.BLL.Tests.TestServises
 
         public CreateTestRepositories()
         {
-            visitor1 = new Visitor { Id = 1, Surname = "surname1", BithDate = DateTime.Now, Nationality = nat1};
-            visitor2 = new Visitor { Id = 2, Surname = "surname2", Gender = gender2, Name = "Name2", UserInSystem = "user", Nationality = nat2, DateInSystem = new DateTime(2018, 07, 01) };
-            visitor3 = new Visitor { Id = 3, Surname = "surname3", Nationality = nat3 };
-            visitor4 = new Visitor { Id = 4, Surname = "surname4", Nationality = nat1 };
-            visitor5 = new Visitor { Id = 5, Surname = "surname5", Nationality = nat3 };
-            visitor6 = new Visitor { Id = 6, Surname = "surname6", Nationality = nat2 };
-            visitor7 = new Visitor { Id = 7, Surname = "surname7", Nationality = nat3 };
+            groupForVisitor = new GroupVisitor { Status = status1};
 
-            group1 = new GroupVisitor { Id = 1, CheckPoint = check1, PlaceOfRecidense = "place1", Visitors = new List<Visitor> { visitor1, visitor2 }, User = user4 };
+            visitor1 = new Visitor { Id = 1, Surname = "surname1", BithDate = DateTime.Now, Nationality = nat1, Group = groupForVisitor };
+            visitor2 = new Visitor { Id = 2, Surname = "surname2", Gender = gender2, Name = "Name2", UserInSystem = "user",
+                                     Nationality = nat2, DateInSystem = new DateTime(2018, 07, 01), Group = groupForVisitor };
+
+            visitor3 = new Visitor { Id = 3, Surname = "surname3", Nationality = nat3 };
+            visitor4 = new Visitor { Id = 4, Surname = "surname4", Nationality = nat1, Group = groupForVisitor };
+            visitor5 = new Visitor { Id = 5, Surname = "surname5", Nationality = nat3, Group = groupForVisitor };
+            visitor6 = new Visitor { Id = 6, Surname = "surname6", Nationality = nat2, Group = groupForVisitor };
+            visitor7 = new Visitor { Id = 7, Surname = "surname7", Nationality = nat3, Group = groupForVisitor };
+
+            group1 = new GroupVisitor { Id = 1, CheckPoint = check1, PlaceOfRecidense = "place1",
+                                        Visitors = new List<Visitor> { visitor1, visitor2 }, User = user4, Status = status2 };
             group2 = new GroupVisitor { Id = 2, CheckPoint = check2, PlaceOfRecidense = "place2",
-                                        Visitors = new List<Visitor> { visitor2, visitor3 },
-                                        User = user4, UserInSystem = "Admin", DateInSystem = new DateTime(2018, 07, 01) };
-            group3 = new GroupVisitor { Id = 3, CheckPoint = check3, PlaceOfRecidense = "place3", Visitors = new List<Visitor> { visitor4, visitor5, visitor6, visitor7 } };
-            group4 = new GroupVisitor { Id = 4, CheckPoint = check4, PlaceOfRecidense = "place4", Visitors = new List<Visitor> { visitor2 } };
-            group5 = new GroupVisitor { Id = 5, CheckPoint = check2, PlaceOfRecidense = "place5", Visitors = new List<Visitor> { visitor3 } };
+                                        Visitors = new List<Visitor> { visitor3, visitor4 },
+                                        User = user4, UserInSystem = "Admin", DateInSystem = new DateTime(2018, 07, 01), Status = status1 };
+            group3 = new GroupVisitor { Id = 3, CheckPoint = check3, PlaceOfRecidense = "place3",
+                                        Visitors = new List<Visitor> { visitor5, visitor6, visitor7 },
+                                        Status = status3
+            };
+            group4 = new GroupVisitor { Id = 4, CheckPoint = check4, PlaceOfRecidense = "place4", Visitors = new List<Visitor> { visitor6 } };
+            group5 = new GroupVisitor { Id = 5, CheckPoint = check2, PlaceOfRecidense = "place5", Visitors = new List<Visitor> { visitor7 } };
 
             activity1 = new UserActivity { Id = 1, Login = "login1", Ip = "Ip1", TimeActivity = DateTime.Now, Operation = operation1 };
             activity2 = new UserActivity { Id = 2, Login = "login2", Ip = "Ip2", TimeActivity = DateTime.Now, Operation = operation2 };
@@ -217,12 +226,10 @@ namespace BezvizSystem.BLL.Tests.TestServises
 
         public IUnitOfWork CreateIoWManager()
         {
-            BezvizUserManager userManager = CreateUserManager();
-            IRepository<Visitor, int> visitorManager = CreateVisitorManager();
             Mock<IUnitOfWork> mockDB = new Mock<IUnitOfWork>();
 
-            mockDB.Setup(m => m.UserManager).Returns(userManager);
-            mockDB.Setup(m => m.VisitorManager).Returns(visitorManager);
+            mockDB.Setup(m => m.UserManager).Returns(CreateUserManager());
+            mockDB.Setup(m => m.VisitorManager).Returns(CreateVisitorManager());
             mockDB.Setup(m => m.NationalityManager).Returns(CreateNationalitiesManager());
             mockDB.Setup(m => m.StatusManager).Returns(CreateStatusManager());
             mockDB.Setup(m => m.CheckPointManager).Returns(CreateCheckPointManager());

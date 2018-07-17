@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.Interfaces;
+using BezvizSystem.Pogranec.Web.Mapper;
 using BezvizSystem.Pogranec.Web.Models.Report;
 using Microsoft.AspNet.Identity.Owin;
 using System;
@@ -15,31 +16,19 @@ namespace BezvizSystem.Pogranec.Web.Controllers.Api
     public class ReportController : Controller
     {
         private IReport _report;
+        IMapper _mapper;
 
         public ReportController(IReport report)
         {
             _report = report;
-            _mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ReportDTO, ReportModel>();
-                cfg.CreateMap<ReportModel, ReportDTO>();
-
-            }).CreateMapper();
+            _mapper = new MapperPogranecConfiguration().CreateMapper();
         }
-
-        IMapper _mapper;
 
         public ReportController()
         {
-            _mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ReportDTO, ReportModel>();
-                cfg.CreateMap<ReportModel, ReportDTO>();
-
-            }).CreateMapper();
-
+            _mapper = new MapperPogranecConfiguration().CreateMapper();
         }
-
+      
         public ActionResult Index()
         {
             var model = _report.GetReport();

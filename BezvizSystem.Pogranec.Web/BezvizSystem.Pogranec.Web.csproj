@@ -209,6 +209,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\Log\TrackLoginFilter.cs" />
+    <Compile Include="Mapper\MapperPogranecConfiguration.cs" />
     <Compile Include="Models\Anketa\ArrivedPerson.cs" />
     <Compile Include="Models\Login\Model.cs" />
     <Compile Include="Models\Report\FindModel.cs" />

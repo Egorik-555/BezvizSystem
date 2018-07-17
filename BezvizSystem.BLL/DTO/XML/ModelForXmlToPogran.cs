@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace BezvizSystem.BLL.DTO.XML
 {
-    public class ModelForXmlPogranec
+    public class ModelForXmlToPogran
     {
         public int Id { get; set; }
 
         public int Organization { get; set; }
         public int TypeOperation { get; set; }
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
+        public string Surname { get; set; }
+        public string Name { get; set; }
 
         public string DayBith { get; set; }
         public string MonthBith { get; set; }
@@ -22,7 +22,7 @@ namespace BezvizSystem.BLL.DTO.XML
         public string TextSex { get; set; }
         public int CodeSex { get; set; }
 
-        public string DocNum { get; set; }
+        public string SerialAndNumber { get; set; }
         public string DayValid { get; set; }
         public string MonthValid { get; set; }
         public string YearValid { get; set; }

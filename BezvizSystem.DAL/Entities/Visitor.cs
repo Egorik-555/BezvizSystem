@@ -19,11 +19,33 @@ namespace BezvizSystem.DAL.Entities
         public DateTime? BithDate { get; set; }
         public virtual Nationality Nationality { get; set; }    
 
+        public int StatusOfOperation { get; set; }
         public bool Arrived { get; set; }
     
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
         public DateTime? DateEdit { get; set; }
         public string UserEdit { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            Visitor visitor = obj as Visitor;
+            if (visitor == null) return false;
+
+            if ((visitor.Id == this.Id) &&
+                (visitor.Surname == Surname) &&
+                (visitor.Name == Name) &&
+                (visitor.SerialAndNumber == SerialAndNumber) &&
+                (visitor.Gender.Name == Gender.Name) &&
+                (visitor.BithDate == BithDate) &&
+                (visitor.Nationality.Name == Nationality.Name)) return true;
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
     }
 }
