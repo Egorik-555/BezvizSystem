@@ -56,8 +56,10 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(findGroup.UserInSystem == "Admin");
             Assert.IsTrue(findGroup.DateInSystem.Value.Date == DateTime.Now.Date);     
             Assert.IsTrue(findGroup.UserOperatorProfileUNP == "UnpAdmin");
+            Assert.IsTrue(findGroup.StatusName == "status1");
             Assert.IsTrue(findGroup.Visitors.Count() == 3);
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == 1).Count() == 3);
+            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusName == "status1").Count() == 3);
 
             Assert.IsTrue(visitor.Name == "test1");
             Assert.IsTrue(visitor.Gender == "Мужчина");
@@ -76,8 +78,7 @@ namespace BezvizSystem.BLL.Tests
             var listOfVisitors2 = ServiceVisitor.GetAll();
             var list = Service.GetAll();
             var group = await Service.GetByIdAsync(2);
-
-
+         
             Assert.IsTrue(listOfVisitors1.Count() == 7);
             Assert.IsTrue(listOfVisitors2.Count() == 5);
             Assert.IsTrue(result.Succedeed);
@@ -98,6 +99,21 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(list.Count() == 4);
 
             Assert.IsTrue(visitors.Count() == 2);
+            Assert.IsTrue(visitors.Where(v => v.StatusOfOperation == 3).Count() == 2);
+
+            // test delete item have status code 2, 3 (send to pogran)
+            result = await Service.Delete(3);
+            list = Service.GetAll();
+            group = await Service.GetByIdAsync(3);
+            var allVisitors = ServiceVisitor.GetAll();
+
+            Assert.IsTrue(result.Succedeed);
+            Assert.IsNotNull(group);
+            Assert.IsTrue(group.StatusName == "status1");
+            Assert.IsTrue(result.Message == "Группа туристов помечена к удалению");
+            Assert.IsTrue(list.Count() == 4);
+
+            Assert.IsTrue(allVisitors.Count() == 4);
             Assert.IsTrue(visitors.Where(v => v.StatusOfOperation == 3).Count() == 2);
         }
 

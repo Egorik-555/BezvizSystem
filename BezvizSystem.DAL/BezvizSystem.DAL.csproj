@@ -93,6 +93,7 @@
     <Compile Include="Entities\Log\TypeOfOperation.cs" />
     <Compile Include="Entities\Log\Unload.cs" />
     <Compile Include="Entities\Log\UserActivity.cs" />
+    <Compile Include="Helpers\StatusOfOperation.cs" />
     <Compile Include="Interfaces\IOperatorManager.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
