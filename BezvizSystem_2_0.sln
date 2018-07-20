@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BezvizSystem.DAL", "BezvizSystem.DAL\BezvizSystem.DAL.csproj", "{C01E9E88-181D-4A27-9741-D82C26A29CDA}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BezvizSystem.BLL.Tests", "BezvizSystem.BLL.Tests\BezvizSystem.BLL.Tests.csproj", "{F57A1392-9ED2-4803-BD2F-2FA28EB14A2C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BezvizSystem.Web", "BezvizSystem.Web\BezvizSystem.Web.csproj", "{5738CA45-7C51-44B6-955B-C3F3BAB4D029}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BezvizSystem.Pogranec.Web", "BezvizSystem.Pogranec.Web\BezvizSystem.Pogranec.Web.csproj", "{5F2E2224-2E53-4AED-B77F-361BB849FF17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{5738CA45-7C51-44B6-955B-C3F3BAB4D029}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5738CA45-7C51-44B6-955B-C3F3BAB4D029}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5738CA45-7C51-44B6-955B-C3F3BAB4D029}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F2E2224-2E53-4AED-B77F-361BB849FF17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F2E2224-2E53-4AED-B77F-361BB849FF17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F2E2224-2E53-4AED-B77F-361BB849FF17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F2E2224-2E53-4AED-B77F-361BB849FF17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
