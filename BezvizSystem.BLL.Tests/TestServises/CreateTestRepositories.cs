@@ -1,6 +1,7 @@
 ﻿using BezvizSystem.DAL;
 using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Entities.Log;
+using BezvizSystem.DAL.Helpers;
 using BezvizSystem.DAL.Identity;
 using BezvizSystem.DAL.Interfaces;
 using Microsoft.AspNet.Identity;
@@ -34,6 +35,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
         Visitor visitor5;
         Visitor visitor6;
         Visitor visitor7;
+        Visitor visitor8;
 
         GroupVisitor group1;
         GroupVisitor group2;
@@ -62,7 +64,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
 
         public CreateTestRepositories()
         {
-            groupForVisitor = new GroupVisitor { Status = status1};
+            groupForVisitor = new GroupVisitor {DateArrival = new DateTime(2018,7,1), DaysOfStay = 3, Status = status1};
 
             visitor1 = new Visitor { Id = 1, Surname = "surname1", BithDate = DateTime.Now, Nationality = nat1, Group = groupForVisitor, Status = status3 };
             visitor2 = new Visitor { Id = 2, Surname = "surname2", Gender = gender2, Name = "Name2", UserInSystem = "user", 
@@ -73,6 +75,16 @@ namespace BezvizSystem.BLL.Tests.TestServises
             visitor5 = new Visitor { Id = 5, Surname = "surname5", Nationality = nat3, Group = groupForVisitor, Status = status1 };
             visitor6 = new Visitor { Id = 6, Surname = "surname6", Nationality = nat2, Group = groupForVisitor , Status = status2};
             visitor7 = new Visitor { Id = 7, Surname = "surname7", Nationality = nat3, Group = groupForVisitor, Status = status2 };
+
+            visitor8 = new Visitor { Id = 9,
+                                     StatusOfOperation = StatusOfOperation.Add,
+                                     Name = "Name", Surname = "surname",
+                                     Nationality = nat3, Group = groupForVisitor,
+                                     BithDate = new DateTime(1987,07,26),
+                                     Gender = gender1,
+                                     SerialAndNumber = "AB344",
+                                     DocValid = null,                             
+                                     Status = status1 };
 
             group1 = new GroupVisitor { Id = 1, CheckPoint = check1, PlaceOfRecidense = "place1",
                                         Visitors = new List<Visitor> { visitor1, visitor2 }, User = user4, Status = status1 };
@@ -131,7 +143,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
 
         private IRepository<Visitor, int> CreateVisitorManager()
         {
-            List<Visitor> list = new List<Visitor> { visitor1, visitor2, visitor3, visitor4, visitor5, visitor6, visitor7 };
+            List<Visitor> list = new List<Visitor> { visitor1, visitor2, visitor3, visitor4, visitor5, visitor6, visitor7, visitor8 };
             Mock<IRepository<Visitor, int>> mockVisitors = new Mock<IRepository<Visitor, int>>();
             mockVisitors.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.Where(v => v.Id == id).FirstOrDefault());
             mockVisitors.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO.XML;
+using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.BLL.Interfaces.XML;
 using BezvizSystem.BLL.Mapper.XML;
 using BezvizSystem.DAL.Entities;
@@ -23,7 +24,6 @@ namespace BezvizSystem.BLL.Services.XML
             _database = database;
             MapperConfiguration config = new MapperConfiguration(cfg => 
                 {
-                    //cfg.AddProfile<MapperXMLProfile>();
                     cfg.AddProfile(new MapperXMLProfile(_database));
                 });
 
@@ -33,42 +33,50 @@ namespace BezvizSystem.BLL.Services.XML
 
         private IEnumerable<ModelForXmlToPogran> GetNewItems()
         {
-            var visitors = _database.VisitorManager.GetAll().Where(v => v.Group == null ? false : v.Group.Status.Code == 1).ToList();
+            var visitors = _database.VisitorManager.GetAll().Where(v => v.Group == null ? false : v.Status.Code == 1).ToList();
             return _mapper.Map<IEnumerable<Visitor>,IEnumerable<ModelForXmlToPogran>>(visitors);
         }
 
-        public void Save(string name, SaveOptions options)
+        public OperationDetails Save(string name, SaveOptions options)
         {
             var list = GetNewItems();
 
-            XElement form = new XElement("EXPORT", 
-                                list.Select(v => 
-                                    new XElement("FORM_BORDER_INFORM",
-                                        new XElement("SECTION1", 
-                                            new XElement("ORGANIZATION", v.Organization),
-                                            new XElement("TYPE_OPERATION", v.TypeOperation),
-                                            new XElement("UNIQUE_ID", v.Id)),
-                                       
-                                        new XElement("SECTION2",
-                                            new XElement("LAT_SURNAME", v.Surname),
-                                            new XElement("LAT_NAME", v.Name),
-                                            new XElement("BITH_DATE", new XElement("DAY", v.DayBith), new XElement("MONTH", v.MonthBith), new XElement("YEAR",  v.YearBith)),
-                                            new XElement("SEX", new XElement("TEXT_SEX", v.TextSex), new XElement("CODE_SEX", v.CodeSex)),
-                                            new XElement("DOC", 
-                                                new XElement("DOC_NUM", v.SerialAndNumber),
-                                                new XElement("DOC_VALID", new XElement("DAY", v.DayValid), new XElement("MONTH", v.MonthValid), new XElement("YEAR", v.YearValid))),
-                                            new XElement("AUTHORIZED_DAY", v.DayOfStay),
-                                            new XElement("DATE_ENTRY", new XElement("DAY", v.DayArrival), new XElement("MONTH", v.MonthArrival), new XElement("YEAR", v.YearArrival))
-                                        )
-                                    )));
+            try
+            {
+                XElement form = new XElement("EXPORT",
+                                    list.Select(v =>
+                                        new XElement("FORM_BORDER_INFORM",
+                                            new XElement("SECTION1",
+                                                new XElement("ORGANIZATION", v.Organization),
+                                                new XElement("TYPE_OPERATION", v.TypeOperation),
+                                                new XElement("UNIQUE_ID", v.Id)),
 
-            XDocument xDoc = new XDocument(form);
-            xDoc.Save(name, options);
+                                            new XElement("SECTION2",
+                                                new XElement("LAT_SURNAME", v.Surname),
+                                                new XElement("LAT_NAME", v.Name),
+                                                new XElement("BITH_DATE", new XElement("DAY", v.DayBith), new XElement("MONTH", v.MonthBith), new XElement("YEAR", v.YearBith)),
+                                                new XElement("SEX", new XElement("TEXT_SEX", v.TextSex), new XElement("CODE_SEX", v.CodeSex)),
+                                                new XElement("DOC",
+                                                    new XElement("DOC_NUM", v.SerialAndNumber),
+                                                    new XElement("DOC_VALID", new XElement("DAY", v.DayValid), new XElement("MONTH", v.MonthValid), new XElement("YEAR", v.YearValid))),
+                                                new XElement("AUTHORIZED_DAY", v.DayOfStay),
+                                                new XElement("DATE_ENTRY", new XElement("DAY", v.DayArrival), new XElement("MONTH", v.MonthArrival), new XElement("YEAR", v.YearArrival))
+                                            )
+                                        )));
+
+                XDocument xDoc = new XDocument(form);
+                xDoc.Save(name, options);
+                return new OperationDetails(true, "XML файл создан в " + name, "");
+            }
+            catch(Exception ex)
+            {
+                return new OperationDetails(false, ex.Message, "");
+            }
         }
 
-        public void Save(string name)
+        public OperationDetails Save(string name)
         {
-            Save(name, SaveOptions.None);
+            return Save(name, SaveOptions.None);
         }
     }
 }

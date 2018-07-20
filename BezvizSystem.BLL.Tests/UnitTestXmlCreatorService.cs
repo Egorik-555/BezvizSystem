@@ -21,7 +21,9 @@ namespace BezvizSystem.BLL.Tests
         [TestMethod]
         public void Test_Save_with_one_argument()
         {
-            _service.Save("test.xml");
+            var result = _service.Save("test.xml");
+
+            Assert.IsTrue(result.Succedeed);
         }
     }
 }
