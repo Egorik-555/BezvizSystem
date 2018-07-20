@@ -9,6 +9,7 @@ using BezvizSystem.BLL.Tests.TestServises;
 using BezvizSystem.DAL;
 using BezvizSystem.DAL.EF;
 using BezvizSystem.DAL.Entities;
+using BezvizSystem.DAL.Helpers;
 using BezvizSystem.DAL.Identity;
 using BezvizSystem.DAL.Interfaces;
 using BezvizSystem.DAL.Repositories;
@@ -26,7 +27,7 @@ namespace BezvizSystem.BLL.Tests
         IService<VisitorDTO> ServiceVisitor;
 
         public UnitTestGroupService()
-        {         
+        {
             CreateTestRepositories repoes = new CreateTestRepositories();
             var database = repoes.CreateIoWManager();
 
@@ -51,14 +52,14 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsTrue(result.Succedeed);
             Assert.IsTrue(Service.GetAll().Count() == 6);
-            
+
             Assert.IsTrue(findGroup.PlaceOfRecidense == "testPlace");
             Assert.IsTrue(findGroup.UserInSystem == "Admin");
-            Assert.IsTrue(findGroup.DateInSystem.Value.Date == DateTime.Now.Date);     
+            Assert.IsTrue(findGroup.DateInSystem.Value.Date == DateTime.Now.Date);
             Assert.IsTrue(findGroup.UserOperatorProfileUNP == "UnpAdmin");
             Assert.IsTrue(findGroup.StatusName == "status1");
             Assert.IsTrue(findGroup.Visitors.Count() == 3);
-            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == 1).Count() == 3);
+            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 3);
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusName == "status1").Count() == 3);
 
             Assert.IsTrue(visitor.Name == "test1");
@@ -66,7 +67,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(visitor.Nationality == "nat1");
             Assert.IsTrue(visitor.DateInSystem.Value.Date == DateTime.Now.Date);
             Assert.IsTrue(visitor.UserInSystem == "Admin");
-            Assert.IsTrue(visitor.StatusOfOperation == 1);
+            Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Add);
         }
 
         [TestMethod]
@@ -78,7 +79,7 @@ namespace BezvizSystem.BLL.Tests
             var listOfVisitors2 = ServiceVisitor.GetAll();
             var list = Service.GetAll();
             var group = await Service.GetByIdAsync(2);
-         
+
             Assert.IsTrue(listOfVisitors1.Count() == 7);
             Assert.IsTrue(listOfVisitors2.Count() == 5);
             Assert.IsTrue(result.Succedeed);
@@ -99,7 +100,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(list.Count() == 4);
 
             Assert.IsTrue(visitors.Count() == 2);
-            Assert.IsTrue(visitors.Where(v => v.StatusOfOperation == 3).Count() == 2);
+            Assert.IsTrue(visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Remove).Count() == 2);
 
             // test delete item have status code 2, 3 (send to pogran)
             result = await Service.Delete(3);
@@ -114,40 +115,40 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(list.Count() == 4);
 
             Assert.IsTrue(allVisitors.Count() == 4);
-            Assert.IsTrue(visitors.Where(v => v.StatusOfOperation == 3).Count() == 2);
+            Assert.IsTrue(visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Remove).Count() == 2);
         }
 
         [TestMethod]
-        public async Task Update_Group_Test()
+        public async Task Update_Group_OnlyUpdateVisitors_ForStatusOne_Test()
         {
             GroupVisitorDTO group = new GroupVisitorDTO
             {
                 Id = 2,
                 PlaceOfRecidense = "new Place",
                 Visitors = new List<VisitorDTO> {
-                    new VisitorDTO{Id = 1, Name="new name", Gender = "Мужчина", Nationality = "nat1", UserInSystem = "Admin", DateInSystem = new DateTime(2018, 07, 01)},
-                    new VisitorDTO { Id = 2, Surname = "newSurname2", Name = "newName2" },
-                    new VisitorDTO { Id = 3, Surname = "newSurname3", Name = "newName3" },
+                    new VisitorDTO{Id = 3, Name="new name", Gender = "Мужчина", Nationality = "nat1", UserInSystem = "Admin", DateInSystem = new DateTime(2018, 07, 01)},
+                    new VisitorDTO { Id = 4, Surname = "newSurname2", Name = "newName2" },
                 },
 
                 UserInSystem = "Admin",
                 DateInSystem = new DateTime(2018, 07, 01),
                 UserEdit = "Test1",
-                DateEdit = DateTime.Now
+                // DateEdit = DateTime.Now
             };
 
             var result = await Service.Update(group);
             var findGroup = await Service.GetByIdAsync(2);
             var visitor = findGroup.Visitors.ToList()[0];
- 
+
             Assert.IsTrue(findGroup.PlaceOfRecidense == "new Place");
             Assert.IsTrue(findGroup.UserUserName == "Admin");
             Assert.IsTrue(findGroup.UserOperatorProfileUNP == "UnpAdmin");
-            Assert.IsTrue(findGroup.Visitors.Count() == 3);
+            Assert.IsTrue(findGroup.Visitors.Count() == 2);
             Assert.IsTrue(findGroup.UserInSystem == "Admin");
             Assert.IsTrue(findGroup.DateInSystem == new DateTime(2018, 07, 01));
             Assert.IsTrue(findGroup.UserEdit == "Test1");
             Assert.IsTrue(findGroup.DateEdit.Value.Date == DateTime.Now.Date);
+            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 2);
 
             Assert.IsTrue(visitor.Name == "new name");
             Assert.IsTrue(visitor.UserInSystem == "Admin");
@@ -156,6 +157,240 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(visitor.DateEdit.Value.Date == DateTime.Now.Date);
             Assert.IsTrue(visitor.Gender == "Мужчина");
             Assert.IsTrue(visitor.Nationality == "nat1");
+        }
+
+        [TestMethod]
+        public async Task Update_Group_AddOneVisitor_ForStatusOne_Test()
+        {
+            GroupVisitorDTO group = new GroupVisitorDTO
+            {
+                Id = 2,
+                PlaceOfRecidense = "new Place",
+                Visitors = new List<VisitorDTO> {
+                    new VisitorDTO{Id = 3, Name="new name", Gender = "Мужчина", Nationality = "nat1", UserInSystem = "Admin", DateInSystem = new DateTime(2018, 07, 01)},
+                    new VisitorDTO { Id = 4, Surname = "newSurname2", Name = "newName2" },
+                    new VisitorDTO{Id = 5, Name="name added", Gender = "Женщина", Nationality = "nat1"},
+                },
+
+                UserInSystem = "Admin",
+                DateInSystem = new DateTime(2018, 07, 01),
+                UserEdit = "Test1",
+            };
+
+            var result = await Service.Update(group);
+            var findGroup = await Service.GetByIdAsync(2);
+            var visitor = findGroup.Visitors.ToList()[2];
+
+            Assert.IsTrue(findGroup.Visitors.Count() == 3);
+            Assert.IsTrue(findGroup.UserInSystem == "Admin");
+            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 3);
+
+            Assert.IsTrue(visitor.Name == "name added");
+            Assert.IsTrue(visitor.UserInSystem == "Test1");
+            Assert.IsTrue(visitor.DateInSystem.Value.Date == DateTime.Now.Date);
+            Assert.IsTrue(visitor.Gender == "Женщина");
+            Assert.IsTrue(visitor.Nationality == "nat1");
+        }
+
+        [TestMethod]
+        public async Task Update_Group_DeleteOneVisitor_ForStatusOne_Test()
+        {
+            GroupVisitorDTO group = new GroupVisitorDTO
+            {
+                Id = 2,
+                PlaceOfRecidense = "new Place",
+                Visitors = new List<VisitorDTO> {
+                    new VisitorDTO{Id = 3, Name="new name", Gender = "Мужчина", Nationality = "nat1", UserInSystem = "Admin", DateInSystem = new DateTime(2018, 07, 01)},
+                },
+
+                UserInSystem = "Admin",
+                DateInSystem = new DateTime(2018, 07, 01),
+                UserEdit = "Test1",
+            };
+
+            var result = await Service.Update(group);
+            var findGroup = await Service.GetByIdAsync(2);
+            var visitor = findGroup.Visitors.ToList()[0];
+
+            Assert.IsTrue(findGroup.Visitors.Count() == 1);
+            Assert.IsTrue(findGroup.UserInSystem == "Admin");
+            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 1);
+
+            Assert.IsTrue(visitor.Name == "new name");
+            Assert.IsTrue(visitor.UserInSystem == "Admin");
+            Assert.IsTrue(visitor.DateInSystem == new DateTime(2018, 07, 01));
+            Assert.IsTrue(visitor.UserEdit == "Test1");
+            Assert.IsTrue(visitor.DateEdit.Value.Date == DateTime.Now.Date);
+            Assert.IsTrue(visitor.Gender == "Мужчина");
+            Assert.IsTrue(visitor.Nationality == "nat1");
+            Assert.IsTrue(visitor.StatusName == "status1");
+            Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Add);
+        }
+
+        [TestMethod]
+        public async Task Update_OnlyGroup_Test()
+        {
+            GroupVisitorDTO group = new GroupVisitorDTO
+            {
+                Id = 2,
+                PlaceOfRecidense = "new Place",
+                CheckPoint = "check3",
+                Visitors = new List<VisitorDTO> {
+                    new VisitorDTO { Id = 3, Surname = "surname3", Nationality = "nat3"},
+                    new VisitorDTO { Id = 4, Surname = "surname4", Nationality = "nat1"}},
+
+                UserInSystem = "Admin",
+                DateInSystem = new DateTime(2018, 07, 01),
+                UserEdit = "Test1"
+            };
+
+            var result = await Service.Update(group);
+            var findGroup = await Service.GetByIdAsync(2);
+            var visitor = findGroup.Visitors.ToList()[0];
+
+            Assert.IsTrue(findGroup.Visitors.Count() == 2);
+            Assert.IsTrue(findGroup.UserInSystem == "Admin");
+            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 2);
+
+            Assert.IsTrue(visitor.Surname == "surname3");
+            Assert.IsTrue(visitor.Nationality == "nat3");
+            Assert.IsTrue(visitor.StatusName == "status1");
+            Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Add);
+        }
+
+        [TestMethod]
+        public async Task Update_Group_EditVisitor_With_Status_Two_Test()
+        {
+            GroupVisitorDTO group = new GroupVisitorDTO
+            {
+                Id = 5,
+                PlaceOfRecidense = "new Place",
+                CheckPoint = "check3",
+                Visitors = new List<VisitorDTO> {
+                    new VisitorDTO { Id = 7, Surname = "new surname", Nationality = "nat1"}},
+
+                UserInSystem = "Admin",
+                DateInSystem = new DateTime(2018, 07, 01),
+                UserEdit = "Test1"
+            };
+
+            var result = await Service.Update(group);
+
+            var findGroup = await Service.GetByIdAsync(5);
+            var visitor = findGroup.Visitors.ToList()[0];
+
+            Assert.IsTrue(result.Succedeed);
+            Assert.IsTrue(findGroup.Visitors.Count() == 1);
+            Assert.IsTrue(findGroup.StatusName == "status1");
+            Assert.IsTrue(findGroup.UserInSystem == "Admin");
+            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Edit).Count() == 1);
+
+            Assert.IsTrue(visitor.Surname == "new surname");
+            Assert.IsTrue(visitor.Nationality == "nat1");
+            Assert.IsTrue(visitor.StatusName == "status1");
+            Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Edit);
+        }
+
+        [TestMethod]
+        public async Task Update_Group_Edit_Visitor_With_Status_Two_And_Add_Test()
+        {
+            GroupVisitorDTO group = new GroupVisitorDTO
+            {
+                Id = 5,
+                PlaceOfRecidense = "new Place",
+                CheckPoint = "check3",
+                Visitors = new List<VisitorDTO> {
+                    new VisitorDTO { Id = 7, Surname = "new surname", Nationality = "nat1"},
+                    new VisitorDTO { Id = 8, Surname = "add new Visitor", Nationality = "nat3", Gender = "Мужчина"},
+                },
+
+                UserInSystem = "Admin",
+                DateInSystem = new DateTime(2018, 07, 01),
+                UserEdit = "Test1"
+            };
+
+            var result = await Service.Update(group);
+
+            var findGroup = await Service.GetByIdAsync(5);
+            var visitor = findGroup.Visitors.ToList()[1];
+
+            Assert.IsTrue(result.Succedeed);
+            Assert.IsTrue(findGroup.Visitors.Count() == 2);
+            Assert.IsTrue(findGroup.StatusName == "status1");
+            Assert.IsTrue(findGroup.UserInSystem == "Admin");
+            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Edit).Count() == 1);
+            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 1);
+
+            Assert.IsTrue(visitor.Surname == "add new Visitor");
+            Assert.IsTrue(visitor.Nationality == "nat3");
+            Assert.IsTrue(visitor.Gender == "Мужчина");
+            Assert.IsTrue(visitor.StatusName == "status1");
+            Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Add);
+        }
+
+        [TestMethod]
+        public async Task Update_Group_No_Edit_Visitor_With_Status_Two_Test()
+        {
+            GroupVisitorDTO group = new GroupVisitorDTO
+            {
+                Id = 5,
+                PlaceOfRecidense = "new Place",
+                CheckPoint = "check3",
+                Visitors = new List<VisitorDTO> {
+                    new VisitorDTO { Id = 7, Surname = "surname7", Nationality = "nat3", StatusName = "Status2" }
+                    },
+
+                UserInSystem = "Admin",
+                DateInSystem = new DateTime(2018, 07, 01),
+                UserEdit = "Test1"
+            };
+
+            var result = await Service.Update(group);
+
+            var findGroup = await Service.GetByIdAsync(5);
+            var visitor = findGroup.Visitors.ToList()[0];
+
+            Assert.IsTrue(result.Succedeed);
+            Assert.IsTrue(findGroup.Visitors.Count() == 1);
+            Assert.IsTrue(findGroup.StatusName == "status1");
+            Assert.IsTrue(findGroup.UserInSystem == "Admin");
+        
+            Assert.IsTrue(visitor.Surname == "surname7");
+            Assert.IsTrue(visitor.StatusName == "status2");
+        }
+
+        [TestMethod]
+        public async Task Update_Group_Remove_Visitor_With_Status_Two_And_Add_Test()
+        {
+            GroupVisitorDTO group = new GroupVisitorDTO
+            {
+                Id = 5,
+                PlaceOfRecidense = "new Place",
+                CheckPoint = "check3",
+                Visitors = new List<VisitorDTO> {
+                    new VisitorDTO { Id = 8, Surname = "add new Visitor", Nationality = "nat3", Gender = "Мужчина"},
+                },
+
+                UserInSystem = "Admin",
+                DateInSystem = new DateTime(2018, 07, 01),
+                UserEdit = "Test1"
+            };
+
+            var result = await Service.Update(group);
+
+            var findGroup = await Service.GetByIdAsync(5);
+            var visitor = findGroup.Visitors.ToList()[1];
+
+            Assert.IsTrue(result.Succedeed);
+            Assert.IsTrue(findGroup.Visitors.Count() == 2);
+            Assert.IsTrue(findGroup.StatusName == "status1");
+            Assert.IsTrue(findGroup.UserInSystem == "Admin");
+            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Remove).Count() == 1);
+            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 1);
+
+            Assert.IsTrue(visitor.Surname == "surname7");
+            Assert.IsTrue(visitor.StatusName == "status1");
+            Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Remove);
         }
 
         [TestMethod]

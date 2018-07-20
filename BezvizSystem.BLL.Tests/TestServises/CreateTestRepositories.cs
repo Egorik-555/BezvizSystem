@@ -25,7 +25,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
         Nationality nat3 = new Nationality { Id = 3, Name = "nat3", Active = true };
 
         Gender gender1 = new Gender { Id = 1, Code = 1, Name = "Мужчина", Active = true };
-        Gender gender2 = new Gender { Id = 2, Code = 2, Name = "Жунщина", Active = true };  
+        Gender gender2 = new Gender { Id = 2, Code = 2, Name = "Женщина", Active = true };  
 
         Visitor visitor1;
         Visitor visitor2;
@@ -69,7 +69,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
                                      Nationality = nat2, DateInSystem = new DateTime(2018, 07, 01), Group = groupForVisitor, Status = status2 };
 
             visitor3 = new Visitor { Id = 3, Surname = "surname3", Nationality = nat3, Status = status1 };
-            visitor4 = new Visitor { Id = 4, Surname = "surname4", Nationality = nat1, Group = groupForVisitor };
+            visitor4 = new Visitor { Id = 4, Surname = "surname4", Nationality = nat1, Group = groupForVisitor, Status = status1 };
             visitor5 = new Visitor { Id = 5, Surname = "surname5", Nationality = nat3, Group = groupForVisitor, Status = status1 };
             visitor6 = new Visitor { Id = 6, Surname = "surname6", Nationality = nat2, Group = groupForVisitor , Status = status2};
             visitor7 = new Visitor { Id = 7, Surname = "surname7", Nationality = nat3, Group = groupForVisitor, Status = status2 };
@@ -84,7 +84,16 @@ namespace BezvizSystem.BLL.Tests.TestServises
                                         Status = status3
             };
             group4 = new GroupVisitor { Id = 4, CheckPoint = check4, PlaceOfRecidense = "place4", Visitors = new List<Visitor> { visitor6 } };
-            group5 = new GroupVisitor { Id = 5, CheckPoint = check2, PlaceOfRecidense = "place5", Visitors = new List<Visitor> { visitor7 } };
+
+            group5 = new GroupVisitor {
+                Id = 5, CheckPoint = check2,
+                PlaceOfRecidense = "place5",
+                Visitors = new List<Visitor> { visitor7 },
+                User = user4,
+                UserInSystem = "Admin",
+                DateInSystem = new DateTime(2018, 07, 01),
+                Status = status3
+            };
 
             activity1 = new UserActivity { Id = 1, Login = "login1", Ip = "Ip1", TimeActivity = DateTime.Now, Operation = operation1 };
             activity2 = new UserActivity { Id = 2, Login = "login2", Ip = "Ip2", TimeActivity = DateTime.Now, Operation = operation2 };

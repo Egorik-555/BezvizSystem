@@ -121,25 +121,25 @@ namespace BezvizSystem.BLL.Services
             }
         }
 
-        private ICollection<Visitor> UpdateVisitors(GroupVisitorDTO groupDTO, GroupVisitor group)
+        private ICollection<Visitor> UpdateVisitors(string userName, IEnumerable<Visitor> newVisitors, IEnumerable<Visitor> oldVisitors)
         {            
             var result = new List<Visitor>();
-            var visitorNew = mapper.Map<IEnumerable<VisitorDTO>, IEnumerable<Visitor>>(groupDTO.Visitors);
-            var visitorOld = group.Visitors;
+            var visitorNew = newVisitors;
+            var visitorOld = oldVisitors;
             var statusForNewItem = Database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
 
             foreach (var itemNew in visitorNew)
             {
                 itemNew.StatusOfOperation = StatusOfOperation.Add;
-                itemNew.Status = statusForNewItem;
-                itemNew.DateInSystem = itemNew.DateInSystem ?? DateTime.Now;
-                itemNew.UserInSystem = itemNew.UserInSystem ?? groupDTO.UserInSystem;
+                itemNew.Status = statusForNewItem;            
 
                 var itemOld = visitorOld.Where(v => v.Id == itemNew.Id).FirstOrDefault();
 
                 // if item new
                 if (itemOld == null)
                 {
+                    itemNew.DateInSystem = DateTime.Now;
+                    itemNew.UserInSystem = userName;
                     result.Add(itemNew);
                 }
                 else
@@ -150,7 +150,7 @@ namespace BezvizSystem.BLL.Services
                         //edit old item
                         if (!itemOld.Equals(itemNew))
                         {
-                            itemNew.UserEdit = groupDTO.UserEdit;
+                            itemNew.UserEdit = userName;
                             itemNew.DateEdit = DateTime.Now;
                         }
 
@@ -165,7 +165,7 @@ namespace BezvizSystem.BLL.Services
                         {
                             itemNew.StatusOfOperation = StatusOfOperation.Edit;
                             itemNew.Status = statusForNewItem;
-                            itemNew.UserEdit = groupDTO.UserEdit;
+                            itemNew.UserEdit = userName;
                             itemNew.DateEdit = DateTime.Now;
                         }
 
@@ -174,7 +174,7 @@ namespace BezvizSystem.BLL.Services
                 }              
             }
 
-            //delete item in visitorsOld if thier item send to pogran
+            //delete item in visitorsOld if thier send to pogran
             foreach (var itemOld in visitorOld)
             {
                 if (itemOld.Status.Code != 1)
@@ -182,6 +182,7 @@ namespace BezvizSystem.BLL.Services
                     var itemNew = visitorNew.Where(v => v.Id == itemOld.Id).FirstOrDefault();
                     if (itemNew == null)
                     {
+                        itemOld.Status = statusForNewItem;
                         itemOld.StatusOfOperation = StatusOfOperation.Remove;
                         result.Add(itemOld);
                     }
@@ -196,7 +197,7 @@ namespace BezvizSystem.BLL.Services
         {
             try
             {
-                var model = await Database.GroupManager.GetByIdAsync(group.Id);
+                var model = await Database.GroupManager.GetByIdAsync(group.Id);            
                 if (model != null)
                 {
                   
@@ -210,15 +211,17 @@ namespace BezvizSystem.BLL.Services
                     }
                     ).CreateMapper();
 
-                    var m = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
-                    m.DateEdit = DateTime.Now;
+                    var oldVisitors = model.Visitors;
+                    var modelNew = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
+                    modelNew.DateEdit = DateTime.Now;
 
-                    var newVisitors = UpdateVisitors(group, model);
-                   
+                    var newVisitors = UpdateVisitors(modelNew.UserEdit, modelNew.Visitors, oldVisitors);
+
                     //add new visitors
-                    m.Visitors = newVisitors;
-
-                    Database.GroupManager.Update(m);
+                    modelNew.Visitors = newVisitors;
+                    var statusForNewItem = Database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
+                    modelNew.Status = statusForNewItem;
+                    Database.GroupManager.Update(modelNew);
 
                     return new OperationDetails(true, "Группа туристов изменена", "");
                 }
