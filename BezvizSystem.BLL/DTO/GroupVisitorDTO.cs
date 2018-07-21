@@ -21,7 +21,6 @@ namespace BezvizSystem.BLL.DTO
         public string UserUserName { get; set; }
         public string UserOperatorProfileUNP { get; set; }
         public string UserOperatorProfileTranscript { get; set; }
-        public string StatusName { get; set; }
         public bool Group { get; set; }
 
         public DateTime? DateArrival { get; set; }

@@ -11,67 +11,48 @@ using BezvizSystem.DAL.Interfaces;
 using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL;
 using BezvizSystem.BLL.Services;
+using BezvizSystem.BLL.Tests.TestServises;
 
 namespace BezvizSystem.BLL.Tests
 {
     [TestClass]
     public class UnitTestAnketaService
     {
-        IService<AnketaDTO> anketaService;
-        Mock<IUnitOfWork> databaseMock = new Mock<IUnitOfWork>();
-        Mock<IRepository<GroupVisitor, int>> groupMangerMock = new Mock<IRepository<GroupVisitor, int>>();
-        IEnumerable<GroupVisitor> listGroups;
+        IService<AnketaDTO> _service;
 
         public UnitTestAnketaService()
         {
-            BezvizUser user1 = new BezvizUser { Id = "aaa", UserName = "Admin", OperatorProfile = new OperatorProfile { UNP = "UNPAdmin", Transcript = "Oper1" } };
-            BezvizUser user2 = new BezvizUser { Id = "bbb", UserName = "Test", OperatorProfile = new OperatorProfile { UNP = "UNPTest", Transcript = "Oper2" } };
-
-            CheckPoint point1 = new CheckPoint { Name = "point1" };
-            CheckPoint point2 = new CheckPoint { Name = "point2" };
-
-            listGroups = new List<GroupVisitor>()
-            {
-                new GroupVisitor { Id = 1,
-                    CheckPoint = point1,
-                    DateArrival = DateTime.Now,
-                    User = user1,
-                    Visitors = new List<Visitor>{ new Visitor {Id = 1,  Name = "testVisitor1" } } },
-
-                new GroupVisitor { Id = 2,
-                    CheckPoint = point2,
-                    DateArrival = DateTime.Now,
-                    User = user2,
-                    Visitors = new List<Visitor>{ new Visitor {Id = 2, Name = "testVisitor21"} ,
-                                                  new Visitor {Id = 3, Name = "testVisitor22"}}}
-            };
-       
-            groupMangerMock.Setup(m => m.GetAll()).Returns(listGroups);
-            groupMangerMock.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => listGroups.Where(g => g.Id == id).FirstOrDefault());
-
-            databaseMock.Setup(m => m.GroupManager).Returns(groupMangerMock.Object);
-            anketaService = new AnketaService(databaseMock.Object);
+            CreateTestRepositories repoes = new CreateTestRepositories();
+            var database = repoes.CreateIoWManager();
+            _service = new AnketaService(database);        
         }
 
         [TestMethod]
         public void Get_All_Anketa()
         {
-            var anketas = anketaService.GetAll();
-            var group = anketas.Where(v => v.Id == 2).First();
+            var anketas = _service.GetAll();
+            var group = anketas.Where(v => v.Id == 1).FirstOrDefault();
+            var group3 = anketas.Where(v => v.Id == 3).FirstOrDefault();
 
-            Assert.IsTrue(anketas.Count() == 2);
-            Assert.IsTrue(group.CheckPoint == "point2");
-            Assert.IsTrue(group.Operator == "Oper2");
+            Assert.IsTrue(anketas.Count() == 5);
+            Assert.IsTrue(group.DateArrival == new DateTime(2018, 6, 1));
+            Assert.IsTrue(group.CheckPoint == "check1");
+            Assert.IsTrue(group.Operator == "AdminTran");
+            Assert.IsTrue(group.CountMembers == 2);
+            Assert.IsTrue(group.Status == "status2");
+
+            Assert.IsTrue(group3.CountMembers == 3);
+            Assert.IsTrue(group3.Status == "status1");
         }
 
         [TestMethod]
         public void Get_ById_Anketa()
         {
-            var anketa = anketaService.GetById(2);
+            var anketa = _service.GetById(2);
 
             Assert.IsTrue(anketa.CountMembers == 2);
-            Assert.IsTrue(anketa.CheckPoint == "point2");
-            Assert.IsTrue(anketa.Operator == "Oper2");
+            Assert.IsTrue(anketa.CheckPoint == "check2");
+            Assert.IsTrue(anketa.Status == "status1");
         }
     }
 }

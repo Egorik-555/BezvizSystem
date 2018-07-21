@@ -2,6 +2,7 @@
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.BLL.Interfaces;
+using BezvizSystem.BLL.Mapper;
 using BezvizSystem.DAL;
 using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Identity;
@@ -31,16 +32,7 @@ namespace BezvizSystem.BLL.Services
             Database = uow;        
             mapper = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<ProfileUserDTO, OperatorProfile>();
-                cfg.CreateMap<OperatorProfile, ProfileUserDTO>();
-
-                cfg.CreateMap<UserDTO, BezvizUser>().
-                    ForMember(dest => dest.OperatorProfile, opt => opt.MapFrom(src => src.ProfileUser)).
-                    ForMember(dest => dest.Id, opt => opt.MapFrom(src => new BezvizUser().Id));
-
-                cfg.CreateMap<BezvizUser, UserDTO>().
-                    ForMember(dest => dest.ProfileUser, opt => opt.MapFrom(src => src.OperatorProfile));
-
+                cfg.AddProfile(new FromDALToBLLProfile(uow));
             }).CreateMapper();
         }
 
@@ -110,14 +102,8 @@ namespace BezvizSystem.BLL.Services
                 if (user == null)
                     return new OperationDetails(false, "Пользователь для редактирования не найден", "");
 
-                var mapper = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<UserDTO, BezvizUser>().ConstructUsing(v => user).
-                        ForMember(dest => dest.OperatorProfile, opt => opt.MapFrom(src => src.ProfileUser));
+                var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelUser(user))).CreateMapper();
 
-                    cfg.CreateMap<ProfileUserDTO, OperatorProfile>().ConstructUsing(v => user.OperatorProfile);
-
-                }).CreateMapper();
                 var m = mapper.Map<UserDTO, BezvizUser>(userDto);    
 
                 //изменить пароль
@@ -152,14 +138,9 @@ namespace BezvizSystem.BLL.Services
                 var user = await Database.UserManager.FindByIdAsync(userDto.Id);
                 if (user == null)
                     return new OperationDetails(false, "Туроператор не найден", "");
-             
-                var mapper = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<UserDTO, BezvizUser>().ConstructUsing(v => user).
-                        ForMember(dest => dest.OperatorProfile, opt => opt.MapFrom(src => src.ProfileUser));
-                    cfg.CreateMap<ProfileUserDTO, OperatorProfile>();
 
-                }).CreateMapper();
+                var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelUser(user))).CreateMapper();
+
                 var m = mapper.Map<UserDTO, BezvizUser>(userDto);
                 var result = await Database.UserManager.UpdateAsync(m);
 

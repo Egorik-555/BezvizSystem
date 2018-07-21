@@ -31,18 +31,31 @@ namespace BezvizSystem.BLL.Services.XML
         }
 
 
-        private IEnumerable<ModelForXmlToPogran> GetNewItems()
+        private IEnumerable<ModelForXmlToPogran> GetNewItems(int code)
         {
-            var visitors = _database.VisitorManager.GetAll().Where(v => v.Group == null ? false : v.Status.Code == 1).ToList();
+            var visitors = _database.VisitorManager.GetAll().ToList().Where(v => v.Status.Code == code);         
             return _mapper.Map<IEnumerable<Visitor>,IEnumerable<ModelForXmlToPogran>>(visitors);
         }
 
-        public OperationDetails Save(string name, SaveOptions options)
+        private void EditStatus(int codeOld, int codeNew)
         {
-            var list = GetNewItems();
+            var visitors = _database.VisitorManager.GetAll().Where(v => v.Status.Code == codeOld).ToList();
 
+            foreach(var item in visitors)
+            {
+                var status = _database.StatusManager.GetAll().Where(s => s.Code == codeNew).FirstOrDefault();
+                item.Status = status;
+                _database.VisitorManager.Update(item);
+            }
+
+        }
+
+        public OperationDetails Save(string name, SaveOptions options)
+        {                   
             try
             {
+                var list = GetNewItems(code: 1);
+                var count = list.Count();
                 XElement form = new XElement("EXPORT",
                                     list.Select(v =>
                                         new XElement("FORM_BORDER_INFORM",
@@ -64,9 +77,15 @@ namespace BezvizSystem.BLL.Services.XML
                                             )
                                         )));
 
+                if (count == 0)
+                    return new OperationDetails(false, "Нет записей для выгрузки", "");
+
                 XDocument xDoc = new XDocument(form);
                 xDoc.Save(name, options);
-                return new OperationDetails(true, "XML файл создан в " + name, "");
+                //mark item uploaded
+                EditStatus(codeOld: 1, codeNew: 2);
+           
+                return new OperationDetails(true, "XML файл создан", "");
             }
             catch(Exception ex)
             {

@@ -2,6 +2,7 @@
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.BLL.Interfaces;
+using BezvizSystem.BLL.Mapper;
 using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Helpers;
 using BezvizSystem.DAL.Interfaces;
@@ -15,26 +16,16 @@ namespace BezvizSystem.BLL.Services
 {
     public class GroupService : IService<GroupVisitorDTO>
     {
-        IUnitOfWork Database;
-        IMapper mapper;
+        IUnitOfWork _database;
+        IMapper _mapper;
 
         public GroupService(IUnitOfWork uow)
         {
-            Database = uow;
+            _database = uow;
 
-            mapper = new MapperConfiguration(cfg =>
+            _mapper = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<GroupVisitorDTO, GroupVisitor>().
-                     ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => Database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault()));
-                cfg.CreateMap<VisitorDTO, Visitor>().
-                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => Database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
-                    ForMember(dest => dest.Gender, opt => opt.MapFrom(src => Database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
-
-                cfg.CreateMap<GroupVisitor, GroupVisitorDTO>().
-                    ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name));
-                cfg.CreateMap<Visitor, VisitorDTO>().
-                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name)).
-                    ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Name));
+                cfg.AddProfile(new FromDALToBLLProfile(_database));
 
             }).CreateMapper();
         }
@@ -43,9 +34,9 @@ namespace BezvizSystem.BLL.Services
         {
             try
             {
-                var model = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
-                var user = await Database.UserManager.FindByNameAsync(group.UserInSystem);
-                var status = Database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
+                var model = _mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
+                var user = await _database.UserManager.FindByNameAsync(group.UserInSystem);
+                var status = _database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
 
                 //data of visitors
                 foreach (var visitor in model.Visitors)
@@ -59,9 +50,8 @@ namespace BezvizSystem.BLL.Services
                 //data for group of visitors
                 model.User = user;
                 model.DateInSystem = DateTime.Now;
-                model.Status = status;
 
-                Database.GroupManager.Create(model);
+                _database.GroupManager.Create(model);
                 return new OperationDetails(true, "Группа туристов создана", "");
             }
             catch (Exception ex)
@@ -74,42 +64,40 @@ namespace BezvizSystem.BLL.Services
         {
             try
             {
-                var group = await Database.GroupManager.GetByIdAsync(id);
+                var group = await _database.GroupManager.GetByIdAsync(id);
                 if (group != null)
                 {
-                    var status = Database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
+                    var status = _database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
                     var visitors = group.Visitors.ToList();
 
                     int k = 0;
 
                     foreach (var item in visitors)
                     {
-                        //if group have status code = 1 (new)
+                        //if item have status code = 1 (new)
                         if (item.Status == null || item.Status.Code == 1)
                         {
-                            Database.VisitorManager.Delete(item.Id); // remove item
+                            _database.VisitorManager.Delete(item.Id); // remove item
                             k++;
                         }
-                        // if group send to pogran
+                        // if item send to pogran
                         else
                         {
                             item.Status = status; // mark to upload
                             item.StatusOfOperation = StatusOfOperation.Remove; //mark to delete
-                            Database.VisitorManager.Update(item);
+                            _database.VisitorManager.Update(item);
                         }
                     }
 
-                    //if group have status code = 1 (new) and count deleted item = count of visitors
-                    if (group.Visitors.Count() == k && (group.Status.Code == 1 || group.Status == null))
+                    //if deleted all visitors in group
+                    if (group.Visitors.Count() == k)
                     {
-                        Database.GroupManager.Delete(group.Id);
+                        _database.GroupManager.Delete(group.Id);
                         return new OperationDetails(true, "Группа туристов удалена", "");
                     }
                     // if group send to pogran
                     else
-                    {
-                        group.Status = status; // mark to upload
-                        Database.GroupManager.Update(group);
+                    {                      
                         return new OperationDetails(true, "Группа туристов помечена к удалению", "");
                     }
                 }
@@ -126,7 +114,7 @@ namespace BezvizSystem.BLL.Services
             var result = new List<Visitor>();
             var visitorNew = newVisitors;
             var visitorOld = oldVisitors;
-            var statusForNewItem = Database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
+            var statusForNewItem = _database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
 
             foreach (var itemNew in visitorNew)
             {
@@ -197,19 +185,13 @@ namespace BezvizSystem.BLL.Services
         {
             try
             {
-                var model = await Database.GroupManager.GetByIdAsync(group.Id);            
+                var model = await _database.GroupManager.GetByIdAsync(group.Id);            
                 if (model != null)
-                {
-                  
+                {               
                     var mapper = new MapperConfiguration(cfg =>
                     {
-                        cfg.CreateMap<GroupVisitorDTO, GroupVisitor>().ConstructUsing(v => model).
-                            ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => Database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault()));
-                        cfg.CreateMap<VisitorDTO, Visitor>().
-                            ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => Database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
-                            ForMember(dest => dest.Gender, opt => opt.MapFrom(src => Database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
-                    }
-                    ).CreateMapper();
+                        cfg.AddProfile(new FromDALToBLLProfileWithModelGroup(_database, model));                 
+                    }).CreateMapper();
 
                     var oldVisitors = model.Visitors;
                     var modelNew = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
@@ -219,9 +201,9 @@ namespace BezvizSystem.BLL.Services
 
                     //add new visitors
                     modelNew.Visitors = newVisitors;
-                    var statusForNewItem = Database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
-                    modelNew.Status = statusForNewItem;
-                    Database.GroupManager.Update(modelNew);
+                    //var statusForNewItem = Database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
+                    //modelNew.Status = statusForNewItem;
+                    _database.GroupManager.Update(modelNew);
 
                     return new OperationDetails(true, "Группа туристов изменена", "");
                 }
@@ -237,28 +219,28 @@ namespace BezvizSystem.BLL.Services
 
         public void Dispose()
         {
-            Database.Dispose();
+            _database.Dispose();
         }
 
         public IEnumerable<GroupVisitorDTO> GetAll()
         {
-            var groups = Database.GroupManager.GetAll().ToList();
-            var groupsDto = mapper.Map<IEnumerable<GroupVisitor>, IEnumerable<GroupVisitorDTO>>(groups);
+            var groups = _database.GroupManager.GetAll().ToList();
+            var groupsDto = _mapper.Map<IEnumerable<GroupVisitor>, IEnumerable<GroupVisitorDTO>>(groups);
 
             return groupsDto;
         }
 
         public async Task<GroupVisitorDTO> GetByIdAsync(int id)
         {
-            var group = await Database.GroupManager.GetByIdAsync(id);
-            var groupDto = mapper.Map<GroupVisitor, GroupVisitorDTO>(group);
+            var group = await _database.GroupManager.GetByIdAsync(id);
+            var groupDto = _mapper.Map<GroupVisitor, GroupVisitorDTO>(group);
             return groupDto;
         }
 
         public GroupVisitorDTO GetById(int id)
         {
-            var group = Database.GroupManager.GetById(id);
-            var groupDto = mapper.Map<GroupVisitor, GroupVisitorDTO>(group);
+            var group = _database.GroupManager.GetById(id);
+            var groupDto = _mapper.Map<GroupVisitor, GroupVisitorDTO>(group);
             return groupDto;
         }
 

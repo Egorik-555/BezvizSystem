@@ -17,5 +17,6 @@ namespace BezvizSystem.BLL.DTO
         public string NotArriverd { get; set; }
         public string AllTourist { get; set; }
         public string AllGroup { get; set; }
+        public string AllTouristInGroup { get; set; }
     }
 }

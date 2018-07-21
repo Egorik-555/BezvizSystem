@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EXPORT>
+  <FORM_BORDER_INFORM>
+    <SECTION1>
+      <ORGANIZATION>1</ORGANIZATION>
+      <TYPE_OPERATION>1</TYPE_OPERATION>
+      <UNIQUE_ID>1</UNIQUE_ID>
+    </SECTION1>
+    <SECTION2>
+      <LAT_SURNAME>surname</LAT_SURNAME>
+      <LAT_NAME>name</LAT_NAME>
+      <BITH_DATE>
+        <DAY>30</DAY>
+        <MONTH>6</MONTH>
+        <YEAR>2018</YEAR>
+      </BITH_DATE>
+      <SEX>
+        <TEXT_SEX>Мужчина</TEXT_SEX>
+        <CODE_SEX>1</CODE_SEX>
+      </SEX>
+      <DOC>
+        <DOC_NUM>aaaaa</DOC_NUM>
+        <DOC_VALID>
+          <DAY />
+          <MONTH />
+          <YEAR />
+        </DOC_VALID>
+      </DOC>
+      <AUTHORIZED_DAY>2</AUTHORIZED_DAY>
+      <DATE_ENTRY>
+        <DAY>21</DAY>
+        <MONTH>7</MONTH>
+        <YEAR>2018</YEAR>
+      </DATE_ENTRY>
+    </SECTION2>
+  </FORM_BORDER_INFORM>
+</EXPORT>

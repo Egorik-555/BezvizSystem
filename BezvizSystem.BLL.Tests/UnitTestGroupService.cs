@@ -57,7 +57,6 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(findGroup.UserInSystem == "Admin");
             Assert.IsTrue(findGroup.DateInSystem.Value.Date == DateTime.Now.Date);
             Assert.IsTrue(findGroup.UserOperatorProfileUNP == "UnpAdmin");
-            Assert.IsTrue(findGroup.StatusName == "status1");
             Assert.IsTrue(findGroup.Visitors.Count() == 3);
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 3);
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusName == "status1").Count() == 3);
@@ -80,8 +79,8 @@ namespace BezvizSystem.BLL.Tests
             var list = Service.GetAll();
             var group = await Service.GetByIdAsync(2);
 
-            Assert.IsTrue(listOfVisitors1.Count() == 7);
-            Assert.IsTrue(listOfVisitors2.Count() == 5);
+            Assert.IsTrue(listOfVisitors1.Count() == 8);
+            Assert.IsTrue(listOfVisitors2.Count() == 6);
             Assert.IsTrue(result.Succedeed);
             Assert.IsTrue(result.Message == "Группа туристов удалена");
             Assert.IsTrue(list.Count() == 4);
@@ -95,7 +94,6 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsTrue(result.Succedeed);
             Assert.IsNotNull(group);
-            Assert.IsTrue(group.StatusName == "status1");
             Assert.IsTrue(result.Message == "Группа туристов помечена к удалению");
             Assert.IsTrue(list.Count() == 4);
 
@@ -110,11 +108,10 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsTrue(result.Succedeed);
             Assert.IsNotNull(group);
-            Assert.IsTrue(group.StatusName == "status1");
             Assert.IsTrue(result.Message == "Группа туристов помечена к удалению");
             Assert.IsTrue(list.Count() == 4);
 
-            Assert.IsTrue(allVisitors.Count() == 4);
+            Assert.IsTrue(allVisitors.Count() == 5);
             Assert.IsTrue(visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Remove).Count() == 2);
         }
 
@@ -281,7 +278,6 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsTrue(result.Succedeed);
             Assert.IsTrue(findGroup.Visitors.Count() == 1);
-            Assert.IsTrue(findGroup.StatusName == "status1");
             Assert.IsTrue(findGroup.UserInSystem == "Admin");
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Edit).Count() == 1);
 
@@ -316,7 +312,6 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsTrue(result.Succedeed);
             Assert.IsTrue(findGroup.Visitors.Count() == 2);
-            Assert.IsTrue(findGroup.StatusName == "status1");
             Assert.IsTrue(findGroup.UserInSystem == "Admin");
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Edit).Count() == 1);
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 1);
@@ -352,7 +347,6 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsTrue(result.Succedeed);
             Assert.IsTrue(findGroup.Visitors.Count() == 1);
-            Assert.IsTrue(findGroup.StatusName == "status1");
             Assert.IsTrue(findGroup.UserInSystem == "Admin");
         
             Assert.IsTrue(visitor.Surname == "surname7");
@@ -383,7 +377,6 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsTrue(result.Succedeed);
             Assert.IsTrue(findGroup.Visitors.Count() == 2);
-            Assert.IsTrue(findGroup.StatusName == "status1");
             Assert.IsTrue(findGroup.UserInSystem == "Admin");
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Remove).Count() == 1);
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 1);

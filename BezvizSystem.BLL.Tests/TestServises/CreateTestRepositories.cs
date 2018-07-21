@@ -19,7 +19,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
         BezvizUser user1 = new BezvizUser { Id = "aaa", UserName = "Test1", OperatorProfile = new OperatorProfile { UNP = "UnpTest1", OKPO = "OKPO1", Role = "Operator" } };
         BezvizUser user2 = new BezvizUser { Id = "bbb", UserName = "Test2", OperatorProfile = new OperatorProfile { UNP = "UnpTest2", OKPO = "OKPO2", Role = "Admin" } };
         BezvizUser user3 = new BezvizUser { Id = "ccc", UserName = "Test3", OperatorProfile = new OperatorProfile { UNP = "UnpTest3", OKPO = "OKPO3", Role = "Operator" } };
-        BezvizUser user4 = new BezvizUser { Id = "ddd", UserName = "Admin", OperatorProfile = new OperatorProfile { UNP = "UnpAdmin", OKPO = "OKPO4", Role = "Operator" } };
+        BezvizUser user4 = new BezvizUser { Id = "ddd", UserName = "Admin", OperatorProfile = new OperatorProfile {Transcript = "AdminTran", UNP = "UnpAdmin", OKPO = "OKPO4", Role = "Operator" } };
 
         Nationality nat1 = new Nationality { Id = 1, Name = "nat1", ShortName = "n1", Active = true };
         Nationality nat2 = new Nationality { Id = 2, Name = "nat2", Active = true };
@@ -64,16 +64,16 @@ namespace BezvizSystem.BLL.Tests.TestServises
 
         public CreateTestRepositories()
         {
-            groupForVisitor = new GroupVisitor {DateArrival = new DateTime(2018,7,1), DaysOfStay = 3, Status = status1};
+            groupForVisitor = new GroupVisitor {DateArrival = new DateTime(2018,7,1), DaysOfStay = 3};
 
             visitor1 = new Visitor { Id = 1, Surname = "surname1", BithDate = DateTime.Now, Nationality = nat1, Group = groupForVisitor, Status = status3 };
             visitor2 = new Visitor { Id = 2, Surname = "surname2", Gender = gender2, Name = "Name2", UserInSystem = "user", 
-                                     Nationality = nat2, DateInSystem = new DateTime(2018, 07, 01), Group = groupForVisitor, Status = status2 };
+                                     Nationality = nat2, DateInSystem = new DateTime(2018, 07, 01), Group = groupForVisitor, Status = status2, Arrived = true };
 
-            visitor3 = new Visitor { Id = 3, Surname = "surname3", Nationality = nat3, Status = status1 };
-            visitor4 = new Visitor { Id = 4, Surname = "surname4", Nationality = nat1, Group = groupForVisitor, Status = status1 };
+            visitor3 = new Visitor { Id = 3, Surname = "surname3", Nationality = nat3, Status = status1, Arrived = true };
+            visitor4 = new Visitor { Id = 4, Surname = "surname4", Nationality = nat1, Group = groupForVisitor, Status = status1, Arrived = true };
             visitor5 = new Visitor { Id = 5, Surname = "surname5", Nationality = nat3, Group = groupForVisitor, Status = status1 };
-            visitor6 = new Visitor { Id = 6, Surname = "surname6", Nationality = nat2, Group = groupForVisitor , Status = status2};
+            visitor6 = new Visitor { Id = 6, Surname = "surname6", Nationality = nat2, Group = groupForVisitor , Status = status2, Arrived = true};
             visitor7 = new Visitor { Id = 7, Surname = "surname7", Nationality = nat3, Group = groupForVisitor, Status = status2 };
 
             visitor8 = new Visitor { Id = 9,
@@ -86,16 +86,18 @@ namespace BezvizSystem.BLL.Tests.TestServises
                                      DocValid = null,                             
                                      Status = status1 };
 
-            group1 = new GroupVisitor { Id = 1, CheckPoint = check1, PlaceOfRecidense = "place1",
-                                        Visitors = new List<Visitor> { visitor1, visitor2 }, User = user4, Status = status1 };
-            group2 = new GroupVisitor { Id = 2, CheckPoint = check2, PlaceOfRecidense = "place2",
-                                        Visitors = new List<Visitor> { visitor3, visitor4 },
-                                        User = user4, UserInSystem = "Admin", DateInSystem = new DateTime(2018, 07, 01), Status = status1 };
-            group3 = new GroupVisitor { Id = 3, CheckPoint = check3, PlaceOfRecidense = "place3",
-                                        Visitors = new List<Visitor> { visitor5, visitor6, visitor7 },
-                                        Status = status3
+            group1 = new GroupVisitor { Id = 1, CheckPoint = check1, PlaceOfRecidense = "place1", DateArrival = new DateTime(2018, 6, 1), Group = true,
+                                        Visitors = new List<Visitor> { visitor1, visitor2 }, User = user4 };
+
+            group2 = new GroupVisitor { Id = 2, CheckPoint = check2, PlaceOfRecidense = "place2", Group = true,
+                                        Visitors = new List<Visitor> { visitor3, visitor4 }, DateArrival = new DateTime(2018, 07, 21),
+                                        User = user4, UserInSystem = "Admin", DateInSystem = new DateTime(2018, 07, 01) };
+
+            group3 = new GroupVisitor { Id = 3, CheckPoint = check3, PlaceOfRecidense = "place3", DateArrival = new DateTime(2018, 07, 26),
+                                        Visitors = new List<Visitor> { visitor5, visitor6, visitor7 }, Group = true
             };
-            group4 = new GroupVisitor { Id = 4, CheckPoint = check4, PlaceOfRecidense = "place4", Visitors = new List<Visitor> { visitor6 } };
+            group4 = new GroupVisitor { Id = 4, CheckPoint = check4, PlaceOfRecidense = "place4",
+                                        Visitors = new List<Visitor> { visitor6 }, DateArrival = new DateTime(2018, 6, 15) };
 
             group5 = new GroupVisitor {
                 Id = 5, CheckPoint = check2,
@@ -104,7 +106,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
                 User = user4,
                 UserInSystem = "Admin",
                 DateInSystem = new DateTime(2018, 07, 01),
-                Status = status3
+                DateArrival = new DateTime(2018, 07,30)
             };
 
             activity1 = new UserActivity { Id = 1, Login = "login1", Ip = "Ip1", TimeActivity = DateTime.Now, Operation = operation1 };

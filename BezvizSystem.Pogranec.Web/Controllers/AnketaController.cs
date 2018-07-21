@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.Interfaces;
+using BezvizSystem.BLL.Interfaces.XML;
 using BezvizSystem.Pogranec.Web.Models.Anketa;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 
 namespace BezvizSystem.Pogranec.Web.Controllers
@@ -14,10 +17,12 @@ namespace BezvizSystem.Pogranec.Web.Controllers
     public class AnketaController : Controller
     {
         IService<AnketaDTO> _anketaService;
+        IXmlCreator _xmlService;
 
-        public AnketaController(IService<AnketaDTO> service)
+        public AnketaController(IService<AnketaDTO> anketaService, IXmlCreator xmlService)
         {
-            _anketaService = service;         
+            _anketaService = anketaService;
+            _xmlService = xmlService;
         }
 
         public ActionResult Index()
@@ -31,6 +36,18 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             var model = new ArrivedPerson { Infoes = group, Count = group.Sum(a => a.Count) };
 
             return View(model);
+        }
+
+        public ActionResult GetAnketas()
+        {
+            string file = HostingEnvironment.MapPath("~/App_Data/file.xml");
+            var result = _xmlService.Save(file);
+
+            string contentType = "application/xml";
+
+            if (result.Succedeed)
+                return File(file, contentType, Path.GetFileName(file));
+            else return View("Index"); 
         }
     }
 }

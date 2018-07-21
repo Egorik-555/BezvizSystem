@@ -10,7 +10,8 @@ namespace BezvizSystem.BLL.Interfaces
     public interface IReport : IDisposable
     {
         ReportDTO GetReport();
-        ReportDTO GetReport(DateTime dateFrom);
-        ReportDTO GetReport(DateTime dateFrom, DateTime dateTo);       
+        ReportDTO GetReport(DateTime dateMoment);
+        ReportDTO GetReport(DateTime dateFrom, DateTime dateTo);
+        ReportDTO GetReport(DateTime dateFrom, DateTime dateTo, DateTime dateMoment);
     }
 }

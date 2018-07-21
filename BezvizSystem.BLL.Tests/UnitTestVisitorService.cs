@@ -32,19 +32,19 @@ namespace BezvizSystem.BLL.Tests
         [TestMethod]
         public async Task Create_Visitor()
         {
-            VisitorDTO visitor1 = new VisitorDTO {Id = 8, Name = "newTest", Nationality = "nat1", Gender = "Мужчина", UserInSystem = "Test1" };
-            VisitorDTO visitor2 = new VisitorDTO { Id = 9, Name = "newTest", Nationality = "nat1", Gender = "Error", UserInSystem = "Test1" };
+            VisitorDTO visitor1 = new VisitorDTO {Id = 10, Name = "newTest", Nationality = "nat1", Gender = "Мужчина", UserInSystem = "Test1" };
+            VisitorDTO visitor2 = new VisitorDTO { Id = 11, Name = "newTest", Nationality = "nat1", Gender = "Error", UserInSystem = "Test1" };
 
             var result1 = await Service.Create(visitor1);
             var result2 = await Service.Create(visitor2);
             var count = Service.GetAll().Count();
 
-            var addedVisitor1 = await Service.GetByIdAsync(8);
-            var addedVisitor2 = await Service.GetByIdAsync(9);
+            var addedVisitor1 = await Service.GetByIdAsync(10);
+            var addedVisitor2 = await Service.GetByIdAsync(11);
 
             Assert.IsTrue(result1.Succedeed);
             Assert.IsTrue(result2.Succedeed);
-            Assert.IsTrue(count == 9);
+            Assert.IsTrue(count == 10);
             Assert.IsTrue(addedVisitor1.Gender == "Мужчина");
             Assert.IsNull(addedVisitor2.Gender);
             Assert.IsFalse(addedVisitor1.Arrived);
@@ -61,7 +61,7 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsNull(visitor);
             Assert.IsTrue(result.Succedeed);
-            Assert.IsTrue(count == 6);
+            Assert.IsTrue(count == 7);
         }
 
         [TestMethod]
@@ -75,7 +75,7 @@ namespace BezvizSystem.BLL.Tests
             var count = Service.GetAll().Count();
 
             Assert.IsTrue(result.Succedeed);
-            Assert.IsTrue(count == 7);
+            Assert.IsTrue(count == 8);
             Assert.IsTrue(resVisitor.Name == "new Name");
             Assert.IsTrue(resVisitor.UserInSystem == "user");
             Assert.IsTrue(resVisitor.DateInSystem == new DateTime(2018, 07, 01));
@@ -99,7 +99,7 @@ namespace BezvizSystem.BLL.Tests
         public void Get_All_Visitor()
         {
             var visitor = Service.GetAll();
-            Assert.IsTrue(visitor.Count() == 7);
+            Assert.IsTrue(visitor.Count() == 8);
         }
     }
 }

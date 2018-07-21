@@ -21,7 +21,7 @@ namespace BezvizSystem.DAL.Entities
         public DateTime? BithDate { get; set; }
         public virtual Nationality Nationality { get; set; }
 
-        public Status Status { get; set; }
+        public virtual Status Status { get; set; }
         public StatusOfOperation StatusOfOperation { get; set; }
         public bool Arrived { get; set; }
 
