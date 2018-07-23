@@ -31,24 +31,24 @@ namespace BezvizSystem.BLL.Services
             return GetReport(DateTime.Now.Date, DateTime.Now.Date);
         }
 
-        public ReportDTO GetReport(DateTime dateMoment)
+        public ReportDTO GetReport(DateTime? dateMoment)
         {
             return GetReport(DateTime.Now.Date, DateTime.Now.Date, dateMoment);
         }
 
-        public ReportDTO GetReport(DateTime dateFrom, DateTime dateTo)
+        public ReportDTO GetReport(DateTime? dateFrom, DateTime? dateTo)
         {
             return GetReport(dateFrom, dateTo, DateTime.Now.Date);
         }
 
-        public ReportDTO GetReport(DateTime dateFrom, DateTime dateTo, DateTime dateMoment)
+        public ReportDTO GetReport(DateTime? dateFrom, DateTime? dateTo, DateTime? dateMoment)
         {           
             _groups = _database.GroupManager.GetAll().Where(g => g.DateArrival >= dateFrom && g.DateArrival <= dateTo).ToList();
 
             return new ReportDTO
             {
-                DateFrom = dateFrom.ToShortDateString(),
-                DateTo = dateTo.ToShortDateString(),
+                DateFrom = dateFrom.Value.ToShortDateString(),
+                DateTo = dateTo.Value.ToShortDateString(),
 
                 AllRegistrated = GetAllRegistrated().ToString(),
                 AllArrived = GetAllArrived().ToString(),
@@ -70,13 +70,13 @@ namespace BezvizSystem.BLL.Services
             return _groups.Select(a => a.Visitors.Where(v => v.Arrived).Count()).Sum();
         }
 
-        private int? GetWaitArrived(DateTime dateMoment)
+        private int? GetWaitArrived(DateTime? dateMoment)
         {
             var groups = _groups.Where(g => g.DateArrival >= dateMoment).ToList();
             return groups.Select(a => a.Visitors.Where(v => !v.Arrived).Count()).Sum();
         }
 
-        private int? GetNotArrived(DateTime dateMoment)
+        private int? GetNotArrived(DateTime? dateMoment)
         {
             var groups = _groups.Where(g => g.DateArrival < dateMoment);
             return groups.Select(a => a.Visitors.Where(v => !v.Arrived).Count()).Sum();

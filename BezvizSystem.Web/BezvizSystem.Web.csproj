@@ -321,6 +321,7 @@
     <Content Include="Views\Mark\Index.cshtml" />
     <Content Include="Views\Mark\GroupData.cshtml" />
     <Content Include="Views\Anketa\GroupData.cshtml" />
+    <Content Include="Views\Report\DataReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

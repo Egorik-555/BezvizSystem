@@ -39,12 +39,20 @@ namespace BezvizSystem.Web.Controllers
             return View(modelInView);
         }
 
-        [HttpPost]
-        public ActionResult Index(DateTime dateFrom, DateTime dateTo)
+        public ActionResult DataReport(DateTime? dateFrom, DateTime? dateTo)
         {
-            var model = _reportService.GetReport(dateFrom, dateTo);
+            ReportDTO model;
+            if (dateFrom.HasValue && dateTo.HasValue)
+            {
+                model = _reportService.GetReport(dateFrom, dateTo);
+            }
+            else
+            {
+                model = _reportService.GetReport();
+            }
+
             var modelInView = _mapper.Map<ReportDTO, ReportModel>(model);
-            return View(modelInView);
+            return PartialView(modelInView);
         }
     }
 }

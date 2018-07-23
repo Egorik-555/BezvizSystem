@@ -49,7 +49,7 @@
     <Compile Include="TestServises\CreateTestRepositories.cs" />
     <Compile Include="TestUnitOfWork.cs" />
     <Compile Include="ExcelTest.cs" />
-    <Compile Include="ReportTest.cs" />
+    <Compile Include="UnitTestReportService.cs" />
     <Compile Include="UnitTestXmlCreatorService.cs" />
     <Compile Include="UnitTestLoggerTest.cs" />
     <Compile Include="UnitTestAnketaService.cs" />
