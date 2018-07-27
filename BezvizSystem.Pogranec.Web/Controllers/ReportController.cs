@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.Interfaces;
+using BezvizSystem.BLL.Report.DTO;
 using BezvizSystem.Pogranec.Web.Mapper;
 using BezvizSystem.Pogranec.Web.Models.Report;
 using Microsoft.AspNet.Identity.Owin;

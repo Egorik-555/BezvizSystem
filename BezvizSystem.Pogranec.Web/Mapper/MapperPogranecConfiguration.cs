@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.Configuration;
 using BezvizSystem.BLL.DTO;
+using BezvizSystem.BLL.Report.DTO;
 using BezvizSystem.Pogranec.Web.Models.Report;
 using System;
 using System.Collections.Generic;

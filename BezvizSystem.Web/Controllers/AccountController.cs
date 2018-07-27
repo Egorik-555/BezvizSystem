@@ -32,12 +32,7 @@ namespace BezvizSystem.Web.Controllers
             get { return HttpContext.GetOwinContext().GetUserManager<BezvizUserManager>(); }
         }
 
-        public ActionResult Login(string returnUrl)
-        {
-            ViewBag.returnUrl = returnUrl;
-            return View();
-        }
-
+       
         public ActionResult Register()
         {
             return View();
@@ -106,6 +101,12 @@ namespace BezvizSystem.Web.Controllers
                 }
             }
             return RedirectToAction("Login");
+        }
+
+        public ActionResult Login(string returnUrl)
+        {
+            ViewBag.returnUrl = returnUrl;
+            return View();
         }
 
         [HttpPost]

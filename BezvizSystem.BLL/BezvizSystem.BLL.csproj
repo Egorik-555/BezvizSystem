@@ -142,11 +142,15 @@
     <Compile Include="DTO\Log\UnloadDTO.cs" />
     <Compile Include="DTO\Log\UserActivityDTO.cs" />
     <Compile Include="DTO\ProfileUserDTO.cs" />
-    <Compile Include="DTO\ReportDTO.cs" />
+    <Compile Include="DTO\Report\CountByCheckPoint.cs" />
+    <Compile Include="DTO\Report\CountByDate.cs" />
+    <Compile Include="DTO\Report\NatAndAge.cs" />
+    <Compile Include="DTO\Report\ReportDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="DTO\VisitorDTO.cs" />
     <Compile Include="DTO\XML\ModelForXmlToPogran.cs" />
     <Compile Include="Infrastructure\OperationDetails.cs" />
+    <Compile Include="Interfaces\Docs\IDocCreator.cs" />
     <Compile Include="Interfaces\IExcel.cs" />
     <Compile Include="Interfaces\IGeneratePass.cs" />
     <Compile Include="Interfaces\ILogger.cs" />
@@ -160,6 +164,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AnketaService.cs" />
     <Compile Include="Services\DictionaryService.cs" />
+    <Compile Include="Services\Docs\DocCreatorAnketa.cs" />
     <Compile Include="Services\GroupService.cs" />
     <Compile Include="Interfaces\IDictionaryService.cs" />
     <Compile Include="Services\ActivityLoggerService.cs" />
