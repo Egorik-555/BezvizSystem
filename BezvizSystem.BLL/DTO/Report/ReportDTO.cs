@@ -23,5 +23,7 @@ namespace BezvizSystem.BLL.Report.DTO
         public IEnumerable<NatAndAge> AllByNatAndAge { get; set; }
         public IEnumerable<CountByDate> AllByDateArrivalCount { get; set; }
         public IEnumerable<CountByCheckPoint> AllByCheckPointCount { get; set; }
+        public IEnumerable<CountByDays> AllByDaysCount { get; set; }
+        public IEnumerable<CountByOperator> AllByOperatorCount { get; set; }
     }
 }

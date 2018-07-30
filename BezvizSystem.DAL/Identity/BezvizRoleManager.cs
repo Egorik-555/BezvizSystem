@@ -11,10 +11,14 @@ namespace BezvizSystem.DAL.Identity
 {
     public class BezvizRoleManager : RoleManager<BezvizRole>
     {
-        public BezvizRoleManager(RoleStore<BezvizRole> store)
+        public BezvizRoleManager(IRoleStore<BezvizRole> store)
             : base(store)
         {
 
+        }
+
+        public BezvizRoleManager(IRoleStore<BezvizRole, string> store) : base(store)
+        {
         }
     }
 }

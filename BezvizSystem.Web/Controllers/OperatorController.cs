@@ -2,6 +2,7 @@
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.DAL;
+using BezvizSystem.Web.Mapper;
 using BezvizSystem.Web.Models.Operator;
 using Microsoft.AspNet.Identity.Owin;
 using System;
@@ -21,35 +22,39 @@ namespace BezvizSystem.Web.Controllers
             get { return HttpContext.GetOwinContext().Get<IUserService>(); }
         }
 
-        IMapper mapper;
+        IMapper _mapper;
 
         public OperatorController()
         {
-            IMapper mapperProfile = new MapperConfiguration(cfg => {
+            //IMapper mapperProfile = new MapperConfiguration(cfg => {
 
-                cfg.CreateMap<CreateOperatorModel, ProfileUserDTO>();
-                cfg.CreateMap<EditOperatorModel, ProfileUserDTO>();
-                cfg.CreateMap<DeleteOperatorModel, ProfileUserDTO>();
-                cfg.RecognizePrefixes("ProfileUser");           
-            }).CreateMapper();
+            //    cfg.CreateMap<CreateOperatorModel, ProfileUserDTO>();
+            //    cfg.CreateMap<EditOperatorModel, ProfileUserDTO>();
+            //    cfg.CreateMap<DeleteOperatorModel, ProfileUserDTO>();
+            //    cfg.RecognizePrefixes("ProfileUser");           
+            //}).CreateMapper();
 
-            mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<UserDTO, ViewOperatorModel>();
+            //mapper = new MapperConfiguration(cfg =>
+            //{
+            //    cfg.CreateMap<UserDTO, ViewOperatorModel>();
 
-                cfg.CreateMap<CreateOperatorModel, UserDTO>().
-                   ForMember(dest => dest.ProfileUser, opt => opt.MapFrom(src => mapperProfile.Map<CreateOperatorModel, ProfileUserDTO>(src)));
+            //    cfg.CreateMap<CreateOperatorModel, UserDTO>().
+            //       ForMember(dest => dest.ProfileUser, opt => opt.MapFrom(src => mapperProfile.Map<CreateOperatorModel, ProfileUserDTO>(src)));
 
-                cfg.CreateMap<UserDTO, EditOperatorModel>();
+            //    cfg.CreateMap<UserDTO, EditOperatorModel>();
 
-                cfg.CreateMap<EditOperatorModel, UserDTO>().
-                   ForMember(dest => dest.ProfileUser, opt => opt.MapFrom(src => mapperProfile.Map<EditOperatorModel, ProfileUserDTO>(src)));
+            //    cfg.CreateMap<EditOperatorModel, UserDTO>().
+            //       ForMember(dest => dest.ProfileUser, opt => opt.MapFrom(src => mapperProfile.Map<EditOperatorModel, ProfileUserDTO>(src)));
 
-                cfg.CreateMap<UserDTO, DeleteOperatorModel>();
-                cfg.CreateMap<DeleteOperatorModel, UserDTO>().
-                    ForMember(dest => dest.ProfileUser, opt => opt.MapFrom(src => mapperProfile.Map<DeleteOperatorModel, ProfileUserDTO>(src)));
+            //    cfg.CreateMap<UserDTO, DeleteOperatorModel>();
+            //    cfg.CreateMap<DeleteOperatorModel, UserDTO>().
+            //        ForMember(dest => dest.ProfileUser, opt => opt.MapFrom(src => mapperProfile.Map<DeleteOperatorModel, ProfileUserDTO>(src)));
 
-            }).CreateMapper();
+            //}).CreateMapper();
+
+            _mapper = new MapperConfiguration(cfg => 
+                cfg.AddProfile(new FromBLLToWebProfile())).
+                    CreateMapper();
         }
 
         public ActionResult Index()
@@ -66,7 +71,7 @@ namespace BezvizSystem.Web.Controllers
         public ActionResult DataOperators(string id)
         {
             var usersDto = UserService.GetByRole("operator");
-            var model = mapper.Map<IEnumerable<UserDTO>, IEnumerable<ViewOperatorModel>>(usersDto);         
+            var model = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<ViewOperatorModel>>(usersDto);         
             if (!string.IsNullOrEmpty(id))
             {
                 model = model.Where(m => m.ProfileUserTranscript.ToUpper().Contains(id.ToUpper()));
@@ -84,7 +89,10 @@ namespace BezvizSystem.Web.Controllers
         {
             if (ModelState.IsValid)
             {          
-                var user = mapper.Map<CreateOperatorModel, UserDTO>(model);                   
+                var user = _mapper.Map<CreateOperatorModel, UserDTO>(model);
+                var userProfile = _mapper.Map<CreateOperatorModel, ProfileUserDTO>(model);
+                user.ProfileUser = userProfile;
+
                 var result = await UserService.Create(user);
                 if (result.Succedeed)
                     return RedirectToAction("Index");
@@ -102,14 +110,14 @@ namespace BezvizSystem.Web.Controllers
             if (user == null)
                 return RedirectToAction("Index");
        
-            var model = mapper.Map<UserDTO, DeleteOperatorModel>(user);
+            var model = _mapper.Map<UserDTO, DeleteOperatorModel>(user);
             return View(model);
         }
 
         [HttpPost]
         public async Task<ActionResult> Delete(DeleteOperatorModel model)
         {          
-            var user = mapper.Map<DeleteOperatorModel, UserDTO>(model);
+            var user = _mapper.Map<DeleteOperatorModel, UserDTO>(model);
 
             await UserService.Delete(user);
             return RedirectToAction("Index");
@@ -120,7 +128,7 @@ namespace BezvizSystem.Web.Controllers
             var user = await UserService.GetByIdAsync(id);
             if (user == null)
                 return RedirectToAction("Index");
-            var model = mapper.Map<UserDTO, EditOperatorModel>(user);
+            var model = _mapper.Map<UserDTO, EditOperatorModel>(user);
             return View(model);
         }
 
@@ -129,7 +137,7 @@ namespace BezvizSystem.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = mapper.Map<EditOperatorModel, UserDTO>(model);
+                var user = _mapper.Map<EditOperatorModel, UserDTO>(model);
 
                 var result = await UserService.Update(user);
                 if (result.Succedeed)

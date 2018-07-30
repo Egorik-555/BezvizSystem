@@ -16,10 +16,16 @@ namespace BezvizSystem.BLL.Tests.TestServises
 {
     public class CreateTestRepositories
     {
-        BezvizUser user1 = new BezvizUser { Id = "aaa", UserName = "Test1", OperatorProfile = new OperatorProfile { UNP = "UnpTest1", OKPO = "OKPO1", Role = "Operator" } };
-        BezvizUser user2 = new BezvizUser { Id = "bbb", UserName = "Test2", OperatorProfile = new OperatorProfile { UNP = "UnpTest2", OKPO = "OKPO2", Role = "Admin" } };
-        BezvizUser user3 = new BezvizUser { Id = "ccc", UserName = "Test3", OperatorProfile = new OperatorProfile { UNP = "UnpTest3", OKPO = "OKPO3", Role = "Operator" } };
-        BezvizUser user4 = new BezvizUser { Id = "ddd", UserName = "Admin", OperatorProfile = new OperatorProfile {Transcript = "AdminTran", UNP = "UnpAdmin", OKPO = "OKPO4", Role = "Operator" } };
+        OperatorProfile profile1 = new OperatorProfile {Id = "aaa", Transcript = "operator1", UNP = "UnpTest1", OKPO = "OKPO1", Role = "Operator" };
+        OperatorProfile profile2 = new OperatorProfile {Id = "bbb", Transcript = "operator2", UNP = "UnpTest2", OKPO = "OKPO2", Role = "Operator" };
+        OperatorProfile profile3 = new OperatorProfile {Id = "ccc", Transcript = "operator3", UNP = "UnpTest3", OKPO = "OKPO3", Role = "Operator" };
+        OperatorProfile profile4 = new OperatorProfile {Id = "ddd", Transcript = "AdminTran", UNP = "UnpAdmin", OKPO = "OKPO4", Role = "Admin" };
+
+        BezvizUser user1 = new BezvizUser { Id = "aaa", UserName = "Test1"};
+        BezvizUser user2 = new BezvizUser { Id = "bbb", UserName = "Test2"};
+        BezvizUser user3 = new BezvizUser { Id = "ccc", UserName = "Test3"};
+        BezvizUser user4 = new BezvizUser { Id = "ddd", UserName = "Admin"};
+
 
         Nationality nat1 = new Nationality { Id = 1, Name = "nat1", ShortName = "n1", Active = true };
         Nationality nat2 = new Nationality { Id = 2, Name = "nat2", ShortName = "n2", Active = true };
@@ -64,10 +70,15 @@ namespace BezvizSystem.BLL.Tests.TestServises
 
         public CreateTestRepositories()
         {
-            groupForVisitor = new GroupVisitor {DateArrival = new DateTime(2018,7,1), DaysOfStay = 3, CheckPoint = check1};
+            user1.OperatorProfile = profile1;
+            user2.OperatorProfile = profile2;
+            user3.OperatorProfile = profile3;
+            user4.OperatorProfile = profile4;
 
-            GroupVisitor groupForVisitor1 = new GroupVisitor { DateArrival = new DateTime(2018, 7, 2), DaysOfStay = 3, CheckPoint = check2 };
-            GroupVisitor groupForVisitor2 = new GroupVisitor { DateArrival = new DateTime(2018, 5, 1), DaysOfStay = 3, CheckPoint = check3 };
+            groupForVisitor = new GroupVisitor {DateArrival = new DateTime(2018,7,1), DaysOfStay = 3, CheckPoint = check1, User = user1};
+
+            GroupVisitor groupForVisitor1 = new GroupVisitor { DateArrival = new DateTime(2018, 7, 2), DaysOfStay = 1, CheckPoint = check2, User = user2 };
+            GroupVisitor groupForVisitor2 = new GroupVisitor { DateArrival = new DateTime(2018, 5, 1), DaysOfStay = 3, CheckPoint = check3, User = user3 };
 
             visitor1 = new Visitor { Id = 1, Surname = "surname1", BithDate = new DateTime(1987, 07, 01),
                                      Nationality = nat1, Group = groupForVisitor, Status = status3, Gender = gender1 };
@@ -123,14 +134,41 @@ namespace BezvizSystem.BLL.Tests.TestServises
         }
 
 
+        private IRepository<OperatorProfile, string> CreateOperatorManager()
+        {
+            List<OperatorProfile> list = new List<OperatorProfile> { profile1, profile2, profile3, profile4 };
+
+            Mock<IRepository<OperatorProfile, string>> operatorMng = new Mock<IRepository<OperatorProfile, string>>();
+
+            operatorMng.Setup(m => m.Delete(It.IsAny<string>())).Returns<string>(id => { var profile = list.Where(p => p.Id == id).FirstOrDefault();
+                                                                                         list.Remove(profile); return profile; });
+
+            operatorMng.Setup(m => m.GetById(It.IsAny<string>())).Returns<string>(id => { return list.Where(p => p.Id == id).FirstOrDefault(); });
+
+            return operatorMng.Object;
+        }
+
         private BezvizUserManager CreateUserManager()
         {
             List<BezvizUser> userList = new List<BezvizUser> { user1, user2, user3, user4 };
             Mock<IUserStore<BezvizUser>> userStore = new Mock<IUserStore<BezvizUser>>();
-            userStore.Setup(m => m.FindByNameAsync(It.IsAny<string>())).Returns<string>(id =>
-                                                                            Task<BezvizUser>.FromResult<BezvizUser>(
-                                                                                userList.Where(u => u.UserName == id).FirstOrDefault()));
-            return new BezvizUserManager(userStore.Object);
+            
+            return new UserManagerTest(userList, userStore.Object);
+        }
+
+        private BezvizRoleManager CreateRoleManager()
+        {
+            List<BezvizRole> list = new List<BezvizRole> { };
+            Mock<IRoleStore<BezvizRole, string>> roleStore = new Mock<IRoleStore<BezvizRole, string>>();
+
+            roleStore.Setup(m => m.FindByNameAsync(It.IsAny<string>())).Returns<string>(id =>
+                                                                            Task<BezvizRole>.FromResult<BezvizRole>(
+                                                                                list.Where(u => u.Name == id).FirstOrDefault()));
+
+            roleStore.Setup(m => m.CreateAsync(It.IsAny<BezvizRole>())).Returns<BezvizRole>( role => Task.FromResult(Task.Run(() => list.Add(role))));
+
+
+            return new BezvizRoleManager(roleStore.Object);
         }
 
         private IRepository<Status, int> CreateStatusManager()
@@ -261,6 +299,8 @@ namespace BezvizSystem.BLL.Tests.TestServises
             Mock<IUnitOfWork> mockDB = new Mock<IUnitOfWork>();
 
             mockDB.Setup(m => m.UserManager).Returns(CreateUserManager());
+            mockDB.Setup(m => m.OperatorManager).Returns(CreateOperatorManager());
+            mockDB.Setup(m => m.RoleManager).Returns(CreateRoleManager());
             mockDB.Setup(m => m.VisitorManager).Returns(CreateVisitorManager());
             mockDB.Setup(m => m.NationalityManager).Returns(CreateNationalitiesManager());
             mockDB.Setup(m => m.StatusManager).Returns(CreateStatusManager());

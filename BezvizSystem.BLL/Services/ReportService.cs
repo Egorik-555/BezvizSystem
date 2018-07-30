@@ -64,7 +64,9 @@ namespace BezvizSystem.BLL.Services
 
                 AllByNatAndAge = GetByNatAndAge(dateMoment),
                 AllByDateArrivalCount = GetByDateArrivalCount(),
-                AllByCheckPointCount = GetByCheckPointCount()
+                AllByCheckPointCount = GetByCheckPointCount(),
+                AllByDaysCount = GetByDaysCount(),
+                AllByOperatorCount = GetByOperatorCount()
             };
         }
 
@@ -98,6 +100,18 @@ namespace BezvizSystem.BLL.Services
         private IEnumerable<CountByCheckPoint> GetByCheckPointCount()
         {
             var visitors = _visitors.GroupBy(v => v.Group.CheckPoint.Name).Select(g => new CountByCheckPoint { CheckPoint = g.Key, Count = g.Count() });
+            return visitors.ToList();
+        }
+
+        private IEnumerable<CountByDays> GetByDaysCount()
+        {
+            var visitors = _visitors.GroupBy(v => v.Group.DaysOfStay).Select(g => new CountByDays { Days = g.Key, Count = g.Count() });
+            return visitors.ToList();
+        }
+
+        private IEnumerable<CountByOperator> GetByOperatorCount()
+        {
+            var visitors = _visitors.GroupBy(v => v.Group.User.OperatorProfile.Transcript).Select(g => new CountByOperator { Operator = g.Key, Count = g.Count() });
             return visitors.ToList();
         }
 

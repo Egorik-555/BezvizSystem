@@ -14,9 +14,7 @@ namespace BezvizSystem.DAL.Identity
         public BezvizUserManager(IUserStore<BezvizUser> store)
             : base(store)
         {
-
-            this.EmailService = new EmailService();
-
+            this.EmailService = new EmailService();            
         }
 
         public static BezvizUserManager Create(IdentityFactoryOptions<BezvizUserManager> options,

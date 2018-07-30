@@ -69,5 +69,27 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(list.Where(l => l.CheckPoint == "check1").FirstOrDefault().Count == 4);
             Assert.IsTrue(list.Where(l => l.CheckPoint == "check2").FirstOrDefault().Count == 2);
         }
+
+        [TestMethod]
+        public void Get_By_Days_Count_Test()
+        {
+            var r = report.GetReport(DateTime.Parse("01.06.2018"), DateTime.Parse("30.07.2018"), DateTime.Parse("21.07.2018"));
+            var list = r.AllByDaysCount;
+
+            Assert.IsTrue(list.Count() == 2);
+            Assert.IsTrue(list.Where(l => l.Days == 1).FirstOrDefault().Count == 2);
+            Assert.IsTrue(list.Where(l => l.Days == 3).FirstOrDefault().Count == 4);
+        }
+
+        [TestMethod]
+        public void Get_By_Operator_Count_Test()
+        {
+            var r = report.GetReport(DateTime.Parse("01.06.2018"), DateTime.Parse("30.07.2018"), DateTime.Parse("21.07.2018"));
+            var list = r.AllByOperatorCount;
+
+            Assert.IsTrue(list.Count() == 2);
+            Assert.IsTrue(list.Where(l => l.Operator == "operator1").FirstOrDefault().Count == 4);
+            Assert.IsTrue(list.Where(l => l.Operator == "operator2").FirstOrDefault().Count == 2);
+        }
     }
 }

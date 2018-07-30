@@ -144,6 +144,8 @@
     <Compile Include="DTO\ProfileUserDTO.cs" />
     <Compile Include="DTO\Report\CountByCheckPoint.cs" />
     <Compile Include="DTO\Report\CountByDate.cs" />
+    <Compile Include="DTO\Report\CountByDays.cs" />
+    <Compile Include="DTO\Report\CountByOperator.cs" />
     <Compile Include="DTO\Report\NatAndAge.cs" />
     <Compile Include="DTO\Report\ReportDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />

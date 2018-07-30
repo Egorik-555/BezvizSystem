@@ -23,5 +23,46 @@ namespace BezvizSystem.DAL.Entities
         public bool Active { get; set; }
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
+        public DateTime? DateEdit { get; set; }
+        public string UserEdit { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            OperatorProfile profile = obj as OperatorProfile;
+            if (profile == null) return false;
+
+            if (profile.Id != this.Id) return false;
+
+            if (profile.OKPO == null && OKPO != null) return false;
+            if (profile.OKPO != null && OKPO == null) return false;
+            if (profile.OKPO != null && OKPO != null)
+                if (profile.OKPO != OKPO) return false;
+
+            if (profile.UNP == null && UNP != null) return false;
+            if (profile.UNP != null && UNP == null) return false;
+            if (profile.UNP != null && UNP != null)
+                if (profile.UNP != UNP) return false;
+
+            if (profile.Transcript == null && Transcript != null) return false;
+            if (profile.Transcript != null && Transcript == null) return false;
+            if (profile.Transcript != null && Transcript != null)
+                if (profile.Transcript != Transcript) return false;
+
+
+            if (profile.Role == null && Role != null) return false;
+            if (profile.Role != null && Role == null) return false;
+            if (profile.Role != null && Role != null)
+                if (profile.Role != Role) return false;
+
+          
+            if (profile.Active != Active) return false;
+
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
     }
 }
