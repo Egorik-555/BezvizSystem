@@ -92,7 +92,7 @@ namespace BezvizSystem.Web.Controllers
         public async Task<ActionResult> Index()
         {
             var anketas = await AnketaService.GetForUserAsync(User.Identity.Name);
-            var model = mapper.Map<IEnumerable<AnketaDTO>, IEnumerable<ViewAnketaModel>>(anketas);
+            var model = mapper.Map<IEnumerable<AnketaDTO>, IEnumerable<ViewAnketaModel>>(anketas.OrderBy(m => m.DateArrival));
             return View(model);
         }
 

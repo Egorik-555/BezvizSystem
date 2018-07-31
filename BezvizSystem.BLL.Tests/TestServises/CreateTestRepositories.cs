@@ -16,7 +16,9 @@ namespace BezvizSystem.BLL.Tests.TestServises
 {
     public class CreateTestRepositories
     {
-        OperatorProfile profile1 = new OperatorProfile {Id = "aaa", Transcript = "operator1", UNP = "UnpTest1", OKPO = "OKPO1", Role = "Operator" };
+        OperatorProfile profile1 = new OperatorProfile {Id = "aaa",
+                                                        Transcript = "operator1", UNP = "UnpTest1", OKPO = "OKPO1", Role = "Operator",
+                                                        DateInSystem = new DateTime(2018, 1, 1) };
         OperatorProfile profile2 = new OperatorProfile {Id = "bbb", Transcript = "operator2", UNP = "UnpTest2", OKPO = "OKPO2", Role = "Operator" };
         OperatorProfile profile3 = new OperatorProfile {Id = "ccc", Transcript = "operator3", UNP = "UnpTest3", OKPO = "OKPO3", Role = "Operator" };
         OperatorProfile profile4 = new OperatorProfile {Id = "ddd", Transcript = "AdminTran", UNP = "UnpAdmin", OKPO = "OKPO4", Role = "Admin" };
@@ -137,13 +139,13 @@ namespace BezvizSystem.BLL.Tests.TestServises
         private IRepository<OperatorProfile, string> CreateOperatorManager()
         {
             List<OperatorProfile> list = new List<OperatorProfile> { profile1, profile2, profile3, profile4 };
-
             Mock<IRepository<OperatorProfile, string>> operatorMng = new Mock<IRepository<OperatorProfile, string>>();
 
             operatorMng.Setup(m => m.Delete(It.IsAny<string>())).Returns<string>(id => { var profile = list.Where(p => p.Id == id).FirstOrDefault();
                                                                                          list.Remove(profile); return profile; });
 
             operatorMng.Setup(m => m.GetById(It.IsAny<string>())).Returns<string>(id => { return list.Where(p => p.Id == id).FirstOrDefault(); });
+            operatorMng.Setup(m => m.GetAll()).Returns(() => list);
 
             return operatorMng.Object;
         }
@@ -151,9 +153,10 @@ namespace BezvizSystem.BLL.Tests.TestServises
         private BezvizUserManager CreateUserManager()
         {
             List<BezvizUser> userList = new List<BezvizUser> { user1, user2, user3, user4 };
-            Mock<IUserStore<BezvizUser>> userStore = new Mock<IUserStore<BezvizUser>>();
-            
-            return new UserManagerTest(userList, userStore.Object);
+            List<OperatorProfile> profiles = new List<OperatorProfile> { profile1, profile2, profile3, profile4 };
+
+            Mock<IUserStore<BezvizUser>> userStore = new Mock<IUserStore<BezvizUser>>();     
+            return new UserManagerTest(userList, profiles, userStore.Object);
         }
 
         private BezvizRoleManager CreateRoleManager()

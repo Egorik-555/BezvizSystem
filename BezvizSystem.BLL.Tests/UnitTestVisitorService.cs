@@ -92,7 +92,7 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsNotNull(visitor);
             Assert.AreEqual(visitor.Surname, "surname1");
-            Assert.AreEqual(visitor.BithDate.Value.Date, DateTime.Now.Date);
+            Assert.AreEqual(visitor.BithDate.Value.Date, new DateTime(1987, 07, 01).Date);
         }
 
         [TestMethod]

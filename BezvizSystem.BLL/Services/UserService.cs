@@ -21,7 +21,7 @@ namespace BezvizSystem.BLL.Services
 {
 
     public class UserService : IUserService
-    {    
+    {
         public BezvizUserManager ManagerForChangePass { get; set; }
         IUnitOfWork Database { get; set; }
 
@@ -29,7 +29,7 @@ namespace BezvizSystem.BLL.Services
 
         public UserService(IUnitOfWork uow)
         {
-            Database = uow;        
+            Database = uow;
             mapper = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new FromDALToBLLProfile(uow));
@@ -37,13 +37,13 @@ namespace BezvizSystem.BLL.Services
         }
 
         public async Task<OperationDetails> Create(UserDTO userDto)
-        {     
+        {
             if (userDto.ProfileUser.UNP == null && userDto.UserName == null)
                 return new OperationDetails(true, "Имя пользователя не указано", "");
             if (userDto.ProfileUser == null)
                 return new OperationDetails(true, "Профайл пользователя не заполнен", "");
 
-            if (userDto.UserName == null)     
+            if (userDto.UserName == null)
                 userDto.UserName = userDto.ProfileUser.UNP;
 
             BezvizUser user = await Database.UserManager.FindByNameAsync(userDto.UserName);
@@ -52,10 +52,8 @@ namespace BezvizSystem.BLL.Services
                 try
                 {
                     user = mapper.Map<UserDTO, BezvizUser>(userDto);
-
+                    user.OperatorProfile.DateInSystem = DateTime.Now;
                     var result = await Database.UserManager.CreateAsync(user, userDto.Password);
-
-                   // var users = Database.UserManager.Users;
 
                     if (result.Errors.Count() > 0)
                         return new OperationDetails(false, result.Errors.FirstOrDefault(), "");
@@ -65,7 +63,7 @@ namespace BezvizSystem.BLL.Services
                     await Database.SaveAsync();
                     return new OperationDetails(true, "Пользователь успешно создан", "");
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     return new OperationDetails(false, ex.Message, "");
                 }
@@ -108,15 +106,13 @@ namespace BezvizSystem.BLL.Services
             try
             {
                 var user = await Database.UserManager.FindByIdAsync(userDto.Id);
-
                 if (user == null)
                     return new OperationDetails(false, "Пользователь не найден", "");
-
+            
                 var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelUser(user))).CreateMapper();
+                var m = mapper.Map<UserDTO, BezvizUser>(userDto);
 
-                var m = mapper.Map<UserDTO, BezvizUser>(userDto);    
-
-                //изменить пароль
+                //if password is edited
                 if (!String.IsNullOrEmpty(userDto.Password))
                 {
                     var validPass = await Database.UserManager.PasswordValidator.ValidateAsync(userDto.Password);
@@ -129,9 +125,11 @@ namespace BezvizSystem.BLL.Services
                 //////
 
                 //Database.OperatorManager.Update(m.OperatorProfile);
+                m.OperatorProfile.DateEdit = DateTime.Now;
                 var result = await Database.UserManager.UpdateAsync(m);
                 return new OperationDetails(result.Succeeded, result.Succeeded ? "Пользователь успешно изменен" : result.Errors.First(), "");
             }
+
             catch (Exception e)
             {
                 return new OperationDetails(false, e.Message, "");
@@ -155,7 +153,7 @@ namespace BezvizSystem.BLL.Services
                 var result = await Database.UserManager.UpdateAsync(m);
 
                 if (!result.Succeeded)
-                    return new OperationDetails(result.Succeeded, "Произошла проблема при обновлении Email пользователя","");
+                    return new OperationDetails(result.Succeeded, "Произошла проблема при обновлении Email пользователя", "");
 
                 //отправка почты
                 await Database.UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты", message);
@@ -205,7 +203,7 @@ namespace BezvizSystem.BLL.Services
                     role = new BezvizRole { Name = roleName };
                     var result = await Database.RoleManager.CreateAsync(role);
                     if (!result.Succeeded)
-                        return new OperationDetails(false, result.Errors.FirstOrDefault(),"");
+                        return new OperationDetails(false, result.Errors.FirstOrDefault(), "");
                 }
             }
             return await Create(adminDto);
@@ -233,7 +231,7 @@ namespace BezvizSystem.BLL.Services
 
         public IEnumerable<UserDTO> GetAll()
         {
-            var users = Database.UserManager.Users;
+            var users = Database.UserManager.Users.ToList();
             return mapper.Map<IEnumerable<BezvizUser>, IEnumerable<UserDTO>>(users);
         }
 

@@ -15,7 +15,6 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
     <input hidden="hidden" name="UserInSystem" value="@User.Identity.Name" />
-    <input hidden="hidden" name="DateInSystem" value="@DateTime.Now" />
 
     <div class="form-group">
         @Html.LabelFor(model => model.Transcript, htmlAttributes: new { @class = "control-label col-md-2" })

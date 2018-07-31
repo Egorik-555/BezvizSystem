@@ -38,7 +38,7 @@ namespace BezvizSystem.Web.Controllers
         }
 
         IMapper mapper;
-     
+
         public GroupController()
         {
             mapper = new MapperConfiguration(cfg =>
@@ -49,12 +49,11 @@ namespace BezvizSystem.Web.Controllers
             }).CreateMapper();
         }
 
-        public ActionResult Create(string returnUrl)
+        public ActionResult Create()
         {
             ViewBag.Genders = Gender();
             ViewBag.CheckPoints = CheckPoints();
             ViewBag.Nationalities = Nationalities();
-            ViewBag.returnUrl = returnUrl;
 
             var model = new CreateGroupModel();
             model.Infoes.Add(new InfoVisitorModel());
@@ -62,27 +61,22 @@ namespace BezvizSystem.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(string returnUrl, CreateGroupModel model)
+        public async Task<ActionResult> Create(CreateGroupModel model)
         {
             if (ModelState.IsValid)
             {
                 var group = mapper.Map<CreateGroupModel, GroupVisitorDTO>(model);
-                group.Group = true;            
+                group.Group = true;
                 var result = await GroupService.Create(group);
                 if (result.Succedeed)
                 {
-                    if (returnUrl == null)
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else return Redirect(returnUrl);
+                    return RedirectToAction("Index", "Home");
                 }
                 else ModelState.AddModelError("", result.Message);
             }
             ViewBag.Genders = Gender();
             ViewBag.CheckPoints = CheckPoints();
             ViewBag.Nationalities = Nationalities();
-            ViewBag.returnUrl = returnUrl;
             return View(model);
         }
 

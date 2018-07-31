@@ -1,4 +1,5 @@
 ﻿using BezvizSystem.DAL;
+using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Identity;
 using Microsoft.AspNet.Identity;
 using System;
@@ -12,19 +13,26 @@ namespace BezvizSystem.BLL.Tests.TestServises
     public class UserManagerTest : BezvizUserManager
     {
         IEnumerable<BezvizUser> list;
+        IEnumerable<OperatorProfile> profiles;
 
-        public UserManagerTest(IEnumerable<BezvizUser> list, IUserStore<BezvizUser> store)
+        public UserManagerTest(IEnumerable<BezvizUser> list, IEnumerable<OperatorProfile> profiles, IUserStore<BezvizUser> store)
             : base(store)
         {
             this.EmailService = new EmailService();
             this.list = list;
+            this.profiles = profiles;
         }
 
         public override IQueryable<BezvizUser> Users => list.AsQueryable();
 
         public override Task<IdentityResult> CreateAsync(BezvizUser user, string password)
-        {          
-            return Task.Run(() => { list = list.Concat(new List<BezvizUser> { user }); return IdentityResult.Success; } );            
+        {
+            var newList = list.ToList();
+            newList.Add(user);
+            var newProfiles = profiles.ToList();
+            newProfiles.Add(user.OperatorProfile);
+            profiles = newProfiles.AsEnumerable();
+            return Task.Run(() => { list = newList.AsEnumerable(); return IdentityResult.Success; } );            
         }
 
         public override Task<IdentityResult> AddToRoleAsync(string userId, string role)

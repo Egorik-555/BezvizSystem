@@ -22,13 +22,13 @@ namespace BezvizSystem.BLL.Tests
     {
         IUserService service;
         IUnitOfWork database;
-       
+
         public UnitTestUserService()
         {
             CreateTestRepositories repoes = new CreateTestRepositories();
             database = repoes.CreateIoWManager();
 
-            service = new UserService(database);          
+            service = new UserService(database);
         }
 
         [TestMethod]
@@ -50,12 +50,13 @@ namespace BezvizSystem.BLL.Tests
             var result = await service.SetInitialData(user, list);
             var roleResult1 = await database.RoleManager.FindByNameAsync("Test1");
             var roleResult2 = await database.RoleManager.FindByNameAsync("Test2");
-            //var userUser = await service.GetByNameAsync("Test");
+            var userUser = await database.UserManager.FindByNameAsync("Test");
 
-            //Assert.IsTrue(result.Succedeed);
+            Assert.IsTrue(result.Succedeed);
             Assert.IsTrue(roleResult1.Name == "Test1");
             Assert.IsTrue(roleResult2.Name == "Test2");
-            //Assert.IsNotNull(userUser);      
+            Assert.IsNotNull(userUser.OperatorProfile.Role == "Test1");
+            Assert.IsNotNull(userUser.UserName == "Test");
         }
 
         [TestMethod]
@@ -64,15 +65,17 @@ namespace BezvizSystem.BLL.Tests
             UserDTO user = new UserDTO
             {
                 Password = "qwerty",
-                ProfileUser = new ProfileUserDTO { OKPO = "okpo", UNP = "unp", Role = "role1", Transcript = "transcript", DateInSystem = DateTime.Now }
+                ProfileUser = new ProfileUserDTO { OKPO = "okpo", UNP = "unp", Role = "role1", Transcript = "transcript" }
             };
 
             var result = await service.Create(user);
-            var userResult = await service.GetByNameAsync("unp");
+            var userResult = await database.UserManager.FindByNameAsync(user.ProfileUser.UNP);
 
             Assert.IsTrue(result.Succedeed);
             Assert.IsNotNull(userResult);
+            Assert.IsNotNull(userResult.OperatorProfile);
             Assert.IsTrue(userResult.UserName == "unp");
+            Assert.IsNotNull(userResult.OperatorProfile.DateInSystem.Value.Date == DateTime.Now.Date);
         }
 
         [TestMethod]
@@ -80,13 +83,14 @@ namespace BezvizSystem.BLL.Tests
         {
             UserDTO user = new UserDTO
             {
-                Id = "aaa", UserName = "Test1",  
+                Id = "aaa",
+                UserName = "Test1",
                 ProfileUser = new ProfileUserDTO { OKPO = "okpo", UNP = "unp", Role = "role1", Transcript = "transcript", DateInSystem = DateTime.Now }
             };
-          
+
             var result = await service.Delete(user);
-            var userResult1 = await service.GetByNameAsync("Test1");
-            var userResult2 = await service.GetByIdAsync("aaa");
+            var userResult1 = await database.UserManager.FindByNameAsync("Test1");
+            var userResult2 = await database.UserManager.FindByIdAsync("aaa");
             var profile = database.OperatorManager.GetById("aaa");
 
             Assert.IsTrue(result.Succedeed);
@@ -100,31 +104,22 @@ namespace BezvizSystem.BLL.Tests
         {
             UserDTO user = new UserDTO
             {
-                Password = "qwerty",
-                ProfileUser = new ProfileUserDTO { OKPO = "okpo", UNP = "unp" }
+                Id = "aaa",
+                UserName = "Test1",
+                Email = "newMail@mail.ru",
+                ProfileUser = new ProfileUserDTO {Transcript = "newTranscript", OKPO = "okpoNew",
+                                                    UNP = "unpNew", DateInSystem = new DateTime(2018, 1, 1),
+                                                    UserInSystem = "User", UserEdit = "UserEdit"}
             };
 
-            var findUser = await service.GetByNameAsync(user.ProfileUser.UNP);
-            if(findUser != null)
-            {
-                await service.Delete(findUser);
-            }
-
-            var result = await service.Create(user);
-            if (result.Succedeed)
-            {
-                findUser = await service.GetByNameAsync(user.ProfileUser.UNP);
-                findUser.Email = "test@test.ru";
-                findUser.ProfileUser.Transcript = "transcript";
-                var updateResult = await service.Update(findUser);
-
-                findUser = await service.GetByNameAsync(user.ProfileUser.UNP);
-                await service.Delete(findUser);
-
-                Assert.IsTrue(updateResult.Succedeed);
-                Assert.IsTrue(findUser.Email == "test@test.ru");
-                Assert.IsTrue(findUser.ProfileUser.Transcript == "transcript");
-            }
+            var updateResult = await service.Update(user);
+            var findUser = await database.UserManager.FindByNameAsync(user.UserName);
+          
+            Assert.IsTrue(updateResult.Succedeed);
+            Assert.IsTrue(findUser.Email == "newMail@mail.ru");
+            Assert.IsTrue(findUser.OperatorProfile.Transcript == "newTranscript");
+            Assert.IsTrue(findUser.OperatorProfile.DateInSystem.Value.Date == new DateTime(2018, 1, 1).Date);
+            Assert.IsTrue(findUser.OperatorProfile.DateEdit.Value.Date == DateTime.Now.Date);
         }
 
         [TestMethod]
@@ -187,12 +182,12 @@ namespace BezvizSystem.BLL.Tests
 
         [TestMethod]
         public void Get_All_By_Role_Test()
-        {          
+        {
             var users = service.GetByRole("operator");
             Assert.IsTrue(users.Count() == 3);
             Assert.IsNull(users.Where(u => u.Id == "ddd").FirstOrDefault());
             Assert.IsTrue(users.Where(u => u.Id == "aaa").FirstOrDefault().ProfileUser.OKPO == "OKPO1");
         }
-   
+
     }
 }

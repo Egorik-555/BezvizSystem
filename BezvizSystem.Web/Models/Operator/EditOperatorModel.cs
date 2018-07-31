@@ -54,6 +54,10 @@ namespace BezvizSystem.Web.Models.Operator
         public DateTime ProfileUserDateInSystem { get; set; }
         [HiddenInput(DisplayValue = false)]
         public string ProfileUserUserInSystem { get; set; }
+        [HiddenInput(DisplayValue = false)]
+        public DateTime ProfileUserDateEdit { get; set; }
+        [HiddenInput(DisplayValue = false)]
+        public string ProfileUserUserEdit { get; set; }
 
     }
 }

@@ -25,33 +25,7 @@ namespace BezvizSystem.Web.Controllers
         IMapper _mapper;
 
         public OperatorController()
-        {
-            //IMapper mapperProfile = new MapperConfiguration(cfg => {
-
-            //    cfg.CreateMap<CreateOperatorModel, ProfileUserDTO>();
-            //    cfg.CreateMap<EditOperatorModel, ProfileUserDTO>();
-            //    cfg.CreateMap<DeleteOperatorModel, ProfileUserDTO>();
-            //    cfg.RecognizePrefixes("ProfileUser");           
-            //}).CreateMapper();
-
-            //mapper = new MapperConfiguration(cfg =>
-            //{
-            //    cfg.CreateMap<UserDTO, ViewOperatorModel>();
-
-            //    cfg.CreateMap<CreateOperatorModel, UserDTO>().
-            //       ForMember(dest => dest.ProfileUser, opt => opt.MapFrom(src => mapperProfile.Map<CreateOperatorModel, ProfileUserDTO>(src)));
-
-            //    cfg.CreateMap<UserDTO, EditOperatorModel>();
-
-            //    cfg.CreateMap<EditOperatorModel, UserDTO>().
-            //       ForMember(dest => dest.ProfileUser, opt => opt.MapFrom(src => mapperProfile.Map<EditOperatorModel, ProfileUserDTO>(src)));
-
-            //    cfg.CreateMap<UserDTO, DeleteOperatorModel>();
-            //    cfg.CreateMap<DeleteOperatorModel, UserDTO>().
-            //        ForMember(dest => dest.ProfileUser, opt => opt.MapFrom(src => mapperProfile.Map<DeleteOperatorModel, ProfileUserDTO>(src)));
-
-            //}).CreateMapper();
-
+        {        
             _mapper = new MapperConfiguration(cfg => 
                 cfg.AddProfile(new FromBLLToWebProfile())).
                     CreateMapper();
@@ -70,7 +44,7 @@ namespace BezvizSystem.Web.Controllers
 
         public ActionResult DataOperators(string id)
         {
-            var usersDto = UserService.GetByRole("operator");
+            var usersDto = UserService.GetByRole("operator").OrderByDescending(m => m.ProfileUser.DateInSystem);
             var model = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<ViewOperatorModel>>(usersDto);         
             if (!string.IsNullOrEmpty(id))
             {
@@ -138,6 +112,8 @@ namespace BezvizSystem.Web.Controllers
             if (ModelState.IsValid)
             {
                 var user = _mapper.Map<EditOperatorModel, UserDTO>(model);
+                var userProfile = _mapper.Map<EditOperatorModel, ProfileUserDTO>(model);
+                user.ProfileUser = userProfile;
 
                 var result = await UserService.Update(user);
                 if (result.Succedeed)
