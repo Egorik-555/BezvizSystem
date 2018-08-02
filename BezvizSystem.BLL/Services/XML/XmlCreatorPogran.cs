@@ -22,19 +22,19 @@ namespace BezvizSystem.BLL.Services.XML
         public XmlCreatorPogran(IUnitOfWork database)
         {
             _database = database;
-            MapperConfiguration config = new MapperConfiguration(cfg => 
-                {
-                    cfg.AddProfile(new MapperXMLProfile(_database));
-                });
-
-            _mapper = config.CreateMapper();
+            _mapper =  new MapperConfiguration(cfg => cfg.AddProfile(new MapperXMLProfile(_database))).CreateMapper();
         }
 
-
-        private IEnumerable<ModelForXmlToPogran> GetNewItems(int code)
+        private IEnumerable<ModelForXmlToPogran> GetNewItems()
         {
-            var visitors = _database.VisitorManager.GetAll().ToList().Where(v => v.Status.Code == code);         
-            return _mapper.Map<IEnumerable<Visitor>,IEnumerable<ModelForXmlToPogran>>(visitors);
+            var visitors = _database.VisitorManager.GetAll().ToList().Where(v => v.Status.Code == 1);
+            return _mapper.Map<IEnumerable<Visitor>, IEnumerable<ModelForXmlToPogran>>(visitors);
+        }
+
+        private IEnumerable<ModelForXmlToPogran> GetExtraNewItems()
+        {
+            var visitors = _database.VisitorManager.GetAll().ToList().Where(v => v.Status.Code == 1).Where(v => v.Group.ExtraSend);
+            return _mapper.Map<IEnumerable<Visitor>, IEnumerable<ModelForXmlToPogran>>(visitors);
         }
 
         private void EditStatus(int codeOld, int codeNew)
@@ -47,16 +47,11 @@ namespace BezvizSystem.BLL.Services.XML
                 item.Status = status;
                 _database.VisitorManager.Update(item);
             }
-
         }
 
-        public OperationDetails Save(string name, SaveOptions options)
-        {                   
-            try
-            {
-                var list = GetNewItems(code: 1);
-                var count = list.Count();
-                XElement form = new XElement("EXPORT",
+        private XDocument CreadeDoc(IEnumerable<ModelForXmlToPogran> list)
+        {
+            XElement form = new XElement("EXPORT",
                                     list.Select(v =>
                                         new XElement("FORM_BORDER_INFORM",
                                             new XElement("SECTION1",
@@ -77,12 +72,20 @@ namespace BezvizSystem.BLL.Services.XML
                                             )
                                         )));
 
-                if (count == 0)
+            return new XDocument(form);
+        }
+
+        public OperationDetails SaveNew(string name, SaveOptions options)
+        {                   
+            try
+            {
+                var list = GetNewItems();
+                if (list.Count() == 0)
                     return new OperationDetails(false, "Нет записей для выгрузки", "");
 
-                XDocument xDoc = new XDocument(form);
+                XDocument xDoc = CreadeDoc(list);
                 xDoc.Save(name, options);
-                //mark item uploaded
+                //mark item unloaded
                 EditStatus(codeOld: 1, codeNew: 2);
            
                 return new OperationDetails(true, "XML файл создан", "");
@@ -93,9 +96,34 @@ namespace BezvizSystem.BLL.Services.XML
             }
         }
 
-        public OperationDetails Save(string name)
+        public OperationDetails SaveExtra(string name, SaveOptions options)
         {
-            return Save(name, SaveOptions.None);
+            try
+            {
+                var list = GetExtraNewItems();
+                if (list.Count() == 0)
+                    return new OperationDetails(false, "Нет записей для выгрузки", "");
+
+                XDocument xDoc = CreadeDoc(list);
+                xDoc.Save(name, options);
+                //mark item unloaded
+                EditStatus(codeOld: 1, codeNew: 2);
+
+                return new OperationDetails(true, "XML файл создан", "");
+            }
+            catch (Exception ex)
+            {
+                return new OperationDetails(false, ex.Message, "");
+            }
+        }
+
+        public OperationDetails SaveNew(string name)
+        {
+            return SaveNew(name, SaveOptions.None);
+        }
+        public OperationDetails SaveExtra(string name)
+        {
+            return SaveExtra(name, SaveOptions.None);
         }
     }
 }

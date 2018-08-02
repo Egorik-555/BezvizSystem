@@ -143,6 +143,9 @@ namespace BezvizSystem.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (button == "Extra") model.ExtraSend = true;
+                else model.ExtraSend = false;
+
                 var visitor = mapper.Map<EditGroupModel, GroupVisitorDTO>(model);
                 var result = await GroupService.Update(visitor);
 

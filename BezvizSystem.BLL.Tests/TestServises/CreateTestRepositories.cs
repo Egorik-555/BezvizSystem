@@ -80,7 +80,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
             groupForVisitor = new GroupVisitor {DateArrival = new DateTime(2018,7,1), DaysOfStay = 3, CheckPoint = check1, User = user1};
 
             GroupVisitor groupForVisitor1 = new GroupVisitor { DateArrival = new DateTime(2018, 7, 2), DaysOfStay = 1, CheckPoint = check2, User = user2 };
-            GroupVisitor groupForVisitor2 = new GroupVisitor { DateArrival = new DateTime(2018, 5, 1), DaysOfStay = 3, CheckPoint = check3, User = user3 };
+            GroupVisitor groupForVisitor2 = new GroupVisitor { DateArrival = new DateTime(2018, 5, 1), DaysOfStay = 3, CheckPoint = check3, User = user3, ExtraSend = true };
 
             visitor1 = new Visitor { Id = 1, Surname = "surname1", BithDate = new DateTime(1987, 07, 01),
                                      Nationality = nat1, Group = groupForVisitor, Status = status3, Gender = gender1 };

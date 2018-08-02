@@ -68,6 +68,7 @@ namespace BezvizSystem.Web.Models.Group
         [Display(Name = "Другая информация")]
         public string OtherInfo { get; set; }
 
+        public bool ExtraSend { get; set; }
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
         public DateTime? DateEdit { get; set; }

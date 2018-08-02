@@ -124,7 +124,8 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Сохранить" class="btn btn-default" /> |
+            <button type="submit" class="btn btn-default">Сохранить</button>
+            <button type="submit" name="button" value="Extra" class="btn btn-default">Сохранить для экстренной передачи</button> |
             @Html.ActionLink("Удалить", "Delete", new { id = Model.Id })
         </div>
     </div>

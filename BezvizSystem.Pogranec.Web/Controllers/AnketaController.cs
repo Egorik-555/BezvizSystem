@@ -37,17 +37,36 @@ namespace BezvizSystem.Pogranec.Web.Controllers
 
             return View(model);
         }
+     
 
-        public ActionResult GetAnketas()
+        public ActionResult GetAnketasDefault()
         {
-            string file = HostingEnvironment.MapPath("~/App_Data/file.xml");
-            var result = _xmlService.Save(file);
+            string file = HostingEnvironment.MapPath("~/App_Data/fileDefault.xml");
+            var result = _xmlService.SaveExtra(file);
 
             string contentType = "application/xml";
 
             if (result.Succedeed)
                 return File(file, contentType, Path.GetFileName(file));
-            else return View("Index"); 
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+        public ActionResult GetAnketasExtra()
+        {
+            string file = HostingEnvironment.MapPath("~/App_Data/fileExtra.xml");
+            var result = _xmlService.SaveExtra(file);
+
+            string contentType = "application/xml";
+
+            if (result.Succedeed)
+                return File(file, contentType, Path.GetFileName(file));
+            else
+            {
+               return RedirectToAction("Index");
+            }
         }
     }
 }
