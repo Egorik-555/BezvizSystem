@@ -332,7 +332,7 @@ namespace BezvizSystem.BLL.Tests
                 PlaceOfRecidense = "new Place",
                 CheckPoint = "check3",
                 Visitors = new List<VisitorDTO> {
-                    new VisitorDTO { Id = 7, Surname = "surname7", Nationality = "nat3", StatusName = "Status2" }
+                    new VisitorDTO { Id = 7, Surname = "surname7", Nationality = "nat3", StatusName = "Status2", Gender = "Мужчина"  }
                     },
 
                 UserInSystem = "Admin",

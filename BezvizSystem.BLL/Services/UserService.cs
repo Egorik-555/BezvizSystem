@@ -36,6 +36,7 @@ namespace BezvizSystem.BLL.Services
             }).CreateMapper();
         }
 
+        //tested
         public async Task<OperationDetails> Create(UserDTO userDto)
         {
             if (userDto.ProfileUser.UNP == null && userDto.UserName == null)
@@ -74,6 +75,7 @@ namespace BezvizSystem.BLL.Services
             }
         }
 
+        //tested
         public async Task<OperationDetails> Delete(UserDTO userDto)
         {
             if (userDto.UserName == null)
@@ -101,6 +103,7 @@ namespace BezvizSystem.BLL.Services
             }
         }
 
+        //tested
         public async Task<OperationDetails> Update(UserDTO userDto)
         {
             try
@@ -136,6 +139,7 @@ namespace BezvizSystem.BLL.Services
             }
         }
 
+
         public async Task<OperationDetails> Registrate(UserDTO userDto, string callback, IGeneratePass generator)
         {
             string pass = generator.Generate();
@@ -148,14 +152,14 @@ namespace BezvizSystem.BLL.Services
                     return new OperationDetails(false, "Туроператор не найден", "");
 
                 var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelUser(user))).CreateMapper();
-
                 var m = mapper.Map<UserDTO, BezvizUser>(userDto);
+
                 var result = await Database.UserManager.UpdateAsync(m);
 
                 if (!result.Succeeded)
                     return new OperationDetails(result.Succeeded, "Произошла проблема при обновлении Email пользователя", "");
 
-                //отправка почты
+                //sending mail
                 await Database.UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты", message);
 
                 string code = ManagerForChangePass.GeneratePasswordResetToken(user.Id);
@@ -171,19 +175,20 @@ namespace BezvizSystem.BLL.Services
 
         private string CreateMessage(UserDTO user, string callBackUrl, string pass)
         {
-            string message = "Ваш логин: " + user.ProfileUser.UNP + "<br/>";
-            message += "Ваш пароль: " + pass + "<br/>";
+            string message = "Логин: " + user.ProfileUser.UNP + "<br/>";
+            message += "Пароль: " + pass + "<br/>";
 
             message += "Для завершения регистрации перейдите по ссылке - <a href=\""
-                                           + callBackUrl + "\">завершить регистрацию</a>";
-
+                                           + callBackUrl + "\">завершить регистрацию.</a><br/>";
+            message += "<p>&copy; " + DateTime.Now.Year + " - Без виз</p>";
             return message;
         }
 
+        //tested
         public async Task<ClaimsIdentity> Authenticate(UserDTO userDto)
         {
             ClaimsIdentity claim = null;
-            // находим пользователя
+            // find user
             BezvizUser user = await Database.UserManager.FindAsync(userDto.UserName, userDto.Password);
             // авторизуем его и возвращаем объект ClaimsIdentity
             if (user != null)
@@ -192,7 +197,8 @@ namespace BezvizSystem.BLL.Services
             return claim;
         }
 
-        // начальная инициализация бд
+        //tested
+        // initialize base with 2 roles and 1 user - admin
         public async Task<OperationDetails> SetInitialData(UserDTO adminDto, List<string> roles)
         {
             foreach (string roleName in roles)
@@ -214,7 +220,7 @@ namespace BezvizSystem.BLL.Services
             Database.Dispose();
         }
 
-
+        //tested
         public async Task<UserDTO> GetByIdAsync(string id)
         {
             var user = await Database.UserManager.FindByIdAsync(id);
@@ -222,6 +228,7 @@ namespace BezvizSystem.BLL.Services
             return userDto;
         }
 
+        //tested
         public async Task<UserDTO> GetByNameAsync(string name)
         {
             var user = await Database.UserManager.FindByNameAsync(name);
@@ -229,12 +236,14 @@ namespace BezvizSystem.BLL.Services
             return userDto;
         }
 
+        //tested
         public IEnumerable<UserDTO> GetAll()
         {
             var users = Database.UserManager.Users.ToList();
             return mapper.Map<IEnumerable<BezvizUser>, IEnumerable<UserDTO>>(users);
         }
 
+        //tested
         public IEnumerable<UserDTO> GetByRole(string roleName)
         {
             if (roleName != null)

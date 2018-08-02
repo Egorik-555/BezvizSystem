@@ -50,6 +50,12 @@ namespace BezvizSystem.BLL.Tests.TestServises
             return Task.Run(() => list.Where(u => u.UserName == userName).FirstOrDefault());
         }
 
+        public override Task<BezvizUser> FindAsync(string userName, string password)
+        {
+            var checkUser = list.Where(u => u.UserName == userName).FirstOrDefault();
+            return Task.Run(() => list.Where(u => u.UserName == userName && u.PasswordHash == checkUser.PasswordHash).FirstOrDefault());
+        }
+
         public override Task<IdentityResult> DeleteAsync(BezvizUser user)
         {
             var listNew = list.ToList();

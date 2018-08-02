@@ -2,6 +2,7 @@
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Report.DTO;
+using BezvizSystem.Web.Mapper;
 using BezvizSystem.Web.Models.Report;
 using Microsoft.AspNet.Identity.Owin;
 using System;
@@ -24,13 +25,7 @@ namespace BezvizSystem.Web.Controllers
 
         public ReportController()
         {
-            _mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ReportDTO, ReportModel>();
-                cfg.CreateMap<ReportModel, ReportDTO>();
-
-            }).CreateMapper();
-
+            _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();         
         }
 
         public ActionResult Index()

@@ -2,6 +2,7 @@
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.DTO.Dictionary;
 using BezvizSystem.BLL.Interfaces;
+using BezvizSystem.Web.Mapper;
 using BezvizSystem.Web.Models.Group;
 using BezvizSystem.Web.Models.Visitor;
 using Microsoft.AspNet.Identity.Owin;
@@ -41,12 +42,7 @@ namespace BezvizSystem.Web.Controllers
 
         public GroupController()
         {
-            mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<CreateGroupModel, GroupVisitorDTO>().
-                    ForMember(dest => dest.Visitors, opt => opt.MapFrom(src => src.Infoes));
-                cfg.CreateMap<InfoVisitorModel, VisitorDTO>();
-            }).CreateMapper();
+            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
 
         public ActionResult Create()

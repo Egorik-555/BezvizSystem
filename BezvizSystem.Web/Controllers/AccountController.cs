@@ -49,7 +49,7 @@ namespace BezvizSystem.Web.Controllers
                     ModelState.AddModelError("", "Туроператор с УНП - " + model.UNP + " не найден");
                     return View(model);
                 }
-                // отправка мыла
+                // send mail
                 if (user.ProfileUser.OKPO == model.OKPO)
                 {
                     if (user.ProfileUser.Active)
@@ -103,15 +103,14 @@ namespace BezvizSystem.Web.Controllers
             return RedirectToAction("Login");
         }
 
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login()
         {
-            ViewBag.returnUrl = returnUrl;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(string returnUrl, LoginModel model)
+        public async Task<ActionResult> Login(LoginModel model)
         {
             if (ModelState.IsValid)
             {
@@ -133,9 +132,8 @@ namespace BezvizSystem.Web.Controllers
                             {
                                 IsPersistent = model.RememberMe,
                             }, claim);
-                            if (returnUrl != null)
-                                return Redirect(returnUrl);
-                            else return RedirectToAction("Index", "Home");
+
+                            return RedirectToAction("Index", "Home");
                         }
                         else if (findUser.ProfileUser.Role == "operator")
                         {
@@ -153,7 +151,6 @@ namespace BezvizSystem.Web.Controllers
                 }
             }
 
-            ViewBag.returnUrl = returnUrl;
             return View(model);
         }
 

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.Interfaces;
+using BezvizSystem.Web.Mapper;
 using BezvizSystem.Web.Models.Mark;
 using Microsoft.AspNet.Identity.Owin;
 using System;
@@ -33,15 +34,7 @@ namespace BezvizSystem.Web.Controllers
 
         public MarkController()
         {
-            mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<AnketaDTO, ViewMarkModel>().
-                    ForMember(dest => dest.DateArrival, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date : src.DateArrival));
-                   
-                cfg.CreateMap<VisitorDTO, ViewVisitorModel>().
-                    ForMember(dest => dest.GroupId, opt => opt.MapFrom(src => src.Group.Id));
-
-            }).CreateMapper();
+            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }   
         
         public async Task<ActionResult> Index()

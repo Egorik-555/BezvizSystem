@@ -26,9 +26,7 @@ namespace BezvizSystem.Web.Controllers
 
         public OperatorController()
         {        
-            _mapper = new MapperConfiguration(cfg => 
-                cfg.AddProfile(new FromBLLToWebProfile())).
-                    CreateMapper();
+            _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
 
         public ActionResult Index()

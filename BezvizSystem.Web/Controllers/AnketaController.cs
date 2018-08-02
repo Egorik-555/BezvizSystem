@@ -4,6 +4,7 @@ using BezvizSystem.BLL.DTO.Dictionary;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Utils;
 using BezvizSystem.Web.Infrustructure;
+using BezvizSystem.Web.Mapper;
 using BezvizSystem.Web.Models.Anketa;
 using BezvizSystem.Web.Models.Group;
 using BezvizSystem.Web.Models.Visitor;
@@ -47,46 +48,8 @@ namespace BezvizSystem.Web.Controllers
         }
 
         public AnketaController()
-        {
-            IMapper visitorMapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<VisitorDTO, InfoVisitorModel>();
-                cfg.CreateMap<InfoVisitorModel, VisitorDTO>();
-            }
-            ).CreateMapper();
-
-            mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<VisitorDTO, InfoVisitorModel>(); 
-                
-
-                cfg.CreateMap<AnketaDTO, ViewAnketaModel>().
-                    ForMember(dest => dest.DateArrival, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date : src.DateArrival));
-
-                cfg.CreateMap<GroupVisitorDTO, EditVisitorModel>().
-                    ForMember(dest => dest.Info, opt => opt.MapFrom(src =>
-                                        visitorMapper.Map<IEnumerable<VisitorDTO>, IEnumerable<InfoVisitorModel>>(src.Visitors).FirstOrDefault())).
-                    ForMember(dest => dest.DateArrival, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date : src.DateArrival));
-
-                cfg.CreateMap<EditVisitorModel, GroupVisitorDTO>().
-                    ForMember(dest => dest.Visitors, opt => opt.MapFrom(src => 
-                        new List<VisitorDTO> { visitorMapper.Map<InfoVisitorModel, VisitorDTO>(src.Info)}));
-
-                cfg.CreateMap<GroupVisitorDTO, EditGroupModel>().
-                    ForMember(dest => dest.Infoes, opt => opt.MapFrom(src => src.Visitors));
-                cfg.CreateMap<VisitorDTO, InfoVisitorModel>();
-
-                cfg.CreateMap<EditGroupModel, GroupVisitorDTO>().
-                    ForMember(dest => dest.Visitors, opt => opt.MapFrom(src => src.Infoes));
-                cfg.CreateMap<InfoVisitorModel, VisitorDTO>();
-
-                cfg.CreateMap<GroupVisitorDTO, ViewAnketaModel>().
-                    ForMember(dest => dest.CountMembers, opt => opt.MapFrom(src => src.Visitors.Count()));
-                cfg.CreateMap<ViewAnketaModel, GroupVisitorDTO>();
-
-                cfg.CreateMap<AnketaDTO, ViewAnketaExcel>();
-
-            }).CreateMapper();
+        {       
+            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
     
         public async Task<ActionResult> Index()
@@ -150,11 +113,15 @@ namespace BezvizSystem.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditVisitor(EditVisitorModel model)
+        public async Task<ActionResult> EditVisitor(EditVisitorModel model, string button)
         {
 
             if (ModelState.IsValid)
             {
+
+                if (button == "Extra") model.ExtraSend = true;
+                else model.ExtraSend = false;
+                        
                 var visitor = mapper.Map<EditVisitorModel, GroupVisitorDTO>(model);
                 var result = await GroupService.Update(visitor);
 
@@ -172,7 +139,7 @@ namespace BezvizSystem.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditGroup(EditGroupModel model, ICollection<InfoVisitorModel> infoes)
+        public async Task<ActionResult> EditGroup(EditGroupModel model, ICollection<InfoVisitorModel> infoes, string button)
         {
             if (ModelState.IsValid)
             {

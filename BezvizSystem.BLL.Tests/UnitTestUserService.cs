@@ -132,11 +132,13 @@ namespace BezvizSystem.BLL.Tests
                 ProfileUser = new ProfileUserDTO { Role = "Admin" }
             };
 
+            var result = await service.Create(user);
+
             var claim = await service.Authenticate(user);
             var controlUser = await database.UserManager.FindAsync(user.UserName, user.Password);
-
-            if (claim == null && controlUser == null) Assert.IsTrue(true);
-            if (claim != null && controlUser != null) Assert.IsTrue(true);
+          
+            Assert.IsNotNull(claim);
+            Assert.IsNotNull(controlUser);
         }
 
         [TestMethod]
@@ -150,8 +152,8 @@ namespace BezvizSystem.BLL.Tests
             };
 
             var claim = await service.Authenticate(user);
-            if (claim == null) Assert.IsTrue(true);
-            await service.Delete(user);
+
+            Assert.IsNull(claim);
         }
 
         [TestMethod]
