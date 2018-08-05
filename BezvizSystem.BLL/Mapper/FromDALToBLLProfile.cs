@@ -167,6 +167,7 @@ namespace BezvizSystem.BLL.Mapper
 
 
 
+
                     mapperVisitor.Map(visitorDTO, group.Visitors.SingleOrDefault(v => v.Id == visitorDTO.Id));
                 }
             }
