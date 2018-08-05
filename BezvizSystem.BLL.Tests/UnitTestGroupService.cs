@@ -59,7 +59,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(findGroup.UserOperatorProfileUNP == "UnpAdmin");
             Assert.IsTrue(findGroup.Visitors.Count() == 3);
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 3);
-            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusName == "status1").Count() == 3);
+            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusName == "Сохранено").Count() == 3);
 
             Assert.IsTrue(visitor.Name == "test1");
             Assert.IsTrue(visitor.Gender == "Мужчина");
@@ -252,7 +252,7 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsTrue(visitor.Surname == "surname3");
             Assert.IsTrue(visitor.Nationality == "nat3");
-            Assert.IsTrue(visitor.StatusName == "status1");
+            Assert.IsTrue(visitor.StatusName == "Сохранено");
             Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Add);
         }
 

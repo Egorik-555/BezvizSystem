@@ -187,13 +187,13 @@ namespace BezvizSystem.BLL.Services
                 if (model != null)
                 {
 
-                    IEnumerable<Visitor> oldVisitors = model.Visitors.ToList();
+                    //IEnumerable<Visitor> oldVisitors = model.Visitors.ToList();
 
                     var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelGroup(_database, model))).CreateMapper();
 
                     var modelNew = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);                 
-                    var newVisitors = UpdateVisitors(modelNew.UserEdit, modelNew, oldVisitors);
-                    modelNew.Visitors = newVisitors;
+                    //var newVisitors = UpdateVisitors(modelNew.UserEdit, modelNew, oldVisitors);
+                    //modelNew.Visitors = newVisitors;
 
                     _database.GroupManager.Update(modelNew);
                     return new OperationDetails(true, "Группа туристов изменена", "");
