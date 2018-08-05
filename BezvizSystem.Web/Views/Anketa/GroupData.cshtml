@@ -1,61 +1,53 @@
 ﻿@model IEnumerable<BezvizSystem.Web.Models.Anketa.ViewAnketaModel>
-
-<table id="mainTable" class="table">
-    <thead>
-        <tr>
-            @{ 
-                int i = 0;
-            }
-            <th>
-                №
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateArrival)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DaysOfStay)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckPoint)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CountMembers)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Operator)
-            </th>
-        </tr>
-    </thead>
-
-    <tbody id="tabledata">
-        @foreach (var item in Model)
-        {
-            <tr id="@item.Id" class="mainTableRow">
-                <td>
-                    @(++i)
-                </td>
-                <td>
-                    @(item.DateArrival.HasValue ? item.DateArrival.Value.ToShortDateString() : "")
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DaysOfStay)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CheckPoint)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CountMembers)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Operator)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<tr>
+    @{
+        int i = 0;
+    }
+    <td class="orange coly1">
+        <h3>№ группы</h3>
+    </td>
+    <td class="orange coly2">
+        @Html.DisplayNameFor(model => model.DateArrival)
+    </td>
+    <td class="orange coly1">
+        @Html.DisplayNameFor(model => model.DaysOfStay)
+    </td>
+    <td class="orange coly2">
+        @Html.DisplayNameFor(model => model.CheckPoint)
+    </td>
+    <td class="orange coly1">
+        @Html.DisplayNameFor(model => model.CountMembers)
+    </td>
+    <td class="orange coly2">
+        @Html.DisplayNameFor(model => model.Status)
+    </td>
+    <td class="orange coly3">
+        @Html.DisplayNameFor(model => model.Operator)
+    </td>
+</tr>
+<tr>
+    @foreach (var item in Model)
+    {
+        <td id="@item.Id" class="mainTableRow">
+            @(++i)
+        </td>
+        <td>
+            @(item.DateArrival.HasValue ? item.DateArrival.Value.ToShortDateString() : "")
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DaysOfStay)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CheckPoint)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CountMembers)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Operator)
+        </td>
+    }
+</tr>

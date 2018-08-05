@@ -1,40 +1,39 @@
 ﻿@model IEnumerable<BezvizSystem.Web.Models.Mark.ViewMarkModel>
 
-<table id="mainTable" class="table">
-    <thead>
-        <tr>
-            <th>
-                №
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateArrival)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DaysOfStay)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckPoint)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CountMembers)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Operator)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Arrived)
-            </th>
-        </tr>
-    </thead>
+<tr>
+    <td class="two_column2" valign="top">
+        <table class="in_table4">
+            <tr>
+                <td class="coly1">
+                    №
+                </td>
+                <td class="coly2">
+                    @Html.DisplayNameFor(model => model.DateArrival)
+                </td>
+                <td class=" coly1">
+                    @Html.DisplayNameFor(model => model.DaysOfStay)
+                </td>
+                <td class=" coly2">
+                    @Html.DisplayNameFor(model => model.CheckPoint)
+                </td>
+                <td class="coly1">
+                    @Html.DisplayNameFor(model => model.CountMembers)
+                </td>
+                <td class="coly2">
+                    @Html.DisplayNameFor(model => model.Status)
+                </td>
+                <td class="coly2">
+                    @Html.DisplayNameFor(model => model.Operator)
+                </td>
+                <td class="coly1">
+                    @Html.DisplayNameFor(model => model.Arrived)
+                </td>
+            </tr>
 
-    <tbody id="tabledata">
-        @foreach (var item in Model)
-        {
-            <tr id="@item.Id" class="mainTableRow">
-                <td>                
+            @foreach (var item in Model)
+            {
+            <tr id="tabledata">
+                <td id="@item.Id" class="mainTableRow">
                     @Html.DisplayFor(modelItem => item.Id)
                 </td>
                 <td>
@@ -59,6 +58,8 @@
                     @Html.DisplayFor(modelItem => item.Arrived)
                 </td>
             </tr>
-        }
-    </tbody>
-</table>
+                    }
+                
+            </table>
+    </td>
+</tr>

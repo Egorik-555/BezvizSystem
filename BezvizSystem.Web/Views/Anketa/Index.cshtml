@@ -2,15 +2,22 @@
 
 @{
     ViewBag.Title = "Зарегистрированные анкеты";
+    ViewBag.SubTitle = "Зарегистрированные анкеты";
 }
-
-<h2>Зарегистрированные анкеты</h2>
-
-<div style="float: right">
-    @Html.ActionLink("Экспортировать", "InExcel")
-</div>
-
-@{Html.RenderPartial("GroupData", Model);}
+<td class="two_column2" valign="top">
+    <table class="in_table3">
+        <tr class="no_border">
+            <td class="no_border"></td>
+            <td class="no_border"></td>
+            <td class="no_border"></td>
+            <td class="no_border"></td>
+            <td class="no_border"></td>
+            <td class="no_border"></td>
+            <td class="no_border">@Html.ActionLink("Экспортировать", "InExcel")</td>
+        </tr>
+        @{Html.RenderPartial("GroupData", Model);}
+    </table>
+</td>
 
 
 @section scripts
@@ -32,11 +39,11 @@
                     location.href = '@Url.Action("Edit", "Anketa")/' + id;
                     return;
                 }
-                target = target.parentNode;         
+                target = target.parentNode;
             }
         }
 
-   
+
         //var exp = document.getElementById('export');
         //exp.onclick = makeRequest;
 
