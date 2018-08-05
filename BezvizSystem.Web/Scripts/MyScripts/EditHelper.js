@@ -68,8 +68,10 @@ function onClickAdd(){
         var parent = infoVisitor.parentNode;
         parent.insertBefore(newInfoVisitor, infoVisitor.nextElementSibling);
 
-        var newElem = document.getElementById("Infoes_" + count + "__Id");
-        newElem.value = "0";
+        var newId = document.getElementById("Infoes_" + count + "__Id");
+        newId.value = "0";     
+        var newStatusOfOperation = document.getElementById("Infoes_" + count + "__StatusOfOperation");
+        newStatusOfOperation.value = "1";   
     }
 }
 

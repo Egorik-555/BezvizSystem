@@ -5,6 +5,7 @@ using BezvizSystem.BLL.DTO.Log;
 using BezvizSystem.DAL;
 using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Entities.Log;
+using BezvizSystem.DAL.Helpers;
 using BezvizSystem.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -143,7 +144,7 @@ namespace BezvizSystem.BLL.Mapper
 
         public FromDALToBLLProfileWithModelGroup(IUnitOfWork _database, GroupVisitor model)
         {
-            mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelVisitor(_database, null))).CreateMapper();
+            mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database))).CreateMapper();
 
             CreateMap<GroupVisitorDTO, GroupVisitor>().ConstructUsing(v => model).
                 ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => _database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault())).
@@ -157,10 +158,15 @@ namespace BezvizSystem.BLL.Mapper
             {
                 if (visitorDTO.Id == 0)
                 {
+                    visitorDTO.StatusOfOperation = StatusOfOperation.Add;
+                    //visitorDTO.StatusName();
                     group.Visitors.Add(mapperVisitor.Map<Visitor>(visitorDTO));
                 }
                 else
                 {
+
+
+
                     mapperVisitor.Map(visitorDTO, group.Visitors.SingleOrDefault(v => v.Id == visitorDTO.Id));
                 }
             }

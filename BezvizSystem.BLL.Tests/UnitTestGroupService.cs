@@ -41,14 +41,14 @@ namespace BezvizSystem.BLL.Tests
         {
             GroupVisitorDTO group = new GroupVisitorDTO { Id = 6, PlaceOfRecidense = "testPlace", UserInSystem = "Admin" };
             List<VisitorDTO> visitors = new List<VisitorDTO> {
-                new VisitorDTO{ Name="test1", Gender = "Мужчина", Nationality = "nat1", UserInSystem = "Admin"},
-                new VisitorDTO{ Name="test2"},
-                new VisitorDTO{ Name="test3"},
+                new VisitorDTO{Id = 33, Name="test1", Gender = "Мужчина", Nationality = "nat1"},
+                new VisitorDTO{Id = 44, Name="test2"},
+                new VisitorDTO{Id = 55, Name="test3"},
             };
             group.Visitors = visitors;
             var result = await Service.Create(group);
             var findGroup = Service.GetById(6);
-            var visitor = findGroup.Visitors.ToList()[0];
+            var visitor = await ServiceVisitor.GetByIdAsync(33);
 
             Assert.IsTrue(result.Succedeed);
             Assert.IsTrue(Service.GetAll().Count() == 6);
@@ -157,16 +157,16 @@ namespace BezvizSystem.BLL.Tests
         }
 
         [TestMethod]
-        public async Task Update_Group_AddOneVisitor_ForStatusOne_Test()
+        public async Task Update_Group_AddOneVisitor_For_Status_One_Test()
         {
             GroupVisitorDTO group = new GroupVisitorDTO
             {
                 Id = 2,
-                PlaceOfRecidense = "new Place",
+                PlaceOfRecidense = "new Place", CheckPoint = "check3",
                 Visitors = new List<VisitorDTO> {
                     new VisitorDTO{Id = 3, Name="new name", Gender = "Мужчина", Nationality = "nat1", UserInSystem = "Admin", DateInSystem = new DateTime(2018, 07, 01)},
                     new VisitorDTO { Id = 4, Surname = "newSurname2", Name = "newName2" },
-                    new VisitorDTO{Id = 5, Name="name added", Gender = "Женщина", Nationality = "nat1"},
+                    new VisitorDTO{Id = 0, Name="name added", Gender = "Женщина", Nationality = "nat1"},
                 },
 
                 UserInSystem = "Admin",
@@ -178,6 +178,7 @@ namespace BezvizSystem.BLL.Tests
             var findGroup = await Service.GetByIdAsync(2);
             var visitor = findGroup.Visitors.ToList()[2];
 
+            Assert.AreEqual("check2", findGroup.CheckPoint);
             Assert.IsTrue(findGroup.Visitors.Count() == 3);
             Assert.IsTrue(findGroup.UserInSystem == "Admin");
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 3);

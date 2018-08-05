@@ -70,6 +70,9 @@ namespace BezvizSystem.BLL.Tests.TestServises
         CheckPoint check3 = new CheckPoint { Id = 3, Name = "check3", Active = true };
         CheckPoint check4 = new CheckPoint { Id = 4, Name = "check4", Active = true };
 
+        List<GroupVisitor> listOfGroups;
+        List<Visitor> listOfVisitors;
+
         public CreateTestRepositories()
         {
             user1.OperatorProfile = profile1;
@@ -133,6 +136,9 @@ namespace BezvizSystem.BLL.Tests.TestServises
             activity2 = new UserActivity { Id = 2, Login = "login2", Ip = "Ip2", TimeActivity = DateTime.Now, Operation = operation2 };
             activity3 = new UserActivity { Id = 3, Login = "login1", Ip = "Ip3", TimeActivity = DateTime.Now, Operation = operation3 };
             activity4 = new UserActivity { Id = 4, Login = "login3", Ip = "Ip4", TimeActivity = DateTime.Now, Operation = operation1 };
+
+            listOfVisitors = new List<Visitor> { visitor1, visitor2, visitor3, visitor4, visitor5, visitor6, visitor7, visitor8 };
+            listOfGroups = new List<GroupVisitor> { group1, group2, group3, group4, group5 };
         }
 
 
@@ -192,27 +198,26 @@ namespace BezvizSystem.BLL.Tests.TestServises
 
 
         private IRepository<Visitor, int> CreateVisitorManager()
-        {
-            List<Visitor> list = new List<Visitor> { visitor1, visitor2, visitor3, visitor4, visitor5, visitor6, visitor7, visitor8 };
+        {     
             Mock<IRepository<Visitor, int>> mockVisitors = new Mock<IRepository<Visitor, int>>();
-            mockVisitors.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.Where(v => v.Id == id).FirstOrDefault());
+            mockVisitors.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => listOfVisitors.Where(v => v.Id == id).FirstOrDefault());
             mockVisitors.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
                                                                                         Task<Visitor>.FromResult<Visitor>(
-                                                                                        list.Where(v => v.Id == id).FirstOrDefault()));
+                                                                                        listOfVisitors.Where(v => v.Id == id).FirstOrDefault()));
 
-            mockVisitors.Setup(m => m.GetAll()).Returns(list);
-            mockVisitors.Setup(m => m.Create(It.IsAny<Visitor>())).Returns<Visitor>(v => { list.Add(v); return v; });
+            mockVisitors.Setup(m => m.GetAll()).Returns(listOfVisitors);
+            mockVisitors.Setup(m => m.Create(It.IsAny<Visitor>())).Returns<Visitor>(v => { listOfVisitors.Add(v); return v; });
             mockVisitors.Setup(m => m.Delete(It.IsAny<int>())).Returns<int>(id =>
             {
-                var item = list.Where(i => i.Id == id).FirstOrDefault();
-                var result = list.Remove(item);
+                var item = listOfVisitors.Where(i => i.Id == id).FirstOrDefault();
+                var result = listOfVisitors.Remove(item);
                 return null;
             });
             mockVisitors.Setup(m => m.Update(It.IsAny<Visitor>())).Returns<Visitor>(v =>
             {
-                var item = list.Where(i => i.Id == v.Id).FirstOrDefault();
-                list.Remove(item);
-                list.Add(v);
+                var item = listOfVisitors.Where(i => i.Id == v.Id).FirstOrDefault();
+                listOfVisitors.Remove(item);
+                listOfVisitors.Add(v);
                 return v;
             });
 
@@ -220,25 +225,24 @@ namespace BezvizSystem.BLL.Tests.TestServises
         }
 
         private IRepository<GroupVisitor, int> CreateGroupVisitorManager()
-        {
-            List<GroupVisitor> list = new List<GroupVisitor> { group1, group2, group3, group4, group5 };
+        {          
             Mock<IRepository<GroupVisitor, int>> mock = new Mock<IRepository<GroupVisitor, int>>();
-            mock.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.Where(v => v.Id == id).FirstOrDefault());
+            mock.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => listOfGroups.Where(v => v.Id == id).FirstOrDefault());
             mock.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
                                                                                Task<GroupVisitor>.FromResult<GroupVisitor>(
-                                                                               list.Where(v => v.Id == id).FirstOrDefault()));
+                                                                               listOfGroups.Where(v => v.Id == id).FirstOrDefault()));
 
-            mock.Setup(m => m.GetAll()).Returns(list);
-            mock.Setup(m => m.Create(It.IsAny<GroupVisitor>())).Returns<GroupVisitor>(v => { list.Add(v); return v; });
+            mock.Setup(m => m.GetAll()).Returns(listOfGroups);
+            mock.Setup(m => m.Create(It.IsAny<GroupVisitor>())).Returns<GroupVisitor>(v => { listOfGroups.Add(v); listOfVisitors.AddRange(v.Visitors); return v; });
             mock.Setup(m => m.Delete(It.IsAny<int>())).Returns<int>(id =>
             {
-                list.RemoveAt(id - 1);
+                listOfGroups.RemoveAt(id - 1);
                 return null;
             });
             mock.Setup(m => m.Update(It.IsAny<GroupVisitor>())).Returns<GroupVisitor>(v =>
             {
-                list.RemoveAt(v.Id - 1);
-                list.Insert(v.Id - 1, v);
+                listOfGroups.RemoveAt(v.Id - 1);
+                listOfGroups.Insert(v.Id - 1, v);
                 return v;
             });
 
