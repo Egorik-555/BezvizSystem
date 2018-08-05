@@ -105,17 +105,18 @@ namespace BezvizSystem.BLL.Services
             }
         }
 
-        private ICollection<Visitor> UpdateVisitors(string userName, IEnumerable<Visitor> newVisitors, IEnumerable<Visitor> oldVisitors)
+        private ICollection<Visitor> UpdateVisitors(string userName, GroupVisitor newGroup, IEnumerable<Visitor> oldGroup)
         {            
             var result = new List<Visitor>();
-            var visitorNew = newVisitors;
-            var visitorOld = oldVisitors;
+            var visitorNew = newGroup.Visitors;
+            var visitorOld = oldGroup;
             var statusForNewItem = _database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
 
             foreach (var itemNew in visitorNew)
             {
                 itemNew.StatusOfOperation = StatusOfOperation.Add;
-                itemNew.Status = statusForNewItem;            
+                itemNew.Status = statusForNewItem;
+                itemNew.Group = newGroup;
 
                 var itemOld = visitorOld.Where(v => v.Id == itemNew.Id).FirstOrDefault();
 
@@ -176,27 +177,25 @@ namespace BezvizSystem.BLL.Services
             return result;
         }
 
+     
         public async Task<OperationDetails> Update(GroupVisitorDTO group)
         {
             try
             {
-                var model = await _database.GroupManager.GetByIdAsync(group.Id);            
+                var model = await _database.GroupManager.GetByIdAsync(group.Id);   
+               
                 if (model != null)
-                {               
+                {
+
+                    IEnumerable<Visitor> oldVisitors = model.Visitors.ToList();
+
                     var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelGroup(_database, model))).CreateMapper();
 
-                    var oldVisitors = model.Visitors;
-                    var modelNew = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
-                    modelNew.DateEdit = DateTime.Now;
-
-                    var newVisitors = UpdateVisitors(modelNew.UserEdit, modelNew.Visitors, oldVisitors);
-
-                    //add new visitors
+                    var modelNew = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);                 
+                    var newVisitors = UpdateVisitors(modelNew.UserEdit, modelNew, oldVisitors);
                     modelNew.Visitors = newVisitors;
-                    //var statusForNewItem = Database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
-                    //modelNew.Status = statusForNewItem;
-                    _database.GroupManager.Update(modelNew);
 
+                    _database.GroupManager.Update(modelNew);
                     return new OperationDetails(true, "Группа туристов изменена", "");
                 }
                 else return new OperationDetails(false, "Группа туристов не найдена", "");

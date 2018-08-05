@@ -1,11 +1,6 @@
-﻿@model BezvizSystem.Web.Models.Visitor.InfoVisitorModel
+@model BezvizSystem.Web.Models.Visitor.InfoVisitorModel
 
 @Html.HiddenFor(model => model.Id)
-<tr>
-    <td colspan="2">
-        <h3 class="red">Информация о туристе</h3>
-    </td>
-</tr>
 <tr>
     <td colspan="2">
         @Html.LabelFor(model => model.Surname, htmlAttributes: new { @class = "control-label" })

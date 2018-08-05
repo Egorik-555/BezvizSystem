@@ -285,7 +285,7 @@ td h3.red {
     font-size: 20px;
 }
 
-#sex {
+.sex {
     width: 220px;
     height: 49px;
 }
@@ -304,18 +304,6 @@ p.no-pad {
 p.no_need {
     width: 100%;
     margin: 0 auto;
-}
-
-td.left h3.data_bye {
-    text-align: left;
-    width: 220px;
-    font-size: 20px;
-}
-
-td.left h3.data_hi {
-    text-align: left;
-    width: 220px;
-    font-size: 20px;
 }
 
 td.left {
