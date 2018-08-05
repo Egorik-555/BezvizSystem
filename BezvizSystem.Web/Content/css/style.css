@@ -677,10 +677,6 @@ table.text_only {
         width: 20px;
     }
 
-table.text_long {
-    width: 900px;
-}
-
     table.text_long caption {
         color: #0a9200;
         font-weight: bold;
