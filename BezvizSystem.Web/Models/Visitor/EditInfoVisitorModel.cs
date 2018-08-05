@@ -7,7 +7,7 @@ using System.Web;
 
 namespace BezvizSystem.Web.Models.Visitor
 {
-    public class InfoVisitorModel
+    public class EditInfoVisitorModel
     {
         public int Id { get; set; }
 
@@ -45,5 +45,6 @@ namespace BezvizSystem.Web.Models.Visitor
         public string UserInSystem { get; set; }
         public DateTime? DateEdit { get; set; }
         public string UserEdit { get; set; }
+
     }
 }

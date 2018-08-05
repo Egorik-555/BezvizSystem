@@ -210,6 +210,7 @@
     <Compile Include="Models\Enter\RegisterModel.cs" />
     <Compile Include="Models\Operator\ViewOperatorModel.cs" />
     <Compile Include="Models\Report\ReportModel.cs" />
+    <Compile Include="Models\Visitor\EditInfoVisitorModel.cs" />
     <Compile Include="Models\Visitor\EditVisitorModel.cs" />
     <Compile Include="Models\Visitor\InfoVisitorModel.cs" />
     <Compile Include="Models\Visitor\CreateVisitorModel.cs" />
@@ -335,6 +336,7 @@
     <Content Include="Views\Mark\GroupData.cshtml" />
     <Content Include="Views\Anketa\GroupData.cshtml" />
     <Content Include="Views\Report\DataReport.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\EditInfoVisitorModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

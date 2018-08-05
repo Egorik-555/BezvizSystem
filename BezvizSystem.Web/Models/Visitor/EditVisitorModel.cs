@@ -13,7 +13,7 @@ namespace BezvizSystem.Web.Models.Visitor
         public int Id { get; set; }
         public bool Group { get; set; }
 
-        public InfoVisitorModel Info { get; set; }
+        public EditInfoVisitorModel Info { get; set; }
 
         [Required(ErrorMessage = "Дата прибытия не введена")]
         [Display(Name = "Дата прибытия")]
@@ -58,8 +58,6 @@ namespace BezvizSystem.Web.Models.Visitor
         public string Email { get; set; }
 
         public bool ExtraSend { get; set; }
-        public bool Arrived { get; set; }
-
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
         public DateTime? DateEdit { get; set; }

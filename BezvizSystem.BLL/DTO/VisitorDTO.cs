@@ -20,8 +20,8 @@ namespace BezvizSystem.BLL.DTO
         public string SerialAndNumber { get; set; }
         public string Gender { get; set; }
         public DateTime? BithDate { get; set; }
-
         public string Nationality { get; set; }
+
         public string StatusName { get; set; }
         public StatusOfOperation StatusOfOperation { get; set; }
         public bool Arrived { get; set; }

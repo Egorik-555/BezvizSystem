@@ -13,7 +13,7 @@ function changeAttributeSub(elem, nameTag, nameAttLabels){
 
         for(var i = 0; i < labels.length; i++){
             oldVal = labels[i].getAttribute(nameAttLabels);
-            newVal = oldVal.replace(/_\d+__/g, '_'+(count).toString()+'__');
+            newVal = oldVal.replace(/_\d+__/g, '_' + (count).toString() + '__');
             labels[i].setAttribute(nameAttLabels, newVal);
         }
     }
@@ -64,8 +64,12 @@ function onClickAdd(){
         changeAttributeBracket(newInfoVisitor, 'select', 'name');
 
         clearField(newInfoVisitor);
+
         var parent = infoVisitor.parentNode;
         parent.insertBefore(newInfoVisitor, infoVisitor.nextElementSibling);
+
+        var newElem = document.getElementById("Infoes_" + count + "__Id");
+        newElem.value = "0";
     }
 }
 

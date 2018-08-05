@@ -118,10 +118,9 @@ namespace BezvizSystem.Web.Controllers
 
             if (ModelState.IsValid)
             {
-
                 if (button == "Extra") model.ExtraSend = true;
                 else model.ExtraSend = false;
-                        
+
                 var visitor = mapper.Map<EditVisitorModel, GroupVisitorDTO>(model);
                 var result = await GroupService.Update(visitor);
 
@@ -130,6 +129,7 @@ namespace BezvizSystem.Web.Controllers
                     return RedirectToAction("Index");
                 }
                 else ModelState.AddModelError("", result.Message);
+
             }
 
             ViewBag.Genders = Gender();
@@ -139,15 +139,15 @@ namespace BezvizSystem.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditGroup(EditGroupModel model, ICollection<InfoVisitorModel> infoes, string button)
+        public async Task<ActionResult> EditGroup(EditGroupModel model, string button)
         {
             if (ModelState.IsValid)
             {
                 if (button == "Extra") model.ExtraSend = true;
                 else model.ExtraSend = false;
 
-                var visitor = mapper.Map<EditGroupModel, GroupVisitorDTO>(model);
-                var result = await GroupService.Update(visitor);
+                var group = mapper.Map<EditGroupModel, GroupVisitorDTO>(model);
+                var result = await GroupService.Update(group);
 
                 if (result.Succedeed)
                 {

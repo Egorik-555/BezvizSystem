@@ -35,7 +35,7 @@ namespace BezvizSystem.BLL.Mapper
                ForMember(dest => dest.Group, opt => opt.Ignore()).
                ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name));
             /////
-     
+
             //group service
             CreateMap<GroupVisitorDTO, GroupVisitor>().
                      ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault()));
@@ -139,13 +139,31 @@ namespace BezvizSystem.BLL.Mapper
 
     class FromDALToBLLProfileWithModelGroup : Profile
     {
+        IMapper mapperVisitor;
+
         public FromDALToBLLProfileWithModelGroup(IUnitOfWork _database, GroupVisitor model)
         {
+            mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelVisitor(_database, null))).CreateMapper();
+
             CreateMap<GroupVisitorDTO, GroupVisitor>().ConstructUsing(v => model).
-                ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => _database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault()));
-            CreateMap<VisitorDTO, Visitor>().
-                            ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => _database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
-                            ForMember(dest => dest.Gender, opt => opt.MapFrom(src => _database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
+                ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => _database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault())).
+                ForMember(d => d.Visitors, opt => opt.Ignore()).
+                AfterMap((d, e) => AddOrUpdateVisitors(d, e));
+        }
+
+        private void AddOrUpdateVisitors(GroupVisitorDTO dto, GroupVisitor group)
+        {
+            foreach (var visitorDTO in dto.Visitors)
+            {
+                if (visitorDTO.Id == 0)
+                {
+                    group.Visitors.Add(mapperVisitor.Map<Visitor>(visitorDTO));
+                }
+                else
+                {
+                    mapperVisitor.Map(visitorDTO, group.Visitors.SingleOrDefault(v => v.Id == visitorDTO.Id));
+                }
+            }
         }
     }
 

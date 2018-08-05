@@ -23,11 +23,7 @@ namespace BezvizSystem.BLL.Services
         {
             _database = uow;
 
-            _mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new FromDALToBLLProfile(_database));
-
-            }).CreateMapper();
+            _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database))).CreateMapper();
         }
 
         public async Task<OperationDetails> Create(GroupVisitorDTO group)
@@ -180,7 +176,6 @@ namespace BezvizSystem.BLL.Services
             return result;
         }
 
-
         public async Task<OperationDetails> Update(GroupVisitorDTO group)
         {
             try
@@ -188,10 +183,7 @@ namespace BezvizSystem.BLL.Services
                 var model = await _database.GroupManager.GetByIdAsync(group.Id);            
                 if (model != null)
                 {               
-                    var mapper = new MapperConfiguration(cfg =>
-                    {
-                        cfg.AddProfile(new FromDALToBLLProfileWithModelGroup(_database, model));                 
-                    }).CreateMapper();
+                    var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelGroup(_database, model))).CreateMapper();
 
                     var oldVisitors = model.Visitors;
                     var modelNew = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);

@@ -13,14 +13,14 @@ namespace BezvizSystem.Web.Models.Group
     {
         public EditGroupModel()
         {
-            Infoes = new List<InfoVisitorModel>();
+            Infoes = new List<EditInfoVisitorModel>();
         }
 
         public int Id { get; set; }
         public bool Group { get; set; }
 
         [Display(Name = "Информация о туристах")]
-        public ICollection<InfoVisitorModel> Infoes { get; set; }
+        public ICollection<EditInfoVisitorModel> Infoes { get; set; }
 
         [Display(Name = "Дата прибытия")]
         [Required(ErrorMessage = "Дата прибытия не введена")]

@@ -1,4 +1,4 @@
-﻿@model BezvizSystem.Web.Models.Visitor.InfoVisitorModel
+﻿@model BezvizSystem.Web.Models.Visitor.EditInfoVisitorModel
 
 <div name="infoVisitor">
 
@@ -48,7 +48,13 @@
     </div>
 </div>
 
-@Html.EditorFor(model => model.StatusName, new { htmlAttributes = new { @type = "hidden", @Value = "Сохранено" } })
-@Html.EditorFor(model => model.StatusOfOperation, new { htmlAttributes = new { @type = "hidden", @Value = 1 } })
-@Html.EditorFor(model => model.UserInSystem, new { htmlAttributes = new { @type = "hidden", @Value = User.Identity.Name } })
-@Html.EditorFor(model => model.DateInSystem, new { htmlAttributes = new { @type = "hidden", @Value = DateTime.Now.ToString() } })
+@*@Html.EditorFor(model => model.Id, new { htmlAttributes = new { @type = "hidden", @Value = Model.Id } })*@
+@Html.EditorFor(model => model.StatusName, new { htmlAttributes = new { @type = "hidden", @Value = Model.StatusName } })
+@Html.EditorFor(model => model.StatusOfOperation, new { htmlAttributes = new { @type = "hidden", @Value = Model.StatusOfOperation } })
+@Html.EditorFor(model => model.UserInSystem, new { htmlAttributes = new { @type = "hidden", @Value = Model.UserInSystem } })
+@Html.EditorFor(model => model.DateInSystem, new { htmlAttributes = new { @type = "hidden", @Value = Model.DateInSystem.ToString() } })
+@Html.EditorFor(model => model.UserEdit, new { htmlAttributes = new { @type = "hidden", @Value = User.Identity.Name } })
+@Html.EditorFor(model => model.DateEdit, new { htmlAttributes = new { @type = "hidden", @Value = DateTime.Now.ToString() } })
+
+
+
