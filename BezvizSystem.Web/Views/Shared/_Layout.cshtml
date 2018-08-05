@@ -8,37 +8,45 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Без виз</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    <link href="~/Content/MyStyle/Mark.css" rel="stylesheet" />
+    @*@Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")*@
+    <link rel="stylesheet" href="/Content/css/style.css">
 </head>
 <body>
-    
-    <div style="float:left; width: 200px; border: 1px solid black">
-        <input type="button" value="Главная" id="btn1" onclick="location.href='@Url.Action("Index", "Home")'" />
-
-        <input type="button" value="Регистрация индивидуального туриста" onclick="location.href='@Url.Action("Create", "Visitor")'" />
-        <input type="button" value="Регистрация группы" onclick="location.href='@Url.Action("Create", "Group")'" />
-        <input type="button" value="Зарегистрированные анкеты" onclick="location.href='@Url.Action("Index", "Anketa")'" />
-        <input type="button" value="Отметка о прибытии" onclick="location.href='@Url.Action("Index", "Mark")'" />
-        <input type="button" value="Отчеты" onclick="location.href='@Url.Action("Index", "Report")'" />
-        @if (User.IsInRole("admin"))
-        {
-            <input type="button" id="btn2" value="Администрирование туроператоров" onclick="location.href='@Url.Action("Index", "Operator")'" />
-        }
-        <input type="button" value="Выход" onclick="location.href='@Url.Action("Logout", "Account")'" />
-    </div>
-
-    <div style="margin-left:210px;  border: 1px solid black">
-        <div class="container body-content">
+    <table class="header">
+        <tr>
+            <th valign="top">
+                @*<img src="/content/img/logo_bezviz.png" alt="">*@
+            </th>
+        </tr>
+    </table>
+    <table class="first_page" cellpadding="0" cellspacing="20">
+        <caption><b>ИНФОРМАЦИЯ О РАБОТЕ<br> С СИСТЕМОЙ РЕГИСТРАЦИИ</b></caption>
+        <tr>
+            <td class="perc25" valign="top">
+                <ul class="pad_null">
+                    <input type="button" class="pad_cent" value="Главная" id="btn1" onclick="location.href='@Url.Action("Index", "Home")'" />
+                    <input type="button" class="pad_cent" value="Регистрация туриста" onclick="location.href='@Url.Action("Create", "Visitor")'" />
+                    <input type="button" class="pad_cent" value="Регистрация группы" onclick="location.href='@Url.Action("Create", "Group")'" />
+                    <input type="button" class="pad_cent" value="Зарегистрированные анкеты" onclick="location.href='@Url.Action("Index", "Anketa")'" />
+                    <input type="button" class="pad_cent" value="Отметка о прибытии" onclick="location.href='@Url.Action("Index", "Mark")'" />
+                    <input type="button" class="pad_cent" value="Отчеты" onclick="location.href='@Url.Action("Index", "Report")'" />
+                    @if (User.IsInRole("admin"))
+                    {
+                        <input type="button" class="pad_cent" id="btn2" value="Администрирование туроператоров" onclick="location.href='@Url.Action("Index", "Operator")'" />
+                    }
+                    <input type="button" class="pad_cent" value="Выход" onclick="location.href='@Url.Action("Logout", "Account")'" />
+                    <img src="/content/img/sho.png" style="width: 100%">
+                </ul>
+            </td>
             @RenderBody()
-            @*<hr />
-            <footer>
-                    <p>&copy; @DateTime.Now.Year - Без виз</p>
-                </footer>*@
-        </div>
-    </div>
-  
+        </tr>
+    </table>
+    <table class="footer">
+        <tr>
+            <th>Управление спорта и туризма Брестского облисполкома. Дизайн и разработка BrainIT</th>
+        </tr>
+    </table>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

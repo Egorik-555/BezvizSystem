@@ -9,42 +9,34 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
+    <tr>
         <input hidden="hidden" id="returnUrl" value="@ViewBag.returnUrl" />
-
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        <td colspan="2">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control long_but" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control long_but" } })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+    <tr class="mtauto">
+        <td class="stright" colspan="2">
+            <div class="checkbox">
+                @Html.LabelFor(model => model.RememberMe, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.RememberMe)
+                @Html.ValidationMessageFor(model => model.RememberMe, "", new { @class = "text-danger" })
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.RememberMe, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.RememberMe)
-                    @Html.ValidationMessageFor(model => model.RememberMe, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Войти" class="btn btn-default" />
-        </div>
-    </div>
+        </td>
+    </tr>
+    <td class="zareg" colspan="2">
+        <input type="submit" value="Войти" class="simply_form_red" />
+    </td>
 }
 
 @section Scripts {
