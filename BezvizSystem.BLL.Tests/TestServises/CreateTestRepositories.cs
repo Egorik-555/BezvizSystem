@@ -61,9 +61,9 @@ namespace BezvizSystem.BLL.Tests.TestServises
         TypeOfOperation operation2 = new TypeOfOperation { Code = 2, Name = "Exit", Active = true };
         TypeOfOperation operation3 = new TypeOfOperation { Code = 3, Name = "ErrorEnter" };
 
-        Status status1 = new Status { Code = 1, Name = "status1", Active = true };
-        Status status2 = new Status { Code = 2, Name = "status2", Active = true };
-        Status status3 = new Status { Code = 3, Name = "status3", Active = false };
+        Status status1 = new Status { Code = 1, Name = "Сохранено", Active = true };
+        Status status2 = new Status { Code = 2, Name = "Отправлено в пограничную службу", Active = true };
+        Status status3 = new Status { Code = 3, Name = "Принято пограничной службой", Active = false };
 
         CheckPoint check1 = new CheckPoint { Id = 1, Name = "check1", Active = true};
         CheckPoint check2 = new CheckPoint { Id = 2, Name = "check2" };

@@ -159,16 +159,31 @@ namespace BezvizSystem.BLL.Mapper
                 if (visitorDTO.Id == 0)
                 {
                     visitorDTO.StatusOfOperation = StatusOfOperation.Add;
-                    //visitorDTO.StatusName();
+                    visitorDTO.StatusName = "Сохранено";
+                    visitorDTO.DateInSystem = DateTime.Now;
+                    visitorDTO.UserInSystem = dto.UserInSystem;
                     group.Visitors.Add(mapperVisitor.Map<Visitor>(visitorDTO));
                 }
                 else
                 {
+                    var oldVisitor = group.Visitors.SingleOrDefault(v => v.Id == visitorDTO.Id);
+                    var newVisitor = mapperVisitor.Map<VisitorDTO, Visitor>(visitorDTO);
+                   
+                    if (!oldVisitor.Equals(newVisitor))
+                    {
+                        visitorDTO.DateEdit = DateTime.Now;
+                        visitorDTO.UserEdit = dto.UserEdit;
+                    }
+                    if(visitorDTO.StatusName != "Сохранено" && visitorDTO.StatusName != null)
+                    {
+                        visitorDTO.StatusOfOperation = StatusOfOperation.Edit;
+                    }
+                    else
+                    {
+                        visitorDTO.StatusOfOperation = StatusOfOperation.Add;
+                    }
 
-
-
-
-                    mapperVisitor.Map(visitorDTO, group.Visitors.SingleOrDefault(v => v.Id == visitorDTO.Id));
+                    mapperVisitor.Map(visitorDTO, oldVisitor);
                 }
             }
         }
