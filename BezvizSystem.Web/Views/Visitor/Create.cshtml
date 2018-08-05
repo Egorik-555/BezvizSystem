@@ -48,6 +48,11 @@
                     <p class="no_need">*Не обязательно к заполнению если турист не проживает в специализированных средствах размещения</p>
                 </td>
             </tr>
+            <tr>
+                <td colspan="2">
+                    <h3 class="red">Информация о туристе</h3>
+                </td>
+            </tr>
             @Html.EditorFor(model => model.Info)
             @Html.ValidationMessageFor(model => model.Info)
             <tr>
@@ -66,7 +71,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <h3>Информация о туристическом операторе:</h3>
+                    <h3 class="red">Информация о туристическом операторе:</h3>
                 </td>
             </tr>
             <tr>
