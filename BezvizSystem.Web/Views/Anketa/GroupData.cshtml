@@ -28,8 +28,8 @@
 
     @foreach (var item in Model)
     {
-    <tr class="visitor_str" id="@item.Id">
-        <td id="@item.Id" class="mainTableRow">
+    <tr class="visitor_str mainTableRow" id="@item.Id" onclick="onRowClickHandler();">
+        <td>
             @(++i)
         </td>
         <td>
