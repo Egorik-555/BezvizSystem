@@ -13,7 +13,7 @@
             <td class="no_border"></td>
             <td class="no_border"></td>
             <td class="no_border"></td>
-            <td class="no_border">@Html.ActionLink("Экспортировать", "InExcel")</td>
+            <td class="no_border">@Html.ActionLink("Экспортировать", "InExcel", null, new { @class = "simply_form_red marbot20" })</td>
         </tr>
         @{Html.RenderPartial("GroupData", Model);}
     </table>
@@ -22,7 +22,7 @@
 
 @section scripts
 {
-    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
 
     <script>
 
@@ -61,4 +61,5 @@
             });
         }
     </script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
 }
