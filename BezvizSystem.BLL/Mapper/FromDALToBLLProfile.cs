@@ -155,6 +155,19 @@ namespace BezvizSystem.BLL.Mapper
 
         private void AddOrUpdateVisitors(GroupVisitorDTO dto, GroupVisitor group)
         {
+
+            foreach(var visitor in group.Visitors)
+            {
+                if(visitor.Status.Code != 1)
+                {
+                    if(dto.Visitors.SingleOrDefault(v => v.Id == visitor.Id) == null)
+                    {
+
+                    }
+
+                }
+            }
+
             foreach (var visitorDTO in dto.Visitors)
             {
                 visitorDTO.Group = dto;
@@ -174,7 +187,7 @@ namespace BezvizSystem.BLL.Mapper
                                                                         
                     if (!oldVisitor.Equals(newVisitor))
                     {
-                        if (visitorDTO.StatusName != "Сохранено" && visitorDTO.StatusName != null)
+                        if (oldVisitor.Status.Code != 1)
                             visitorDTO.StatusOfOperation = StatusOfOperation.Edit;
                         else
                             visitorDTO.StatusOfOperation = StatusOfOperation.Add;

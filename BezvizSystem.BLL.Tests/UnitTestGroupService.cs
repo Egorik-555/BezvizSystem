@@ -205,7 +205,7 @@ namespace BezvizSystem.BLL.Tests
 
                 UserInSystem = "Admin",
                 DateInSystem = new DateTime(2018, 07, 01),
-                UserEdit = "Test1",
+                UserEdit = "Test1"
             };
 
             var result = await Service.Update(group);
@@ -277,7 +277,7 @@ namespace BezvizSystem.BLL.Tests
             var result = await Service.Update(group);
 
             var findGroup = await Service.GetByIdAsync(5);
-            var visitor = findGroup.Visitors.ToList()[0];
+            var visitor = await ServiceVisitor.GetByIdAsync(7);
 
             Assert.IsTrue(result.Succedeed);
             Assert.IsTrue(findGroup.Visitors.Count() == 1);
@@ -286,7 +286,7 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsTrue(visitor.Surname == "new surname");
             Assert.IsTrue(visitor.Nationality == "nat1");
-            Assert.IsTrue(visitor.StatusName == "status1");
+            Assert.IsTrue(visitor.StatusName == "Сохранено");
             Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Edit);
         }
 
@@ -300,7 +300,7 @@ namespace BezvizSystem.BLL.Tests
                 CheckPoint = "check3",
                 Visitors = new List<VisitorDTO> {
                     new VisitorDTO { Id = 7, Surname = "new surname", Nationality = "nat1"},
-                    new VisitorDTO { Id = 13, Surname = "add new Visitor", Nationality = "nat3", Gender = "Мужчина"},
+                    new VisitorDTO { Id = 0, Surname = "add new Visitor", Nationality = "nat3", Gender = "Мужчина"},
                 },
 
                 UserInSystem = "Admin",
@@ -312,7 +312,7 @@ namespace BezvizSystem.BLL.Tests
             var result = await Service.Update(group);
 
             var findGroup = await Service.GetByIdAsync(5);
-            var visitor = await ServiceVisitor.GetByIdAsync(13);
+            var visitor = findGroup.Visitors.ToList()[1];
 
             Assert.IsTrue(result.Succedeed);
             Assert.AreEqual(DateTime.Now.Date, findGroup.DateEdit.Value.Date);
@@ -324,7 +324,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(visitor.Surname == "add new Visitor");
             Assert.IsTrue(visitor.Nationality == "nat3");
             Assert.IsTrue(visitor.Gender == "Мужчина");
-            Assert.IsTrue(visitor.StatusName == "status1");
+            Assert.IsTrue(visitor.StatusName == "Сохранено");
             Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Add);
         }
 
