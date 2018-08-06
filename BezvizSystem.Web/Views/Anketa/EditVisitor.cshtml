@@ -102,9 +102,9 @@
                     <input type="hidden" name="UserInSystem" value="@Model.UserInSystem" />
                     <input type="hidden" name="UserEdit" value="@User.Identity.Name" />
                     <input type="hidden" name="DateEdit" value="@DateTime.Now" />
-                    <input type="submit" value="Сохранить" class="simply_form_red sfr_auto" />
-                    <button type="submit" name="button" value="Extra" class="simply_form_red sfr_auto">Сохранить для экстренной передачи</button>
-                    @Html.ActionLink("Удалить", "Delete", new { id = Model.Id , @class = "simply_form_red sfr_auto" })
+                    <input type="submit" value="Сохранить" class="simply_form_red sfr_auto" style="height:50px; margin-left:4px;" />
+                    <button type="submit" name="button" value="Extra" class="simply_form_red sfr_auto" style="background-color:#ffba00;border: 1px solid #ffba00;margin-left:15px;">Экстренная передача</button>
+                    @Html.ActionLink("Удалить", "Delete", new { id = Model.Id }, new { @class = "simply_form_red sfr_auto", style = "background-color:red;padding:0;display: block; margin: 0 auto; border: 1px solid red; font-family:Arial;" })
                 </td>
             </tr>
         </table>
