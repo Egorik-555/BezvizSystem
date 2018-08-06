@@ -98,7 +98,8 @@ namespace BezvizSystem.BLL.Tests.TestServises
             mockVisitors.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.Where(v => v.Id == id).FirstOrDefault());
             mockVisitors.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
                                                                                         Task<Visitor>.FromResult<Visitor>(
-                                                                                        list.Where(v => v.Id == id).FirstOrDefault()));
+                                   
+                                                                                            list.Where(v => v.Id == id).FirstOrDefault()));
 
             mockVisitors.Setup(m => m.GetAll()).Returns(list);
             mockVisitors.Setup(m => m.Create(It.IsAny<Visitor>())).Returns<Visitor>(v => { list.Add(v); return v; });
