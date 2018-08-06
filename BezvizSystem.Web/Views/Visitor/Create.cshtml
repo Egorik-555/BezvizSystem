@@ -96,12 +96,12 @@
                     @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                 </td>
             </tr>
-            <input type="hidden" name="UserInSystem" value="@User.Identity.Name" />
-            <input type="hidden" name="DateInSystem" value="@DateTime.Now" />
-            <input type="hidden" name="Group" value="false" />
-            <input type="hidden" name="Arrived" value="false" />
             <tr>
                 <td colspan="2">
+                    <input type="hidden" name="UserInSystem" value="@User.Identity.Name" />
+                    <input type="hidden" name="DateInSystem" value="@DateTime.Now" />
+                    <input type="hidden" name="Group" value="false" />
+                    <input type="hidden" name="Arrived" value="false" />
                     <input type="submit" value="Сохранить" class="simply_form_red sfr_auto" />
                 </td>
             </tr>
