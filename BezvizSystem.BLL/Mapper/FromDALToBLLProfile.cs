@@ -171,15 +171,14 @@ namespace BezvizSystem.BLL.Mapper
                 {
                     var oldVisitor = group.Visitors.SingleOrDefault(v => v.Id == visitorDTO.Id);
                     var newVisitor = mapperVisitor.Map<VisitorDTO, Visitor>(visitorDTO);
-                    
-                    if (visitorDTO.StatusName != "Сохранено" && visitorDTO.StatusName != null)                    
-                        visitorDTO.StatusOfOperation = StatusOfOperation.Edit;
-                    else
-                        visitorDTO.StatusOfOperation = StatusOfOperation.Add;
-                    
-                    
+                                                                        
                     if (!oldVisitor.Equals(newVisitor))
                     {
+                        if (visitorDTO.StatusName != "Сохранено" && visitorDTO.StatusName != null)
+                            visitorDTO.StatusOfOperation = StatusOfOperation.Edit;
+                        else
+                            visitorDTO.StatusOfOperation = StatusOfOperation.Add;
+
                         visitorDTO.StatusName = "Сохранено";
                         visitorDTO.DateEdit = dto.DateEdit;
                         visitorDTO.UserEdit = dto.UserEdit;

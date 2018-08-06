@@ -130,12 +130,12 @@ namespace BezvizSystem.BLL.Tests
                 UserInSystem = "Admin",
                 DateInSystem = new DateTime(2018, 07, 01),
                 UserEdit = "Test1",
-                // DateEdit = DateTime.Now
+                DateEdit = DateTime.Now
             };
 
             var result = await Service.Update(group);
             var findGroup = await Service.GetByIdAsync(2);
-            var visitor = findGroup.Visitors.ToList()[0];
+            var visitor = await ServiceVisitor.GetByIdAsync(3);
 
             Assert.IsTrue(findGroup.PlaceOfRecidense == "new Place");
             Assert.IsTrue(findGroup.UserUserName == "Admin");
@@ -154,6 +154,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(visitor.DateEdit.Value.Date == DateTime.Now.Date);
             Assert.IsTrue(visitor.Gender == "Мужчина");
             Assert.IsTrue(visitor.Nationality == "nat1");
+            Assert.AreEqual("Сохранено",visitor.StatusName);
         }
 
         [TestMethod]
@@ -299,20 +300,22 @@ namespace BezvizSystem.BLL.Tests
                 CheckPoint = "check3",
                 Visitors = new List<VisitorDTO> {
                     new VisitorDTO { Id = 7, Surname = "new surname", Nationality = "nat1"},
-                    new VisitorDTO { Id = 8, Surname = "add new Visitor", Nationality = "nat3", Gender = "Мужчина"},
+                    new VisitorDTO { Id = 13, Surname = "add new Visitor", Nationality = "nat3", Gender = "Мужчина"},
                 },
 
                 UserInSystem = "Admin",
                 DateInSystem = new DateTime(2018, 07, 01),
-                UserEdit = "Test1"
+                UserEdit = "Test1",
+                DateEdit = DateTime.Now
             };
 
             var result = await Service.Update(group);
 
             var findGroup = await Service.GetByIdAsync(5);
-            var visitor = findGroup.Visitors.ToList()[1];
+            var visitor = await ServiceVisitor.GetByIdAsync(13);
 
             Assert.IsTrue(result.Succedeed);
+            Assert.AreEqual(DateTime.Now.Date, findGroup.DateEdit.Value.Date);
             Assert.IsTrue(findGroup.Visitors.Count() == 2);
             Assert.IsTrue(findGroup.UserInSystem == "Admin");
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Edit).Count() == 1);
@@ -353,7 +356,8 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(findGroup.UserInSystem == "Admin");
         
             Assert.IsTrue(visitor.Surname == "surname7");
-            Assert.IsTrue(visitor.StatusName == "status2");
+            Assert.IsTrue(visitor.StatusName == "Отправлено в пограничную службу");
+            Assert.IsTrue(visitor.StatusOfOperation == 0);
         }
 
         [TestMethod]
