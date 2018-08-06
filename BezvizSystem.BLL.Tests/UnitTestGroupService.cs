@@ -172,19 +172,20 @@ namespace BezvizSystem.BLL.Tests
                 UserInSystem = "Admin",
                 DateInSystem = new DateTime(2018, 07, 01),
                 UserEdit = "Test1",
+                DateEdit = DateTime.Now
             };
 
             var result = await Service.Update(group);
             var findGroup = await Service.GetByIdAsync(2);
             var visitor = findGroup.Visitors.ToList()[2];
 
-            Assert.AreEqual("check2", findGroup.CheckPoint);
+            Assert.AreEqual("check3", findGroup.CheckPoint);
             Assert.IsTrue(findGroup.Visitors.Count() == 3);
             Assert.IsTrue(findGroup.UserInSystem == "Admin");
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 3);
 
             Assert.IsTrue(visitor.Name == "name added");
-            Assert.IsTrue(visitor.UserInSystem == "Test1");
+            Assert.IsTrue(visitor.UserInSystem == "Admin");
             Assert.IsTrue(visitor.DateInSystem.Value.Date == DateTime.Now.Date);
             Assert.IsTrue(visitor.Gender == "Женщина");
             Assert.IsTrue(visitor.Nationality == "nat1");
@@ -333,12 +334,13 @@ namespace BezvizSystem.BLL.Tests
                 PlaceOfRecidense = "new Place",
                 CheckPoint = "check3",
                 Visitors = new List<VisitorDTO> {
-                    new VisitorDTO { Id = 7, Surname = "surname7", Nationality = "nat3", StatusName = "Status2", Gender = "Мужчина"  }
+                    new VisitorDTO { Id = 7, Surname = "surname7", Nationality = "nat3", StatusName = "Отправлено в пограничную службу", Gender = "Мужчина"  }
                     },
 
                 UserInSystem = "Admin",
                 DateInSystem = new DateTime(2018, 07, 01),
-                UserEdit = "Test1"
+                UserEdit = "Test1",
+                DateEdit = DateTime.Now
             };
 
             var result = await Service.Update(group);

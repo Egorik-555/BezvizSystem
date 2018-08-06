@@ -42,7 +42,8 @@ namespace BezvizSystem.BLL.Mapper
                      ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault()));
             CreateMap<VisitorDTO, Visitor>().
                 ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
-                ForMember(dest => dest.Gender, opt => opt.MapFrom(src => database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
+                ForMember(dest => dest.Gender, opt => opt.MapFrom(src => database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault())).
+                ForMember(dest => dest.Status, opt => opt.MapFrom(src => database.StatusManager.GetAll().Where(n => n.Name == src.StatusName).FirstOrDefault()));
 
             CreateMap<GroupVisitor, GroupVisitorDTO>().
                 ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name));
@@ -156,6 +157,8 @@ namespace BezvizSystem.BLL.Mapper
         {
             foreach (var visitorDTO in dto.Visitors)
             {
+                visitorDTO.Group = dto;
+
                 if (visitorDTO.Id == 0)
                 {
                     visitorDTO.StatusOfOperation = StatusOfOperation.Add;
@@ -168,21 +171,20 @@ namespace BezvizSystem.BLL.Mapper
                 {
                     var oldVisitor = group.Visitors.SingleOrDefault(v => v.Id == visitorDTO.Id);
                     var newVisitor = mapperVisitor.Map<VisitorDTO, Visitor>(visitorDTO);
-                   
+                    
+                    if (visitorDTO.StatusName != "Сохранено" && visitorDTO.StatusName != null)                    
+                        visitorDTO.StatusOfOperation = StatusOfOperation.Edit;
+                    else
+                        visitorDTO.StatusOfOperation = StatusOfOperation.Add;
+                    
+                    
                     if (!oldVisitor.Equals(newVisitor))
                     {
-                        visitorDTO.DateEdit = DateTime.Now;
+                        visitorDTO.StatusName = "Сохранено";
+                        visitorDTO.DateEdit = dto.DateEdit;
                         visitorDTO.UserEdit = dto.UserEdit;
                     }
-                    if(visitorDTO.StatusName != "Сохранено" && visitorDTO.StatusName != null)
-                    {
-                        visitorDTO.StatusOfOperation = StatusOfOperation.Edit;
-                    }
-                    else
-                    {
-                        visitorDTO.StatusOfOperation = StatusOfOperation.Add;
-                    }
-
+                    
                     mapperVisitor.Map(visitorDTO, oldVisitor);
                 }
             }
