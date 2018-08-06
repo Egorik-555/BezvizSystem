@@ -4,7 +4,7 @@
         int i = 0;
     }
     <td class="orange coly1">
-        <h3>№ группы</h3>
+        №
     </td>
     <td class="orange coly2">
         @Html.DisplayNameFor(model => model.DateArrival)
@@ -25,9 +25,10 @@
         @Html.DisplayNameFor(model => model.Operator)
     </td>
 </tr>
-<tr>
+
     @foreach (var item in Model)
     {
+    <tr class="visitor_str" id="@item.Id">
         <td id="@item.Id" class="mainTableRow">
             @(++i)
         </td>
@@ -49,5 +50,5 @@
         <td>
             @Html.DisplayFor(modelItem => item.Operator)
         </td>
+    </tr>
     }
-</tr>
