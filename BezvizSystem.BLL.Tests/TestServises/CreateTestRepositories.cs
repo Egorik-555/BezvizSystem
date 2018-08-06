@@ -97,8 +97,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
             Mock<IRepository<Visitor, int>> mockVisitors = new Mock<IRepository<Visitor, int>>();
             mockVisitors.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.Where(v => v.Id == id).FirstOrDefault());
             mockVisitors.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
-                                                                                        Task<Visitor>.FromResult<Visitor>(
-                                   
+                                                                                        Task<Visitor>.FromResult<Visitor>(                              
                                                                                             list.Where(v => v.Id == id).FirstOrDefault()));
 
             mockVisitors.Setup(m => m.GetAll()).Returns(list);
