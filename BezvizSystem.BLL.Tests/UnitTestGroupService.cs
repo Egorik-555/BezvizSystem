@@ -205,7 +205,8 @@ namespace BezvizSystem.BLL.Tests
 
                 UserInSystem = "Admin",
                 DateInSystem = new DateTime(2018, 07, 01),
-                UserEdit = "Test1"
+                UserEdit = "Test1",
+                DateEdit = DateTime.Now
             };
 
             var result = await Service.Update(group);
@@ -223,7 +224,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(visitor.DateEdit.Value.Date == DateTime.Now.Date);
             Assert.IsTrue(visitor.Gender == "Мужчина");
             Assert.IsTrue(visitor.Nationality == "nat1");
-            Assert.IsTrue(visitor.StatusName == "status1");
+            Assert.IsTrue(visitor.StatusName == "Сохранено");
             Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Add);
         }
 
@@ -369,17 +370,19 @@ namespace BezvizSystem.BLL.Tests
                 PlaceOfRecidense = "new Place",
                 CheckPoint = "check3",
                 Visitors = new List<VisitorDTO> {
-                    new VisitorDTO { Id = 8, Surname = "add new Visitor", Nationality = "nat3", Gender = "Мужчина"},
+                    new VisitorDTO { Id = 0, Surname = "add new Visitor", Nationality = "nat3", Gender = "Мужчина"},
                 },
 
                 UserInSystem = "Admin",
                 DateInSystem = new DateTime(2018, 07, 01),
-                UserEdit = "Test1"
+                UserEdit = "Test1",
+                DateEdit = DateTime.Now
             };
 
             var result = await Service.Update(group);
 
             var findGroup = await Service.GetByIdAsync(5);
+            var removeVisitor = findGroup.Visitors.ToList()[0];
             var visitor = findGroup.Visitors.ToList()[1];
 
             Assert.IsTrue(result.Succedeed);
@@ -388,9 +391,13 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Remove).Count() == 1);
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 1);
 
-            Assert.IsTrue(visitor.Surname == "surname7");
-            Assert.IsTrue(visitor.StatusName == "status1");
-            Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Remove);
+            Assert.IsTrue(visitor.Surname == "add new Visitor");
+            Assert.IsTrue(visitor.StatusName == "Сохранено");
+            Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Add);
+
+            Assert.AreEqual(7, removeVisitor.Id);
+            Assert.AreEqual("Сохранено", removeVisitor.StatusName);
+            Assert.AreEqual(StatusOfOperation.Remove, removeVisitor.StatusOfOperation);
         }
 
         [TestMethod]

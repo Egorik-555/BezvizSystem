@@ -142,36 +142,39 @@ namespace BezvizSystem.BLL.Mapper
     class FromDALToBLLProfileWithModelGroup : Profile
     {
         IMapper mapperVisitor;
+        IUnitOfWork _database;
 
         public FromDALToBLLProfileWithModelGroup(IUnitOfWork _database, GroupVisitor model)
         {
+            this._database = _database;
             mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database))).CreateMapper();
 
             CreateMap<GroupVisitorDTO, GroupVisitor>().ConstructUsing(v => model).
                 ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => _database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault())).
                 ForMember(d => d.Visitors, opt => opt.Ignore()).
-                AfterMap((d, e) => AddOrUpdateVisitors(d, e));
+                AfterMap(async (d, e) => await AddOrUpdateVisitors(d, e));
         }
 
-        private void AddOrUpdateVisitors(GroupVisitorDTO dto, GroupVisitor group)
+        private async Task AddOrUpdateVisitors(GroupVisitorDTO dto, GroupVisitor group)
         {
 
-            foreach (var visitor in group.Visitors)
+            var oldVisitors = group.Visitors.ToList();
+            foreach (var visitor in oldVisitors)
             {
                 if (dto.Visitors.SingleOrDefault(v => v.Id == visitor.Id) == null)
                 {
                     if (visitor.Status.Code != 1)
                     {
                         visitor.StatusOfOperation = StatusOfOperation.Remove;
+                        visitor.Status = await _database.StatusManager.GetByIdAsync(1);
                     }
                     else
                     {
-                        group.Visitors.Remove();
+                        group.Visitors.Remove(visitor);
                     }
-                }
-           
+                }      
             }
-
+           
             foreach (var visitorDTO in dto.Visitors)
             {
                 visitorDTO.Group = dto;

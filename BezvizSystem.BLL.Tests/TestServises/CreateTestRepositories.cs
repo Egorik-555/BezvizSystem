@@ -61,9 +61,9 @@ namespace BezvizSystem.BLL.Tests.TestServises
         TypeOfOperation operation2 = new TypeOfOperation { Code = 2, Name = "Exit", Active = true };
         TypeOfOperation operation3 = new TypeOfOperation { Code = 3, Name = "ErrorEnter" };
 
-        Status status1 = new Status { Code = 1, Name = "Сохранено", Active = true };
-        Status status2 = new Status { Code = 2, Name = "Отправлено в пограничную службу", Active = true };
-        Status status3 = new Status { Code = 3, Name = "Принято пограничной службой", Active = false };
+        Status status1 = new Status {Id = 1, Code = 1, Name = "Сохранено", Active = true };
+        Status status2 = new Status {Id = 2, Code = 2, Name = "Отправлено в пограничную службу", Active = true };
+        Status status3 = new Status {Id = 3, Code = 3, Name = "Принято пограничной службой", Active = false };
 
         CheckPoint check1 = new CheckPoint { Id = 1, Name = "check1", Active = true};
         CheckPoint check2 = new CheckPoint { Id = 2, Name = "check2" };
@@ -172,7 +172,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
 
             roleStore.Setup(m => m.FindByNameAsync(It.IsAny<string>())).Returns<string>(id =>
                                                                             Task<BezvizRole>.FromResult<BezvizRole>(
-                                                                                list.Where(u => u.Name == id).FirstOrDefault()));
+                                                                            list.Where(u => u.Name == id).FirstOrDefault()));
 
             roleStore.Setup(m => m.CreateAsync(It.IsAny<BezvizRole>())).Returns<BezvizRole>( role => Task.FromResult(Task.Run(() => list.Add(role))));
 
@@ -185,6 +185,9 @@ namespace BezvizSystem.BLL.Tests.TestServises
             List<Status> listStatuses = new List<Status> { status1, status2, status3};
             Mock<IRepository<Status, int>> mockStatuses = new Mock<IRepository<Status, int>>();
             mockStatuses.Setup(m => m.GetAll()).Returns(listStatuses);
+            mockStatuses.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
+                                                                                        Task<Visitor>.FromResult<Status>(
+                                                                                        listStatuses.Where(v => v.Id == id).FirstOrDefault()));
             return mockStatuses.Object;
         }
 
