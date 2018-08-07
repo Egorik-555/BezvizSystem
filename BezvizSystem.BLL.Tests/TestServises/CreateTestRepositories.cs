@@ -61,10 +61,6 @@ namespace BezvizSystem.BLL.Tests.TestServises
         TypeOfOperation operation2 = new TypeOfOperation { Code = 2, Name = "Exit", Active = true };
         TypeOfOperation operation3 = new TypeOfOperation { Code = 3, Name = "ErrorEnter" };
 
-        Status status1 = new Status {Id = 1, Code = 1, Name = "Сохранено", Active = true };
-        Status status2 = new Status {Id = 2, Code = 2, Name = "Отправлено в пограничную службу", Active = true };
-        Status status3 = new Status {Id = 3, Code = 3, Name = "Принято пограничной службой", Active = false };
-
         CheckPoint check1 = new CheckPoint { Id = 1, Name = "check1", Active = true};
         CheckPoint check2 = new CheckPoint { Id = 2, Name = "check2" };
         CheckPoint check3 = new CheckPoint { Id = 3, Name = "check3", Active = true };
@@ -86,18 +82,18 @@ namespace BezvizSystem.BLL.Tests.TestServises
             GroupVisitor groupForVisitor2 = new GroupVisitor { DateArrival = new DateTime(2018, 5, 1), DaysOfStay = 3, CheckPoint = check3, User = user3, ExtraSend = true };
 
             visitor1 = new Visitor { Id = 1, Surname = "surname1", BithDate = new DateTime(1987, 07, 01),
-                                     Nationality = nat1, Group = groupForVisitor, Status = status3, Gender = gender1 };
+                                     Nationality = nat1, Group = groupForVisitor, StatusOfRecord = StatusOfRecord.Recd, Gender = gender1 };
             visitor2 = new Visitor { Id = 2, Surname = "surname2", Gender = gender2, Name = "Name2", UserInSystem = "user", 
                                      BithDate = new DateTime(2005, 1, 1),
                                      Nationality = nat2, DateInSystem = new DateTime(2018, 07, 01),
-                                     Group = groupForVisitor, Status = status2, Arrived = true };
+                                     Group = groupForVisitor, StatusOfRecord = StatusOfRecord.Send, Arrived = true };
 
-            visitor3 = new Visitor { Id = 3, Surname = "surname3", Nationality = nat3, Group = groupForVisitor1, Status = status1, Arrived = true, Gender = gender1 };
+            visitor3 = new Visitor { Id = 3, Surname = "surname3", Nationality = nat3, Group = groupForVisitor1, StatusOfRecord = StatusOfRecord.Save, Arrived = true, Gender = gender1 };
             visitor4 = new Visitor { Id = 4, Surname = "surname4", Nationality = nat1, BithDate = new DateTime(1960, 2, 6),
-                                     Group = groupForVisitor1, Status = status1, Arrived = true, Gender = gender2 };
-            visitor5 = new Visitor { Id = 5, Surname = "surname5", Nationality = nat3, Group = groupForVisitor2, Status = status1, Gender = gender1 };
-            visitor6 = new Visitor { Id = 6, Surname = "surname6", Nationality = nat2, Group = groupForVisitor2, Status = status2, Arrived = true, Gender = gender2};
-            visitor7 = new Visitor { Id = 7, Surname = "surname7", Nationality = nat3, Group = groupForVisitor, Status = status2, Gender = gender1 };
+                                     Group = groupForVisitor1, StatusOfRecord = StatusOfRecord.Save, Arrived = true, Gender = gender2 };
+            visitor5 = new Visitor { Id = 5, Surname = "surname5", Nationality = nat3, Group = groupForVisitor2, StatusOfRecord = StatusOfRecord.Save, Gender = gender1 };
+            visitor6 = new Visitor { Id = 6, Surname = "surname6", Nationality = nat2, Group = groupForVisitor2, StatusOfRecord = StatusOfRecord.Send, Arrived = true, Gender = gender2};
+            visitor7 = new Visitor { Id = 7, Surname = "surname7", Nationality = nat3, Group = groupForVisitor, StatusOfRecord = StatusOfRecord.Send, Gender = gender1 };
 
             visitor8 = new Visitor { Id = 9,
                                      StatusOfOperation = StatusOfOperation.Add,
@@ -107,7 +103,8 @@ namespace BezvizSystem.BLL.Tests.TestServises
                                      Gender = gender1,
                                      SerialAndNumber = "AB344",
                                      DocValid = null,                             
-                                     Status = status1 };
+                                     StatusOfRecord = StatusOfRecord.Save
+            };
 
             group1 = new GroupVisitor { Id = 1, CheckPoint = check1, PlaceOfRecidense = "place1", DateArrival = new DateTime(2018, 6, 1), Group = true,
                                         Visitors = new List<Visitor> { visitor1, visitor2 }, User = user4 };
@@ -171,7 +168,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
             Mock<IRoleStore<BezvizRole, string>> roleStore = new Mock<IRoleStore<BezvizRole, string>>();
 
             roleStore.Setup(m => m.FindByNameAsync(It.IsAny<string>())).Returns<string>(id =>
-                                                                            Task<BezvizRole>.FromResult<BezvizRole>(
+                                                                            Task<BezvizRole>.FromResult<BezvizRole>( 
                                                                             list.Where(u => u.Name == id).FirstOrDefault()));
 
             roleStore.Setup(m => m.CreateAsync(It.IsAny<BezvizRole>())).Returns<BezvizRole>( role => Task.FromResult(Task.Run(() => list.Add(role))));
@@ -180,17 +177,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
             return new BezvizRoleManager(roleStore.Object);
         }
 
-        private IRepository<Status, int> CreateStatusManager()
-        {
-            List<Status> listStatuses = new List<Status> { status1, status2, status3};
-            Mock<IRepository<Status, int>> mockStatuses = new Mock<IRepository<Status, int>>();
-            mockStatuses.Setup(m => m.GetAll()).Returns(listStatuses);
-            mockStatuses.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
-                                                                                        Task<Visitor>.FromResult<Status>(
-                                                                                        listStatuses.Where(v => v.Id == id).FirstOrDefault()));
-            return mockStatuses.Object;
-        }
-
+      
         private IRepository<CheckPoint, int> CreateCheckPointManager()
         {
             List<CheckPoint> list = new List<CheckPoint> { check1, check2, check3, check4};
@@ -312,8 +299,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
             mockDB.Setup(m => m.OperatorManager).Returns(CreateOperatorManager());
             mockDB.Setup(m => m.RoleManager).Returns(CreateRoleManager());
             mockDB.Setup(m => m.VisitorManager).Returns(CreateVisitorManager());
-            mockDB.Setup(m => m.NationalityManager).Returns(CreateNationalitiesManager());
-            mockDB.Setup(m => m.StatusManager).Returns(CreateStatusManager());
+            mockDB.Setup(m => m.NationalityManager).Returns(CreateNationalitiesManager());          
             mockDB.Setup(m => m.CheckPointManager).Returns(CreateCheckPointManager());
             mockDB.Setup(m => m.GroupManager).Returns(CreateGroupVisitorManager());
             mockDB.Setup(m => m.TypeOfOperations).Returns(CreateTypeOfOperationManager());

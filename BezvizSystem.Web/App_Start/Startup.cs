@@ -32,8 +32,7 @@ namespace BezvizSystem.Web.App_Start
 
             app.CreatePerOwinContext<IService<VisitorDTO>>(CreateVisitorService);
             app.CreatePerOwinContext<IService<GroupVisitorDTO>>(CreateGroupService);
-            app.CreatePerOwinContext<IService<AnketaDTO>>(CreateAnketaService);
-            app.CreatePerOwinContext<IDictionaryService<StatusDTO>>(CreateStatusService);
+            app.CreatePerOwinContext<IService<AnketaDTO>>(CreateAnketaService);          
             app.CreatePerOwinContext<IDictionaryService<CheckPointDTO>>(CreateCheckPointService);
             app.CreatePerOwinContext<IDictionaryService<NationalityDTO>>(CreateNationalityService);
             app.CreatePerOwinContext<IDictionaryService<GenderDTO>>(CreateGenderService);
@@ -69,12 +68,7 @@ namespace BezvizSystem.Web.App_Start
         private IService<AnketaDTO> CreateAnketaService()
         {
             return serviceCreator.CreateAnketaService(CONNECTION);
-        }
-
-        private IDictionaryService<StatusDTO> CreateStatusService()
-        {
-            return serviceCreator.CreateStatusService(CONNECTION);
-        }
+        }     
 
         private IDictionaryService<NationalityDTO> CreateNationalityService()
         {

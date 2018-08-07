@@ -18,24 +18,28 @@ namespace BezvizSystem.Web.Controllers
     public class VisitorController : Controller
     {
 
-        private IService<GroupVisitorDTO> GroupService
+        public IService<GroupVisitorDTO> GroupService
         {
             get { return HttpContext.GetOwinContext().Get<IService<GroupVisitorDTO>>(); }
+            set { GroupService = value; }
         }
 
-        private IDictionaryService<CheckPointDTO> CheckPointService
+        public IDictionaryService<CheckPointDTO> CheckPointService
         {
             get { return HttpContext.GetOwinContext().Get<IDictionaryService<CheckPointDTO>>(); }
+            set { CheckPointService = value; }
         }
 
-        private IDictionaryService<NationalityDTO> NationalityService
+        public IDictionaryService<NationalityDTO> NationalityService
         {
             get { return HttpContext.GetOwinContext().Get<IDictionaryService<NationalityDTO>>(); }
+            set { NationalityService = value; }
         }
 
-        private IDictionaryService<GenderDTO> GenderService
+        public IDictionaryService<GenderDTO> GenderService
         {
             get { return HttpContext.GetOwinContext().Get<IDictionaryService<GenderDTO>>(); }
+            set { GenderService = value; }
         }
 
         IMapper mapper;

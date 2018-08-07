@@ -28,7 +28,6 @@ namespace BezvizSystem.DAL.EF
 
         // Dictionaries
         public DbSet<CheckPoint> CheckPoints { get; set; }
-        public DbSet<Status> Statuses { get; set; }
         public DbSet<Nationality> Nationalities { get; set; }
         public DbSet<TypeOfOperation> TypeOfOperations { get; set; }
         public DbSet<Gender> Genders { get; set; }
@@ -38,15 +37,7 @@ namespace BezvizSystem.DAL.EF
     public class Initializer : CreateDatabaseIfNotExists<BezvizContext>
     {
         protected override void Seed(BezvizContext context)
-        {
-            List<Status> statuses = new List<Status>
-            {
-               new Status {Code = 1, Name = "Сохранено", Active = true },              
-               new Status {Code = 2, Name = "Отправлено в пограничную службу", Active = true },
-               new Status {Code = 3, Name = "Принято пограничной службой", Active = true }
-            };           
-            context.Statuses.AddRange(statuses);
-
+        {        
             List<Nationality> nationalities = new List<Nationality>
             {
                new Nationality {Code = 1, Name = "Польша", ShortName = "POL", Active = true },

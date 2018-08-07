@@ -52,13 +52,13 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.2\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.2\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
@@ -94,6 +94,7 @@
     <Compile Include="Entities\Log\Unload.cs" />
     <Compile Include="Entities\Log\UserActivity.cs" />
     <Compile Include="Helpers\StatusOfOperation.cs" />
+    <Compile Include="Helpers\StatusOfRecord.cs" />
     <Compile Include="Interfaces\IOperatorManager.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
@@ -104,7 +105,6 @@
     <Compile Include="Entities\GroupVisitor.cs" />
     <Compile Include="Entities\Nationality.cs" />
     <Compile Include="Entities\OperatorProfile.cs" />
-    <Compile Include="Entities\Status.cs" />
     <Compile Include="Entities\Visitor.cs" />
     <Compile Include="Identity\BezvizRoleManager.cs" />
     <Compile Include="Identity\BezvizUserManager.cs" />
@@ -116,7 +116,6 @@
     <Compile Include="Repositories\IdentityUnitOfWork.cs" />
     <Compile Include="Repositories\NationalityManager.cs" />
     <Compile Include="Repositories\OperatorManager.cs" />
-    <Compile Include="Repositories\StatusManager.cs" />
     <Compile Include="Repositories\UserActivityManager.cs" />
     <Compile Include="Repositories\VisitorManager.cs" />
   </ItemGroup>

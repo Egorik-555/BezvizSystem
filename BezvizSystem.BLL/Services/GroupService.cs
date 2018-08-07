@@ -32,12 +32,11 @@ namespace BezvizSystem.BLL.Services
             {
                 var model = _mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
                 var user = await _database.UserManager.FindByNameAsync(group.UserInSystem);
-                var status = _database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
 
                 //data of visitors
                 foreach (var visitor in model.Visitors)
                 {
-                    visitor.Status = status;
+                    visitor.StatusOfRecord = StatusOfRecord.Save;
                     visitor.StatusOfOperation = StatusOfOperation.Add; // new record
                     visitor.DateInSystem = DateTime.Now;
                     visitor.UserInSystem = model.UserInSystem;
@@ -62,8 +61,7 @@ namespace BezvizSystem.BLL.Services
             {
                 var group = await _database.GroupManager.GetByIdAsync(id);
                 if (group != null)
-                {
-                    var status = _database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
+                {                  
                     var visitors = group.Visitors.ToList();
 
                     int k = 0;
@@ -71,7 +69,7 @@ namespace BezvizSystem.BLL.Services
                     foreach (var item in visitors)
                     {
                         //if item have status code = 1 (new)
-                        if (item.Status == null || item.Status.Code == 1)
+                        if (item.StatusOfRecord == StatusOfRecord.Save)
                         {
                             _database.VisitorManager.Delete(item.Id); // remove item
                             k++;
@@ -79,7 +77,7 @@ namespace BezvizSystem.BLL.Services
                         // if item send to pogran
                         else
                         {
-                            item.Status = status; // mark to upload
+                            item.StatusOfRecord = StatusOfRecord.Save; // mark to upload
                             item.StatusOfOperation = StatusOfOperation.Remove; //mark to delete
                             _database.VisitorManager.Update(item);
                         }
@@ -89,13 +87,10 @@ namespace BezvizSystem.BLL.Services
                     if (group.Visitors.Count() == k)
                     {
                         _database.GroupManager.Delete(group.Id);
-                        return new OperationDetails(true, "Группа туристов удалена", "");
+                        
                     }
-                    // if group send to pogran
-                    else
-                    {                      
-                        return new OperationDetails(true, "Группа туристов помечена к удалению", "");
-                    }
+
+                    return new OperationDetails(true, "Группа туристов удалена", "");
                 }
                 else return new OperationDetails(false, "Группа туристов не найдена", "");
             }
@@ -104,80 +99,7 @@ namespace BezvizSystem.BLL.Services
                 return new OperationDetails(false, ex.Message, "");
             }
         }
-
-        private ICollection<Visitor> UpdateVisitors(string userName, GroupVisitor newGroup, IEnumerable<Visitor> oldGroup)
-        {            
-            var result = new List<Visitor>();
-            var visitorNew = newGroup.Visitors;
-            var visitorOld = oldGroup;
-            var statusForNewItem = _database.StatusManager.GetAll().Where(s => s.Code == 1).FirstOrDefault();
-
-            foreach (var itemNew in visitorNew)
-            {
-                itemNew.StatusOfOperation = StatusOfOperation.Add;
-                itemNew.Status = statusForNewItem;
-                itemNew.Group = newGroup;
-
-                var itemOld = visitorOld.Where(v => v.Id == itemNew.Id).FirstOrDefault();
-
-                // if item new
-                if (itemOld == null)
-                {
-                    itemNew.DateInSystem = DateTime.Now;
-                    itemNew.UserInSystem = userName;
-                    result.Add(itemNew);
-                }
-                else
-                {
-                    //if item have status code = 1 (new)
-                    if (itemOld.Status.Code == 1)
-                    {
-                        //edit old item
-                        if (!itemOld.Equals(itemNew))
-                        {
-                            itemNew.UserEdit = userName;
-                            itemNew.DateEdit = DateTime.Now;
-                        }
-
-                        result.Add(itemNew);
-                    }
-                    //if group have status code = 2, 3 (send or recieve pogran)
-                    else
-                    {
-                        itemNew.Status = itemOld.Status;
-                        //edit old item
-                        if (!itemOld.Equals(itemNew))
-                        {
-                            itemNew.StatusOfOperation = StatusOfOperation.Edit;
-                            itemNew.Status = statusForNewItem;
-                            itemNew.UserEdit = userName;
-                            itemNew.DateEdit = DateTime.Now;
-                        }
-
-                        result.Add(itemNew);
-                    }
-                }              
-            }
-
-            //delete item in visitorsOld if thier send to pogran
-            foreach (var itemOld in visitorOld)
-            {
-                if (itemOld.Status.Code != 1)
-                {
-                    var itemNew = visitorNew.Where(v => v.Id == itemOld.Id).FirstOrDefault();
-                    if (itemNew == null)
-                    {
-                        itemOld.Status = statusForNewItem;
-                        itemOld.StatusOfOperation = StatusOfOperation.Remove;
-                        result.Add(itemOld);
-                    }
-                }
-            }
-
-            return result;
-        }
-
-     
+      
         public async Task<OperationDetails> Update(GroupVisitorDTO group)
         {
             try
@@ -186,13 +108,10 @@ namespace BezvizSystem.BLL.Services
                
                 if (model != null)
                 {
-                    //IEnumerable<Visitor> oldVisitors = model.Visitors.ToList();
                     var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelGroup(_database, model))).CreateMapper();
 
                     var modelNew = mapper.Map<GroupVisitorDTO, GroupVisitor>(group); 
                     
-                    //var newVisitors = UpdateVisitors(modelNew.UserEdit, modelNew, oldVisitors);
-                    //modelNew.Visitors = newVisitors;
                     _database.GroupManager.Update(modelNew);
                     return new OperationDetails(true, "Группа туристов изменена", "");
                 }

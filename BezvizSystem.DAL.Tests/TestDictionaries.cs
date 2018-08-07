@@ -18,13 +18,11 @@ namespace BezvizSystem.DAL.Tests
         const string CONNECT = "BezvizConnection";
 
         CheckPointManager checkPointMng;
-        StatusManager statusMng;
         NationalityManager nationalitiesMng;
 
         public TestDictionaries()
         {
-            checkPointMng = new CheckPointManager(new BezvizContext(CONNECT));
-            statusMng = new StatusManager(new BezvizContext(CONNECT));
+            checkPointMng = new CheckPointManager(new BezvizContext(CONNECT));          
             nationalitiesMng = new NationalityManager(new BezvizContext(CONNECT));
         }
 
@@ -42,22 +40,6 @@ namespace BezvizSystem.DAL.Tests
             Assert.IsTrue(checkPoints.Count() != 0);
             Assert.IsTrue(checkPoints.Contains(checkPoint1));
             Assert.IsTrue(checkPoints.Contains(checkPoint2));
-        }
-
-        [TestMethod]
-        public async Task Status_Dictionary()
-        {
-            Status status1 = statusMng.GetById(1);
-            Status status2 = await statusMng.GetByIdAsync(1);
-            var statuses = statusMng.GetAll();
-
-            Assert.IsNotNull(status1);
-            Assert.IsTrue(status1.Active);
-            Assert.IsNotNull(status2);
-            Assert.IsTrue(status2.Name.Contains("Сохранено"));
-            Assert.IsTrue(statuses.Count() != 0);
-            Assert.IsTrue(statuses.Contains(status1));
-            Assert.IsTrue(statuses.Contains(status2));
         }
 
         [TestMethod]

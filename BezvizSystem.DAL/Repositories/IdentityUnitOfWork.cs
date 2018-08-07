@@ -21,7 +21,6 @@ namespace BezvizSystem.DAL.Repositories
         private IRepository<OperatorProfile, string> operatorManager;
         private IRepository<Visitor, int> visitorManager;
         private IRepository<GroupVisitor, int> groupManager;
-        private IRepository<Status, int> statusManager;
         private IRepository<CheckPoint, int> checkPointManager;
         private IRepository<Nationality, int> nationalityManager;
         private IRepository<UserActivity, int> userActivities;
@@ -37,7 +36,6 @@ namespace BezvizSystem.DAL.Repositories
             operatorManager = new OperatorManager(context);
             visitorManager = new VisitorManager(context);
             groupManager = new GroupManager(context);
-            statusManager = new StatusManager(context);
             checkPointManager = new CheckPointManager(context);
             nationalityManager = new NationalityManager(context);
             userActivities = new UserActivityManager(context);
@@ -50,7 +48,6 @@ namespace BezvizSystem.DAL.Repositories
         public IRepository<OperatorProfile, string> OperatorManager => operatorManager;
         public IRepository<Visitor, int> VisitorManager => visitorManager;
         public IRepository<GroupVisitor, int> GroupManager => groupManager;
-        public IRepository<Status, int> StatusManager => statusManager;
         public IRepository<CheckPoint, int> CheckPointManager => checkPointManager;
         public IRepository<Nationality, int> NationalityManager => nationalityManager;
         public IRepository<UserActivity, int> UserActivities => userActivities;
@@ -70,7 +67,6 @@ namespace BezvizSystem.DAL.Repositories
                     roleManager.Dispose();
                     visitorManager.Dispose();
                     groupManager.Dispose();
-                    statusManager.Dispose();
                     checkPointManager.Dispose();
                     nationalityManager.Dispose();
                     userActivities.Dispose();

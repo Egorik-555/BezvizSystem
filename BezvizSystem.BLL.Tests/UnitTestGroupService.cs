@@ -59,7 +59,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(findGroup.UserOperatorProfileUNP == "UnpAdmin");
             Assert.IsTrue(findGroup.Visitors.Count() == 3);
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 3);
-            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusName == "Сохранено").Count() == 3);
+            Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfRecord == StatusOfRecord.Save).Count() == 3);
 
             Assert.IsTrue(visitor.Name == "test1");
             Assert.IsTrue(visitor.Gender == "Мужчина");
@@ -94,7 +94,7 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsTrue(result.Succedeed);
             Assert.IsNotNull(group);
-            Assert.IsTrue(result.Message == "Группа туристов помечена к удалению");
+            Assert.IsTrue(result.Message == "Группа туристов удалена");
             Assert.IsTrue(list.Count() == 4);
 
             Assert.IsTrue(visitors.Count() == 2);
@@ -108,7 +108,7 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsTrue(result.Succedeed);
             Assert.IsNotNull(group);
-            Assert.IsTrue(result.Message == "Группа туристов помечена к удалению");
+            Assert.IsTrue(result.Message == "Группа туристов удалена");
             Assert.IsTrue(list.Count() == 4);
 
             Assert.IsTrue(allVisitors.Count() == 5);
@@ -154,7 +154,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(visitor.DateEdit.Value.Date == DateTime.Now.Date);
             Assert.IsTrue(visitor.Gender == "Мужчина");
             Assert.IsTrue(visitor.Nationality == "nat1");
-            Assert.AreEqual("Сохранено",visitor.StatusName);
+            Assert.AreEqual(StatusOfRecord.Save, visitor.StatusOfRecord);
         }
 
         [TestMethod]
@@ -224,7 +224,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(visitor.DateEdit.Value.Date == DateTime.Now.Date);
             Assert.IsTrue(visitor.Gender == "Мужчина");
             Assert.IsTrue(visitor.Nationality == "nat1");
-            Assert.IsTrue(visitor.StatusName == "Сохранено");
+            Assert.IsTrue(visitor.StatusOfRecord == StatusOfRecord.Save);
             Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Add);
         }
 
@@ -255,7 +255,7 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsTrue(visitor.Surname == "surname3");
             Assert.IsTrue(visitor.Nationality == "nat3");
-            Assert.IsTrue(visitor.StatusName == "Сохранено");
+            Assert.IsTrue(visitor.StatusOfRecord == StatusOfRecord.Save);
             Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Add);
         }
 
@@ -287,7 +287,7 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsTrue(visitor.Surname == "new surname");
             Assert.IsTrue(visitor.Nationality == "nat1");
-            Assert.IsTrue(visitor.StatusName == "Сохранено");
+            Assert.IsTrue(visitor.StatusOfRecord == StatusOfRecord.Save);
             Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Edit);
         }
 
@@ -325,7 +325,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(visitor.Surname == "add new Visitor");
             Assert.IsTrue(visitor.Nationality == "nat3");
             Assert.IsTrue(visitor.Gender == "Мужчина");
-            Assert.IsTrue(visitor.StatusName == "Сохранено");
+            Assert.IsTrue(visitor.StatusOfRecord == StatusOfRecord.Save);
             Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Add);
         }
 
@@ -338,7 +338,7 @@ namespace BezvizSystem.BLL.Tests
                 PlaceOfRecidense = "new Place",
                 CheckPoint = "check3",
                 Visitors = new List<VisitorDTO> {
-                    new VisitorDTO { Id = 7, Surname = "surname7", Nationality = "nat3", StatusName = "Отправлено в пограничную службу", Gender = "Мужчина"  }
+                    new VisitorDTO { Id = 7, Surname = "surname7", StatusOfRecord = StatusOfRecord.Send, Nationality = "nat3", Gender = "Мужчина"  }
                     },
 
                 UserInSystem = "Admin",
@@ -357,7 +357,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(findGroup.UserInSystem == "Admin");
         
             Assert.IsTrue(visitor.Surname == "surname7");
-            Assert.IsTrue(visitor.StatusName == "Отправлено в пограничную службу");
+            Assert.IsTrue(visitor.StatusOfRecord == StatusOfRecord.Send);
             Assert.IsTrue(visitor.StatusOfOperation == 0);
         }
 
@@ -392,11 +392,11 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(findGroup.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Add).Count() == 1);
 
             Assert.IsTrue(visitor.Surname == "add new Visitor");
-            Assert.IsTrue(visitor.StatusName == "Сохранено");
+            Assert.IsTrue(visitor.StatusOfRecord == StatusOfRecord.Save);
             Assert.IsTrue(visitor.StatusOfOperation == StatusOfOperation.Add);
 
             Assert.AreEqual(7, removeVisitor.Id);
-            Assert.AreEqual("Сохранено", removeVisitor.StatusName);
+            Assert.AreEqual(StatusOfRecord.Save, removeVisitor.StatusOfRecord);
             Assert.AreEqual(StatusOfOperation.Remove, removeVisitor.StatusOfOperation);
         }
 

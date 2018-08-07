@@ -37,11 +37,7 @@ namespace BezvizSystem.BLL.Services
 
         public IEnumerable<T> Get()
         {
-            if (typeof(T).Name == "StatusDTO")
-            {
-                return (IEnumerable<T>)_mapper.Map<IEnumerable<Status>, IEnumerable<StatusDTO>>(Database.StatusManager.GetAll().Where(s => s.Active));
-            }
-            else if (typeof(T).Name == "NationalityDTO")
+            if (typeof(T).Name == "NationalityDTO")
             {
                 return (IEnumerable<T>)_mapper.Map<IEnumerable<Nationality>, IEnumerable<NationalityDTO>>(Database.NationalityManager.GetAll().Where(n => n.Active));
             }

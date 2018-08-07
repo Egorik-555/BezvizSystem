@@ -16,8 +16,7 @@ namespace BezvizSystem.DAL.Interfaces
         BezvizRoleManager RoleManager { get; }
         IRepository<OperatorProfile, string> OperatorManager { get; }
         IRepository<Visitor, int> VisitorManager { get; }
-        IRepository<GroupVisitor, int> GroupManager { get; }
-        IRepository<Status, int> StatusManager { get; }
+        IRepository<GroupVisitor, int> GroupManager { get; }  
         IRepository<Nationality, int> NationalityManager { get; }
         IRepository<CheckPoint, int> CheckPointManager { get; }
         IRepository<UserActivity, int> UserActivities { get; }

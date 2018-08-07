@@ -36,12 +36,7 @@ namespace BezvizSystem.BLL.Services
         public IService<AnketaDTO> CreateAnketaService(string connection)
         {
             return new AnketaService(new IdentityUnitOfWork(connection));
-        }
-
-        public IDictionaryService<StatusDTO> CreateStatusService(string connection)
-        {
-            return new DictionaryService<StatusDTO>(new IdentityUnitOfWork(connection));
-        }
+        }  
 
         public IDictionaryService<NationalityDTO> CreateNationalityService(string connection)
         {

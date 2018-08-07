@@ -13,8 +13,7 @@ namespace BezvizSystem.BLL.Tests
 {
     [TestClass]
     public class UnitTestDictionaryService
-    {
-        IDictionaryService<StatusDTO> serviceStatus;
+    {     
         IDictionaryService<NationalityDTO> serviceNat;
         IDictionaryService<CheckPointDTO> serviceCheck;
         IDictionaryService<TypeOfOperationDTO> serviceOperation;
@@ -24,8 +23,7 @@ namespace BezvizSystem.BLL.Tests
         {
             CreateTestRepositories creator = new CreateTestRepositories();
             IUnitOfWork database = creator.CreateIoWManager();
-
-            serviceStatus = new DictionaryService<StatusDTO>(database);
+        
             serviceNat = new DictionaryService<NationalityDTO>(database);
             serviceCheck = new DictionaryService<CheckPointDTO>(database);
             serviceOperation = new DictionaryService<TypeOfOperationDTO>(database);
@@ -35,28 +33,16 @@ namespace BezvizSystem.BLL.Tests
 
         [TestMethod]
         public void Test_Init_Instance_Dictionary()
-        {          
-            var statuses = (IEnumerable<StatusDTO>)serviceStatus.Get();
+        {                    
             var nationalities = (IEnumerable<NationalityDTO>)serviceNat.Get();
             var checkPoints = (IEnumerable<CheckPointDTO>)serviceCheck.Get();
             var operations = (IEnumerable<TypeOfOperationDTO>)serviceOperation.Get();
             var genders = (IEnumerable<GenderDTO>)serviceGender.Get();
-
-            Assert.IsNotNull(statuses);
+        
             Assert.IsNotNull(nationalities);
             Assert.IsNotNull(checkPoints);
             Assert.IsNotNull(operations);
             Assert.IsNotNull(genders);
-        }
-
-        [TestMethod]
-        public void Test_Get_Status_Dictionary()
-        {
-            var statuses = serviceStatus.Get();
-            
-            Assert.IsNotNull(statuses);
-            Assert.IsTrue(statuses.Count() == 2);
-            Assert.IsNotNull(statuses.Where(s => s.Code == 1).FirstOrDefault().Name == "Status1");
         }
 
         [TestMethod]

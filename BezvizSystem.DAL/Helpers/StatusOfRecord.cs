@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BezvizSystem.BLL.DTO.Dictionary
+namespace BezvizSystem.DAL.Helpers
 {
-    public class StatusDTO : DictionaryDTO
+    public enum StatusOfRecord
     {
-        public int Code { get; set; }
+        Save = 1,
+        Send = 2,
+        Recd = 3
     }
 }

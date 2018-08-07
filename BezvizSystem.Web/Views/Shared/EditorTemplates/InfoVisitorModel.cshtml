@@ -1,6 +1,6 @@
 @model BezvizSystem.Web.Models.Visitor.InfoVisitorModel
 
-@Html.HiddenFor(model => model.Id)
+@Html.HiddenFor(model => model.Id, new { @Value = 0})
 <tr>
     <td colspan="2">
         <h3 class="red">Информация о туристе</h3>

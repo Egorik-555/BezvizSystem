@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BezvizSystem.Web", "BezvizS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BezvizSystem.Pogranec.Web", "BezvizSystem.Pogranec.Web\BezvizSystem.Pogranec.Web.csproj", "{5F2E2224-2E53-4AED-B77F-361BB849FF17}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BezvizSystem.Web.Tests", "BezvizSystem.Web.Tests\BezvizSystem.Web.Tests.csproj", "{33E9C17B-A01D-4ADC-90D6-3ACE79E6284E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{5F2E2224-2E53-4AED-B77F-361BB849FF17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F2E2224-2E53-4AED-B77F-361BB849FF17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F2E2224-2E53-4AED-B77F-361BB849FF17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33E9C17B-A01D-4ADC-90D6-3ACE79E6284E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33E9C17B-A01D-4ADC-90D6-3ACE79E6284E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33E9C17B-A01D-4ADC-90D6-3ACE79E6284E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33E9C17B-A01D-4ADC-90D6-3ACE79E6284E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

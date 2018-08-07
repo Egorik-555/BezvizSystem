@@ -4,6 +4,7 @@ using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Mapper;
 using BezvizSystem.DAL.Entities;
+using BezvizSystem.DAL.Helpers;
 using BezvizSystem.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -42,11 +43,14 @@ namespace BezvizSystem.BLL.Services
         {                   
             var user = await _database.UserManager.FindByNameAsync(username);
             if (user != null)
-            {             
+            {
                 var groups = _database.GroupManager.GetAll().ToList();
 
                 if (user.OperatorProfile.Role.ToUpper() != "ADMIN")
-                    groups = groups.Where(g => g.User.OperatorProfile.UNP == user.OperatorProfile.UNP).ToList();              
+                    groups = groups.Where(g => g.User.OperatorProfile.UNP == user.OperatorProfile.UNP).ToList();
+
+                //in case if all visitors mark to delete
+                groups = groups.Where(g => g.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Remove).Count() < g.Visitors.Count()).ToList();
 
                 var anketaGroup = _mapper.Map<IEnumerable<GroupVisitor>, IEnumerable<AnketaDTO>>(groups);
                 return anketaGroup;

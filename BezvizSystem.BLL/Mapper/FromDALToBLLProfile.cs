@@ -42,9 +42,8 @@ namespace BezvizSystem.BLL.Mapper
                      ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault()));
             CreateMap<VisitorDTO, Visitor>().
                 ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
-                ForMember(dest => dest.Gender, opt => opt.MapFrom(src => database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault())).
-                ForMember(dest => dest.Status, opt => opt.MapFrom(src => database.StatusManager.GetAll().Where(n => n.Name == src.StatusName).FirstOrDefault()));
-
+                ForMember(dest => dest.Gender, opt => opt.MapFrom(src => database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
+               
             CreateMap<GroupVisitor, GroupVisitorDTO>().
                 ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name));
             CreateMap<Visitor, VisitorDTO>().
@@ -63,8 +62,7 @@ namespace BezvizSystem.BLL.Mapper
             CreateMap<BezvizUser, UserDTO>().
                 ForMember(dest => dest.ProfileUser, opt => opt.MapFrom(src => src.OperatorProfile));
             ////
-
-            CreateMap<Status, StatusDTO>();
+        
             CreateMap<Nationality, NationalityDTO>();
             CreateMap<CheckPoint, CheckPointDTO>();
             CreateMap<TypeOfOperation, TypeOfOperationDTO>();
@@ -90,27 +88,22 @@ namespace BezvizSystem.BLL.Mapper
         }
 
         private string CheckAllStatuses(IEnumerable<Visitor> list)
-        {
-            var statuses = _database.StatusManager.GetAll().ToList();
-            var save = statuses.Where(s => s.Code == 1).FirstOrDefault();
-            var send = statuses.Where(s => s.Code == 2).FirstOrDefault();
-            var recieve = statuses.Where(s => s.Code == 3).FirstOrDefault();
-
+        {                   
             int countSave = 0;
             int countSend = 0;
             int countRecieve = 0;
 
             foreach (var item in list)
             {
-                if (item.Status.Code == 1)
+                if (item.StatusOfRecord == StatusOfRecord.Save)
                 {
                     countSave++;
                 }
-                else if (item.Status.Code == 2)
+                else if (item.StatusOfRecord == StatusOfRecord.Send)
                 {
                     countSend++;
                 }
-                else if (item.Status.Code == 3)
+                else if (item.StatusOfRecord == StatusOfRecord.Recd)
                 {
                     countRecieve++;
                 }
@@ -118,13 +111,13 @@ namespace BezvizSystem.BLL.Mapper
 
             if (countSave > 0 && countSave <= list.Count())
             {
-                return save.Name;
+                return "Сохранено";
             }
             else if (countSend > 0 && countSend <= list.Count())
             {
-                return send.Name;
+                return "Передано";
             }
-            else return recieve.Name;
+            else return "Принято";
         }
     }
 
@@ -152,10 +145,10 @@ namespace BezvizSystem.BLL.Mapper
             CreateMap<GroupVisitorDTO, GroupVisitor>().ConstructUsing(v => model).
                 ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => _database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault())).
                 ForMember(d => d.Visitors, opt => opt.Ignore()).
-                AfterMap(async (d, e) => await AddOrUpdateVisitors(d, e));
+                AfterMap((d, e) => AddOrUpdateVisitors(d, e));
         }
 
-        private async Task AddOrUpdateVisitors(GroupVisitorDTO dto, GroupVisitor group)
+        private void AddOrUpdateVisitors(GroupVisitorDTO dto, GroupVisitor group)
         {
 
             var oldVisitors = group.Visitors.ToList();
@@ -163,10 +156,10 @@ namespace BezvizSystem.BLL.Mapper
             {
                 if (dto.Visitors.SingleOrDefault(v => v.Id == visitor.Id) == null)
                 {
-                    if (visitor.Status.Code != 1)
+                    if (visitor.StatusOfRecord != StatusOfRecord.Save)
                     {
                         visitor.StatusOfOperation = StatusOfOperation.Remove;
-                        visitor.Status = await _database.StatusManager.GetByIdAsync(1);
+                        visitor.StatusOfRecord = StatusOfRecord.Save;
                     }
                     else
                     {
@@ -182,7 +175,7 @@ namespace BezvizSystem.BLL.Mapper
                 if (visitorDTO.Id == 0)
                 {
                     visitorDTO.StatusOfOperation = StatusOfOperation.Add;
-                    visitorDTO.StatusName = "Сохранено";
+                    visitorDTO.StatusOfRecord = StatusOfRecord.Save;
                     visitorDTO.DateInSystem = DateTime.Now;
                     visitorDTO.UserInSystem = dto.UserInSystem;
                     group.Visitors.Add(mapperVisitor.Map<Visitor>(visitorDTO));
@@ -194,12 +187,12 @@ namespace BezvizSystem.BLL.Mapper
 
                     if (!oldVisitor.Equals(newVisitor))
                     {
-                        if (oldVisitor.Status.Code != 1)
+                        if (oldVisitor.StatusOfRecord != StatusOfRecord.Save)
                             visitorDTO.StatusOfOperation = StatusOfOperation.Edit;
                         else
                             visitorDTO.StatusOfOperation = StatusOfOperation.Add;
 
-                        visitorDTO.StatusName = "Сохранено";
+                        visitorDTO.StatusOfRecord = StatusOfRecord.Save;
                         visitorDTO.DateEdit = dto.DateEdit;
                         visitorDTO.UserEdit = dto.UserEdit;
                     }

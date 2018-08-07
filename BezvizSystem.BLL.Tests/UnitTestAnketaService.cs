@@ -39,10 +39,10 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(group.CheckPoint == "check1");
             Assert.IsTrue(group.Operator == "AdminTran");
             Assert.IsTrue(group.CountMembers == 2);
-            Assert.IsTrue(group.Status == "status2");
+            Assert.IsTrue(group.Status == "Передано");
 
             Assert.IsTrue(group3.CountMembers == 3);
-            Assert.IsTrue(group3.Status == "status1");
+            Assert.IsTrue(group3.Status == "Сохранено");
         }
 
         [TestMethod]
@@ -52,7 +52,7 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsTrue(anketa.CountMembers == 2);
             Assert.IsTrue(anketa.CheckPoint == "check2");
-            Assert.IsTrue(anketa.Status == "status1");
+            Assert.IsTrue(anketa.Status == "Сохранено");
         }
     }
 }

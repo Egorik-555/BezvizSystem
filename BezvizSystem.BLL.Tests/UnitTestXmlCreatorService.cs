@@ -7,6 +7,7 @@ using BezvizSystem.BLL.Services;
 using BezvizSystem.BLL.Services.XML;
 using BezvizSystem.BLL.Tests.TestServises;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using BezvizSystem.DAL.Helpers;
 
 namespace BezvizSystem.BLL.Tests
 {
@@ -29,9 +30,9 @@ namespace BezvizSystem.BLL.Tests
         [TestMethod]
         public void Test_Save_New_with_one_argument()
         {
-            var visitors1 = _serviceVisitor.GetAll().Where(v => v.StatusName == "status1").ToList();
+            var visitors1 = _serviceVisitor.GetAll().Where(v => v.StatusOfRecord == StatusOfRecord.Save).ToList();
             var result1 = _service.SaveNew("test.xml");
-            var visitors2 = _serviceVisitor.GetAll().Where(v => v.StatusName == "status1").ToList();
+            var visitors2 = _serviceVisitor.GetAll().Where(v => v.StatusOfRecord == StatusOfRecord.Save).ToList();
 
             Assert.IsTrue(visitors1.Count() == 4);
             Assert.IsTrue(visitors2.Count() == 0);
@@ -41,9 +42,9 @@ namespace BezvizSystem.BLL.Tests
         [TestMethod]
         public void Test_Save_Extra_with_one_argument()
         {
-            var visitors1 = _serviceVisitor.GetAll().Where(v => v.StatusName == "status1" && v.Group.ExtraSend).ToList();
+            var visitors1 = _serviceVisitor.GetAll().Where(v => v.StatusOfRecord == StatusOfRecord.Save && v.Group.ExtraSend).ToList();
             var result1 = _service.SaveExtra("test.xml");
-            var visitors2 = _serviceVisitor.GetAll().Where(v => v.StatusName == "status1" && v.Group.ExtraSend).ToList();
+            var visitors2 = _serviceVisitor.GetAll().Where(v => v.StatusOfRecord == StatusOfRecord.Save && v.Group.ExtraSend).ToList();
 
             Assert.IsTrue(visitors1.Count() == 1);
             Assert.IsTrue(visitors2.Count() == 0);

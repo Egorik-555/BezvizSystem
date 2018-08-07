@@ -12,20 +12,12 @@ using BezvizSystem.DAL.Entities.Log;
 namespace BezvizSystem.BLL.Tests
 {
     class TestUnitOfWork : IUnitOfWork
-    {
-        Mock<IRepository<Status, int>> statusManager;
+    {     
         Mock<IRepository<Nationality, int>> nationalityManager;
         Mock<IRepository<CheckPoint, int>> checkPointManager;
         Mock<IRepository<GroupVisitor, int>> groupManger;
         Mock<IRepository<TypeOfOperation, int>> typeOfOperationManger;
         Mock<IRepository<Gender, int>> genderManger;
-
-        List<Status> statuses = new List<Status>
-        {
-            new Status{ Code = 1, Name = "Status1", Active = true},
-            new Status{ Code = 2, Name = "Status2"},
-            new Status{ Code = 3, Name = "Status3", Active = true}
-        };
 
         List<TypeOfOperation> operations = new List<TypeOfOperation>
         {
@@ -59,21 +51,12 @@ namespace BezvizSystem.BLL.Tests
         };
 
         public TestUnitOfWork()
-        {
-            statusManager = new Mock<IRepository<Status, int>>();
-            statusManager.Setup(m => m.GetAll()).Returns(statuses);
-
+        {         
             nationalityManager = new Mock<IRepository<Nationality, int>>();
             nationalityManager.Setup(m => m.GetAll()).Returns(nationalities);
 
             checkPointManager = new Mock<IRepository<CheckPoint, int>>();
             checkPointManager.Setup(m => m.GetAll()).Returns(checkPoints);
-
-            //typeOfOperation = new Mock<IRepository<CheckPoint, int>>();
-            //checkPointManager.Setup(m => m.GetAll()).Returns(checkPoints);
-
-            //checkPointManager = new Mock<IRepository<CheckPoint, int>>();
-            //checkPointManager.Setup(m => m.GetAll()).Returns(checkPoints);
 
             groupManger = new Mock<IRepository<GroupVisitor, int>>();
             groupManger.Setup(m => m.GetAll()).Returns(groups);
@@ -88,7 +71,6 @@ namespace BezvizSystem.BLL.Tests
         public IRepository<UserActivity, int> UserActivities => throw new NotImplementedException();
 
         //Dictionaries
-        public IRepository<Status, int> StatusManager => statusManager.Object;
         public IRepository<Nationality, int> NationalityManager => nationalityManager.Object;
         public IRepository<CheckPoint, int> CheckPointManager => checkPointManager.Object;
         public IRepository<TypeOfOperation, int> TypeOfOperations => throw new NotImplementedException();

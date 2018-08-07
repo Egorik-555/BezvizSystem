@@ -4,6 +4,7 @@ using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.BLL.Interfaces.XML;
 using BezvizSystem.BLL.Mapper.XML;
 using BezvizSystem.DAL.Entities;
+using BezvizSystem.DAL.Helpers;
 using BezvizSystem.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -27,24 +28,23 @@ namespace BezvizSystem.BLL.Services.XML
 
         private IEnumerable<ModelForXmlToPogran> GetNewItems()
         {
-            var visitors = _database.VisitorManager.GetAll().ToList().Where(v => v.Status.Code == 1);
+            var visitors = _database.VisitorManager.GetAll().ToList().Where(v => v.StatusOfRecord == StatusOfRecord.Save);
             return _mapper.Map<IEnumerable<Visitor>, IEnumerable<ModelForXmlToPogran>>(visitors);
         }
 
         private IEnumerable<ModelForXmlToPogran> GetExtraNewItems()
         {
-            var visitors = _database.VisitorManager.GetAll().ToList().Where(v => v.Status.Code == 1).Where(v => v.Group.ExtraSend);
+            var visitors = _database.VisitorManager.GetAll().ToList().Where(v => v.StatusOfRecord == StatusOfRecord.Save).Where(v => v.Group.ExtraSend);
             return _mapper.Map<IEnumerable<Visitor>, IEnumerable<ModelForXmlToPogran>>(visitors);
         }
 
-        private void EditStatus(int codeOld, int codeNew)
+        private void EditStatus(StatusOfRecord codeOld, StatusOfRecord codeNew)
         {
-            var visitors = _database.VisitorManager.GetAll().Where(v => v.Status.Code == codeOld).ToList();
+            var visitors = _database.VisitorManager.GetAll().Where(v => v.StatusOfRecord == codeOld).ToList();
 
             foreach(var item in visitors)
-            {
-                var status = _database.StatusManager.GetAll().Where(s => s.Code == codeNew).FirstOrDefault();
-                item.Status = status;
+            {              
+                item.StatusOfRecord = codeNew;
                 _database.VisitorManager.Update(item);
             }
         }
@@ -86,7 +86,7 @@ namespace BezvizSystem.BLL.Services.XML
                 XDocument xDoc = CreadeDoc(list);
                 xDoc.Save(name, options);
                 //mark item unloaded
-                EditStatus(codeOld: 1, codeNew: 2);
+                EditStatus(StatusOfRecord.Save, StatusOfRecord.Send);
            
                 return new OperationDetails(true, "XML файл создан", "");
             }
@@ -107,7 +107,7 @@ namespace BezvizSystem.BLL.Services.XML
                 XDocument xDoc = CreadeDoc(list);
                 xDoc.Save(name, options);
                 //mark item unloaded
-                EditStatus(codeOld: 1, codeNew: 2);
+                EditStatus(StatusOfRecord.Save, StatusOfRecord.Send);
 
                 return new OperationDetails(true, "XML файл создан", "");
             }
