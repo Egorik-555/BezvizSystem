@@ -22,39 +22,28 @@ namespace BezvizSystem.Web.Controllers
     public class AnketaController : Controller
     {
         IMapper mapper;
-        private IService<AnketaDTO> AnketaService
-        {
-            get { return HttpContext.GetOwinContext().Get<IService<AnketaDTO>>(); }
-        }
+        private IService<AnketaDTO> _anketaService;
+        private IService<GroupVisitorDTO> _groupService;
+        private IDictionaryService<CheckPointDTO> _checkPointService;
+        private IDictionaryService<NationalityDTO> _nationalityService;
+        private IDictionaryService<GenderDTO> _genderService;
 
-        private IService<GroupVisitorDTO> GroupService
+        public AnketaController(IService<AnketaDTO> anketaService, IService<GroupVisitorDTO> groupService,
+                                IDictionaryService<CheckPointDTO> checkPointService, IDictionaryService<NationalityDTO> nationalityService,
+                                IDictionaryService<GenderDTO> genderService)
         {
-            get { return HttpContext.GetOwinContext().Get<IService<GroupVisitorDTO>>(); }
-        }
+            _anketaService = anketaService;
+            _groupService = groupService;
+            _checkPointService = checkPointService;
+            _nationalityService = nationalityService;
+            _genderService = genderService;
 
-        private IDictionaryService<CheckPointDTO> CheckPointService
-        {
-            get { return HttpContext.GetOwinContext().Get<IDictionaryService<CheckPointDTO>>(); }
-        }
-
-        private IDictionaryService<NationalityDTO> NationalityService
-        {
-            get { return HttpContext.GetOwinContext().Get<IDictionaryService<NationalityDTO>>(); }
-        }
-
-        private IDictionaryService<GenderDTO> GenderService
-        {
-            get { return HttpContext.GetOwinContext().Get<IDictionaryService<GenderDTO>>(); }
-        }
-
-        public AnketaController()
-        {       
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
     
         public async Task<ActionResult> Index()
         {
-            var anketas = await AnketaService.GetForUserAsync(User.Identity.Name);
+            var anketas = await _anketaService.GetForUserAsync(User.Identity.Name);
             var model = mapper.Map<IEnumerable<AnketaDTO>, IEnumerable<ViewAnketaModel>>(anketas.OrderBy(m => m.DateArrival));
             return View(model);
         }
@@ -62,7 +51,7 @@ namespace BezvizSystem.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> InExcel()
         {         
-            var anketas = await AnketaService.GetForUserAsync(User.Identity.Name);
+            var anketas = await _anketaService.GetForUserAsync(User.Identity.Name);
 
             //список всех туристов
             var visitors = new List<ViewAnketaExcel>();
@@ -90,7 +79,7 @@ namespace BezvizSystem.Web.Controllers
 
         public async Task<ActionResult> Edit(int id)
         {
-            var group = await GroupService.GetByIdAsync(id);
+            var group = await _groupService.GetByIdAsync(id);
             if (group == null)
             {
                 return RedirectToAction("Index");
@@ -122,7 +111,7 @@ namespace BezvizSystem.Web.Controllers
                 else model.ExtraSend = false;
 
                 var visitor = mapper.Map<EditVisitorModel, GroupVisitorDTO>(model);
-                var result = await GroupService.Update(visitor);
+                var result = await _groupService.Update(visitor);
 
                 if (result.Succedeed)
                 {
@@ -147,7 +136,7 @@ namespace BezvizSystem.Web.Controllers
                 else model.ExtraSend = false;
 
                 var group = mapper.Map<EditGroupModel, GroupVisitorDTO>(model);
-                var result = await GroupService.Update(group);
+                var result = await _groupService.Update(group);
 
                 if (result.Succedeed)
                 {
@@ -164,7 +153,7 @@ namespace BezvizSystem.Web.Controllers
 
         public async Task<ActionResult> Delete(int id)
         {
-            var group = await GroupService.GetByIdAsync(id);
+            var group = await _groupService.GetByIdAsync(id);
             if (group == null)
                 return RedirectToAction("Index");
 
@@ -176,27 +165,27 @@ namespace BezvizSystem.Web.Controllers
         public async Task<ActionResult> Delete(ViewAnketaModel model)
         {
             var group = mapper.Map<ViewAnketaModel, GroupVisitorDTO>(model);
-            await GroupService.Delete(group.Id);
+            await _groupService.Delete(group.Id);
             return RedirectToAction("Index");
         }
 
         private SelectList CheckPoints()
         {
-            List<string> list = new List<string>(CheckPointService.Get().Select(c => c.Name));
+            List<string> list = new List<string>(_checkPointService.Get().Select(c => c.Name));
             list.Insert(0, "");
             return new SelectList(list, "");
         }
 
         private SelectList Nationalities()
         {
-            List<string> list = new List<string>(NationalityService.Get().Select(c => c.Name));
+            List<string> list = new List<string>(_nationalityService.Get().Select(c => c.Name));
             list.Insert(0, "");
             return new SelectList(list, "");
         }
 
         private SelectList Gender()
         {
-            List<string> list = new List<string>(GenderService.Get().Select(c => c.Name));
+            List<string> list = new List<string>(_genderService.Get().Select(c => c.Name));
             list.Insert(0, "");
             return new SelectList(list, "");
         }

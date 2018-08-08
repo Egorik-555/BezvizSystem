@@ -16,16 +16,13 @@ namespace BezvizSystem.Web.Controllers
 {
     [Authorize(Roles = "admin")]
     public class OperatorController : Controller
-    {     
-        IUserService UserService
-        {
-            get { return HttpContext.GetOwinContext().Get<IUserService>(); }
-        }
-
+    {
+        IUserService _userService;
         IMapper _mapper;
 
-        public OperatorController()
-        {        
+        public OperatorController(IUserService userService)
+        {
+            _userService = userService;
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
 
@@ -42,7 +39,7 @@ namespace BezvizSystem.Web.Controllers
 
         public ActionResult DataOperators(string id)
         {
-            var usersDto = UserService.GetByRole("operator").OrderByDescending(m => m.ProfileUser.DateInSystem);
+            var usersDto = _userService.GetByRole("operator").OrderByDescending(m => m.ProfileUser.DateInSystem);
             var model = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<ViewOperatorModel>>(usersDto);         
             if (!string.IsNullOrEmpty(id))
             {
@@ -65,7 +62,7 @@ namespace BezvizSystem.Web.Controllers
                 var userProfile = _mapper.Map<CreateOperatorModel, ProfileUserDTO>(model);
                 user.ProfileUser = userProfile;
 
-                var result = await UserService.Create(user);
+                var result = await _userService.Create(user);
                 if (result.Succedeed)
                     return RedirectToAction("Index");
                 else
@@ -78,7 +75,7 @@ namespace BezvizSystem.Web.Controllers
 
         public async Task<ActionResult> Delete(string id)
         {
-            var user = await UserService.GetByIdAsync(id);         
+            var user = await _userService.GetByIdAsync(id);         
             if (user == null)
                 return RedirectToAction("Index");
        
@@ -91,13 +88,13 @@ namespace BezvizSystem.Web.Controllers
         {          
             var user = _mapper.Map<DeleteOperatorModel, UserDTO>(model);
 
-            await UserService.Delete(user);
+            await _userService.Delete(user);
             return RedirectToAction("Index");
         }
 
         public async Task<ActionResult> Edit(string id)
         {
-            var user = await UserService.GetByIdAsync(id);
+            var user = await _userService.GetByIdAsync(id);
             if (user == null)
                 return RedirectToAction("Index");
             var model = _mapper.Map<UserDTO, EditOperatorModel>(user);
@@ -113,7 +110,7 @@ namespace BezvizSystem.Web.Controllers
                 var userProfile = _mapper.Map<EditOperatorModel, ProfileUserDTO>(model);
                 user.ProfileUser = userProfile;
 
-                var result = await UserService.Update(user);
+                var result = await _userService.Update(user);
                 if (result.Succedeed)
                     return RedirectToAction("Index");
                 else

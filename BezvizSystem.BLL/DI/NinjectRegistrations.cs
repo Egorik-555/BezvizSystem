@@ -1,4 +1,5 @@
 ﻿using BezvizSystem.BLL.DTO;
+using BezvizSystem.BLL.DTO.Dictionary;
 using BezvizSystem.BLL.DTO.Log;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Interfaces.XML;
@@ -19,11 +20,19 @@ namespace BezvizSystem.BLL.DI
         {
             Bind<IUnitOfWork>().To<IdentityUnitOfWork>().WithConstructorArgument("connection", CONNECTION);
             Bind<IUserService>().To<UserService>();
+
+            Bind<IService<VisitorDTO>>().To<VisitorService>();
+            Bind<IService<GroupVisitorDTO>>().To<GroupService>();
             Bind<IService<AnketaDTO>>().To<AnketaService>();
+
+            Bind<IDictionaryService<CheckPointDTO>>().To<DictionaryService<CheckPointDTO>>();
+            Bind<IDictionaryService<NationalityDTO>>().To<DictionaryService<NationalityDTO>>();
+            Bind<IDictionaryService<GenderDTO>>().To<DictionaryService<GenderDTO>>();
+
             Bind<IXmlCreator>().To<XmlCreatorPogran>();
             Bind<ILogger<UserActivityDTO>>().To<ActivityLoggerService>();
             Bind<IReport>().To<ReportService>();
-            Unbind<ModelValidatorProvider>();
+            //Unbind<ModelValidatorProvider>();
         }
     }
 }

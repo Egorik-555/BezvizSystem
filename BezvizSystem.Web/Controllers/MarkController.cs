@@ -17,29 +17,21 @@ namespace BezvizSystem.Web.Controllers
     public class MarkController : Controller
     {
         IMapper mapper;
-        private IService<AnketaDTO> AnketaService
-        {
-            get { return HttpContext.GetOwinContext().Get<IService<AnketaDTO>>(); }
-        }
+        private IService<AnketaDTO> _anketaService;
+        private IService<GroupVisitorDTO> _groupService;
+        private IService<VisitorDTO> _visitorService;
 
-        private IService<GroupVisitorDTO> GroupService
+        public MarkController(IService<AnketaDTO> anketaService, IService<GroupVisitorDTO> groupService, IService<VisitorDTO> visitorService)
         {
-            get { return HttpContext.GetOwinContext().Get<IService<GroupVisitorDTO>>(); }
-        }
-
-        private IService<VisitorDTO> VisitorService
-        {
-            get { return HttpContext.GetOwinContext().Get<IService<VisitorDTO>>(); }
-        }
-
-        public MarkController()
-        {
+            _anketaService = anketaService;
+            _groupService = groupService;
+            _visitorService = visitorService;
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }   
         
         public async Task<ActionResult> Index()
         {
-            var anketas = await AnketaService.GetForUserAsync(User.Identity.Name);
+            var anketas = await _anketaService.GetForUserAsync(User.Identity.Name);
             var model = mapper.Map<IEnumerable<AnketaDTO>, IEnumerable<ViewMarkModel>>(anketas);
             return View(model);
         }
@@ -49,7 +41,7 @@ namespace BezvizSystem.Web.Controllers
             if (id != null)
             {
 
-                var group = await GroupService.GetByIdAsync(id.Value);
+                var group = await _groupService.GetByIdAsync(id.Value);
                 if (group == null)
                 {
                     return RedirectToAction("Index");
@@ -67,11 +59,11 @@ namespace BezvizSystem.Web.Controllers
         {
             if (id.HasValue)
             {
-                var visitor = await VisitorService.GetByIdAsync(id.Value);
+                var visitor = await _visitorService.GetByIdAsync(id.Value);
                 if (visitor != null)
                 {
                     visitor.Arrived = arrived;
-                    var result = await VisitorService.Update(visitor);
+                    var result = await _visitorService.Update(visitor);
                 }
           
             }

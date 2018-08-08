@@ -30,6 +30,20 @@ namespace BezvizSystem.BLL.DTO
         public string UserInSystem { get; set; }
         public DateTime? DateEdit { get; set; }
         public string UserEdit { get; set; }
-      
+
+        public override bool Equals(object obj)
+        {
+            var visitor = obj as VisitorDTO;
+            if (visitor == null) return false;
+
+            if (visitor.Id != this.Id) return false;
+
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
     }
 }

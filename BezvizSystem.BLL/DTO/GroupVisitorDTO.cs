@@ -51,5 +51,20 @@ namespace BezvizSystem.BLL.DTO
         public string UserInSystem { get; set; }
         public DateTime? DateEdit { get; set; }
         public string UserEdit { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            var group = obj as GroupVisitorDTO;
+            if (group == null) return false;
+
+            if (group.Id != this.Id) return false;
+
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
     }
 }
