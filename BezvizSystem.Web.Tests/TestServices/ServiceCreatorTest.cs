@@ -36,7 +36,7 @@ namespace BezvizSystem.Web.Tests.TestServices
         NationalityDTO nat4 = new NationalityDTO { Id = 4, Code = 4, Name = "nat4", ShortName = "n4", Active = true };
 
         IList<VisitorDTO> listVisitors;
-
+        IList<GroupVisitorDTO> listGroups;
 
         public IDictionaryService<CheckPointDTO> CreateCheckPointService(string connection)
         {
@@ -68,17 +68,71 @@ namespace BezvizSystem.Web.Tests.TestServices
         public IService<VisitorDTO> CreateVisitorService(string connection)
         {
             listVisitors = new List<VisitorDTO>();
-            Mock<IService<VisitorDTO>> gender = new Mock<IService<VisitorDTO>>();
-            gender.Setup(m => m.GetAll()).Returns(listVisitors);
+            Mock<IService<VisitorDTO>> visitor = new Mock<IService<VisitorDTO>>();
+            visitor.Setup(m => m.GetAll()).Returns(listVisitors);
 
-            gender.Setup(m => m.Create(It.IsAny<VisitorDTO>())).Returns<VisitorDTO>(v =>
-                                                                    Task.FromResult<OperationDetails>(Task.Run(() => listVisitors.Add(v) )));
+            visitor.Setup(m => m.Create(It.IsAny<VisitorDTO>())).Returns<VisitorDTO>(v => Task.FromResult(new Func<OperationDetails>(() =>
+            {
+                listVisitors.Add(v);
+                return new OperationDetails(true, "test create visitor", "");
+            }).Invoke()));
 
+            visitor.Setup(m => m.Delete(It.IsAny<int>())).Returns<int>(id => Task.FromResult(new Func<OperationDetails>(() =>
+            {
+                var removeVisitor = listVisitors.Where(vis => vis.Id == id).FirstOrDefault();
+                if (removeVisitor == null) return new OperationDetails(false, "test visitor not found", "");
+                listVisitors.Remove(removeVisitor);
+                return new OperationDetails(true, "test delete visito", "");
+            }).Invoke()));
+
+            visitor.Setup(m => m.Update(It.IsAny<VisitorDTO>())).Returns<VisitorDTO>(v => Task.FromResult(new Func<OperationDetails>(() =>
+            {
+                var removeVisitor = listVisitors.Where(vis => vis.Id == v.Id).FirstOrDefault();
+                if (removeVisitor == null) return new OperationDetails(false, "test visitor not found", "");
+                listVisitors.Remove(removeVisitor);
+                listVisitors.Add(v);
+                return new OperationDetails(true, "test update visitor", "");
+
+            }).Invoke()));
+
+            return visitor.Object;
         }
 
         public IService<GroupVisitorDTO> CreateGroupService(string connection)
         {
-            throw new NotImplementedException();
+            listGroups = new List<GroupVisitorDTO>();
+            Mock<IService<GroupVisitorDTO>> visitor = new Mock<IService<GroupVisitorDTO>>();
+            visitor.Setup(m => m.GetAll()).Returns(listGroups);
+
+            visitor.Setup(m => m.Create(It.IsAny<GroupVisitorDTO>())).Returns<GroupVisitorDTO>(g => Task.FromResult(new Func<OperationDetails>(() =>
+            {
+                listGroups.Add(g);
+                foreach (VisitorDTO v in g.Visitors) listVisitors.Add(v);
+                return new OperationDetails(true, "test create group", "");
+            }).Invoke()));
+
+            visitor.Setup(m => m.Delete(It.IsAny<int>())).Returns<int>(id => Task.FromResult(new Func<OperationDetails>(() =>
+            {
+                var removeGroup = listGroups.Where(g => g.Id == id).FirstOrDefault();
+                if (removeGroup == null) return new OperationDetails(false, "test group not found", "");
+                foreach (VisitorDTO v in g.Visitors) listVisitors.Remove(v);
+                listGroups.Remove(removeGroup);
+                return new OperationDetails(true, "test delete group", "");
+            }).Invoke()));
+
+            visitor.Setup(m => m.Update(It.IsAny<GroupVisitorDTO>())).Returns<GroupVisitorDTO>(g => Task.FromResult(new Func<OperationDetails>(() =>
+            {
+                var removeGroup = listGroups.Where(gr => gr.Id == g.Id).FirstOrDefault();
+                if (removeGroup == null) return new OperationDetails(false, "test group not found", "");
+                foreach (VisitorDTO v in g.Visitors) listVisitors.Remove(v);
+                listGroups.Remove(removeGroup);
+                foreach (VisitorDTO v in g.Visitors) listVisitors.Add(v);
+                listGroups.Add(g);
+                return new OperationDetails(true, "test update group", "");
+
+            }).Invoke()));
+
+            return visitor.Object;
         }
 
     

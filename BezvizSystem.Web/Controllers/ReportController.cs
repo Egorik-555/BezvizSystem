@@ -16,15 +16,13 @@ namespace BezvizSystem.Web.Controllers
     [Authorize(Roles = "admin, operator")]
     public class ReportController : Controller
     {
-        private IReport _reportService
-        {
-            get { return HttpContext.GetOwinContext().Get<IReport>(); }
-        }
+        private IReport _reportService;
 
         IMapper _mapper;
 
-        public ReportController()
+        public ReportController(IReport reportService)
         {
+            _reportService = reportService;
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();         
         }
 

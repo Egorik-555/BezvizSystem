@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Threading.Tasks;
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.Interfaces;
@@ -21,22 +22,22 @@ namespace BezvizSystem.Web.App_Start
 {
     public class Startup
     {
-        IServiceCreator serviceCreator = new ServiceCreator();
-        string CONNECTION = "BezvizContext";
+        //IServiceCreator serviceCreator = new ServiceCreator();
+        //string CONNECTION = "BezvizContext";
 
         public void Configuration(IAppBuilder app)
         {
-            app.CreatePerOwinContext<BezvizContext>(CreateContext);
-            app.CreatePerOwinContext<IUserService>(CreateUserService);
-            app.CreatePerOwinContext<BezvizUserManager>(BezvizUserManager.Create);
+            //app.CreatePerOwinContext<BezvizContext>(CreateContext);
+            //app.CreatePerOwinContext<IUserService>(CreateUserService);
+            //app.CreatePerOwinContext<BezvizUserManager>(BezvizUserManager.Create);
 
-            app.CreatePerOwinContext<IService<VisitorDTO>>(CreateVisitorService);
-            app.CreatePerOwinContext<IService<GroupVisitorDTO>>(CreateGroupService);
-            app.CreatePerOwinContext<IService<AnketaDTO>>(CreateAnketaService);          
-            app.CreatePerOwinContext<IDictionaryService<CheckPointDTO>>(CreateCheckPointService);
-            app.CreatePerOwinContext<IDictionaryService<NationalityDTO>>(CreateNationalityService);
-            app.CreatePerOwinContext<IDictionaryService<GenderDTO>>(CreateGenderService);
-            app.CreatePerOwinContext<IReport>(CreateReportService);
+            //app.CreatePerOwinContext<IService<VisitorDTO>>(CreateVisitorService);
+            //app.CreatePerOwinContext<IService<GroupVisitorDTO>>(CreateGroupService);
+            //app.CreatePerOwinContext<IService<AnketaDTO>>(CreateAnketaService);          
+            //app.CreatePerOwinContext<IDictionaryService<CheckPointDTO>>(CreateCheckPointService);
+            //app.CreatePerOwinContext<IDictionaryService<NationalityDTO>>(CreateNationalityService);
+            //app.CreatePerOwinContext<IDictionaryService<GenderDTO>>(CreateGenderService);
+            //app.CreatePerOwinContext<IReport>(CreateReportService);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
@@ -45,49 +46,49 @@ namespace BezvizSystem.Web.App_Start
             });
         }
 
-        private IUserService CreateUserService()
-        {
-            return serviceCreator.CreateUserService(CONNECTION);
-        }
+        //private IUserService CreateUserService()
+        //{
+        //    return serviceCreator.CreateUserService(CONNECTION);
+        //}
 
-        private BezvizContext CreateContext()
-        {
-            return serviceCreator.CreateContext(CONNECTION);
-        }
+        //private BezvizContext CreateContext()
+        //{
+        //    return serviceCreator.CreateContext(CONNECTION);
+        //}
 
-        private IService<VisitorDTO> CreateVisitorService()
-        {
-            return serviceCreator.CreateVisitorService(CONNECTION);
-        }
+        //private IService<VisitorDTO> CreateVisitorService()
+        //{
+        //    return serviceCreator.CreateVisitorService(CONNECTION);
+        //}
 
-        private IService<GroupVisitorDTO> CreateGroupService()
-        {
-            return serviceCreator.CreateGroupService(CONNECTION);
-        }
+        //private IService<GroupVisitorDTO> CreateGroupService()
+        //{
+        //    return serviceCreator.CreateGroupService(CONNECTION);
+        //}
 
-        private IService<AnketaDTO> CreateAnketaService()
-        {
-            return serviceCreator.CreateAnketaService(CONNECTION);
-        }     
+        //private IService<AnketaDTO> CreateAnketaService()
+        //{
+        //    return serviceCreator.CreateAnketaService(CONNECTION);
+        //}     
 
-        private IDictionaryService<NationalityDTO> CreateNationalityService()
-        {
-            return serviceCreator.CreateNationalityService(CONNECTION);
-        }
+        //private IDictionaryService<NationalityDTO> CreateNationalityService()
+        //{
+        //    return serviceCreator.CreateNationalityService(CONNECTION);
+        //}
 
-        private IDictionaryService<CheckPointDTO> CreateCheckPointService()
-        {
-            return serviceCreator.CreateCheckPointService(CONNECTION);
-        }
+        //private IDictionaryService<CheckPointDTO> CreateCheckPointService()
+        //{
+        //    return serviceCreator.CreateCheckPointService(CONNECTION);
+        //}
 
-        private IDictionaryService<GenderDTO> CreateGenderService()
-        {
-            return serviceCreator.CreateGenderService(CONNECTION);
-        }
+        //private IDictionaryService<GenderDTO> CreateGenderService()
+        //{
+        //    return serviceCreator.CreateGenderService(CONNECTION);
+        //}
 
-        private IReport CreateReportService()
-        {
-            return serviceCreator.CreateReport(CONNECTION);
-        }
+        //private IReport CreateReportService()
+        //{
+        //    return serviceCreator.CreateReport(CONNECTION);
+        //}
     }
 }

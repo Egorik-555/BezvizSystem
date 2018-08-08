@@ -18,30 +18,20 @@ namespace BezvizSystem.Web.Controllers
     [Authorize(Roles = "admin, operator")]
     public class GroupController : Controller
     {
-        private IService<GroupVisitorDTO> GroupService
-        {
-            get { return HttpContext.GetOwinContext().Get<IService<GroupVisitorDTO>>(); }
-        }
-
-        private IDictionaryService<CheckPointDTO> CheckPointService
-        {
-            get { return HttpContext.GetOwinContext().Get<IDictionaryService<CheckPointDTO>>(); }
-        }
-
-        private IDictionaryService<NationalityDTO> NationalityService
-        {
-            get { return HttpContext.GetOwinContext().Get<IDictionaryService<NationalityDTO>>(); }
-        }
-
-        private IDictionaryService<GenderDTO> GenderService
-        {
-            get { return HttpContext.GetOwinContext().Get<IDictionaryService<GenderDTO>>(); }
-        }
+        private IService<GroupVisitorDTO> _groupService;
+        private IDictionaryService<CheckPointDTO> _checkPointService;
+        private IDictionaryService<NationalityDTO> _nationalityService;
+        private IDictionaryService<GenderDTO> _genderService;
 
         IMapper mapper;
 
-        public GroupController()
+        public GroupController(IService<GroupVisitorDTO> groupService, IDictionaryService<CheckPointDTO> checkPointService,
+                               IDictionaryService<NationalityDTO> nationalityService, IDictionaryService<GenderDTO> genderService)
         {
+            _groupService = groupService;
+            _checkPointService = checkPointService;
+            _nationalityService = nationalityService;
+            _genderService = genderService;
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
 
@@ -63,7 +53,7 @@ namespace BezvizSystem.Web.Controllers
             {
                 var group = mapper.Map<CreateGroupModel, GroupVisitorDTO>(model);
                 
-                var result = await GroupService.Create(group);
+                var result = await _groupService.Create(group);
                 if (result.Succedeed)
                 {
                     return RedirectToAction("Index", "Home");
@@ -78,21 +68,21 @@ namespace BezvizSystem.Web.Controllers
 
         private SelectList CheckPoints()
         {
-            List<string> list = new List<string>(CheckPointService.Get().Select(c => c.Name));
+            List<string> list = new List<string>(_checkPointService.Get().Select(c => c.Name));
             list.Insert(0, "");
             return new SelectList(list, "");
         }
 
         private SelectList Nationalities()
         {
-            List<string> list = new List<string>(NationalityService.Get().Select(c => c.Name));
+            List<string> list = new List<string>(_nationalityService.Get().Select(c => c.Name));
             list.Insert(0, "");
             return new SelectList(list, "");
         }
 
         private SelectList Gender()
         {
-            List<string> list = new List<string>(GenderService.Get().Select(c => c.Name));
+            List<string> list = new List<string>(_genderService.Get().Select(c => c.Name));
             list.Insert(0, "");
             return new SelectList(list, "");
         }

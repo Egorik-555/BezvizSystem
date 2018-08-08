@@ -18,34 +18,20 @@ namespace BezvizSystem.Web.Controllers
     public class VisitorController : Controller
     {
 
-        public IService<GroupVisitorDTO> GroupService
-        {
-            get { return HttpContext.GetOwinContext().Get<IService<GroupVisitorDTO>>(); }
-            set { GroupService = value; }
-        }
-
-        public IDictionaryService<CheckPointDTO> CheckPointService
-        {
-            get { return HttpContext.GetOwinContext().Get<IDictionaryService<CheckPointDTO>>(); }
-            set { CheckPointService = value; }
-        }
-
-        public IDictionaryService<NationalityDTO> NationalityService
-        {
-            get { return HttpContext.GetOwinContext().Get<IDictionaryService<NationalityDTO>>(); }
-            set { NationalityService = value; }
-        }
-
-        public IDictionaryService<GenderDTO> GenderService
-        {
-            get { return HttpContext.GetOwinContext().Get<IDictionaryService<GenderDTO>>(); }
-            set { GenderService = value; }
-        }
+        private IService<GroupVisitorDTO> _groupService;
+        private IDictionaryService<CheckPointDTO> _checkPointService;
+        private IDictionaryService<NationalityDTO> _nationalityService;
+        private IDictionaryService<GenderDTO> _genderService;
 
         IMapper mapper;
 
-        public VisitorController()
-        {       
+        public VisitorController(IService<GroupVisitorDTO> groupService, IDictionaryService<CheckPointDTO> checkPointService,
+                                 IDictionaryService<NationalityDTO> nationalityService, IDictionaryService<GenderDTO> genderService)
+        {
+            _groupService = groupService;
+            _checkPointService = checkPointService;
+            _nationalityService = nationalityService;
+            _genderService = genderService;
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
 
@@ -63,7 +49,7 @@ namespace BezvizSystem.Web.Controllers
             if (ModelState.IsValid)
             {
                 var visitor = mapper.Map<CreateVisitorModel, GroupVisitorDTO>(model);
-                var result = await GroupService.Create(visitor);
+                var result = await _groupService.Create(visitor);
 
                 if (result.Succedeed)
                 {
@@ -79,21 +65,21 @@ namespace BezvizSystem.Web.Controllers
 
         private SelectList CheckPoints()
         {
-            List<string> list = new List<string>(CheckPointService.Get().Select(c => c.Name));
+            List<string> list = new List<string>(_checkPointService.Get().Select(c => c.Name));
             list.Insert(0, "");
             return new SelectList(list, "");
         }
 
         private SelectList Nationalities()
         {
-            List<string> list = new List<string>(NationalityService.Get().Select(c => c.Name));
+            List<string> list = new List<string>(_nationalityService.Get().Select(c => c.Name));
             list.Insert(0, "");
             return new SelectList(list, "");
         }
 
         private SelectList Gender()
         {
-            List<string> list = new List<string>(GenderService.Get().Select(c => c.Name));
+            List<string> list = new List<string>(_genderService.Get().Select(c => c.Name));
             list.Insert(0, "");
             return new SelectList(list, "");
         }

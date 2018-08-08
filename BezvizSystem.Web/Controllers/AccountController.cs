@@ -17,10 +17,8 @@ namespace BezvizSystem.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private IUserService Service
-        {
-            get { return HttpContext.GetOwinContext().Get<IUserService>(); }
-        }
+        private IUserService _service;
+
 
         private IAuthenticationManager Authentication
         {
@@ -32,7 +30,12 @@ namespace BezvizSystem.Web.Controllers
             get { return HttpContext.GetOwinContext().GetUserManager<BezvizUserManager>(); }
         }
 
-       
+        public AccountController(IUserService service)
+        {
+            _service = service;
+        }
+
+      
         public ActionResult Register()
         {
             return View();
@@ -43,7 +46,7 @@ namespace BezvizSystem.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await Service.GetByNameAsync(model.UNP);
+                var user = await _service.GetByNameAsync(model.UNP);
                 if (user == null)
                 {
                     ModelState.AddModelError("", "Туроператор с УНП - " + model.UNP + " не найден");
@@ -60,8 +63,8 @@ namespace BezvizSystem.Web.Controllers
                             var callbackUrl = Url.Action("ConfirmEmail", "Account", new { token = user.Id, email = user.Email },
                                                           protocol: Request.Url.Scheme);
 
-                            Service.ManagerForChangePass = UserManager;
-                            var result = await Service.Registrate(user, callbackUrl, new SimpleGeneratePass());
+                            _service.ManagerForChangePass = UserManager;
+                            var result = await _service.Registrate(user, callbackUrl, new SimpleGeneratePass());
 
                             if (result.Succedeed)
                                 return View("ConfirmEmail");
@@ -90,14 +93,14 @@ namespace BezvizSystem.Web.Controllers
         {
             if (token == null || email == null)
                 return RedirectToAction("Index", "Home");
-            var user = await Service.GetByIdAsync(token);
+            var user = await _service.GetByIdAsync(token);
 
             if (user != null)
             {
                 if (user.Email == email)
                 {
                     user.EmailConfirmed = true;
-                    await Service.Update(user);
+                    await _service.Update(user);
                 }
             }
             return RedirectToAction("Login");
@@ -117,10 +120,10 @@ namespace BezvizSystem.Web.Controllers
                 await SetInitDataAsync();
 
                 UserDTO user = new UserDTO { UserName = model.Name, Password = model.Password };
-                var claim = await Service.Authenticate(user);
+                var claim = await _service.Authenticate(user);
                 if (claim != null)
                 {
-                    var findUser = await Service.GetByNameAsync(user.UserName);
+                    var findUser = await _service.GetByNameAsync(user.UserName);
 
                     if (findUser.ProfileUser.Active)
                     {
@@ -170,7 +173,7 @@ namespace BezvizSystem.Web.Controllers
             };
 
             var roles = new List<string> { "admin", "operator" };
-            await Service.SetInitialData(user, roles);
+            await _service.SetInitialData(user, roles);
         }
     }
 }
