@@ -125,19 +125,12 @@ table.second form.pad_cent_red {
     font-weight: bold;
     text-transform: uppercase;
     font-size: 15px;
-    text-decoration: none;
 }
-a.simply_form_red {
-    padding: 20px 10px;
-}
-.visitor_str:hover{
-    background: rgba(10,146,0,0.6);
-    cursor:pointer;
-}
+
 .pad_cent {
     width: 208px;
     height: 55px;
-    white-space: inherit;
+    white-space:inherit;
     background-color: #fff;
     color: #313131;
     border: 1px solid #313131;
@@ -153,6 +146,7 @@ a.simply_form_red {
     width: 208px;
     background-color: #0a9200;
     color: #fff;
+    ;
     border: 1px solid #0a9200;
     line-height: 19px;
     padding: 6px;
