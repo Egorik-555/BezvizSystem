@@ -16,8 +16,8 @@ namespace BezvizSystem.BLL.Tests
         Mock<IRepository<Nationality, int>> nationalityManager;
         Mock<IRepository<CheckPoint, int>> checkPointManager;
         Mock<IRepository<GroupVisitor, int>> groupManger;
-        Mock<IRepository<TypeOfOperation, int>> typeOfOperationManger;
-        Mock<IRepository<Gender, int>> genderManger;
+        //Mock<IRepository<TypeOfOperation, int>> typeOfOperationManger;
+        //Mock<IRepository<Gender, int>> genderManger;
 
         List<TypeOfOperation> operations = new List<TypeOfOperation>
         {

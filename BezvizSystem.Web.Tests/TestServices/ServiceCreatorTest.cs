@@ -115,7 +115,7 @@ namespace BezvizSystem.Web.Tests.TestServices
             {
                 var removeGroup = listGroups.Where(g => g.Id == id).FirstOrDefault();
                 if (removeGroup == null) return new OperationDetails(false, "test group not found", "");
-                foreach (VisitorDTO v in g.Visitors) listVisitors.Remove(v);
+                foreach (VisitorDTO v in removeGroup.Visitors) listVisitors.Remove(v);
                 listGroups.Remove(removeGroup);
                 return new OperationDetails(true, "test delete group", "");
             }).Invoke()));
