@@ -34,7 +34,7 @@ namespace BezvizSystem.BLL.Tests
             var group = anketas.Where(v => v.Id == 1).FirstOrDefault();
             var group3 = anketas.Where(v => v.Id == 3).FirstOrDefault();
 
-            Assert.IsTrue(anketas.Count() == 5);
+            Assert.AreEqual(7, anketas.Count());
             Assert.IsTrue(group.DateArrival == new DateTime(2018, 6, 1));
             Assert.IsTrue(group.CheckPoint == "check1");
             Assert.IsTrue(group.Operator == "AdminTran");
@@ -56,13 +56,29 @@ namespace BezvizSystem.BLL.Tests
         }
 
         [TestMethod]
+        public async Task Get_ById_AnketaAsync()
+        {
+            var anketa = await _service.GetByIdAsync(2);
+
+            Assert.IsTrue(anketa.CountMembers == 2);
+            Assert.IsTrue(anketa.CheckPoint == "check2");
+            Assert.IsTrue(anketa.Status == "Сохранено");
+        }
+
+        [TestMethod]
         public async Task Get_ForUser_AnketaAsync()
         {
             var anketa = await _service.GetForUserAsync("Test1");
 
+            var anketa1 = await _service.GetByIdAsync(3);
+            var anketa2 = await _service.GetByIdAsync(7);
+
             Assert.AreEqual(2, anketa.Count());
-            Assert.AreEqual("Частично", anketa.ToList()[0].Arrived);
-            Assert.AreEqual("X", anketa.ToList()[1].Arrived);
+            Assert.AreEqual("Частично", anketa1.Arrived);
+            Assert.AreEqual("X", anketa2.Arrived);
+
+            Assert.AreEqual("Save", anketa1.Status);
+            Assert.AreEqual("Save", anketa2.Status);
         }
     }
 }

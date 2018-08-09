@@ -109,8 +109,10 @@ namespace BezvizSystem.BLL.Tests.TestServises
                                      DocValid = null,                             
                                      StatusOfRecord = StatusOfRecord.Save
             };
-            visitor9 = new Visitor { Id = 10, Surname = "surname9", Nationality = nat3, Group = group6, StatusOfOperation = StatusOfOperation.Remove, Gender = gender1 };
-            visitor10 = new Visitor { Id = 11, Surname = "surname10", Nationality = nat2, Group = group6, StatusOfOperation = StatusOfOperation.Remove, Arrived = true, Gender = gender2 };
+            visitor9 = new Visitor { Id = 10, Surname = "surname9", Nationality = nat3, Group = group6,
+                                     StatusOfOperation = StatusOfOperation.Remove, StatusOfRecord = StatusOfRecord.Send, Gender = gender1 };
+            visitor10 = new Visitor { Id = 11, Surname = "surname10", Nationality = nat2, Group = group6,
+                                      StatusOfOperation = StatusOfOperation.Remove, StatusOfRecord = StatusOfRecord.Send, Arrived = true, Gender = gender2 };
 
 
             group1 = new GroupVisitor { Id = 1, CheckPoint = check1, PlaceOfRecidense = "place1", DateArrival = new DateTime(2018, 6, 1), Group = true,
@@ -137,8 +139,12 @@ namespace BezvizSystem.BLL.Tests.TestServises
                 DateArrival = new DateTime(2018, 07, 30)
             };
 
-            group6 = new GroupVisitor { Id = 6, CheckPoint = check1, PlaceOfRecidense = "place6", Visitors = new List<Visitor> { visitor9, visitor10 }, User = user1 };
-            group7 = new GroupVisitor { Id = 7, CheckPoint = check1, PlaceOfRecidense = "place7", Visitors = new List<Visitor> { visitor8, visitor10 }, User = user1 };
+            group6 = new GroupVisitor { Id = 6, CheckPoint = check1,
+                                        PlaceOfRecidense = "place6", Visitors = new List<Visitor> { visitor9, visitor10 },
+                                        User = user1 };
+            group7 = new GroupVisitor { Id = 7, CheckPoint = check1,
+                                        PlaceOfRecidense = "place7", Visitors = new List<Visitor> { visitor8, visitor10 },
+                                        User = user1 };
 
             activity1 = new UserActivity { Id = 1, Login = "login1", Ip = "Ip1", TimeActivity = DateTime.Now, Operation = operation1 };
             activity2 = new UserActivity { Id = 2, Login = "login2", Ip = "Ip2", TimeActivity = DateTime.Now, Operation = operation2 };

@@ -114,13 +114,13 @@ namespace BezvizSystem.BLL.Mapper
 
             if (countSave > 0 && countSave <= list.Count())
             {
-                return "Сохранено";
+                return StatusOfRecord.Save.ToString();
             }
             else if (countSend > 0 && countSend <= list.Count())
             {
-                return "Передано";
+                return StatusOfRecord.Send.ToString();
             }
-            else return "Принято";
+            else return StatusOfRecord.Recd.ToString();
         }
 
         private void RemovedOrNotVisitors(GroupVisitor groupVisitor, AnketaDTO anketa)

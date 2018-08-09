@@ -42,6 +42,16 @@ namespace BezvizSystem.Web.Tests.TestServices
         GroupVisitorDTO group2 = new GroupVisitorDTO { Id = 2, DateArrival = new DateTime(2018, 8, 30), PlaceOfRecidense = "Place2", Group = false };
         GroupVisitorDTO group3 = new GroupVisitorDTO { Id = 3, DateArrival = new DateTime(2018, 9, 15), PlaceOfRecidense = "Place3", Group = false };
 
+        IList<UserDTO> listUsers;
+        UserDTO user1 = new UserDTO { Id = "aaa", UserName = "Test1", ProfileUser = new ProfileUserDTO { Transcript = "test1 transcript", UNP = "1" } };
+        UserDTO user2 = new UserDTO { Id = "bbb", UserName = "Test2", ProfileUser = new ProfileUserDTO { Transcript = "test2 transcript", UNP = "2" } };
+        UserDTO user3 = new UserDTO { Id = "ccc", UserName = "Test3", ProfileUser = new ProfileUserDTO { Transcript = "test3 transcript", UNP = "3" } };
+
+        IList<AnketaDTO> listAnketas;
+        AnketaDTO anketa1 = new AnketaDTO { Id = 1, CheckPoint = "Check1", DaysOfStay = 1, CountMembers = 5, Operator = "Test1" };
+        AnketaDTO anketa2 = new AnketaDTO { Id = 2, CheckPoint = "Check2", DaysOfStay = 2, CountMembers = 6, Operator = "Test2" };
+        AnketaDTO anketa3 = new AnketaDTO { Id = 3, CheckPoint = "Check3", DaysOfStay = 3, CountMembers = 7, Operator = "Test3" };
+        AnketaDTO anketa4 = new AnketaDTO { Id = 4, CheckPoint = "Check4", DaysOfStay = 4, CountMembers = 8, Operator = "Test4" };
 
         public IDictionaryService<CheckPointDTO> CreateCheckPointService(string connection)
         {
@@ -105,9 +115,14 @@ namespace BezvizSystem.Web.Tests.TestServices
 
         public IService<GroupVisitorDTO> CreateGroupService(string connection)
         {
-            listGroups = new List<GroupVisitorDTO>();
+            group1.Visitors = new List<VisitorDTO> { visitor1, visitor2};
+            group2.Visitors = new List<VisitorDTO> { visitor3 };
+            group3.Visitors = new List<VisitorDTO> { visitor4 };
+
+            listGroups = new List<GroupVisitorDTO> { group1, group2, group3};
             Mock<IService<GroupVisitorDTO>> visitor = new Mock<IService<GroupVisitorDTO>>();
             visitor.Setup(m => m.GetAll()).Returns(listGroups);
+            visitor.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns((int id) => Task.FromResult(listGroups.SingleOrDefault(g => g.Id == id)));
 
             visitor.Setup(m => m.Create(It.IsAny<GroupVisitorDTO>())).Returns<GroupVisitorDTO>(g => Task.FromResult(new Func<OperationDetails>(() =>
             {
@@ -141,13 +156,13 @@ namespace BezvizSystem.Web.Tests.TestServices
         }
 
         public IService<AnketaDTO> CreateAnketaService(string connection)
-        {
-            //group1.Visitors = new List<VisitorDTO> { visitor1, visitor2};
-            //listGroups = new List<GroupVisitorDTO> { group1, group2, group3};
+        {       
+            listAnketas = new List<AnketaDTO> { anketa1, anketa2, anketa3, anketa4};
+            Mock<IService<AnketaDTO>> anketas = new Mock<IService<AnketaDTO>>();
 
-            //Mock<IService<AnketaDTO>> anketas = new Mock<IService<AnketaDTO>>();
-            //anketas.Setup(m => m.GetAll()).Returns(listGroups);
-            throw new NotImplementedException();
+            anketas.Setup(m => m.GetAll()).Returns(listAnketas);
+
+            return anketas.Object;
         }
 
 

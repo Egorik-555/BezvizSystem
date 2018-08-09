@@ -39,7 +39,7 @@ namespace BezvizSystem.BLL.Tests
         [TestMethod]
         public async Task Create_Group()
         {
-            GroupVisitorDTO group = new GroupVisitorDTO { Id = 6, PlaceOfRecidense = "testPlace", UserInSystem = "Admin" };
+            GroupVisitorDTO group = new GroupVisitorDTO { Id = 33, PlaceOfRecidense = "testPlace", UserInSystem = "Admin" };
             List<VisitorDTO> visitors = new List<VisitorDTO> {
                 new VisitorDTO{Id = 33, Name="test1", Gender = "Мужчина", Nationality = "nat1"},
                 new VisitorDTO{Id = 44, Name="test2"},
@@ -47,11 +47,11 @@ namespace BezvizSystem.BLL.Tests
             };
             group.Visitors = visitors;
             var result = await Service.Create(group);
-            var findGroup = Service.GetById(6);
+            var findGroup = Service.GetById(33);
             var visitor = await ServiceVisitor.GetByIdAsync(33);
 
             Assert.IsTrue(result.Succedeed);
-            Assert.IsTrue(Service.GetAll().Count() == 6);
+            Assert.AreEqual(8, Service.GetAll().Count());
 
             Assert.IsTrue(findGroup.PlaceOfRecidense == "testPlace");
             Assert.IsTrue(findGroup.UserInSystem == "Admin");
@@ -79,11 +79,11 @@ namespace BezvizSystem.BLL.Tests
             var list = Service.GetAll();
             var group = await Service.GetByIdAsync(2);
 
-            Assert.IsTrue(listOfVisitors1.Count() == 8);
-            Assert.IsTrue(listOfVisitors2.Count() == 6);
+            Assert.AreEqual( 8, listOfVisitors1.Count());
+            Assert.AreEqual(6, listOfVisitors2.Count());
             Assert.IsTrue(result.Succedeed);
             Assert.IsTrue(result.Message == "Группа туристов удалена");
-            Assert.IsTrue(list.Count() == 4);
+            Assert.AreEqual(6, list.Count());
             Assert.IsNull(group);
 
             // test delete item have status code 2, 3 (send to pogran)
@@ -95,7 +95,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(result.Succedeed);
             Assert.IsNotNull(group);
             Assert.IsTrue(result.Message == "Группа туристов удалена");
-            Assert.IsTrue(list.Count() == 4);
+            Assert.AreEqual(6, list.Count());
 
             Assert.IsTrue(visitors.Count() == 2);
             Assert.IsTrue(visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Remove).Count() == 2);
@@ -109,7 +109,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(result.Succedeed);
             Assert.IsNotNull(group);
             Assert.IsTrue(result.Message == "Группа туристов удалена");
-            Assert.IsTrue(list.Count() == 4);
+            Assert.AreEqual(6, list.Count());
 
             Assert.IsTrue(allVisitors.Count() == 5);
             Assert.IsTrue(visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Remove).Count() == 2);
@@ -405,7 +405,7 @@ namespace BezvizSystem.BLL.Tests
         {
             var groups = Service.GetAll();
 
-            Assert.IsTrue(groups.Count() == 5);
+            Assert.AreEqual(7, groups.Count());
             Assert.IsTrue(groups.Where(g => g.Id == 1).FirstOrDefault().UserOperatorProfileUNP == "UnpAdmin");
             Assert.IsTrue(groups.Where(g => g.Id == 1).FirstOrDefault().UserUserName == "Admin");
             Assert.IsTrue(groups.Where(g => g.Id == 1).FirstOrDefault().Visitors.Count() == 2);
