@@ -55,26 +55,44 @@ namespace BezvizSystem.Web.Tests
             }
         }
 
-        InfoVisitorModel visitor;
-        CreateVisitorModel group;
+        InfoVisitorModel visitor1;
+        InfoVisitorModel visitor2;
+
+        CreateVisitorModel createVisitor;
+        CreateGroupModel createGroup;
 
         private void InitModel()
         {
-            visitor = new InfoVisitorModel
+            visitor1 = new InfoVisitorModel
             {
                 Id = 1,               
-                Surname = "surname",
-                Name = "name",
-                SerialAndNumber = "test 123",
+                Surname = "surname1",
+                Name = "name1",
+                SerialAndNumber = "test 1",
                 Gender = "Мужчина",
                 BithDate = new DateTime(1987, 5, 1),
-                Nationality = "nat1"
+                Nationality = "nat1",
+                DateInSystem = DateTime.Now,
+                UserInSystem = "Test"
             };
 
-            group = new CreateVisitorModel
+            visitor2 = new InfoVisitorModel
+            {
+                Id = 2,
+                Surname = "surname2",
+                Name = "name2",
+                SerialAndNumber = "test 2",
+                Gender = "Мужчина",
+                BithDate = new DateTime(1990, 6, 5),
+                Nationality = "nat2",
+                DateInSystem = DateTime.Now,
+                UserInSystem = "Test"
+            };
+
+            createVisitor = new CreateVisitorModel
             {
                 Id = 1,
-                Info = visitor,
+                Info = visitor1,
                 DateArrival = DateTime.Now,
                 DateDeparture = DateTime.Now,
                 DaysOfStay = 1,
@@ -84,7 +102,27 @@ namespace BezvizSystem.Web.Tests
                 TimeOfWork = "time work",
                 SiteOfOperator = "site",
                 TelNumber = "tel",
-                Email = "egorik-555@yandex.ru"
+                Email = "egorik-555@yandex.ru",
+                DateInSystem = DateTime.Now,
+                UserInSystem = "Test",             
+            };
+
+            createGroup = new CreateGroupModel
+            {
+                Id = 2,
+                Infoes = new List<InfoVisitorModel> { visitor1, visitor2 },
+                DateArrival = DateTime.Now,
+                DateDeparture = DateTime.Now,
+                DaysOfStay = 1,
+                CheckPoint = "Check1",
+                PlaceOfRecidense = "place",
+                ProgramOfTravel = "program of travel",
+                OrganizeForm = "organize form",
+                Name = "name",
+                NumberOfContract = "number of contract 123",
+                DateOfContract = new DateTime(2018, 1, 3),
+                DateInSystem = DateTime.Now,
+                UserInSystem = "Test"
             };
         }
 
@@ -124,9 +162,9 @@ namespace BezvizSystem.Web.Tests
         [TestMethod]
         public async Task Create_Visitor_With_Model_VisitorController()
         {        
-            SimulateValidation(visitor);
-            SimulateValidation(group);
-            var result = (await visitorController.Create(group)) as RedirectToRouteResult;
+            SimulateValidation(visitor1);
+            SimulateValidation(createVisitor);
+            var result = (await visitorController.Create(createVisitor)) as RedirectToRouteResult;
 
             Assert.IsNotNull(result);
 
@@ -135,6 +173,25 @@ namespace BezvizSystem.Web.Tests
                 Assert.AreEqual(1, groupService.GetAll().Count());
                 Assert.AreEqual(1, visitorService.GetAll().Count());
             }
+        }
+
+        [TestMethod]
+        public async Task Validation_Fail_Model_GroupVisitor_GroupVisitorController()
+        {
+            var model = new CreateGroupModel();
+
+            SimulateValidation(model);
+            var result = (ViewResult)await groupController.Create(model);
+
+            Assert.IsNotNull(result);
+
+            var viewData = result.ViewData;
+            var viewBag = result.ViewBag;
+
+            Assert.AreEqual(3, viewData.Values.Count);
+            Assert.AreEqual(3, ((SelectList)viewBag.Genders).Count());
+            Assert.AreEqual(4, ((SelectList)viewBag.CheckPoints).Count());
+            Assert.AreEqual(5, ((SelectList)viewBag.Nationalities).Count());
         }
 
         [TestMethod]
@@ -152,6 +209,25 @@ namespace BezvizSystem.Web.Tests
             Assert.AreEqual(3, ((SelectList)viewBag.Genders).Count());
             Assert.AreEqual(4, ((SelectList)viewBag.CheckPoints).Count());
             Assert.AreEqual(5, ((SelectList)viewBag.Nationalities).Count());
+        }
+
+        [TestMethod]
+        public async Task Create_GroupVisitor_With_Model_GroupVisitorController()
+        {
+            SimulateValidation(visitor1);
+            SimulateValidation(visitor2);
+            SimulateValidation(createGroup);
+            var result = (await groupController.Create(createGroup)) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+
+            if (result != null)
+            {
+                Assert.AreEqual("Home", result.RouteValues["controller"]);
+                Assert.AreEqual("Index", result.RouteValues["action"]);
+                Assert.AreEqual(1, groupService.GetAll().Count());
+                Assert.AreEqual(2, visitorService.GetAll().Count());
+            }
         }
     }
 }

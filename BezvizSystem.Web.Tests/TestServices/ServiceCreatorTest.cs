@@ -14,11 +14,7 @@ namespace BezvizSystem.Web.Tests.TestServices
 {
     public class ServiceCreatorTest : IServiceCreator
     {
-        public IService<AnketaDTO> CreateAnketaService(string connection)
-        {
-            throw new NotImplementedException();
-        }
-
+      
         IEnumerable<CheckPointDTO> listCheckPoints;
         CheckPointDTO check1 = new CheckPointDTO { Id = 1, Name = "Check1", Active = true };
         CheckPointDTO check2 = new CheckPointDTO { Id = 2, Name = "Check2", Active = true };
@@ -36,7 +32,16 @@ namespace BezvizSystem.Web.Tests.TestServices
         NationalityDTO nat4 = new NationalityDTO { Id = 4, Code = 4, Name = "nat4", ShortName = "n4", Active = true };
 
         IList<VisitorDTO> listVisitors;
+        VisitorDTO visitor1 = new VisitorDTO { Id = 1, Name = "name1", Surname = "surname1", Gender = "Мужчина", Arrived = true};
+        VisitorDTO visitor2 = new VisitorDTO { Id = 2, Name = "name2", Surname = "surname2", Gender = "Женщина", Arrived = true };
+        VisitorDTO visitor3 = new VisitorDTO { Id = 3, Name = "name3", Surname = "surname3", Gender = "Женщина", Arrived = false };
+        VisitorDTO visitor4 = new VisitorDTO { Id = 4, Name = "name4", Surname = "surname4", Gender = "Мужчина", Arrived = true };
+
         IList<GroupVisitorDTO> listGroups;
+        GroupVisitorDTO group1 = new GroupVisitorDTO { Id = 1, DateArrival = new DateTime(2018, 8, 9), PlaceOfRecidense = "Place1", Group = true};
+        GroupVisitorDTO group2 = new GroupVisitorDTO { Id = 2, DateArrival = new DateTime(2018, 8, 30), PlaceOfRecidense = "Place2", Group = false };
+        GroupVisitorDTO group3 = new GroupVisitorDTO { Id = 3, DateArrival = new DateTime(2018, 9, 15), PlaceOfRecidense = "Place3", Group = false };
+
 
         public IDictionaryService<CheckPointDTO> CreateCheckPointService(string connection)
         {
@@ -135,7 +140,17 @@ namespace BezvizSystem.Web.Tests.TestServices
             return visitor.Object;
         }
 
-    
+        public IService<AnketaDTO> CreateAnketaService(string connection)
+        {
+            //group1.Visitors = new List<VisitorDTO> { visitor1, visitor2};
+            //listGroups = new List<GroupVisitorDTO> { group1, group2, group3};
+
+            //Mock<IService<AnketaDTO>> anketas = new Mock<IService<AnketaDTO>>();
+            //anketas.Setup(m => m.GetAll()).Returns(listGroups);
+            throw new NotImplementedException();
+        }
+
+
         public IReport CreateReport(string connection)
         {
             throw new NotImplementedException();

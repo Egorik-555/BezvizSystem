@@ -54,5 +54,15 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(anketa.CheckPoint == "check2");
             Assert.IsTrue(anketa.Status == "Сохранено");
         }
+
+        [TestMethod]
+        public async Task Get_ForUser_AnketaAsync()
+        {
+            var anketa = await _service.GetForUserAsync("Test1");
+
+            Assert.AreEqual(2, anketa.Count());
+            Assert.AreEqual("Частично", anketa.ToList()[0].Arrived);
+            Assert.AreEqual("X", anketa.ToList()[1].Arrived);
+        }
     }
 }

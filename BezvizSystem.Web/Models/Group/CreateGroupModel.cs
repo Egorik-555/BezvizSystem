@@ -70,7 +70,9 @@ namespace BezvizSystem.Web.Models.Group
         [Display(Name = "Другая информация")]
         public string OtherInfo { get; set; }
 
+        [Required]
         public DateTime? DateInSystem { get; set; }
+        [Required]
         public string UserInSystem { get; set; }
     }
 }

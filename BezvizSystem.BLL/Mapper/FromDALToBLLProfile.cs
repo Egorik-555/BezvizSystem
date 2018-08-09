@@ -17,20 +17,23 @@ namespace BezvizSystem.BLL.Mapper
 {
     class FromDALToBLLProfile : Profile
     {
+        IMapper mapperVisitor;
         IUnitOfWork _database;
 
         public FromDALToBLLProfile(IUnitOfWork database)
         {
             _database = database;
+            mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelVisitor(database, null))).CreateMapper();
 
             //anketa service
             CreateMap<GroupVisitor, AnketaDTO>().
-               ForMember(dest => dest.CountMembers, opt => opt.MapFrom(src => src.Visitors.Count())).
-               ForMember(dest => dest.DateArrival, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date : src.DateArrival)).
-               ForMember(dest => dest.Status, opt => opt.MapFrom(src => CheckAllStatuses(src.Visitors))).
-               ForMember(dest => dest.Operator, opt => opt.MapFrom(src => src.User.OperatorProfile.Transcript)).
-               ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name)).
-               ForMember(dest => dest.Arrived, opt => opt.MapFrom(src => CheckAllArrivals(src.Visitors)));
+                ForMember(dest => dest.CountMembers, opt => opt.MapFrom(src => src.Visitors.Count())).
+                ForMember(dest => dest.DateArrival, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date : src.DateArrival)).
+                ForMember(dest => dest.Status, opt => opt.MapFrom(src => CheckAllStatuses(src.Visitors))).
+                ForMember(dest => dest.Operator, opt => opt.MapFrom(src => src.User.OperatorProfile.Transcript)).
+                ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name)).
+                ForMember(dest => dest.Arrived, opt => opt.MapFrom(src => CheckAllArrivals(src.Visitors))).
+                AfterMap((d, e) => RemovedOrNotVisitors(d, e));
 
             CreateMap<Visitor, VisitorDTO>().
                ForMember(dest => dest.Group, opt => opt.Ignore()).
@@ -43,7 +46,7 @@ namespace BezvizSystem.BLL.Mapper
             CreateMap<VisitorDTO, Visitor>().
                 ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
                 ForMember(dest => dest.Gender, opt => opt.MapFrom(src => database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
-               
+
             CreateMap<GroupVisitor, GroupVisitorDTO>().
                 ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name));
             CreateMap<Visitor, VisitorDTO>().
@@ -62,7 +65,7 @@ namespace BezvizSystem.BLL.Mapper
             CreateMap<BezvizUser, UserDTO>().
                 ForMember(dest => dest.ProfileUser, opt => opt.MapFrom(src => src.OperatorProfile));
             ////
-        
+
             CreateMap<Nationality, NationalityDTO>();
             CreateMap<CheckPoint, CheckPointDTO>();
             CreateMap<TypeOfOperation, TypeOfOperationDTO>();
@@ -74,7 +77,7 @@ namespace BezvizSystem.BLL.Mapper
             int count = 0;
             foreach (var item in list)
             {
-                if (item.Arrived)
+                if (item.Arrived && item.StatusOfOperation != StatusOfOperation.Remove)
                 {
                     count++;
                 }
@@ -88,7 +91,7 @@ namespace BezvizSystem.BLL.Mapper
         }
 
         private string CheckAllStatuses(IEnumerable<Visitor> list)
-        {                   
+        {
             int countSave = 0;
             int countSend = 0;
             int countRecieve = 0;
@@ -119,6 +122,20 @@ namespace BezvizSystem.BLL.Mapper
             }
             else return "Принято";
         }
+
+        private void RemovedOrNotVisitors(GroupVisitor groupVisitor, AnketaDTO anketa)
+        {
+            ICollection<Visitor> result = new List<Visitor>();
+            foreach (var visitor in groupVisitor.Visitors)
+            {
+                if (visitor.StatusOfOperation != StatusOfOperation.Remove)
+                {
+                    result.Add(visitor);
+                }
+            }
+
+            mapperVisitor.Map(result, anketa.Visitors);
+        }
     }
 
     class FromDALToBLLProfileWithModelVisitor : Profile
@@ -129,6 +146,10 @@ namespace BezvizSystem.BLL.Mapper
                     ForMember(dest => dest.Group, opt => opt.Ignore()).
                     ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => _database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
                     ForMember(dest => dest.Gender, opt => opt.MapFrom(src => _database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
+
+            CreateMap<Visitor, VisitorDTO>().
+               ForMember(dest => dest.Group, opt => opt.Ignore()).
+               ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name));
         }
     }
 
@@ -165,9 +186,9 @@ namespace BezvizSystem.BLL.Mapper
                     {
                         group.Visitors.Remove(visitor);
                     }
-                }      
+                }
             }
-           
+
             foreach (var visitorDTO in dto.Visitors)
             {
                 visitorDTO.Group = dto;

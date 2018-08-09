@@ -60,8 +60,9 @@ namespace BezvizSystem.Web.Models.Visitor
         public string Email { get; set; }
 
         public bool Arrived { get; set; }
-
+        [Required]
         public DateTime? DateInSystem { get; set; }
+        [Required]
         public string UserInSystem { get; set; }
     }
 }

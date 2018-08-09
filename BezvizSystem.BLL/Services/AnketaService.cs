@@ -23,11 +23,7 @@ namespace BezvizSystem.BLL.Services
         {
             _database = db;
 
-            MapperConfiguration config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new FromDALToBLLProfile(_database));
-            });
-
+            MapperConfiguration config = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database)));
             _mapper = config.CreateMapper();
         }
 
@@ -47,12 +43,10 @@ namespace BezvizSystem.BLL.Services
                 var groups = _database.GroupManager.GetAll().ToList();
 
                 if (user.OperatorProfile.Role.ToUpper() != "ADMIN")
-                    groups = groups.Where(g => g.User.OperatorProfile.UNP == user.OperatorProfile.UNP).ToList();
-
-                //in case if all visitors mark to delete
-                groups = groups.Where(g => g.Visitors.Where(v => v.StatusOfOperation == StatusOfOperation.Remove).Count() < g.Visitors.Count()).ToList();
+                    groups = groups.Where(g => g.User != null ? g.User.UserName == user.UserName : false).ToList();
 
                 var anketaGroup = _mapper.Map<IEnumerable<GroupVisitor>, IEnumerable<AnketaDTO>>(groups);
+                anketaGroup = anketaGroup.Where(a => a.Visitors.Count != 0);
                 return anketaGroup;
             }
             else return null;
