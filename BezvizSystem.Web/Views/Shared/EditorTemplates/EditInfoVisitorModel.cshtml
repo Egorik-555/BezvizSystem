@@ -47,4 +47,4 @@
 @Html.EditorFor(model => model.UserInSystem, new { htmlAttributes = new { @type = "hidden", @Value = Model.UserInSystem } })
 @Html.EditorFor(model => model.DateInSystem, new { htmlAttributes = new { @type = "hidden", @Value = Model.DateInSystem.ToString() } })
 @Html.EditorFor(model => model.UserEdit, new { htmlAttributes = new { @type = "hidden", @Value = User.Identity.Name } })
-@*@Html.EditorFor(model => model.DateEdit, new { htmlAttributes = new { @type = "hidden", @Value = DateTime.Now.ToString() } })*@
+@Html.EditorFor(model => model.DateEdit, new { htmlAttributes = new { @type = "hidden", @Value = DateTime.Now.ToString() } })
