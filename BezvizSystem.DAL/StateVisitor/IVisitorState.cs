@@ -10,6 +10,10 @@ namespace BezvizSystem.DAL.StateVisitor
 {
     public interface IVisitorState
     {
+
+        Status Status { get; set; }
+        Operation Operation { get; set; }
+
         void Remove(Visitor visitor);
         void Edit(Visitor visitor);
         void Send(Visitor visitor);
@@ -18,23 +22,30 @@ namespace BezvizSystem.DAL.StateVisitor
 
     public class NewVisitorState : IVisitorState
     {
+        public Status Status { get; set; }
+        public Operation Operation { get; set; }
+
+        public NewVisitorState(Status status, Operation operation)
+        {
+            Status = status;
+            Operation = operation;
+        }
+
         public void Edit(Visitor visitor)
         {
-            visitor.XML.Status = Status.New;
-            visitor.XML.Operation = Operation.Add;
+
         }
 
         public void Remove(Visitor visitor)
         {
-            visitor.XML.Status = Status.New;
-            visitor.XML.Operation = Operation.Add;
+
         }
 
         public void Send(Visitor visitor)
         {
-            visitor.XML.Status = Status.Send;
-            visitor.XML.Operation = Operation.Done;
-            visitor.State = new SendVisitorState();
+            Status = Status.Send;
+            Operation = Operation.Done;
+            visitor.State = new SendVisitorState(Status, Operation);
         }
 
         public void Recd(Visitor visitor)
@@ -45,16 +56,25 @@ namespace BezvizSystem.DAL.StateVisitor
 
     public class SendVisitorState : IVisitorState
     {
+        public Status Status { get; set; }
+        public Operation Operation { get; set; }
+
+        public SendVisitorState(Status status, Operation operation)
+        {
+            Status = status;
+            Operation = operation;
+        }
+
         public void Edit(Visitor visitor)
         {
-            visitor.XML.Status = Status.Send;
-            visitor.XML.Operation = Operation.Edit;
+            Status = Status.Send;
+            Operation = Operation.Edit;
         }
 
         public void Remove(Visitor visitor)
         {
-            visitor.XML.Status = Status.Send;
-            visitor.XML.Operation = Operation.Remove;
+            Status = Status.Send;
+            Operation = Operation.Remove;
         }
 
         public void Send(Visitor visitor)
@@ -64,36 +84,44 @@ namespace BezvizSystem.DAL.StateVisitor
 
         public void Recd(Visitor visitor)
         {
-            visitor.XML.Status = Status.Recd;
-            visitor.XML.Operation = Operation.Done;
-            visitor.State = new RecdVisitorState();
+            Status = Status.Recd;
+            Operation = Operation.Done;
+            visitor.State = new RecdVisitorState(Status, Operation);
         }      
     }
 
     public class RecdVisitorState : IVisitorState
     {
+
+        public Status Status { get; set; }
+        public Operation Operation { get; set; }
+
+        public RecdVisitorState(Status status, Operation operation)
+        {
+            Status = status;
+            Operation = operation;
+        }
+
         public void Edit(Visitor visitor)
         {
-            visitor.XML.Status = Status.Recd;
-            visitor.XML.Operation = Operation.Edit;
+            Status = Status.Recd;
+            Operation = Operation.Edit;
         }
 
         public void Remove(Visitor visitor)
         {
-            visitor.XML.Status = Status.Recd;
-            visitor.XML.Operation = Operation.Remove;
+            Status = Status.Recd;
+            Operation = Operation.Remove;
         }
 
         public void Send(Visitor visitor)
         {
-            visitor.XML.Status = Status.Recd;
-            visitor.XML.Operation = Operation.Done;
+            
         }
 
         public void Recd(Visitor visitor)
         {
-            visitor.XML.Status = Status.Recd;
-            visitor.XML.Operation = Operation.Done;
+          
         }           
     }
 

@@ -98,8 +98,7 @@ namespace BezvizSystem.DAL.Tests
                 Id = 1,
                 Name = "Alex",
                 Surname = "Taylor",
-                DateInSystem = DateTime.Now,
-                XML = new XMLDispatch { Status = Status.New, Operation = Operation.Add }
+                DateInSystem = DateTime.Now            
             };
 
             //create
@@ -115,153 +114,25 @@ namespace BezvizSystem.DAL.Tests
             }
             findVisitor = uow.VisitorManager.GetAll().Where(v => v.Name == visitor.Name && v.Surname == visitor.Surname).FirstOrDefault();
 
-            Assert.IsNotNull(findVisitor);
-            Assert.AreEqual(Status.New, findVisitor.XML.Status);
+            Assert.IsNotNull(findVisitor);          
             ////
 
             //edit
             var newVisitor = findVisitor;
             newVisitor.Name = "New name";
             newVisitor.BithDate = new DateTime(2018, 1, 1);
-            newVisitor.XML.Operation = Operation.Done;
 
             uow.VisitorManager.Update(findVisitor);
             findVisitor = uow.VisitorManager.GetAll().Where(v => v.Name == newVisitor.Name && v.Surname == newVisitor.Surname).FirstOrDefault();
 
             Assert.IsNotNull(findVisitor);
-            Assert.AreEqual(Operation.Done, findVisitor.XML.Operation);
             ////
 
             uow.VisitorManager.Delete(findVisitor.Id);
             findVisitor = uow.VisitorManager.GetAll().Where(v => v.Name == visitor.Name && v.Surname == visitor.Surname).FirstOrDefault();
             Assert.IsNull(findVisitor);
         }
-
-        [TestMethod]
-        public async Task Get_And_State_Visitor_UnitOfWork()
-        {
-            Visitor visitor1 = new Visitor
-            {
-                Id = 1,
-                Name = "Test1",
-                Surname = "Taylor",
-                DateInSystem = DateTime.Now,
-                XML = new XMLDispatch { Status = Status.New, Operation = Operation.Add }
-            };
-
-            Visitor visitor2 = new Visitor
-            {
-                Id = 2,
-                Name = "Test2",
-                Surname = "Taylor",
-                DateInSystem = DateTime.Now,
-                XML = new XMLDispatch { Status = Status.Send, Operation = Operation.Add }
-            };
-
-            var findVisitor1 = uow.VisitorManager.GetAll().Where(v => v.Name == visitor1.Name && v.Surname == visitor1.Surname).FirstOrDefault();
-            var findVisitor2 = uow.VisitorManager.GetAll().Where(v => v.Name == visitor2.Name && v.Surname == visitor2.Surname).FirstOrDefault();
-            Visitor resultVisitor1 = null;
-            Visitor resultVisitor2 = null;
-            if (findVisitor1 == null) resultVisitor1 = uow.VisitorManager.Create(visitor1);
-            else resultVisitor1 = findVisitor1;
-
-            if (findVisitor2 == null) resultVisitor2 = uow.VisitorManager.Create(visitor2);
-            else resultVisitor2 = findVisitor2;
-
-            //getall
-            findVisitor1 = uow.VisitorManager.GetAll().Where(v => v.Name == visitor1.Name && v.Surname == visitor1.Surname).FirstOrDefault();
-            findVisitor2 = uow.VisitorManager.GetAll().Where(v => v.Name == visitor2.Name && v.Surname == visitor2.Surname).FirstOrDefault();
-
-            Assert.IsNotNull(findVisitor1);
-            Assert.IsInstanceOfType(findVisitor1.State, typeof(NewVisitorState));
-            Assert.IsNotNull(findVisitor2);
-            Assert.IsInstanceOfType(findVisitor2.State, typeof(SendVisitorState));
-            ///
-
-            //getbyid
-            findVisitor1 = uow.VisitorManager.GetById(resultVisitor1.Id);
-            findVisitor2 = uow.VisitorManager.GetById(resultVisitor2.Id);
-
-            Assert.IsNotNull(findVisitor1);
-            Assert.IsInstanceOfType(findVisitor1.State, typeof(NewVisitorState));
-            Assert.IsNotNull(findVisitor2);
-            Assert.IsInstanceOfType(findVisitor2.State, typeof(SendVisitorState));
-            ///
-
-            //getbyidasync
-            findVisitor1 = await uow.VisitorManager.GetByIdAsync(resultVisitor1.Id);
-            findVisitor2 = await uow.VisitorManager.GetByIdAsync(resultVisitor2.Id);
-
-            Assert.IsNotNull(findVisitor1);
-            Assert.IsInstanceOfType(findVisitor1.State, typeof(NewVisitorState));
-            Assert.IsNotNull(findVisitor2);
-            Assert.IsInstanceOfType(findVisitor2.State, typeof(SendVisitorState));
-            ///
-
-            uow.VisitorManager.Delete(findVisitor1.Id);
-            uow.VisitorManager.Delete(findVisitor2.Id);
-            findVisitor1 = uow.VisitorManager.GetById(findVisitor1.Id);
-            findVisitor2 = uow.VisitorManager.GetById(findVisitor2.Id);
-            Assert.IsNull(findVisitor1);
-            Assert.IsNull(findVisitor2);
-        }
-
-        [TestMethod]
-        public void Change_State_Visitor()
-        {
-            Visitor visitor = new Visitor
-            {
-                Id = 1,
-                Name = "Alex",
-                Surname = "Taylor",
-                DateInSystem = DateTime.Now,
-                XML = new XMLDispatch { Status = Status.New, Operation = Operation.Add}
-            };
-
-            Assert.IsInstanceOfType(visitor.State, typeof(NewVisitorState));
-
-            //new
-            visitor.Edit();
-            Assert.IsInstanceOfType(visitor.State, typeof(NewVisitorState));
-            Assert.AreEqual(Status.New, visitor.XML.Status);
-            Assert.AreEqual(Operation.Add, visitor.XML.Operation);
-
-            visitor.Remove();
-            Assert.IsInstanceOfType(visitor.State, typeof(NewVisitorState));
-            Assert.AreEqual(Status.New, visitor.XML.Status);
-            Assert.AreEqual(Operation.Add, visitor.XML.Operation);
-
-            visitor.Recd();
-            Assert.IsInstanceOfType(visitor.State, typeof(NewVisitorState));
-            Assert.AreEqual(Status.New, visitor.XML.Status);
-            Assert.AreEqual(Operation.Add, visitor.XML.Operation);
-
-            visitor.Send();
-            Assert.IsInstanceOfType(visitor.State, typeof(SendVisitorState));
-            Assert.AreEqual(Status.Send, visitor.XML.Status);
-            Assert.AreEqual(Operation.Done, visitor.XML.Operation);
-
-            //send
-            visitor.Edit();
-            Assert.IsInstanceOfType(visitor.State, typeof(SendVisitorState));
-            Assert.AreEqual(Status.Send, visitor.XML.Status);
-            Assert.AreEqual(Operation.Edit, visitor.XML.Operation);
-
-            visitor.Remove();
-            Assert.IsInstanceOfType(visitor.State, typeof(SendVisitorState));
-            Assert.AreEqual(Status.Send, visitor.XML.Status);
-            Assert.AreEqual(Operation.Remove, visitor.XML.Operation);
-
-            visitor.Send();
-            Assert.IsInstanceOfType(visitor.State, typeof(SendVisitorState));
-            Assert.AreEqual(Status.Send, visitor.XML.Status);
-            Assert.AreEqual(Operation.Remove, visitor.XML.Operation);
-
-            visitor.Recd();
-            Assert.IsInstanceOfType(visitor.State, typeof(RecdVisitorState));
-            Assert.AreEqual(Status.Recd, visitor.XML.Status);
-            Assert.AreEqual(Operation.Done, visitor.XML.Operation);          
-        }
+      
 
         [TestMethod]
         public void Add_Update_Remove_GroupVisitor_UnitOfWork()
@@ -318,7 +189,7 @@ namespace BezvizSystem.DAL.Tests
         public void Add_Update_Remove_XMLDispatch_UnitOfWork()
         {
             //create
-            XMLDispatch dispatch = new XMLDispatch { /*IdVisitor = 1,*/ Operation = Operation.Add, Status = Status.New };
+            XMLDispatch dispatch = new XMLDispatch { IdVisitor = 1, Operation = Operation.Add, Status = Status.New };
 
             uow.XMLDispatchManager.Create(dispatch);
 
@@ -342,19 +213,6 @@ namespace BezvizSystem.DAL.Tests
             findDispatch = uow.XMLDispatchManager.GetAll().Where(d => d.Id == newDispatch.Id).FirstOrDefault();
 
             Assert.IsNull(findDispatch);
-        }
-
-        [TestMethod]
-        public void Get_Status_ById_XMLDispatch_UnitOfWork()
-        {
-            TestRepoXmlDispatch test = new TestRepoXmlDispatch();
-
-            Status status1 = test.GetStatusByIdRecord(11);
-            Status status2 = test.GetStatusByIdRecord(12);
-            Status status3 = test.GetStatusByIdRecord(13);
-
-            Assert.AreEqual(Status.New, status1);
-
-        }
+        }       
     }
 }

@@ -2,6 +2,7 @@
 using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Helpers;
 using BezvizSystem.DAL.Interfaces;
+using BezvizSystem.DAL.StateVisitor;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -66,21 +67,20 @@ namespace BezvizSystem.DAL.Repositories
             return Database.XMLDispatches.FindAsync(id);
         }
 
-        public Status GetStatusByIdRecord(int id)
+        public async Task<IVisitorState> GetStateByIdRecordAsync(int id)
         {
-            //var allItems = Database.XMLDispatches.Where(i => i.IdVisitor == id);
+            IVisitorState result;
 
-            //// all items with status recd and all operations done
-            //var itemsRecd = allItems.Where(i => i.Status == Status.Recd && i.Operation == Operation.Done);
-            //// all items with status send and all operations done
-            //var itemsSend = allItems.Where(i => i.Status == Status.Send && i.Operation == Operation.Done);
+            var dispatch = await Database.XMLDispatches.SingleOrDefaultAsync(d => d.IdVisitor == id);
 
-            //if (itemsRecd.Count() == allItems.Count())
-            //    return Status.Recd;
-            //else if (itemsSend.Count() == allItems.Count())
-            //    return Status.Send;
-            //else return Status.New;
-            return Status.New;
+            if (dispatch.Status == Status.Recd)
+                result = new RecdVisitorState(dispatch.Status, dispatch.Operation);
+            else if (dispatch.Status == Status.Send)
+                result = new SendVisitorState(dispatch.Status, dispatch.Operation);
+            else result = new NewVisitorState(dispatch.Status, dispatch.Operation);
+
+            return result;
         }
+    
     }
 }

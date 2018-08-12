@@ -9,10 +9,9 @@ using System.Threading.Tasks;
 namespace BezvizSystem.DAL.Entities
 {
     public class XMLDispatch
-    {
-        [ForeignKey("Visitor")]
+    {    
         public int Id { get; set; }
-        public virtual Visitor Visitor { get; set; }
+        public int IdVisitor { get; set; }
 
         public Status Status { get; set; }
         public Operation Operation { get; set; }

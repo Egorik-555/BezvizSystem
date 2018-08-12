@@ -13,14 +13,13 @@ namespace BezvizSystem.DAL.Entities
 
         public Visitor()
         {
-            State = new NewVisitorState();
+            State = new NewVisitorState(Status.New, Operation.Add);
         }
 
         public int Id { get; set; }
 
         public virtual GroupVisitor Group { get; set; }
 
-        public virtual XMLDispatch XML { get; set; }
         public IVisitorState State { get; set; }
 
         public string Surname { get; set; }

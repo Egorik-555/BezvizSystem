@@ -1,4 +1,5 @@
 ﻿using BezvizSystem.DAL.Helpers;
+using BezvizSystem.DAL.StateVisitor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,6 @@ namespace BezvizSystem.DAL.Interfaces
         T Update(T item);
         T Delete(TKey id);
 
-        Status GetStatusByIdRecord(TKey id);
+        Task<IVisitorState> GetStateByIdRecordAsync(TKey id);
     }  
 }

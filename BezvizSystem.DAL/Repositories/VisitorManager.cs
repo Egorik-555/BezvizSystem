@@ -22,84 +22,18 @@ namespace BezvizSystem.DAL.Repositories
         }
 
         public IEnumerable<Visitor> GetAll()
-        {
-            List<Visitor> list = Database.Visitors.ToList();
-            foreach(var item in list)
-            {              
-                if (item.XML == null)
-                {
-                    item.State = new NewVisitorState();
-                    continue;
-                }
-
-                if (item.XML.Status == Status.Recd)
-                {
-                    item.State = new RecdVisitorState();
-                }
-                else if (item.XML.Status == Status.Send)
-                {
-                    item.State = new SendVisitorState();
-                }
-                else
-                {
-                    item.State = new NewVisitorState();
-                }
-            }
-
-            return list;
+        {          
+            return Database.Visitors;
         }
 
         public Visitor GetById(int id)
         {
-            Visitor visitor = Database.Visitors.Find(id);
-            if (visitor != null)
-            {
-                if (visitor.XML == null)
-                {
-                    visitor.State = new NewVisitorState();
-                    return visitor;
-                }
-
-                if (visitor.XML.Status == Status.Recd)
-                {
-                    visitor.State = new RecdVisitorState();
-                }
-            }
-            return visitor;
+            return Database.Visitors.Find(id); ;
         }
 
         public Task<Visitor> GetByIdAsync(int id)
         {
-            Task<Visitor> task = Task.Run(async () => 
-            {
-                Visitor visitor = await Database.Visitors.FindAsync(id);
-
-                if (visitor != null)
-                {
-                    if (visitor.XML == null)
-                    {
-                        visitor.State = new NewVisitorState();
-                        return visitor;
-                    }
-
-                    if (visitor.XML.Status == Status.Recd)
-                    {
-                        visitor.State = new RecdVisitorState();
-                    }
-                    else if (visitor.XML.Status == Status.Send)
-                    {
-                        visitor.State = new SendVisitorState();
-                    }
-                    else
-                    {
-                        visitor.State = new NewVisitorState();
-                    }
-                }
-
-                return visitor;
-            });
-                    
-            return task;
+            return Database.Visitors.FindAsync(id);
         }
 
         public Visitor Create(Visitor item)
