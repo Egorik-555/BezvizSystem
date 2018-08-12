@@ -31,7 +31,6 @@ namespace BezvizSystem.BLL.Services
             try
             {              
                 var model = _mapper.Map<VisitorDTO, Visitor>(visitor);
-                model.DateInSystem = DateTime.Now;
                 _database.VisitorManager.Create(model);
                 return new OperationDetails(true, "Турист создан", "");
             }
@@ -67,9 +66,8 @@ namespace BezvizSystem.BLL.Services
                 if (model != null)
                 {
                     var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelVisitor(_database, model))).CreateMapper();
-
                     var m = mapper.Map<VisitorDTO, Visitor>(visitor);
-                    m.DateEdit = DateTime.Now;
+
                     _database.VisitorManager.Update(m);
                     return new OperationDetails(true, "Турист изменен", "");
                 }
@@ -88,7 +86,7 @@ namespace BezvizSystem.BLL.Services
 
         public IEnumerable<VisitorDTO> GetAll()
         {
-            var visitors = _database.VisitorManager.GetAll().AsQueryable().Include(v => v.Group).ToList();
+            var visitors = _database.VisitorManager.GetAll();
             var visitorsDto = _mapper.Map<IEnumerable<Visitor>, IEnumerable<VisitorDTO>>(visitors);
             return visitorsDto;
         }

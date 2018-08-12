@@ -31,8 +31,7 @@ namespace BezvizSystem.BLL.Services
         {        
             var groups = _database.GroupManager.GetAll().ToList();         
             var anketaGroup = _mapper.Map<IEnumerable<GroupVisitor>, IEnumerable<AnketaDTO>>(groups);
-            List<AnketaDTO> result = new List<AnketaDTO>(anketaGroup);
-            return result;
+            return anketaGroup;
         }
 
         public async Task<IEnumerable<AnketaDTO>> GetForUserAsync(string username)
@@ -43,13 +42,13 @@ namespace BezvizSystem.BLL.Services
                 var groups = _database.GroupManager.GetAll().ToList();
 
                 if (user.OperatorProfile.Role.ToUpper() != "ADMIN")
-                    groups = groups.Where(g => g.User != null ? g.User.UserName == user.UserName : false).ToList();
+                    groups = groups.Where(g => g.UserInSystem == username).ToList();
 
                 var anketaGroup = _mapper.Map<IEnumerable<GroupVisitor>, IEnumerable<AnketaDTO>>(groups);
-                anketaGroup = anketaGroup.Where(a => a.Visitors.Count != 0);
                 return anketaGroup;
             }
-            else return null;
+            else
+                return await Task.Run(() => (IEnumerable<AnketaDTO>)(new List<AnketaDTO>()));
         }    
 
         public AnketaDTO GetById(int id)

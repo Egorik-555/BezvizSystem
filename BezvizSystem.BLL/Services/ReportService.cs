@@ -111,7 +111,7 @@ namespace BezvizSystem.BLL.Services
 
         private IEnumerable<CountByOperator> GetByOperatorCount()
         {
-            var visitors = _visitors.GroupBy(v => v.Group.User.OperatorProfile.Transcript).Select(g => new CountByOperator { Operator = g.Key, Count = g.Count() });
+            var visitors = _visitors.GroupBy(v => v.Group.TranscriptUser).Select(g => new CountByOperator { Operator = g.Key, Count = g.Count() });
             return visitors.ToList();
         }
 
@@ -119,7 +119,7 @@ namespace BezvizSystem.BLL.Services
         { 
             int result = 0;
             if (date1.HasValue && date2.HasValue)
-                result = (date1.Value.Date - date2.Value.Date).Days / 18;
+                result = (date1.Value.Date - date2.Value.Date).Days / 365;
             else result = -1;
 
             return result;

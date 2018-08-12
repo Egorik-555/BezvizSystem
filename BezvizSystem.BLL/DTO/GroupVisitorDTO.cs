@@ -18,9 +18,6 @@ namespace BezvizSystem.BLL.DTO
 
         public virtual ICollection<VisitorDTO> Visitors { get; set; }
 
-        public string UserUserName { get; set; }
-        public string UserOperatorProfileUNP { get; set; }
-        public string UserOperatorProfileTranscript { get; set; }
         public bool Group { get; set; }
 
         public DateTime? DateArrival { get; set; }
@@ -28,7 +25,6 @@ namespace BezvizSystem.BLL.DTO
         public int? DaysOfStay { get; set; }
         public string CheckPoint { get; set; }
         public string PlaceOfRecidense { get; set; }
-
         public string ProgramOfTravel { get; set; }
 
         //part of visitor only
@@ -49,6 +45,7 @@ namespace BezvizSystem.BLL.DTO
         public bool ExtraSend { get; set; }
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
+        public string TranscriptUser { get; set; }
         public DateTime? DateEdit { get; set; }
         public string UserEdit { get; set; }
 
@@ -61,7 +58,7 @@ namespace BezvizSystem.BLL.DTO
 
             return true;
         }
-
+      
         public override int GetHashCode()
         {
             return this.Id.GetHashCode();

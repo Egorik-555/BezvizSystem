@@ -17,11 +17,13 @@ namespace BezvizSystem.DAL.Tests
     {
         const string CONNECT = "BezvizConnection";
 
+        GenderManager genderMng;
         CheckPointManager checkPointMng;
         NationalityManager nationalitiesMng;
 
         public TestDictionaries()
         {
+            genderMng = new GenderManager(new BezvizContext(CONNECT));
             checkPointMng = new CheckPointManager(new BezvizContext(CONNECT));          
             nationalitiesMng = new NationalityManager(new BezvizContext(CONNECT));
         }
@@ -43,7 +45,7 @@ namespace BezvizSystem.DAL.Tests
         }
 
         [TestMethod]
-        public async Task Nationalities_Dictionary()
+        public async Task Nationality_Dictionary()
         {
             Nationality nat1 = nationalitiesMng.GetById(1);
             Nationality nat2 = await nationalitiesMng.GetByIdAsync(1);
@@ -56,6 +58,22 @@ namespace BezvizSystem.DAL.Tests
             Assert.IsTrue(nationalities.Count() != 0);
             Assert.IsTrue(nationalities.Contains(nat1));
             Assert.IsTrue(nationalities.Contains(nat2));
+        }
+
+        [TestMethod]
+        public async Task Gender_Dictionary()
+        {
+            Gender gender1 = genderMng.GetById(1);
+            Gender gender2 = await genderMng.GetByIdAsync(1);
+            var genders = genderMng.GetAll();
+
+            Assert.IsNotNull(gender1);
+            Assert.IsTrue(gender2.Active);
+            Assert.IsNotNull(gender2);
+            Assert.IsTrue(gender1.Name.Contains("Муж"));
+            Assert.IsTrue(genders.Count() != 0);
+            Assert.IsTrue(genders.Contains(gender1));
+            Assert.IsTrue(genders.Contains(gender2));
         }
     }
 }

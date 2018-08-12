@@ -26,28 +26,28 @@ namespace BezvizSystem.BLL.Services.XML
             _mapper =  new MapperConfiguration(cfg => cfg.AddProfile(new MapperXMLProfile(_database))).CreateMapper();
         }
 
-        private IEnumerable<ModelForXmlToPogran> GetNewItems()
-        {
-            var visitors = _database.VisitorManager.GetAll().ToList().Where(v => v.StatusOfRecord == StatusOfRecord.Save);
-            return _mapper.Map<IEnumerable<Visitor>, IEnumerable<ModelForXmlToPogran>>(visitors);
-        }
+        //private IEnumerable<ModelForXmlToPogran> GetNewItems()
+        //{
+        //    var visitors = _database.VisitorManager.GetAll().ToList().Where(v => v.IsNew());
+        //    return _mapper.Map<IEnumerable<Visitor>, IEnumerable<ModelForXmlToPogran>>(visitors);
+        //}
 
-        private IEnumerable<ModelForXmlToPogran> GetExtraNewItems()
-        {
-            var visitors = _database.VisitorManager.GetAll().ToList().Where(v => v.StatusOfRecord == StatusOfRecord.Save).Where(v => v.Group.ExtraSend);
-            return _mapper.Map<IEnumerable<Visitor>, IEnumerable<ModelForXmlToPogran>>(visitors);
-        }
+        //private IEnumerable<ModelForXmlToPogran> GetExtraNewItems()
+        //{
+        //    var visitors = _database.VisitorManager.GetAll().ToList().Where(v => v.IsNew()).Where(v => v.Group.ExtraSend);
+        //    return _mapper.Map<IEnumerable<Visitor>, IEnumerable<ModelForXmlToPogran>>(visitors);
+        //}
 
-        private void EditStatus(StatusOfRecord codeOld, StatusOfRecord codeNew)
-        {
-            var visitors = _database.VisitorManager.GetAll().Where(v => v.StatusOfRecord == codeOld).ToList();
+        //private void EditStatus(StatusOfRecord codeNew)
+        //{
+        //    var visitors = _database.VisitorManager.GetAll().Where(v => v.IsNew()).ToList();
 
-            foreach(var item in visitors)
-            {              
-                item.StatusOfRecord = codeNew;
-                _database.VisitorManager.Update(item);
-            }
-        }
+        //    foreach(var item in visitors)
+        //    {
+        //        item.EditStatus(codeNew);
+        //        _database.VisitorManager.Update(item);
+        //    }
+        //}
 
         private XDocument CreadeDoc(IEnumerable<ModelForXmlToPogran> list)
         {
@@ -79,14 +79,14 @@ namespace BezvizSystem.BLL.Services.XML
         {                   
             try
             {
-                var list = GetNewItems();
-                if (list.Count() == 0)
-                    return new OperationDetails(false, "Нет записей для выгрузки", "");
+                //var list = GetNewItems();
+                //if (list.Count() == 0)
+                //    return new OperationDetails(false, "Нет записей для выгрузки", "");
 
-                XDocument xDoc = CreadeDoc(list);
-                xDoc.Save(name, options);
+                //XDocument xDoc = CreadeDoc(list);
+                //xDoc.Save(name, options);
                 //mark item unloaded
-                EditStatus(StatusOfRecord.Save, StatusOfRecord.Send);
+                //EditStatus(StatusOfRecord.Send);
            
                 return new OperationDetails(true, "XML файл создан", "");
             }
@@ -100,14 +100,14 @@ namespace BezvizSystem.BLL.Services.XML
         {
             try
             {
-                var list = GetExtraNewItems();
-                if (list.Count() == 0)
-                    return new OperationDetails(false, "Нет записей для выгрузки", "");
+               // var list = GetExtraNewItems();
+                //if (list.Count() == 0)
+                //    return new OperationDetails(false, "Нет записей для выгрузки", "");
 
-                XDocument xDoc = CreadeDoc(list);
-                xDoc.Save(name, options);
+                //XDocument xDoc = CreadeDoc(list);
+                //xDoc.Save(name, options);
                 //mark item unloaded
-                EditStatus(StatusOfRecord.Save, StatusOfRecord.Send);
+               // EditStatus(StatusOfRecord.Send);
 
                 return new OperationDetails(true, "XML файл создан", "");
             }

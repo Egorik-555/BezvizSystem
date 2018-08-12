@@ -51,7 +51,6 @@
     <Compile Include="ExcelTest.cs" />
     <Compile Include="UnitTestReportService.cs" />
     <Compile Include="UnitTestXmlCreatorService.cs" />
-    <Compile Include="UnitTestLoggerTest.cs" />
     <Compile Include="UnitTestAnketaService.cs" />
     <Compile Include="UnitTestGroupService.cs" />
     <Compile Include="UnitTestVisitorService.cs" />

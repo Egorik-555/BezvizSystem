@@ -7,7 +7,6 @@ using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.DAL.Interfaces;
 using System.Linq;
 using BezvizSystem.BLL.Tests.TestServises;
-using BezvizSystem.BLL.DTO.Log;
 
 namespace BezvizSystem.BLL.Tests
 {
@@ -16,7 +15,6 @@ namespace BezvizSystem.BLL.Tests
     {     
         IDictionaryService<NationalityDTO> serviceNat;
         IDictionaryService<CheckPointDTO> serviceCheck;
-        IDictionaryService<TypeOfOperationDTO> serviceOperation;
         IDictionaryService<GenderDTO> serviceGender;
 
         public UnitTestDictionaryService()
@@ -26,7 +24,6 @@ namespace BezvizSystem.BLL.Tests
         
             serviceNat = new DictionaryService<NationalityDTO>(database);
             serviceCheck = new DictionaryService<CheckPointDTO>(database);
-            serviceOperation = new DictionaryService<TypeOfOperationDTO>(database);
             serviceGender = new DictionaryService<GenderDTO>(database);
         }
 
@@ -36,12 +33,10 @@ namespace BezvizSystem.BLL.Tests
         {                    
             var nationalities = (IEnumerable<NationalityDTO>)serviceNat.Get();
             var checkPoints = (IEnumerable<CheckPointDTO>)serviceCheck.Get();
-            var operations = (IEnumerable<TypeOfOperationDTO>)serviceOperation.Get();
             var genders = (IEnumerable<GenderDTO>)serviceGender.Get();
         
             Assert.IsNotNull(nationalities);
             Assert.IsNotNull(checkPoints);
-            Assert.IsNotNull(operations);
             Assert.IsNotNull(genders);
         }
 
@@ -64,18 +59,6 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsTrue(nationalities.Count() == 3);
             Assert.IsNotNull(nationalities.Where(s => s.ShortName == "n1") != null);
             Assert.IsNotNull(nationalities.Where(s => s.Name == "n2") == null);
-        }
-
-        [TestMethod]
-        public void Test_Get_TypeOfOperation_Dictionary()
-        {
-            var operations = serviceOperation.Get();
-
-            Assert.IsNotNull(operations);
-            Assert.IsTrue(operations.Count() == 2);
-            Assert.IsNotNull(operations.Where(s => s.Code == 3).Count() == 0);
-            Assert.IsTrue(operations.Where(s => s.Name == "Enter").FirstOrDefault().Code == 1 );
-           
         }
 
         [TestMethod]

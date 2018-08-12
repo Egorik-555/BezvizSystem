@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace BezvizSystem.DAL.Helpers
 {
-    public enum StatusOfRecord
+   public enum Operation
     {
-        Save = 1,
-        Send = 2,
-        Recd = 3
+        Done = 1,
+        Add = 2,
+        Edit = 3,
+        Remove = 4
     }
 }

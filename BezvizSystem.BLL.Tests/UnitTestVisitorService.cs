@@ -22,7 +22,7 @@ namespace BezvizSystem.BLL.Tests
     public class UnitTestVisitorService
     {
         IService<VisitorDTO> Service;
-              
+
         public UnitTestVisitorService()
         {
             CreateTestRepositories repoes = new CreateTestRepositories();
@@ -32,23 +32,23 @@ namespace BezvizSystem.BLL.Tests
         [TestMethod]
         public async Task Create_Visitor()
         {
-            VisitorDTO visitor1 = new VisitorDTO {Id = 10, Name = "newTest", Nationality = "nat1", Gender = "Мужчина", UserInSystem = "Test1" };
-            VisitorDTO visitor2 = new VisitorDTO { Id = 11, Name = "newTest", Nationality = "nat1", Gender = "Error", UserInSystem = "Test1" };
+            VisitorDTO visitor1 = new VisitorDTO { Id = 111, Name = "newTest", Nationality = "nat1", Gender = "Мужчина", UserInSystem = "Test1", DateInSystem = DateTime.Now };
+            VisitorDTO visitor2 = new VisitorDTO { Id = 222, Name = "newTest", Nationality = "nat1", Gender = "Error", UserInSystem = "Test1", DateInSystem = DateTime.Now };
 
             var result1 = await Service.Create(visitor1);
             var result2 = await Service.Create(visitor2);
             var count = Service.GetAll().Count();
 
-            var addedVisitor1 = await Service.GetByIdAsync(10);
-            var addedVisitor2 = await Service.GetByIdAsync(11);
+            var addedVisitor1 = await Service.GetByIdAsync(111);
+            var addedVisitor2 = await Service.GetByIdAsync(222);
 
             Assert.IsTrue(result1.Succedeed);
             Assert.IsTrue(result2.Succedeed);
-            Assert.IsTrue(count == 10);
-            Assert.IsTrue(addedVisitor1.Gender == "Мужчина");
+            Assert.AreEqual(4, count);
+            Assert.AreEqual("Мужчина", addedVisitor1.Gender);
             Assert.IsNull(addedVisitor2.Gender);
             Assert.IsFalse(addedVisitor1.Arrived);
-            Assert.IsTrue(addedVisitor1.DateInSystem.Value.Date == DateTime.Now.Date);
+            Assert.AreEqual(DateTime.Now.Date, addedVisitor1.DateInSystem.Value.Date);
 
         }
 
@@ -61,28 +61,37 @@ namespace BezvizSystem.BLL.Tests
 
             Assert.IsNull(visitor);
             Assert.IsTrue(result.Succedeed);
-            Assert.IsTrue(count == 7);
+            Assert.AreEqual(1, count);
         }
 
         [TestMethod]
         public async Task Update_Visitor()
         {
-            VisitorDTO visitor = new VisitorDTO {Id = 2, Name = "new Name", Nationality = "nat2", Gender = "Мужчина",
-                                                 DateInSystem = new DateTime(2018, 07, 01), UserInSystem = "user",  UserEdit = "new user"};
+            VisitorDTO visitor = new VisitorDTO
+            {
+                Id = 2,
+                Name = "new Name",
+                Nationality = "nat1",
+                Gender = "Мужчина",
+                DateInSystem = new DateTime(2018, 07, 02),
+                UserInSystem = "Test",
+                DateEdit = DateTime.Now,
+                UserEdit = "new user"
+            };
 
             var result = await Service.Update(visitor);
             var resVisitor = await Service.GetByIdAsync(2);
             var count = Service.GetAll().Count();
 
             Assert.IsTrue(result.Succedeed);
-            Assert.IsTrue(count == 8);
-            Assert.IsTrue(resVisitor.Name == "new Name");
-            Assert.IsTrue(resVisitor.UserInSystem == "user");
-            Assert.IsTrue(resVisitor.DateInSystem == new DateTime(2018, 07, 01));
-            Assert.IsTrue(resVisitor.UserEdit == "new user");
-            Assert.IsTrue(resVisitor.DateEdit.Value.Date == DateTime.Now.Date);
-            Assert.IsTrue(resVisitor.Gender == "Мужчина");
-            Assert.IsTrue(resVisitor.Nationality == "nat2");
+            Assert.AreEqual(2, count);
+            Assert.AreEqual("new Name", resVisitor.Name);
+            Assert.AreEqual("Test", resVisitor.UserInSystem);
+            Assert.AreEqual(new DateTime(2018, 07, 02).Date, resVisitor.DateInSystem.Value.Date);
+            Assert.AreEqual("new user", resVisitor.UserEdit);
+            Assert.AreEqual(DateTime.Now.Date, resVisitor.DateEdit.Value.Date);
+            Assert.AreEqual("Мужчина", resVisitor.Gender);
+            Assert.AreEqual("nat1", resVisitor.Nationality);
         }
 
         [TestMethod]
@@ -91,15 +100,25 @@ namespace BezvizSystem.BLL.Tests
             var visitor = Service.GetById(1);
 
             Assert.IsNotNull(visitor);
-            Assert.AreEqual(visitor.Surname, "surname1");
-            Assert.AreEqual(visitor.BithDate.Value.Date, new DateTime(1987, 07, 01).Date);
+            Assert.AreEqual("surname1", visitor.Surname);
+            Assert.AreEqual(new DateTime(1987, 07, 01).Date, visitor.BithDate.Value.Date);
+        }
+
+        [TestMethod]
+        public async Task Get_By_Id_Async_Visitor()
+        {
+            var visitor = await Service.GetByIdAsync(1);
+
+            Assert.IsNotNull(visitor);
+            Assert.AreEqual("surname1", visitor.Surname);
+            Assert.AreEqual(new DateTime(1987, 07, 01).Date, visitor.BithDate.Value.Date);
         }
 
         [TestMethod]
         public void Get_All_Visitor()
         {
             var visitor = Service.GetAll();
-            Assert.IsTrue(visitor.Count() == 8);
+            Assert.AreEqual(2, visitor.Count());         
         }
     }
 }

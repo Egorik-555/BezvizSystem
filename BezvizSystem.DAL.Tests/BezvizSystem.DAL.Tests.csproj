@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestDictionaries.cs" />
+    <Compile Include="TestRepoXmlDispatch.cs" />
     <Compile Include="UnitTestEqualsVisitors.cs" />
     <Compile Include="UnitTestUOW.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

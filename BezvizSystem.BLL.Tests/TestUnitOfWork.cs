@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Identity;
 using Moq;
-using BezvizSystem.DAL.Entities.Log;
 
 namespace BezvizSystem.BLL.Tests
 {
@@ -16,15 +15,6 @@ namespace BezvizSystem.BLL.Tests
         Mock<IRepository<Nationality, int>> nationalityManager;
         Mock<IRepository<CheckPoint, int>> checkPointManager;
         Mock<IRepository<GroupVisitor, int>> groupManger;
-        //Mock<IRepository<TypeOfOperation, int>> typeOfOperationManger;
-        //Mock<IRepository<Gender, int>> genderManger;
-
-        List<TypeOfOperation> operations = new List<TypeOfOperation>
-        {
-            new TypeOfOperation{ Code = 1, Name = "Enter", Active = true},
-            new TypeOfOperation{ Code = 2, Name = "Exit"},
-            new TypeOfOperation{ Code = 3, Name = "ErrorEnter", Active = true}
-        };
 
         List<Nationality> nationalities = new List<Nationality>
         {
@@ -68,12 +58,11 @@ namespace BezvizSystem.BLL.Tests
         public IRepository<OperatorProfile, string> OperatorManager => throw new NotImplementedException();
         public IRepository<Visitor, int> VisitorManager => throw new NotImplementedException();
         public IRepository<GroupVisitor, int> GroupManager => groupManger.Object;
-        public IRepository<UserActivity, int> UserActivities => throw new NotImplementedException();
+        public IRepositoryXMLDispatch<XMLDispatch, int> XMLDispatchManager => throw new NotImplementedException();
 
         //Dictionaries
-        public IRepository<Nationality, int> NationalityManager => nationalityManager.Object;
-        public IRepository<CheckPoint, int> CheckPointManager => checkPointManager.Object;
-        public IRepository<TypeOfOperation, int> TypeOfOperations => throw new NotImplementedException();
+        public IRepository<Nationality, int> Nationalities => nationalityManager.Object;
+        public IRepository<CheckPoint, int> CheckPoints => checkPointManager.Object;
         public IRepository<Gender, int> Genders => throw new NotImplementedException();
      
         public void Dispose()

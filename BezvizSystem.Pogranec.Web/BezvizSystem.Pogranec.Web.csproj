@@ -203,12 +203,10 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AnketaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\Api\LogController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Infrastructure\Log\TrackLoginFilter.cs" />
     <Compile Include="Mapper\MapperPogranecConfiguration.cs" />
     <Compile Include="Models\Anketa\ArrivedPerson.cs" />
     <Compile Include="Models\Login\Model.cs" />
@@ -307,6 +305,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\XMLs\" />
+    <Folder Include="Infrastructure\" />
     <Folder Include="Views\Log\" />
   </ItemGroup>
   <ItemGroup>

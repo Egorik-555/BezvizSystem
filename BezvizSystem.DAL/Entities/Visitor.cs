@@ -1,4 +1,5 @@
 ﻿using BezvizSystem.DAL.Helpers;
+using BezvizSystem.DAL.StateVisitor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,18 @@ namespace BezvizSystem.DAL.Entities
 {
     public class Visitor
     {
+
+        public Visitor()
+        {
+            State = new NewVisitorState();
+        }
+
         public int Id { get; set; }
 
         public virtual GroupVisitor Group { get; set; }
+
+        public virtual XMLDispatch XML { get; set; }
+        public IVisitorState State { get; set; }
 
         public string Surname { get; set; }
         public string Name { get; set; }
@@ -21,8 +31,6 @@ namespace BezvizSystem.DAL.Entities
         public DateTime? BithDate { get; set; }
         public virtual Nationality Nationality { get; set; }
 
-        public StatusOfRecord StatusOfRecord { get; set; }
-        public StatusOfOperation StatusOfOperation { get; set; }
         public bool Arrived { get; set; }
 
         public DateTime? DateInSystem { get; set; }
@@ -59,7 +67,7 @@ namespace BezvizSystem.DAL.Entities
                 if (visitor.Gender.Name != Gender.Name) return false;
 
             if (!visitor.BithDate.HasValue && BithDate.HasValue) return false;
-            if (visitor.BithDate.HasValue && !BithDate.HasValue) return false;      
+            if (visitor.BithDate.HasValue && !BithDate.HasValue) return false;
             if (visitor.BithDate.HasValue && visitor.BithDate.HasValue)
                 if (visitor.BithDate.Value != BithDate.Value) return false;
 
@@ -67,13 +75,33 @@ namespace BezvizSystem.DAL.Entities
             if (visitor.Nationality != null && Nationality == null) return false;
             if (visitor.Nationality != null && Nationality != null)
                 if (visitor.Nationality.Name != Nationality.Name) return false;
-      
+
             return true;
         }
 
         public override int GetHashCode()
         {
             return this.Id.GetHashCode();
+        }
+
+        public void Edit()
+        {
+            State.Edit(this);
+        }
+
+        public void Remove()
+        {
+            State.Remove(this);
+        }
+
+        public void Send()
+        {
+            State.Send(this);
+        }
+
+        public void Recd()
+        {
+            State.Recd(this);
         }
     }
 }

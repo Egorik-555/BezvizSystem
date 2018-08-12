@@ -18,7 +18,7 @@ namespace BezvizSystem.BLL.Mapper.XML
         {
             CreateMap<Visitor, ModelForXmlToPogran>().
                 ForMember(dest => dest.Organization, opt => opt.MapFrom(src => 1)).
-                ForMember(dest => dest.TypeOperation, opt => opt.MapFrom(src => src.StatusOfOperation)).
+                //ForMember(dest => dest.TypeOperation, opt => opt.MapFrom(src => src.StatusOfRecord)).
                 ForMember(dest => dest.DayBith, opt => opt.MapFrom(src => src.BithDate.HasValue ? src.BithDate.Value.Day.ToString() : null)).
                 ForMember(dest => dest.MonthBith, opt => opt.MapFrom(src => src.BithDate.HasValue ? src.BithDate.Value.Month.ToString() : null)).
                 ForMember(dest => dest.YearBith, opt => opt.MapFrom(src => src.BithDate.HasValue ? src.BithDate.Value.Year.ToString() : null)).

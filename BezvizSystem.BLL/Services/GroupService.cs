@@ -32,20 +32,16 @@ namespace BezvizSystem.BLL.Services
             {
                 var model = _mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
                 var user = await _database.UserManager.FindByNameAsync(group.UserInSystem);
+                model.TranscriptUser = user.OperatorProfile.Transcript;
 
                 //data of visitors
                 foreach (var visitor in model.Visitors)
                 {
-                    visitor.StatusOfRecord = StatusOfRecord.Save;
-                    visitor.StatusOfOperation = StatusOfOperation.Add; // new record
+                   // visitor.StatusOfRecord = StatusOfRecord.New;                   
                     visitor.DateInSystem = DateTime.Now;
                     visitor.UserInSystem = model.UserInSystem;
                 }
-
-                //data for group of visitors
-                model.User = user;
-                model.DateInSystem = DateTime.Now;
-
+             
                 _database.GroupManager.Create(model);
                 return new OperationDetails(true, "Группа туристов создана", "");
             }
@@ -59,36 +55,12 @@ namespace BezvizSystem.BLL.Services
         {
             try
             {
-                var group = await _database.GroupManager.GetByIdAsync(id);
+                var group = await GetByIdAsync(id);
                 if (group != null)
-                {                  
-                    var visitors = group.Visitors.ToList();
+                {
 
-                    int k = 0;
-
-                    foreach (var item in visitors)
-                    {
-                        //if item have status code = 1 (new)
-                        if (item.StatusOfRecord == StatusOfRecord.Save)
-                        {
-                            _database.VisitorManager.Delete(item.Id); // remove item
-                            k++;
-                        }
-                        // if item send to pogran
-                        else
-                        {
-                            item.StatusOfRecord = StatusOfRecord.Save; // mark to upload
-                            item.StatusOfOperation = StatusOfOperation.Remove; //mark to delete
-                            _database.VisitorManager.Update(item);
-                        }
-                    }
-
-                    //if deleted all visitors in group
-                    if (group.Visitors.Count() == k)
-                    {
-                        _database.GroupManager.Delete(group.Id);
-                        
-                    }
+                    //var newGroup = _mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
+                    _database.GroupManager.Delete(group.Id);
 
                     return new OperationDetails(true, "Группа туристов удалена", "");
                 }
@@ -99,19 +71,18 @@ namespace BezvizSystem.BLL.Services
                 return new OperationDetails(false, ex.Message, "");
             }
         }
-      
+
         public async Task<OperationDetails> Update(GroupVisitorDTO group)
         {
             try
             {
-                var model = await _database.GroupManager.GetByIdAsync(group.Id);   
-               
+                var model = await _database.GroupManager.GetByIdAsync(group.Id);
+
                 if (model != null)
                 {
                     var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelGroup(_database, model))).CreateMapper();
+                    var modelNew = mapper.Map<GroupVisitor>(group);
 
-                    var modelNew = mapper.Map<GroupVisitorDTO, GroupVisitor>(group); 
-                    
                     _database.GroupManager.Update(modelNew);
                     return new OperationDetails(true, "Группа туристов изменена", "");
                 }
