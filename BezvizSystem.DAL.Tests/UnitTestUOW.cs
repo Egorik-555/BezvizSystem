@@ -98,7 +98,7 @@ namespace BezvizSystem.DAL.Tests
                 Id = 1,
                 Name = "Alex",
                 Surname = "Taylor",
-                DateInSystem = DateTime.Now            
+                DateInSystem = DateTime.Now
             };
 
             //create
@@ -114,7 +114,7 @@ namespace BezvizSystem.DAL.Tests
             }
             findVisitor = uow.VisitorManager.GetAll().Where(v => v.Name == visitor.Name && v.Surname == visitor.Surname).FirstOrDefault();
 
-            Assert.IsNotNull(findVisitor);          
+            Assert.IsNotNull(findVisitor);
             ////
 
             //edit
@@ -132,7 +132,7 @@ namespace BezvizSystem.DAL.Tests
             findVisitor = uow.VisitorManager.GetAll().Where(v => v.Name == visitor.Name && v.Surname == visitor.Surname).FirstOrDefault();
             Assert.IsNull(findVisitor);
         }
-      
+
 
         [TestMethod]
         public void Add_Update_Remove_GroupVisitor_UnitOfWork()
@@ -186,14 +186,31 @@ namespace BezvizSystem.DAL.Tests
         }
 
         [TestMethod]
-        public void Add_Update_Remove_XMLDispatch_UnitOfWork()
+        public async Task Add_Update_Remove_XMLDispatch_UnitOfWork()
         {
             //create
-            XMLDispatch dispatch = new XMLDispatch { IdVisitor = 1, Operation = Operation.Add, Status = Status.New };
+            XMLDispatch dispatch = new XMLDispatch { Id = 55, Operation = Operation.Add, Status = Status.New };
 
-            uow.XMLDispatchManager.Create(dispatch);
+            var findDispatch = uow.XMLDispatchManager.GetById(dispatch.Id);
 
-            var findDispatch = uow.XMLDispatchManager.GetAll().Where(d => d.Id == dispatch.Id).FirstOrDefault();
+            if (findDispatch != null)
+            {
+                dispatch = findDispatch;
+            }
+            else
+            {
+                dispatch = uow.XMLDispatchManager.Create(dispatch);
+            }
+
+            findDispatch = uow.XMLDispatchManager.GetAll().Where(d => d.Id == dispatch.Id).FirstOrDefault();
+            Assert.AreEqual(Operation.Add, findDispatch.Operation);
+            Assert.AreEqual(Status.New, findDispatch.Status);
+
+            findDispatch = uow.XMLDispatchManager.GetById(dispatch.Id);
+            Assert.AreEqual(Operation.Add, findDispatch.Operation);
+            Assert.AreEqual(Status.New, findDispatch.Status);
+
+            findDispatch = await uow.XMLDispatchManager.GetByIdAsync(dispatch.Id);
             Assert.AreEqual(Operation.Add, findDispatch.Operation);
             Assert.AreEqual(Status.New, findDispatch.Status);
             ////
@@ -213,6 +230,6 @@ namespace BezvizSystem.DAL.Tests
             findDispatch = uow.XMLDispatchManager.GetAll().Where(d => d.Id == newDispatch.Id).FirstOrDefault();
 
             Assert.IsNull(findDispatch);
-        }       
+        }
     }
 }

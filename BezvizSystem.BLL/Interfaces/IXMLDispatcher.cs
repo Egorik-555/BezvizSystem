@@ -10,10 +10,10 @@ namespace BezvizSystem.BLL.Interfaces
 {
     public interface IXMLDispatcher
     {
-
-        Task<OperationDetails> New(VisitorDTO visitor, XMLDispatchDTO dispatch);
-        Task<OperationDetails> Update(VisitorDTO visitor, XMLDispatchDTO dispatch);
-        Task<OperationDetails> Remove(VisitorDTO visitor, XMLDispatchDTO dispatch);      
-
+        Task<OperationDetails> New(int IdVisitor);
+        Task<OperationDetails> Send(int IdVisitor);
+        Task<OperationDetails> Recd(int IdVisitor);
+        Task<OperationDetails> Remove(int IdVisitor);
+        Task<OperationDetails> Edit(int IdVisitor);      
     }
 }

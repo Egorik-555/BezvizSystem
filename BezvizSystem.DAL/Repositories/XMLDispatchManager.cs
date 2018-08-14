@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BezvizSystem.DAL.Repositories
 {
-    public class XMLDispatchManager : IRepositoryXMLDispatch<XMLDispatch, int>
+    public class XMLDispatchManager : IRepository<XMLDispatch, int>
     {
         private BezvizContext Database { get; set; }
 
@@ -66,21 +66,5 @@ namespace BezvizSystem.DAL.Repositories
         {
             return Database.XMLDispatches.FindAsync(id);
         }
-
-        public async Task<IVisitorState> GetStateByIdRecordAsync(int id)
-        {
-            IVisitorState result;
-
-            var dispatch = await Database.XMLDispatches.SingleOrDefaultAsync(d => d.IdVisitor == id);
-
-            if (dispatch.Status == Status.Recd)
-                result = new RecdVisitorState(dispatch.Status, dispatch.Operation);
-            else if (dispatch.Status == Status.Send)
-                result = new SendVisitorState(dispatch.Status, dispatch.Operation);
-            else result = new NewVisitorState(dispatch.Status, dispatch.Operation);
-
-            return result;
-        }
-    
     }
 }

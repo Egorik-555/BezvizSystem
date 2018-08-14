@@ -53,6 +53,9 @@ namespace BezvizSystem.BLL.Tests.TestServises
         CheckPoint check3 = new CheckPoint { Id = 3, Name = "check3", Active = true };
         CheckPoint check4 = new CheckPoint { Id = 4, Name = "check4", Active = true };
 
+        XMLDispatch dispatch1 = new XMLDispatch { Id = 1, Status = Status.New, Operation = Operation.Add, DateInSystem = DateTime.Now };
+        XMLDispatch dispatch2 = new XMLDispatch { Id = 2, Status = Status.Send, Operation = Operation.Done, DateInSystem = DateTime.Now };
+
         List<Visitor> listOfVisitorsForVisitorService;
 
         List<GroupVisitor> listOfGroupsForGroupService;
@@ -105,13 +108,13 @@ namespace BezvizSystem.BLL.Tests.TestServises
         }
 
         private void ListForGroupVisitorService()
-        {           
+        {
             visitor1 = new Visitor
             {
                 Id = 1,
                 Group = group1,
                 Surname = "surname1",
-                BithDate = new DateTime(1987, 07, 01),           
+                BithDate = new DateTime(1987, 07, 01),
                 Nationality = nat1,
                 Gender = gender1,
                 DateInSystem = new DateTime(2018, 07, 01),
@@ -328,6 +331,38 @@ namespace BezvizSystem.BLL.Tests.TestServises
             return mockNat.Object;
         }
 
+        private IRepository<XMLDispatch, int> CreateXMLDispatcherManager()
+        {
+            List<XMLDispatch> list = new List<XMLDispatch> { dispatch1, dispatch2 };
+            Mock<IRepository<XMLDispatch, int>> mock = new Mock<IRepository<XMLDispatch, int>>();
+            mock.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.SingleOrDefault(v => v.Id == id));
+            mock.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
+                                                                                  Task<XMLDispatch>.FromResult<XMLDispatch>(
+                                                                                  list.Where(v => v.Id == id).FirstOrDefault()));
+            mock.Setup(m => m.GetAll()).Returns(list);
+
+            mock.Setup(m => m.Create(It.IsAny<XMLDispatch>())).Returns<XMLDispatch>((XMLDispatch xml) =>
+            {
+                list.Add(xml);
+                return xml;
+            });
+            mock.Setup(m => m.Delete(It.IsAny<int>())).Returns((int id) =>
+            {
+                var deleteXML = list.SingleOrDefault(g => g.Id == id);        
+                list.Remove(deleteXML);
+                return deleteXML;
+            });
+            mock.Setup(m => m.Update(It.IsAny<XMLDispatch>())).Returns<XMLDispatch>(xml =>
+            {
+                var deleteGroup = list.SingleOrDefault(g => g.Id == xml.Id);
+                list.Remove(deleteGroup);
+                list.Add(xml);            
+                return xml;
+            });
+
+            return mock.Object;
+        }
+
         public IUnitOfWork CreateIoWManager()
         {
             Mock<IUnitOfWork> mockDB = new Mock<IUnitOfWork>();
@@ -337,6 +372,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
             mockDB.Setup(m => m.RoleManager).Returns(CreateRoleManager());
             mockDB.Setup(m => m.VisitorManager).Returns(CreateVisitorManager());
             mockDB.Setup(m => m.GroupManager).Returns(CreateGroupVisitorManager());
+            mockDB.Setup(m => m.XMLDispatchManager).Returns(CreateXMLDispatcherManager());
 
             mockDB.Setup(m => m.Nationalities).Returns(CreateNationalitiesManager());
             mockDB.Setup(m => m.CheckPoints).Returns(CreateCheckPointManager());

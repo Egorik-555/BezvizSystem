@@ -36,8 +36,7 @@ namespace BezvizSystem.BLL.Services
 
                 //data of visitors
                 foreach (var visitor in model.Visitors)
-                {
-                   // visitor.StatusOfRecord = StatusOfRecord.New;                   
+                {                  
                     visitor.DateInSystem = DateTime.Now;
                     visitor.UserInSystem = model.UserInSystem;
                 }
@@ -58,10 +57,7 @@ namespace BezvizSystem.BLL.Services
                 var group = await GetByIdAsync(id);
                 if (group != null)
                 {
-
-                    //var newGroup = _mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
                     _database.GroupManager.Delete(group.Id);
-
                     return new OperationDetails(true, "Группа туристов удалена", "");
                 }
                 else return new OperationDetails(false, "Группа туристов не найдена", "");

@@ -10,7 +10,6 @@ namespace BezvizSystem.DAL.StateVisitor
 {
     public interface IVisitorState
     {
-
         Status Status { get; set; }
         Operation Operation { get; set; }
 

@@ -95,7 +95,6 @@
     <Compile Include="Helpers\Status.cs" />
     <Compile Include="Interfaces\IOperatorManager.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
-    <Compile Include="Interfaces\IRepositoryXMLDispatch.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="EF\BezvizContext.cs" />
     <Compile Include="Entities\BezvizRole.cs" />

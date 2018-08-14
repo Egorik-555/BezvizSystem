@@ -58,7 +58,7 @@ namespace BezvizSystem.BLL.Tests
         public IRepository<OperatorProfile, string> OperatorManager => throw new NotImplementedException();
         public IRepository<Visitor, int> VisitorManager => throw new NotImplementedException();
         public IRepository<GroupVisitor, int> GroupManager => groupManger.Object;
-        public IRepositoryXMLDispatch<XMLDispatch, int> XMLDispatchManager => throw new NotImplementedException();
+        public IRepository<XMLDispatch, int> XMLDispatchManager => throw new NotImplementedException();
 
         //Dictionaries
         public IRepository<Nationality, int> Nationalities => nationalityManager.Object;

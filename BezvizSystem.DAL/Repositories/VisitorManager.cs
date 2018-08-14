@@ -28,7 +28,7 @@ namespace BezvizSystem.DAL.Repositories
 
         public Visitor GetById(int id)
         {
-            return Database.Visitors.Find(id); ;
+            return Database.Visitors.Find(id);
         }
 
         public Task<Visitor> GetByIdAsync(int id)

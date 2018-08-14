@@ -17,7 +17,7 @@ namespace BezvizSystem.DAL.Interfaces
         IRepository<OperatorProfile, string> OperatorManager { get; }
         IRepository<Visitor, int> VisitorManager { get; }
         IRepository<GroupVisitor, int> GroupManager { get; }
-        IRepositoryXMLDispatch<XMLDispatch, int> XMLDispatchManager { get; }
+        IRepository<XMLDispatch, int> XMLDispatchManager { get; }
 
         IRepository<Nationality, int> Nationalities { get; }
         IRepository<CheckPoint, int> CheckPoints { get; }

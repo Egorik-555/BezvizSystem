@@ -31,7 +31,7 @@ namespace BezvizSystem.BLL.Services
             try
             {              
                 var model = _mapper.Map<VisitorDTO, Visitor>(visitor);
-                _database.VisitorManager.Create(model);
+                var newVisitor = _database.VisitorManager.Create(model);
                 return new OperationDetails(true, "Турист создан", "");
             }
             catch (Exception ex)

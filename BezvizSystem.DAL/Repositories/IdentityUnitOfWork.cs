@@ -22,7 +22,7 @@ namespace BezvizSystem.DAL.Repositories
         private IRepository<OperatorProfile, string> operatorManager;
         private IRepository<Visitor, int> visitorManager;
         private IRepository<GroupVisitor, int> groupManager;
-        private IRepositoryXMLDispatch<XMLDispatch, int> xmlDispatchManager;
+        private IRepository<XMLDispatch, int> xmlDispatchManager;
 
         private IRepository<CheckPoint, int> checkPoints;
         private IRepository<Nationality, int> nationalities;
@@ -51,7 +51,7 @@ namespace BezvizSystem.DAL.Repositories
         public IRepository<OperatorProfile, string> OperatorManager => operatorManager;
         public IRepository<Visitor, int> VisitorManager => visitorManager;
         public IRepository<GroupVisitor, int> GroupManager => groupManager;
-        public IRepositoryXMLDispatch<XMLDispatch, int> XMLDispatchManager => xmlDispatchManager;
+        public IRepository<XMLDispatch, int> XMLDispatchManager => xmlDispatchManager;
 
         public IRepository<Nationality, int> Nationalities => nationalities;
         public IRepository<CheckPoint, int> CheckPoints => checkPoints;

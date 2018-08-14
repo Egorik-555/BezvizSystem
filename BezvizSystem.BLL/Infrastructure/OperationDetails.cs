@@ -14,6 +14,14 @@ namespace BezvizSystem.BLL.Infrastructure
             Message = message;
             Property = prop;
         }
+
+        public OperationDetails(bool succedeed, string message)
+        {
+            Succedeed = succedeed;
+            Message = message;
+            Property = "";
+        }
+
         public bool Succedeed { get; private set; }
         public string Message { get; private set; }
         public string Property { get; private set; }
