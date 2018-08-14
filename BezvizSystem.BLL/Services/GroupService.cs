@@ -18,11 +18,12 @@ namespace BezvizSystem.BLL.Services
     {
         IUnitOfWork _database;
         IMapper _mapper;
+        IXMLDispatcher _xmlDispatcher;
 
-        public GroupService(IUnitOfWork uow)
+        public GroupService(IUnitOfWork uow, IXMLDispatcher xmlDispatcher)
         {
             _database = uow;
-
+            _xmlDispatcher = xmlDispatcher;
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database))).CreateMapper();
         }
 
