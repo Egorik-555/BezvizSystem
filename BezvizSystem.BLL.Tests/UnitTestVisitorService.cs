@@ -26,7 +26,8 @@ namespace BezvizSystem.BLL.Tests
         public UnitTestVisitorService()
         {
             CreateTestRepositories repoes = new CreateTestRepositories();
-            Service = new VisitorService(repoes.CreateIoWManager());
+            IUnitOfWork database = repoes.CreateIoWManager();
+            Service = new VisitorService(repoes.CreateIoWManager(), new XMLDispatcher(database));
         }
 
         [TestMethod]

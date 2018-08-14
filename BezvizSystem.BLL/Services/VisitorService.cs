@@ -18,11 +18,12 @@ namespace BezvizSystem.BLL.Services
     {
         IUnitOfWork _database;
         IMapper _mapper;
+        IXMLDispatcher _xmlDispatcher;
 
-
-        public VisitorService(IUnitOfWork uow)
+        public VisitorService(IUnitOfWork uow, IXMLDispatcher xmlDispatcher)
         {
             _database = uow;
+            _xmlDispatcher = xmlDispatcher;
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database))).CreateMapper();
         }
 
@@ -32,6 +33,7 @@ namespace BezvizSystem.BLL.Services
             {              
                 var model = _mapper.Map<VisitorDTO, Visitor>(visitor);
                 var newVisitor = _database.VisitorManager.Create(model);
+                await _xmlDispatcher.New(newVisitor.Id);
                 return new OperationDetails(true, "Турист создан", "");
             }
             catch (Exception ex)
@@ -47,7 +49,8 @@ namespace BezvizSystem.BLL.Services
                 var visitor = await _database.VisitorManager.GetByIdAsync(id);
                 if (visitor != null)
                 {
-                    _database.VisitorManager.Delete(visitor.Id);
+                    _database.VisitorManager.Delete(id);
+                    await _xmlDispatcher.Remove(id);
                     return new OperationDetails(true, "Турист удален", "");
                 }
                 else return new OperationDetails(false, "Турист не найден", "");
@@ -69,6 +72,7 @@ namespace BezvizSystem.BLL.Services
                     var m = mapper.Map<VisitorDTO, Visitor>(visitor);
 
                     _database.VisitorManager.Update(m);
+                    await _xmlDispatcher.Edit(m.Id);
                     return new OperationDetails(true, "Турист изменен", "");
                 }
                 else return new OperationDetails(false, "Турист не найден", "");
