@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.DTO.Dictionary;
+using BezvizSystem.BLL.Interfaces;
+using BezvizSystem.BLL.Services;
 using BezvizSystem.DAL;
 using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Helpers;
@@ -17,10 +19,12 @@ namespace BezvizSystem.BLL.Mapper
     {
         IMapper mapperVisitor;
         IUnitOfWork _database;
+        IXMLDispatcher _xmlDispatcher;
 
         public FromDALToBLLProfile(IUnitOfWork database)
         {
             _database = database;
+            _xmlDispatcher = new XMLDispatcher(database);
             mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelVisitor(database, null))).CreateMapper();
 
             //anketa service
@@ -30,30 +34,32 @@ namespace BezvizSystem.BLL.Mapper
                 ForMember(dest => dest.Status, opt => opt.MapFrom(src => CheckAllStatuses(src.Visitors))).
                 ForMember(dest => dest.Operator, opt => opt.MapFrom(src => src.TranscriptUser)).
                 ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name)).
-                ForMember(dest => dest.Arrived, opt => opt.MapFrom(src => CheckAllArrivals(src.Visitors)));//.
-               // AfterMap((d, e) => RemovedOrNotVisitors(d, e));
+                ForMember(dest => dest.Arrived, opt => opt.MapFrom(src => CheckAllArrivals(src.Visitors)));
+            //.AfterMap((d, e) => RemovedOrNotVisitors(d, e));
 
+            //visitors
             CreateMap<Visitor, VisitorDTO>().
                ForMember(dest => dest.Group, opt => opt.Ignore()).
-               ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name));
-            /////
-
-            //group service
-            CreateMap<GroupVisitorDTO, GroupVisitor>().
-                     ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => database.CheckPoints.GetAll().SingleOrDefault(n => n.Name == src.CheckPoint)));
+               ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name)).
+               ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Name));
 
             CreateMap<VisitorDTO, Visitor>().
                 ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => database.Nationalities.GetAll().SingleOrDefault(n => n.Name == src.Nationality))).
                 ForMember(dest => dest.Gender, opt => opt.MapFrom(src => database.Genders.GetAll().SingleOrDefault(n => n.Name == src.Gender)));
+            /////
+
+            //group service
+            CreateMap<GroupVisitorDTO, GroupVisitor>().
+                     ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => database.CheckPoints.GetAll().SingleOrDefault(n => n.Name == src.CheckPoint)));            
 
             CreateMap<GroupVisitor, GroupVisitorDTO>().
                 ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name));
-            CreateMap<Visitor, VisitorDTO>().
-                ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name)).
-                ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Name));
+            //CreateMap<Visitor, VisitorDTO>().
+            //    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name)).
+            //    ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Name));
             ///
 
-            //User service
+            //User
             CreateMap<ProfileUserDTO, OperatorProfile>();
             CreateMap<OperatorProfile, ProfileUserDTO>();
 
@@ -111,21 +117,6 @@ namespace BezvizSystem.BLL.Mapper
             //else return StatusOfRecord.New.ToString();
 
             return "Сохранено";
-        }
-
-
-        private void RemovedOrNotVisitors(GroupVisitor groupVisitor, AnketaDTO anketa)
-        {
-            ICollection<Visitor> result = new List<Visitor>();
-            foreach (var visitor in groupVisitor.Visitors)
-            {
-                //if (!visitor.IsRemove())
-                //{
-                //    result.Add(visitor);
-                //}
-            }
-
-            //mapperVisitor.Map(result, anketa.Visitors);
         }
     }
 

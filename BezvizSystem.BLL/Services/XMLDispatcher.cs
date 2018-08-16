@@ -135,6 +135,10 @@ namespace BezvizSystem.BLL.Services
                         dispatch.DateEdit = DateTime.Now;
                         _database.XMLDispatchManager.Update(dispatch);
                     }
+                    else
+                    {
+                        _database.XMLDispatchManager.Delete(dispatch.Id);
+                    }
                     return new OperationDetails(true, "Запись готова для удаления");
                 }
                 catch (Exception ex)

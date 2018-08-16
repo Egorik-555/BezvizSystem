@@ -31,7 +31,8 @@ namespace BezvizSystem.BLL.Services
 
         public IService<GroupVisitorDTO> CreateGroupService(string connection)
         {
-            return new GroupService(new IdentityUnitOfWork(connection));
+            IdentityUnitOfWork uow = new IdentityUnitOfWork(connection);
+            return new GroupService(uow, new XMLDispatcher(uow));
         }
 
         public IService<AnketaDTO> CreateAnketaService(string connection)
