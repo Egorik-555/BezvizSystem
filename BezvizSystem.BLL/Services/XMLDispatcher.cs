@@ -21,7 +21,7 @@ namespace BezvizSystem.BLL.Services
             _database = uow;
         }
 
-        public Task<OperationDetails> New(int IdVisitor)
+        public Task<OperationDetails> New(Visitor visitor)
         {
             var task = Task<OperationDetails>.Factory.StartNew(() =>
             {
@@ -29,7 +29,7 @@ namespace BezvizSystem.BLL.Services
                 {
                     var dispatch = new XMLDispatch
                     {
-                        Id = IdVisitor,
+                        Id = visitor.Id,
                         Status = Status.New,
                         Operation = Operation.Add,
                         DateInSystem = DateTime.Now
@@ -48,9 +48,21 @@ namespace BezvizSystem.BLL.Services
             return task;
         }
 
-        public async Task<OperationDetails> Send(int IdVisitor)
+        public async Task<List<OperationDetails>> New(ICollection<Visitor> visitors)
         {
-            var dispatch = await _database.XMLDispatchManager.GetByIdAsync(IdVisitor);
+            List<OperationDetails> list = new List<OperationDetails>();
+            foreach (var visitor in visitors)
+            {
+                var result = await New(visitor);
+                list.Add(result);
+            }
+
+            return list;
+        }
+
+        public async Task<OperationDetails> Send(Visitor visitor)
+        {
+            var dispatch = await _database.XMLDispatchManager.GetByIdAsync(visitor.Id);
             if (dispatch != null)
             {
                 try
@@ -72,9 +84,21 @@ namespace BezvizSystem.BLL.Services
             }
         }
 
-        public async Task<OperationDetails> Recd(int IdVisitor)
+        public async Task<List<OperationDetails>> Send(ICollection<Visitor> visitors)
         {
-            var dispatch = await _database.XMLDispatchManager.GetByIdAsync(IdVisitor);
+            List<OperationDetails> list = new List<OperationDetails>();
+            foreach (var visitor in visitors)
+            {
+                var result = await Send(visitor);
+                list.Add(result);
+            }
+
+            return list;
+        }
+
+        public async Task<OperationDetails> Recd(Visitor visitor)
+        {
+            var dispatch = await _database.XMLDispatchManager.GetByIdAsync(visitor.Id);
             if (dispatch != null)
             {
                 try
@@ -96,9 +120,21 @@ namespace BezvizSystem.BLL.Services
             }
         }
 
-        public async Task<OperationDetails> Edit(int IdVisitor)
+        public async Task<List<OperationDetails>> Recd(ICollection<Visitor> visitors)
         {
-            var dispatch = await _database.XMLDispatchManager.GetByIdAsync(IdVisitor);
+            List<OperationDetails> list = new List<OperationDetails>();
+            foreach (var visitor in visitors)
+            {
+                var result = await Recd(visitor);
+                list.Add(result);
+            }
+
+            return list;
+        }
+
+        public async Task<OperationDetails> Edit(Visitor visitor)
+        {
+            var dispatch = await _database.XMLDispatchManager.GetByIdAsync(visitor.Id);
             if (dispatch != null)
             {
                 try
@@ -122,9 +158,42 @@ namespace BezvizSystem.BLL.Services
             }
         }
 
-        public async Task<OperationDetails> Remove(int IdVisitor)
+        public async Task<List<OperationDetails>> Edit(ICollection<Visitor> oldVisitors, ICollection<Visitor> newVisitors)
         {
-            var dispatch = await _database.XMLDispatchManager.GetByIdAsync(IdVisitor);
+            List<OperationDetails> list = new List<OperationDetails>();
+          
+            foreach (var visitor in newVisitors)
+            {
+                //add visitors do not in old visitors
+                if (!oldVisitors.Contains(visitor))
+                {
+                    var result = await New(visitor);
+                    list.Add(result);
+                }
+                //edit visitors
+                else 
+                {
+                    var result = await Edit(visitor);
+                    list.Add(result);
+                }
+            }
+
+            //delete visitors do not contain in new visitors
+            foreach (var visitor in oldVisitors)
+            {
+                if (!newVisitors.Contains(visitor))
+                {
+                    var result = await Remove(visitor);
+                    list.Add(result);
+                }
+            }
+
+            return list;
+        }
+
+        public async Task<OperationDetails> Remove(Visitor visitor)
+        {
+            var dispatch = await _database.XMLDispatchManager.GetByIdAsync(visitor.Id);
             if (dispatch != null)
             {
                 try
@@ -139,7 +208,7 @@ namespace BezvizSystem.BLL.Services
                     {
                         _database.XMLDispatchManager.Delete(dispatch.Id);
                     }
-                    return new OperationDetails(true, "Запись готова для удаления");
+                    return new OperationDetails(true, "Запись удалена");
                 }
                 catch (Exception ex)
                 {
@@ -151,5 +220,17 @@ namespace BezvizSystem.BLL.Services
                 return new OperationDetails(false, "Отчет xml не найден");
             }
         }
+
+        public async Task<List<OperationDetails>> Remove(ICollection<Visitor> visitors)
+        {
+            List<OperationDetails> list = new List<OperationDetails>();
+            foreach (var visitor in visitors)
+            {
+                var result = await Remove(visitor);
+                list.Add(result);
+            }
+
+            return list;
+        }     
     }
 }

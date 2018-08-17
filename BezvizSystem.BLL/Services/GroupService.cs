@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace BezvizSystem.BLL.Services
 {
-    public delegate Task<OperationDetails> XMLAction(int id);
+    public delegate Task<OperationDetails> XMLAction(Visitor visitor);
 
     public class GroupService : IService<GroupVisitorDTO>
     {
@@ -29,20 +29,12 @@ namespace BezvizSystem.BLL.Services
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database))).CreateMapper();
         }
 
-        private void DateAndUserFroVisitors(ICollection<Visitor> visitors, string user, DateTime? date)
+        private void DateAndUserForVisitors(ICollection<Visitor> visitors, string user, DateTime? date)
         {
             foreach (var visitor in visitors)
             {
                 visitor.DateInSystem = date;
                 visitor.UserInSystem = user;
-            }
-        }
-
-        private void XMLActionForVisitors(ICollection<Visitor> visitors, XMLAction action)
-        {
-            foreach (var visitor in visitors)
-            {
-                action(visitor.Id);
             }
         }
 
@@ -57,14 +49,11 @@ namespace BezvizSystem.BLL.Services
                 {
                     model.TranscriptUser = user.OperatorProfile.Transcript;
                     //data for visitors
-                    DateAndUserFroVisitors(model.Visitors, model.UserInSystem, model.DateInSystem);
-                    ///
-                    //create
-                    _database.GroupManager.Create(model);
-                    ///
+                    DateAndUserForVisitors(model.Visitors, model.UserInSystem, model.DateInSystem);
                     //xml dispatch
-                    XMLActionForVisitors(model.Visitors, _xmlDispatcher.New);
-                    ///
+                    await _xmlDispatcher.New(model.Visitors);
+                    //create visitor
+                    _database.GroupManager.Create(model);                   
                     return new OperationDetails(true, "Группа туристов создана", "");
                 }
                 else return new OperationDetails(false, "Пользователь не найден", "");
@@ -82,7 +71,7 @@ namespace BezvizSystem.BLL.Services
                 var group = await _database.GroupManager.GetByIdAsync(id);
                 if (group != null)
                 {
-                    XMLActionForVisitors(group.Visitors, _xmlDispatcher.Remove);
+                    await _xmlDispatcher.Remove(group.Visitors);
                     _database.GroupManager.Delete(group.Id);
                     return new OperationDetails(true, "Группа туристов удалена", "");
                 }
@@ -99,9 +88,11 @@ namespace BezvizSystem.BLL.Services
             try
             {
                 var model = await _database.GroupManager.GetByIdAsync(group.Id);
-
+                var newModel = _mapper.Map<GroupVisitor>(group);
                 if (model != null)
                 {
+                    await _xmlDispatcher.Edit(model.Visitors, newModel.Visitors);
+
                     var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelGroup(_database, model))).CreateMapper();
                     var modelNew = mapper.Map<GroupVisitor>(group);
 
