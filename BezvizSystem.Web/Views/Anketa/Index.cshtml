@@ -22,19 +22,26 @@
 
 @section scripts
 {
-    @*<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>*@
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
 
     <script>
 
+        var table = document.getElementsByTagName('table')[0];
+        table.onclick = onRowClickHandler;
+
         function onRowClickHandler(event) {
+            var target = event.target;
 
-            var table = document.getElementsByClassName('visitor_str')[0];
-            var id = table.getAttribute('id');
-            location.href = '@Url.Action("Edit", "Anketa")/' + id;
+            while (target != table) {
+                if (target.tagName == "TR") {
+                    var id = target.getAttribute('id');
+
+                    location.href = '@Url.Action("Edit", "Anketa")/' + id;
+                    return;
+                }
+                target = target.parentNode;         
+            }
         }
-
-        //var exp = document.getElementById('export');
-        //exp.onclick = makeRequest;
 
         function makeRequest() {
             // Отправка асинхронного запроса на сервер.

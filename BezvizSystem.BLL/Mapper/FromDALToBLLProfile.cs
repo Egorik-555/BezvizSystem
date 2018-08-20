@@ -145,12 +145,12 @@ namespace BezvizSystem.BLL.Mapper
             this._database = _database;
             mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database))).CreateMapper();
 
-            CreateMap<VisitorDTO, Visitor>();
+            //CreateMap<VisitorDTO, Visitor>();
+            CreateMap<IEnumerable<VisitorDTO>, IEnumerable< Visitor>>().ConstructUsing(v => model.Visitors);
 
             CreateMap<GroupVisitorDTO, GroupVisitor>().ConstructUsing(v => model).
                 ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => _database.CheckPoints.GetAll().SingleOrDefault(n => n.Name == src.CheckPoint))).
-                ForMember(d => d.Visitors, opt => opt.MapFrom(src => mapperVisitor.Map<IEnumerable<VisitorDTO>, IEnumerable<Visitor>>(src.Visitors)));
-            // AfterMap((d, e) => AddOrUpdateVisitors(d, e));        
+                ForMember(d => d.Visitors, opt => opt.MapFrom(src => mapperVisitor.Map<IEnumerable<VisitorDTO>, IEnumerable<Visitor>>(src.Visitors)));    
         }
 
         private void AddOrUpdateVisitors(GroupVisitorDTO newGroupDto, GroupVisitor oldGroup)

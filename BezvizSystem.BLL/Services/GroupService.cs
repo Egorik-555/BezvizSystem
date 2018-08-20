@@ -14,8 +14,6 @@ using System.Threading.Tasks;
 
 namespace BezvizSystem.BLL.Services
 {
-    public delegate Task<OperationDetails> XMLAction(Visitor visitor);
-
     public class GroupService : IService<GroupVisitorDTO>
     {
         IUnitOfWork _database;

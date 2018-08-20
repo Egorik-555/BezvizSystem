@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace BezvizSystem.DAL.Entities
 
         public int Id { get; set; }
 
+        [Required]
         public virtual ICollection<Visitor> Visitors { get; set; }
         public bool Group { get; set; }
 

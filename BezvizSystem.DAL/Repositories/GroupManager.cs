@@ -47,6 +47,7 @@ namespace BezvizSystem.DAL.Repositories
             GroupVisitor result = null;
             if (item != null)
             {
+                Database.Visitors.RemoveRange(item.Visitors.ToArray());
                 result = Database.GroupsVisitors.Remove(item);
                 Database.SaveChanges();
             }
