@@ -19,6 +19,7 @@ namespace BezvizSystem.BLL.DI
         {
             Bind<IUnitOfWork>().To<IdentityUnitOfWork>().WithConstructorArgument("connection", CONNECTION);
             Bind<IUserService>().To<UserService>();
+            Bind<IXMLDispatcher>().To<XMLDispatcher>();
 
             Bind<IService<VisitorDTO>>().To<VisitorService>();
             Bind<IService<GroupVisitorDTO>>().To<GroupService>();
