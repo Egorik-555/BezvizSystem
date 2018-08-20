@@ -17,7 +17,6 @@ namespace BezvizSystem.BLL.DTO
         public int Id { get; set; }
 
         public virtual ICollection<VisitorDTO> Visitors { get; set; }
-
         public bool Group { get; set; }
 
         public DateTime? DateArrival { get; set; }
@@ -25,6 +24,7 @@ namespace BezvizSystem.BLL.DTO
         public int? DaysOfStay { get; set; }
         public string CheckPoint { get; set; }
         public string PlaceOfRecidense { get; set; }
+
         public string ProgramOfTravel { get; set; }
 
         //part of visitor only

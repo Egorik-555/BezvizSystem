@@ -27,6 +27,7 @@
     <script>
 
         function onRowClickHandler(event) {
+
             var table = document.getElementsByClassName('visitor_str')[0];
             var id = table.getAttribute('id');
             location.href = '@Url.Action("Edit", "Anketa")/' + id;

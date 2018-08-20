@@ -48,16 +48,16 @@ namespace BezvizSystem.DAL.Entities
         public DateTime? DateEdit { get; set; }
         public string UserEdit { get; set; }
 
-        public bool EqualsDateArrival(object obj)
-        {
-            var group = obj as GroupVisitor;
-            if (group == null) return false;
+        //public bool EqualsDateArrival(object obj)
+        //{
+        //    var group = obj as GroupVisitor;
+        //    if (group == null) return false;
 
-            if (!group.DateArrival.HasValue || !this.DateArrival.HasValue) return false;
+        //    if (!group.DateArrival.HasValue || !this.DateArrival.HasValue) return false;
 
-            if (group.DateArrival.Value != this.DateArrival.Value) return false;
+        //    if (group.DateArrival.Value != this.DateArrival.Value) return false;
 
-            return true;
-        }
+        //    return true;
+        //}
     }
 }

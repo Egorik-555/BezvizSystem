@@ -9,17 +9,9 @@ namespace BezvizSystem.DAL.Entities
 {
     public class Visitor
     {
-
-        //public Visitor()
-        //{
-        //    State = new NewVisitorState(Status.New, Operation.Add);
-        //}
-
         public int Id { get; set; }
 
         public virtual GroupVisitor Group { get; set; }
-
-        //public IVisitorState State { get; set; }
 
         public string Surname { get; set; }
         public string Name { get; set; }
@@ -80,25 +72,5 @@ namespace BezvizSystem.DAL.Entities
         {
             return this.Id.GetHashCode();
         }
-
-        //public void Edit()
-        //{
-        //    State.Edit(this);
-        //}
-
-        //public void Remove()
-        //{
-        //    State.Remove(this);
-        //}
-
-        //public void Send()
-        //{
-        //    State.Send(this);
-        //}
-
-        //public void Recd()
-        //{
-        //    State.Recd(this);
-        //}
     }
 }

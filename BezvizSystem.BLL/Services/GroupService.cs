@@ -49,11 +49,11 @@ namespace BezvizSystem.BLL.Services
                 {
                     model.TranscriptUser = user.OperatorProfile.Transcript;
                     //data for visitors
-                    DateAndUserForVisitors(model.Visitors, model.UserInSystem, model.DateInSystem);
+                    DateAndUserForVisitors(model.Visitors, model.UserInSystem, model.DateInSystem);                 
+                    //create visitor
+                    _database.GroupManager.Create(model);
                     //xml dispatch
                     await _xmlDispatcher.New(model.Visitors);
-                    //create visitor
-                    _database.GroupManager.Create(model);                   
                     return new OperationDetails(true, "Группа туристов создана", "");
                 }
                 else return new OperationDetails(false, "Пользователь не найден", "");
