@@ -1,5 +1,6 @@
 ﻿using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Interfaces;
+using EntityFramework.Triggers;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Data.Entity;
 
 namespace BezvizSystem.DAL.EF
 {
-    public class BezvizContext : IdentityDbContext<BezvizUser>
+    public class BezvizContext : IdentityDbContext<BezvizUser>, DbContextWithTriggers
     {
         static BezvizContext()
         {
