@@ -117,6 +117,31 @@ namespace BezvizSystem.BLL.Tests
         }
 
         [TestMethod]
+        public async Task Update_Group_Delete_All_Visitors_Test()
+        {
+            GroupVisitorDTO group = new GroupVisitorDTO
+            {
+                Id = 1,
+                PlaceOfRecidense = "new Place",
+                CheckPoint = "check3",
+
+                Visitors = new List<VisitorDTO>(),
+
+                UserInSystem = "Admin",
+                DateInSystem = new DateTime(2018, 07, 01),
+                UserEdit = "Test1",
+                DateEdit = DateTime.Now
+            };
+
+            var result = await Service.Update(group);
+            var findGroup = await Service.GetByIdAsync(1);
+            
+            Assert.AreEqual(0, findGroup.Visitors.Count());
+            Assert.AreEqual("Admin", findGroup.UserInSystem);
+            Assert.AreEqual(DateTime.Now.Date, findGroup.DateEdit.Value.Date);
+        }
+
+        [TestMethod]
         public void GetAll_Group_Test()
         {
             var groups = Service.GetAll();

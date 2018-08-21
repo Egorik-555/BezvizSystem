@@ -121,9 +121,9 @@ namespace BezvizSystem.BLL.Mapper
         public FromDALToBLLProfileWithModelVisitor(IUnitOfWork _database)
         {
             CreateMap<VisitorDTO, Visitor>().
-                    ForMember(dest => dest.Group, opt => opt.MapFrom(src => _database.GroupManager.GetById(src.Group.Id))).
-                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => _database.Nationalities.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
-                    ForMember(dest => dest.Gender, opt => opt.MapFrom(src => _database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
+               ForMember(dest => dest.Group, opt => opt.MapFrom(src => _database.GroupManager.GetById(src.Group.Id))).
+               ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => _database.Nationalities.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
+               ForMember(dest => dest.Gender, opt => opt.MapFrom(src => _database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
 
             CreateMap<Visitor, VisitorDTO>().
                ForMember(dest => dest.Group, opt => opt.Ignore()).
@@ -131,15 +131,15 @@ namespace BezvizSystem.BLL.Mapper
         }
 
         public FromDALToBLLProfileWithModelVisitor(IUnitOfWork _database, Visitor model)
-            : this(_database)
         {
-            CreateMap<VisitorDTO, Visitor>().ConstructUsing(v => model);
-        }
+            CreateMap<VisitorDTO, Visitor>().ConstructUsing(v => model).
+               ForMember(dest => dest.Group, opt => opt.Ignore()).
+               ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => _database.Nationalities.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
+               ForMember(dest => dest.Gender, opt => opt.MapFrom(src => _database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
 
-        public FromDALToBLLProfileWithModelVisitor(IUnitOfWork _database, GroupVisitor model)
-            : this(_database)
-        {
-            CreateMap<IEnumerable<VisitorDTO>, IEnumerable<Visitor>>().ConstructUsing(m => model.Visitors);
+            CreateMap<Visitor, VisitorDTO>().
+              ForMember(dest => dest.Group, opt => opt.Ignore()).
+              ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name));
         }
     }
 
@@ -151,20 +151,34 @@ namespace BezvizSystem.BLL.Mapper
         public ProfileGroupDtoToDao(IUnitOfWork _database, GroupVisitor model)
         {
             this._database = _database;
-            mapperVisitor = new MapperConfiguration(cfg =>
-
-                CreateMap<VisitorDTO, Visitor>()//;.
-                 //   ForMember(dest => dest.Group, opt => opt.MapFrom(src => _database.GroupManager.GetById(src.Group.Id))).
-                 //   ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => _database.Nationalities.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
-                 //   ForMember(dest => dest.Gender, opt => opt.MapFrom(src => _database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()))
-
-            ).CreateMapper();
-
-            CreateMap<IEnumerable<VisitorDTO>, IEnumerable<Visitor>>().ConstructUsing(v => model.Visitors);
 
             CreateMap<GroupVisitorDTO, GroupVisitor>().ConstructUsing(v => model).
-                ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => _database.CheckPoints.GetAll().SingleOrDefault(n => n.Name == src.CheckPoint)));//.
-                //ForMember(d => d.Visitors, opt => opt.MapFrom(src => mapperVisitor.Map<IEnumerable<VisitorDTO>, IEnumerable<Visitor>>(src.Visitors)));
+                ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => _database.CheckPoints.GetAll().SingleOrDefault(n => n.Name == src.CheckPoint))).
+                ForMember(d => d.Visitors, opt => opt.MapFrom(src => GetVisitors(model.Visitors, src.Visitors)));
+        }
+
+        private IEnumerable<Visitor> GetVisitors(IEnumerable<Visitor> oldModel, IEnumerable<VisitorDTO> newModel)
+        {
+            List<Visitor> result = new List<Visitor>();
+            //если в новом наборе туристов есть старые туристы
+            foreach (var newItem in newModel)
+            {
+                foreach (var oldItem in oldModel)
+                {
+                    if (oldItem.Id == newItem.Id)
+                    {
+                        mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelVisitor(_database, oldItem))).CreateMapper();
+                        result.Add(mapperVisitor.Map<VisitorDTO, Visitor>(newItem));
+                        break;
+                    }
+
+                    //если в новом наборе есть новые туристы
+                    mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelVisitor(_database))).CreateMapper();
+                    result.Add(mapperVisitor.Map<VisitorDTO, Visitor>(newItem));
+                }
+            }
+
+            return result;
         }
     }
 
