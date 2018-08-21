@@ -34,37 +34,6 @@ namespace BezvizSystem.DAL.Entities
 
             if (visitor.Id != this.Id) return false;
 
-            //if (visitor.Surname == null && Surname != null) return false;
-            //if (visitor.Surname != null && Surname == null) return false;
-            //if (visitor.Surname != null && Surname != null)
-            //    if (visitor.Surname != Surname) return false;
-
-            //if (visitor.Name == null && Name != null) return false;
-            //if (visitor.Name != null && Name == null) return false;
-            //if (visitor.Name != null && Name != null)
-            //    if (visitor.Name != Name) return false;
-
-            //if (visitor.SerialAndNumber == null && SerialAndNumber != null) return false;
-            //if (visitor.SerialAndNumber != null && SerialAndNumber == null) return false;
-            //if (visitor.SerialAndNumber != null && SerialAndNumber != null)
-            //    if (visitor.SerialAndNumber != SerialAndNumber) return false;
-
-
-            //if (visitor.Gender == null && Gender != null) return false;
-            //if (visitor.Gender != null && Gender == null) return false;
-            //if (visitor.Gender != null && Gender != null)
-            //    if (visitor.Gender.Name != Gender.Name) return false;
-
-            //if (!visitor.BithDate.HasValue && BithDate.HasValue) return false;
-            //if (visitor.BithDate.HasValue && !BithDate.HasValue) return false;
-            //if (visitor.BithDate.HasValue && visitor.BithDate.HasValue)
-            //    if (visitor.BithDate.Value != BithDate.Value) return false;
-
-            //if (visitor.Nationality == null && Nationality != null) return false;
-            //if (visitor.Nationality != null && Nationality == null) return false;
-            //if (visitor.Nationality != null && Nationality != null)
-            //    if (visitor.Nationality.Name != Nationality.Name) return false;
-
             return true;
         }
 

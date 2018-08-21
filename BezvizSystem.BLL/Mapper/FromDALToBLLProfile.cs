@@ -25,7 +25,7 @@ namespace BezvizSystem.BLL.Mapper
         {
             _database = database;
             _xmlDispatcher = new XMLDispatcher(database);
-            mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelVisitor(database, null))).CreateMapper();
+            mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelVisitor(database))).CreateMapper();
 
             //anketa service
             CreateMap<GroupVisitor, AnketaDTO>().
@@ -35,7 +35,6 @@ namespace BezvizSystem.BLL.Mapper
                 ForMember(dest => dest.Operator, opt => opt.MapFrom(src => src.TranscriptUser)).
                 ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name)).
                 ForMember(dest => dest.Arrived, opt => opt.MapFrom(src => CheckAllArrivals(src.Visitors)));
-            //.AfterMap((d, e) => RemovedOrNotVisitors(d, e));
 
             //visitors
             CreateMap<Visitor, VisitorDTO>().
@@ -50,14 +49,10 @@ namespace BezvizSystem.BLL.Mapper
 
             //group service
             CreateMap<GroupVisitorDTO, GroupVisitor>().
-                     ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => database.CheckPoints.GetAll().SingleOrDefault(n => n.Name == src.CheckPoint)));            
+                     ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => database.CheckPoints.GetAll().SingleOrDefault(n => n.Name == src.CheckPoint)));
 
             CreateMap<GroupVisitor, GroupVisitorDTO>().
                 ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name));
-            //CreateMap<Visitor, VisitorDTO>().
-            //    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name)).
-            //    ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Name));
-            ///
 
             //User
             CreateMap<ProfileUserDTO, OperatorProfile>();
@@ -122,9 +117,10 @@ namespace BezvizSystem.BLL.Mapper
 
     class FromDALToBLLProfileWithModelVisitor : Profile
     {
-        public FromDALToBLLProfileWithModelVisitor(IUnitOfWork _database, Visitor model)
+
+        public FromDALToBLLProfileWithModelVisitor(IUnitOfWork _database)
         {
-            CreateMap<VisitorDTO, Visitor>().ConstructUsing(v => model).
+            CreateMap<VisitorDTO, Visitor>().
                     ForMember(dest => dest.Group, opt => opt.MapFrom(src => _database.GroupManager.GetById(src.Group.Id))).
                     ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => _database.Nationalities.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
                     ForMember(dest => dest.Gender, opt => opt.MapFrom(src => _database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
@@ -133,79 +129,42 @@ namespace BezvizSystem.BLL.Mapper
                ForMember(dest => dest.Group, opt => opt.Ignore()).
                ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name));
         }
+
+        public FromDALToBLLProfileWithModelVisitor(IUnitOfWork _database, Visitor model)
+            : this(_database)
+        {
+            CreateMap<VisitorDTO, Visitor>().ConstructUsing(v => model);
+        }
+
+        public FromDALToBLLProfileWithModelVisitor(IUnitOfWork _database, GroupVisitor model)
+            : this(_database)
+        {
+            CreateMap<IEnumerable<VisitorDTO>, IEnumerable<Visitor>>().ConstructUsing(m => model.Visitors);
+        }
     }
 
-    class FromDALToBLLProfileWithModelGroup : Profile
+    class ProfileGroupDtoToDao : Profile
     {
         IMapper mapperVisitor;
         IUnitOfWork _database;
 
-        public FromDALToBLLProfileWithModelGroup(IUnitOfWork _database, GroupVisitor model)
+        public ProfileGroupDtoToDao(IUnitOfWork _database, GroupVisitor model)
         {
             this._database = _database;
-            mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database))).CreateMapper();
+            mapperVisitor = new MapperConfiguration(cfg =>
 
-            //CreateMap<VisitorDTO, Visitor>();
-            CreateMap<IEnumerable<VisitorDTO>, IEnumerable< Visitor>>().ConstructUsing(v => model.Visitors);
+                CreateMap<VisitorDTO, Visitor>()//;.
+                 //   ForMember(dest => dest.Group, opt => opt.MapFrom(src => _database.GroupManager.GetById(src.Group.Id))).
+                 //   ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => _database.Nationalities.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
+                 //   ForMember(dest => dest.Gender, opt => opt.MapFrom(src => _database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()))
+
+            ).CreateMapper();
+
+            CreateMap<IEnumerable<VisitorDTO>, IEnumerable<Visitor>>().ConstructUsing(v => model.Visitors);
 
             CreateMap<GroupVisitorDTO, GroupVisitor>().ConstructUsing(v => model).
-                ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => _database.CheckPoints.GetAll().SingleOrDefault(n => n.Name == src.CheckPoint))).
-                ForMember(d => d.Visitors, opt => opt.MapFrom(src => mapperVisitor.Map<IEnumerable<VisitorDTO>, IEnumerable<Visitor>>(src.Visitors)));    
-        }
-
-        private void AddOrUpdateVisitors(GroupVisitorDTO newGroupDto, GroupVisitor oldGroup)
-        {
-
-            var oldVisitors = oldGroup.Visitors.ToList();
-            foreach (var visitor in oldVisitors)
-            {
-                if (newGroupDto.Visitors.SingleOrDefault(v => v.Id == visitor.Id) == null)
-                {
-                    //    if (visitor.StatusOfRecord != StatusOfRecord.New)
-                    //    {
-                    //        visitor.StatusOfRecord = StatusOfRecord.Remove;
-                    //    }
-                    //    else
-                    //    {
-                    //        oldGroup.Visitors.Remove(visitor);
-                    //    }
-                    //}
-                }
-
-                foreach (var visitorDTO in newGroupDto.Visitors)
-                {
-                    //visitorDTO.Group = dto;
-
-                    if (visitorDTO.Id == 0)
-                    {
-                        // visitorDTO.StatusOfRecord = StatusOfRecord.New;
-                        visitorDTO.DateInSystem = DateTime.Now;
-                        visitorDTO.UserInSystem = newGroupDto.UserInSystem;
-                        //oldGroup.Visitors.Add(mapperVisitor.Map<Visitor>(visitorDTO));
-                    }
-                    else
-                    {
-                        var oldVisitor = oldGroup.Visitors.SingleOrDefault(v => v.Id == visitorDTO.Id);
-                        //var newVisitor = mapperVisitor.Map<VisitorDTO, Visitor>(visitorDTO);
-                        //if (visitorDTO.StatusOfRecord == 0)
-                        //    visitorDTO.StatusOfRecord = StatusOfRecord.Save;
-                        //if (visitorDTO.StatusOfOperation == 0)
-                        //    visitorDTO.StatusOfOperation = StatusOfOperation.Add;
-
-                        //if (!oldVisitor.Equals(newVisitor) ||
-                        //        (newGroupDto.DateArrival.HasValue && oldGroup.DateArrival.HasValue && newGroupDto.DateArrival.Value != oldGroup.DateArrival.Value))
-                        //{
-                            //if (oldVisitor.StatusOfRecord != StatusOfRecord.New)
-                            //    visitorDTO.StatusOfRecord = StatusOfRecord.Edit;
-
-                            //visitorDTO.DateEdit = newGroupDto.DateEdit;
-                            //visitorDTO.UserEdit = newGroupDto.UserEdit;
-                       // }
-
-                        //mapperVisitor.Map(visitorDTO, oldVisitor);
-                    }
-                }
-            }
+                ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => _database.CheckPoints.GetAll().SingleOrDefault(n => n.Name == src.CheckPoint)));//.
+                //ForMember(d => d.Visitors, opt => opt.MapFrom(src => mapperVisitor.Map<IEnumerable<VisitorDTO>, IEnumerable<Visitor>>(src.Visitors)));
         }
     }
 

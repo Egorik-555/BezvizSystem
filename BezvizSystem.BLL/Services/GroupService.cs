@@ -91,8 +91,8 @@ namespace BezvizSystem.BLL.Services
                 {
                     await _xmlDispatcher.Edit(model.Visitors, newModel.Visitors);
 
-                    var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelGroup(_database, model))).CreateMapper();
-                    var modelNew = mapper.Map<GroupVisitor>(group);
+                    var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new ProfileGroupDtoToDao(_database, model))).CreateMapper();
+                    var modelNew = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
 
                     _database.GroupManager.Update(modelNew);
                     return new OperationDetails(true, "Группа туристов изменена", "");
