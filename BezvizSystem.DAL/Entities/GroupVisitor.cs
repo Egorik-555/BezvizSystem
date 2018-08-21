@@ -1,6 +1,6 @@
-﻿using BezvizSystem.DAL.Entities.Log;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,14 +12,12 @@ namespace BezvizSystem.DAL.Entities
         public GroupVisitor()
         {
             Visitors = new List<Visitor>();
-            Unloads = new List<Unload>();
         }
 
         public int Id { get; set; }
 
+        [Required]
         public virtual ICollection<Visitor> Visitors { get; set; }
-        public virtual BezvizUser User { get; set; }
-
         public bool Group { get; set; }
 
         public DateTime? DateArrival { get; set; }
@@ -48,9 +46,20 @@ namespace BezvizSystem.DAL.Entities
         public bool ExtraSend { get; set; }
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
+        public string TranscriptUser { get; set; }
         public DateTime? DateEdit { get; set; }
         public string UserEdit { get; set; }
 
-        public ICollection<Unload> Unloads { get; set; }
+        //public bool EqualsDateArrival(object obj)
+        //{
+        //    var group = obj as GroupVisitor;
+        //    if (group == null) return false;
+
+        //    if (!group.DateArrival.HasValue || !this.DateArrival.HasValue) return false;
+
+        //    if (group.DateArrival.Value != this.DateArrival.Value) return false;
+
+        //    return true;
+        //}
     }
 }

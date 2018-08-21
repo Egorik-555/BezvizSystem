@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO.Dictionary;
-using BezvizSystem.BLL.DTO.Log;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Mapper;
 using BezvizSystem.DAL.Entities;
-using BezvizSystem.DAL.Entities.Log;
 using BezvizSystem.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -39,15 +37,11 @@ namespace BezvizSystem.BLL.Services
         {
             if (typeof(T).Name == "NationalityDTO")
             {
-                return (IEnumerable<T>)_mapper.Map<IEnumerable<Nationality>, IEnumerable<NationalityDTO>>(Database.NationalityManager.GetAll().Where(n => n.Active));
+                return (IEnumerable<T>)_mapper.Map<IEnumerable<Nationality>, IEnumerable<NationalityDTO>>(Database.Nationalities.GetAll().Where(n => n.Active));
             }
             else if (typeof(T).Name == "CheckPointDTO")
             {
-                return (IEnumerable<T>)_mapper.Map<IEnumerable<CheckPoint>, IEnumerable<CheckPointDTO>>(Database.CheckPointManager.GetAll().Where(c => c.Active));
-            }
-            else if (typeof(T).Name == "TypeOfOperationDTO")
-            {
-                return (IEnumerable<T>)_mapper.Map<IEnumerable<TypeOfOperation>, IEnumerable<TypeOfOperationDTO>>(Database.TypeOfOperations.GetAll().Where(c => c.Active));
+                return (IEnumerable<T>)_mapper.Map<IEnumerable<CheckPoint>, IEnumerable<CheckPointDTO>>(Database.CheckPoints.GetAll().Where(c => c.Active));
             }
             else if (typeof(T).Name == "GenderDTO")
             {

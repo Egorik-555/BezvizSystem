@@ -54,8 +54,8 @@
                     <h3 class="red">Информация о туристах</h3>
                 </td>
             </tr>
+            @*@Html.ValidationMessageFor(model => model.Infoes, "")*@
             @Html.EditorFor(model => model.Infoes)
-            @Html.ValidationMessageFor(model => model.Infoes, "")
             <tr>
                 <td class="left">
                     <input type="button" id="addVisitorBut" class="simply_form_red sfr_auto" value="Добавить туриста" />

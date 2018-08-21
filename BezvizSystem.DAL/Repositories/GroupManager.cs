@@ -21,22 +21,22 @@ namespace BezvizSystem.DAL.Repositories
 
         public IEnumerable<GroupVisitor> GetAll()
         {
-            return Database.GroupsVisitor;
+            return Database.GroupsVisitors;
         }
 
         public GroupVisitor GetById(int id)
         {
-            return Database.GroupsVisitor.Find(id);
+            return Database.GroupsVisitors.Find(id);
         }
 
         public Task<GroupVisitor> GetByIdAsync(int id)
         {
-            return Database.GroupsVisitor.FindAsync(id);
+            return Database.GroupsVisitors.FindAsync(id);
         }
 
         public GroupVisitor Create(GroupVisitor item)
         {
-            var result = Database.GroupsVisitor.Add(item);
+            var result = Database.GroupsVisitors.Add(item);
             Database.SaveChanges();
             return result;
         }
@@ -47,7 +47,8 @@ namespace BezvizSystem.DAL.Repositories
             GroupVisitor result = null;
             if (item != null)
             {
-                result = Database.GroupsVisitor.Remove(item);
+                Database.Visitors.RemoveRange(item.Visitors.ToArray());
+                result = Database.GroupsVisitors.Remove(item);
                 Database.SaveChanges();
             }
             return result;

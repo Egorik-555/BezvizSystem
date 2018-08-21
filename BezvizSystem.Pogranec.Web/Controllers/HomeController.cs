@@ -9,7 +9,6 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using BezvizSystem.BLL.DTO.Log;
 
 namespace BezvizSystem.Pogranec.Web.Controllers
 {
@@ -21,13 +20,11 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         }
 
         private IUserService _userService;
-        private ILogger<UserActivityDTO> _logger;
 
 
-        public HomeController(IUserService service, ILogger<UserActivityDTO> logger)
+        public HomeController(IUserService service)
         {
             _userService = service;
-            _logger = logger;
         }
 
 
@@ -81,32 +78,13 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                     ModelState.AddModelError("", errorMsg);
                 }
 
-            }
-
-            if (!string.IsNullOrEmpty(errorMsg))
-            {
-                _logger.Insert(new UserActivityDTO
-                {
-                    Login = model.Name,
-                    Ip = HttpContext.Request.UserHostAddress,
-                    Operation = "Вход",
-                    Messsage = errorMsg,
-                    TimeActivity = DateTime.Now
-                });
-            }
+            }           
 
             return View(model);
         }
 
         public ActionResult Logout()
-        {
-            _logger.Insert(new UserActivityDTO
-            {
-                Login = User.Identity.Name,
-                Ip = HttpContext.Request.UserHostAddress,
-                Operation = "Выход",            
-                TimeActivity = DateTime.Now
-            });
+        {          
             Authentication.SignOut();
             return RedirectToAction("Index", "Home");
         }

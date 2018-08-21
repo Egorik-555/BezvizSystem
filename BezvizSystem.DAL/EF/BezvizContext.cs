@@ -1,5 +1,4 @@
 ﻿using BezvizSystem.DAL.Entities;
-using BezvizSystem.DAL.Entities.Log;
 using BezvizSystem.DAL.Interfaces;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
@@ -23,13 +22,12 @@ namespace BezvizSystem.DAL.EF
 
         public DbSet<OperatorProfile> OperatorProfiles { get; set; }
         public DbSet<Visitor> Visitors { get; set; }
-        public DbSet<GroupVisitor> GroupsVisitor { get; set; }
-        public DbSet<UserActivity> UserActivities { get; set; }
+        public DbSet<GroupVisitor> GroupsVisitors { get; set; }
+        public DbSet<XMLDispatch> XMLDispatches { get; set; }
 
         // Dictionaries
         public DbSet<CheckPoint> CheckPoints { get; set; }
         public DbSet<Nationality> Nationalities { get; set; }
-        public DbSet<TypeOfOperation> TypeOfOperations { get; set; }
         public DbSet<Gender> Genders { get; set; }
 
     }
@@ -56,15 +54,7 @@ namespace BezvizSystem.DAL.EF
             };
             context.CheckPoints.AddRange(checkPoints);
 
-            List<TypeOfOperation> operations = new List<TypeOfOperation>
-            {
-               new TypeOfOperation {Code = 1, Name = "Вход", Active = true},
-               new TypeOfOperation {Code = 2, Name = "Выход", Active = true},
-               new TypeOfOperation {Code = 3, Name = "Выгрузка данных", Active = true}            
-            };
-            context.TypeOfOperations.AddRange(operations);
-
-            List<Gender> genders = new List<Gender>
+           List<Gender> genders = new List<Gender>
             {
                new Gender {Code = 1, Name = "Мужчина", Active = true},
                new Gender {Code = 2, Name = "Женщина", Active = true}

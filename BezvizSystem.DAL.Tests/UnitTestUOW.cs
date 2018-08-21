@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BezvizSystem.DAL.EF;
 using BezvizSystem.DAL.Entities;
+using BezvizSystem.DAL.Helpers;
 using BezvizSystem.DAL.Interfaces;
 using BezvizSystem.DAL.Repositories;
 using Microsoft.AspNet.Identity;
@@ -40,7 +41,7 @@ namespace BezvizSystem.DAL.Tests
                 uow.UserManager.Delete(result);
             }
 
-            uow.UserManager.Create(user);      
+            uow.UserManager.Create(user);
             var resultUser = context.Users.Where(u => u.UserName == "Egor").FirstOrDefault();
             var resultProfile = context.OperatorProfiles.Where(p => p.UNP == "123").FirstOrDefault();
 
@@ -89,35 +90,53 @@ namespace BezvizSystem.DAL.Tests
         }
 
         [TestMethod]
-        public void Add_Remove_Visitor_UnitOfWork()
+        public void Add_Update_Remove_Visitor_UnitOfWork()
         {
             Visitor visitor = new Visitor
             {
+                Id = 1,
                 Name = "Alex",
                 Surname = "Taylor",
                 DateInSystem = DateTime.Now
             };
 
+            //create
             var findVisitor = uow.VisitorManager.GetAll().Where(v => v.Name == visitor.Name && v.Surname == visitor.Surname).FirstOrDefault();
             Visitor resultVisitor = null;
             if (findVisitor == null)
             {
                 resultVisitor = uow.VisitorManager.Create(visitor);
             }
-
+            else
+            {
+                resultVisitor = findVisitor;
+            }
             findVisitor = uow.VisitorManager.GetAll().Where(v => v.Name == visitor.Name && v.Surname == visitor.Surname).FirstOrDefault();
 
-            Assert.AreEqual(visitor, resultVisitor);
             Assert.IsNotNull(findVisitor);
+            ////
+
+            //edit
+            var newVisitor = findVisitor;
+            newVisitor.Name = "New name";
+            newVisitor.BithDate = new DateTime(2018, 1, 1);
+
+            uow.VisitorManager.Update(findVisitor);
+            findVisitor = uow.VisitorManager.GetAll().Where(v => v.Name == newVisitor.Name && v.Surname == newVisitor.Surname).FirstOrDefault();
+
+            Assert.IsNotNull(findVisitor);
+            ////
 
             uow.VisitorManager.Delete(findVisitor.Id);
             findVisitor = uow.VisitorManager.GetAll().Where(v => v.Name == visitor.Name && v.Surname == visitor.Surname).FirstOrDefault();
             Assert.IsNull(findVisitor);
         }
 
+
         [TestMethod]
-        public void Add_Remove_GroupVisitor_UnitOfWork()
+        public void Add_Update_Remove_GroupVisitor_UnitOfWork()
         {
+            //create
             List<Visitor> list = new List<Visitor>();
             Visitor visitor1 = new Visitor
             {
@@ -139,16 +158,77 @@ namespace BezvizSystem.DAL.Tests
             group.Visitors = list;
             uow.GroupManager.Create(group);
 
-            var findGroup = uow.GroupManager.GetAll().Where(g => g.PlaceOfRecidense == "test place").FirstOrDefault();
+            var findGroup = uow.GroupManager.GetAll().Where(g => g.Id == group.Id).FirstOrDefault();
             Assert.IsNotNull(findGroup);
             Assert.IsTrue(findGroup.Visitors.Count == 2);
+            ////
+
+
+            //edit
+            List<Visitor> newList = new List<Visitor>();
+            newList.Add(visitor1);
+            group.PlaceOfRecidense = "new place";
+            group.Visitors = newList;
+
+            uow.GroupManager.Update(group);
+            findGroup = uow.GroupManager.GetAll().Where(g => g.Id == group.Id).FirstOrDefault();
+            Assert.AreEqual("new place", findGroup.PlaceOfRecidense);
+            Assert.IsTrue(findGroup.Visitors.Count == 1);
+            ///
 
             uow.VisitorManager.Delete(visitor1.Id);
             uow.VisitorManager.Delete(visitor2.Id);
             uow.GroupManager.Delete(findGroup.Id);
-            findGroup = uow.GroupManager.GetAll().Where(g => g.PlaceOfRecidense == "test place").FirstOrDefault();
+            findGroup = uow.GroupManager.GetAll().Where(g => g.Id == group.Id).FirstOrDefault();
 
             Assert.IsNull(findGroup);
+        }
+
+        [TestMethod]
+        public async Task Add_Update_Remove_XMLDispatch_UnitOfWork()
+        {
+            //create
+            XMLDispatch dispatch = new XMLDispatch { Id = 55, Operation = Operation.Add, Status = Status.New };
+
+            var findDispatch = uow.XMLDispatchManager.GetById(dispatch.Id);
+
+            if (findDispatch != null)
+            {
+                dispatch = findDispatch;
+            }
+            else
+            {
+                dispatch = uow.XMLDispatchManager.Create(dispatch);
+            }
+
+            findDispatch = uow.XMLDispatchManager.GetAll().Where(d => d.Id == dispatch.Id).FirstOrDefault();
+            Assert.AreEqual(Operation.Add, findDispatch.Operation);
+            Assert.AreEqual(Status.New, findDispatch.Status);
+
+            findDispatch = uow.XMLDispatchManager.GetById(dispatch.Id);
+            Assert.AreEqual(Operation.Add, findDispatch.Operation);
+            Assert.AreEqual(Status.New, findDispatch.Status);
+
+            findDispatch = await uow.XMLDispatchManager.GetByIdAsync(dispatch.Id);
+            Assert.AreEqual(Operation.Add, findDispatch.Operation);
+            Assert.AreEqual(Status.New, findDispatch.Status);
+            ////
+
+            //edit
+            var newDispatch = dispatch;
+            newDispatch.Operation = Operation.Done;
+            newDispatch.Status = Status.Send;
+
+            uow.XMLDispatchManager.Update(newDispatch);
+            findDispatch = uow.XMLDispatchManager.GetAll().Where(d => d.Id == newDispatch.Id).FirstOrDefault();
+            Assert.AreEqual(Operation.Done, findDispatch.Operation);
+            Assert.AreEqual(Status.Send, findDispatch.Status);
+            ////
+
+            uow.XMLDispatchManager.Delete(newDispatch.Id);
+            findDispatch = uow.XMLDispatchManager.GetAll().Where(d => d.Id == newDispatch.Id).FirstOrDefault();
+
+            Assert.IsNull(findDispatch);
         }
     }
 }

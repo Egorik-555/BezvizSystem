@@ -1,6 +1,5 @@
 ﻿using BezvizSystem.DAL;
 using BezvizSystem.DAL.Entities;
-using BezvizSystem.DAL.Entities.Log;
 using BezvizSystem.DAL.Helpers;
 using BezvizSystem.DAL.Identity;
 using BezvizSystem.DAL.Interfaces;
@@ -16,62 +15,175 @@ namespace BezvizSystem.BLL.Tests.TestServises
 {
     public class CreateTestRepositories
     {
-        OperatorProfile profile1 = new OperatorProfile {Id = "aaa",
-                                                        Transcript = "operator1", UNP = "UnpTest1", OKPO = "OKPO1", Role = "Operator",
-                                                        DateInSystem = new DateTime(2018, 1, 1) };
-        OperatorProfile profile2 = new OperatorProfile {Id = "bbb", Transcript = "operator2", UNP = "UnpTest2", OKPO = "OKPO2", Role = "Operator" };
-        OperatorProfile profile3 = new OperatorProfile {Id = "ccc", Transcript = "operator3", UNP = "UnpTest3", OKPO = "OKPO3", Role = "Operator" };
-        OperatorProfile profile4 = new OperatorProfile {Id = "ddd", Transcript = "AdminTran", UNP = "UnpAdmin", OKPO = "OKPO4", Role = "Admin" };
+        OperatorProfile profile1 = new OperatorProfile
+        {
+            Id = "aaa",
+            Transcript = "operator1",
+            UNP = "UnpTest1",
+            OKPO = "OKPO1",
+            Role = "Operator",
+            DateInSystem = new DateTime(2018, 1, 1)
+        };
 
-        BezvizUser user1 = new BezvizUser { Id = "aaa", UserName = "Test1"};
-        BezvizUser user2 = new BezvizUser { Id = "bbb", UserName = "Test2"};
-        BezvizUser user3 = new BezvizUser { Id = "ccc", UserName = "Test3"};
-        BezvizUser user4 = new BezvizUser { Id = "ddd", UserName = "Admin"};
+        OperatorProfile profile2 = new OperatorProfile { Id = "bbb", Transcript = "operator2", UNP = "UnpTest2", OKPO = "OKPO2", Role = "Operator" };
+        OperatorProfile profile3 = new OperatorProfile { Id = "ccc", Transcript = "operator3", UNP = "UnpTest3", OKPO = "OKPO3", Role = "Operator" };
+        OperatorProfile profile4 = new OperatorProfile { Id = "ddd", Transcript = "AdminTran", UNP = "UnpAdmin", OKPO = "OKPO4", Role = "Admin" };
 
+        BezvizUser user1 = new BezvizUser { Id = "aaa", UserName = "Test1" };
+        BezvizUser user2 = new BezvizUser { Id = "bbb", UserName = "Test2" };
+        BezvizUser user3 = new BezvizUser { Id = "ccc", UserName = "Test3" };
+        BezvizUser user4 = new BezvizUser { Id = "ddd", UserName = "Admin" };
 
-        Nationality nat1 = new Nationality { Id = 1, Name = "nat1", ShortName = "n1", Active = true };
-        Nationality nat2 = new Nationality { Id = 2, Name = "nat2", ShortName = "n2", Active = true };
-        Nationality nat3 = new Nationality { Id = 3, Name = "nat3", ShortName = "n3", Active = true };
+        Nationality nat1 = new Nationality { Id = 1, Code = 1, Name = "nat1", ShortName = "n1", Active = true };
+        Nationality nat2 = new Nationality { Id = 2, Code = 2, Name = "nat2", ShortName = "n2", Active = true };
+        Nationality nat3 = new Nationality { Id = 3, Code = 3, Name = "nat3", ShortName = "n3", Active = true };
 
         Gender gender1 = new Gender { Id = 1, Code = 1, Name = "Мужчина", Active = true };
-        Gender gender2 = new Gender { Id = 2, Code = 2, Name = "Женщина", Active = true };  
+        Gender gender2 = new Gender { Id = 2, Code = 2, Name = "Женщина", Active = true };
 
         Visitor visitor1;
         Visitor visitor2;
         Visitor visitor3;
-        Visitor visitor4;
-        Visitor visitor5;
-        Visitor visitor6;
-        Visitor visitor7;
-        Visitor visitor8;
-        Visitor visitor9;
-        Visitor visitor10;
 
         GroupVisitor group1;
         GroupVisitor group2;
-        GroupVisitor group3;
-        GroupVisitor group4;
-        GroupVisitor group5;
-        GroupVisitor group6;
-        GroupVisitor group7;
-        GroupVisitor groupForVisitor;
 
-        UserActivity activity1;
-        UserActivity activity2;
-        UserActivity activity3;
-        UserActivity activity4;
-
-        TypeOfOperation operation1 = new TypeOfOperation { Code = 1, Name = "Enter", Active = true };
-        TypeOfOperation operation2 = new TypeOfOperation { Code = 2, Name = "Exit", Active = true };
-        TypeOfOperation operation3 = new TypeOfOperation { Code = 3, Name = "ErrorEnter" };
-
-        CheckPoint check1 = new CheckPoint { Id = 1, Name = "check1", Active = true};
+        CheckPoint check1 = new CheckPoint { Id = 1, Name = "check1", Active = true };
         CheckPoint check2 = new CheckPoint { Id = 2, Name = "check2" };
         CheckPoint check3 = new CheckPoint { Id = 3, Name = "check3", Active = true };
         CheckPoint check4 = new CheckPoint { Id = 4, Name = "check4", Active = true };
 
-        List<GroupVisitor> listOfGroups;
-        List<Visitor> listOfVisitors;
+        XMLDispatch dispatch1 = new XMLDispatch { Id = 1, Status = Status.New, Operation = Operation.Add, DateInSystem = DateTime.Now };
+        XMLDispatch dispatch2 = new XMLDispatch { Id = 2, Status = Status.Send, Operation = Operation.Done, DateInSystem = DateTime.Now };
+
+        List<Visitor> listOfVisitorsForVisitorService;
+
+        List<GroupVisitor> listOfGroupsForGroupService;
+        List<Visitor> listOfVisitorsForGroupService;
+
+        private void ListForVisitorService()
+        {
+            visitor1 = new Visitor
+            {
+                Id = 1,
+                Surname = "surname1",
+                BithDate = new DateTime(1987, 07, 01),
+                Nationality = nat1,
+                Gender = gender1,
+                DateInSystem = new DateTime(2018, 07, 01),
+                UserInSystem = "Test"
+            };
+
+            visitor2 = new Visitor
+            {
+                Id = 2,
+                Surname = "surname2",
+                Name = "Name2",
+                Gender = gender2,
+                BithDate = new DateTime(2005, 1, 1),
+                Nationality = nat2,
+                DateInSystem = new DateTime(2018, 07, 02),
+                UserInSystem = "Test"
+            };
+
+            group1 = new GroupVisitor
+            {
+                Id = 1,
+                Group = false,
+                PlaceOfRecidense = "place 1",
+                CheckPoint = check1,
+                DaysOfStay = 4,
+                DateArrival = new DateTime(2018, 6, 1),
+                Visitors = new List<Visitor> { visitor1 },
+
+                DateInSystem = new DateTime(2018, 07, 02),
+                TranscriptUser = "transcript User",
+                UserInSystem = "Test1"
+            };
+
+            visitor1.Group = group1;
+            visitor2.Group = group1;
+
+            listOfVisitorsForVisitorService = new List<Visitor> { visitor1, visitor2 };
+        }
+
+        private void ListForGroupVisitorService()
+        {
+            visitor1 = new Visitor
+            {
+                Id = 1,
+                Group = group1,
+                Surname = "surname1",
+                BithDate = new DateTime(1987, 07, 01),
+                Nationality = nat1,
+                Gender = gender1,
+                DateInSystem = new DateTime(2018, 07, 01),
+                UserInSystem = "Test1",
+                Arrived = true
+            };
+
+            visitor2 = new Visitor
+            {
+                Id = 2,
+                Group = group2,
+                Surname = "surname2",
+                Name = "Name2",
+                Gender = gender2,
+                BithDate = new DateTime(2005, 1, 1),
+                Nationality = nat2,
+                DateInSystem = new DateTime(2018, 07, 02),
+                UserInSystem = "Test1",
+                Arrived = true
+            };
+
+            visitor3 = new Visitor
+            {
+                Id = 3,
+                Group = group2,
+                Surname = "surname3",
+                Name = "Name3",
+                Gender = gender1,
+                BithDate = new DateTime(2000, 1, 1),
+                Nationality = nat2,
+                DateInSystem = new DateTime(2017, 01, 01),
+                UserInSystem = "Test2"
+            };
+
+            group1 = new GroupVisitor
+            {
+                Id = 1,
+                Group = false,
+                PlaceOfRecidense = "place 1",
+                CheckPoint = check1,
+                DateArrival = new DateTime(2018, 6, 1),
+                Visitors = new List<Visitor> { visitor1 },
+
+                DateInSystem = new DateTime(2018, 07, 02),
+                TranscriptUser = "transcript User",
+                UserInSystem = "Test1"
+            };
+
+            group2 = new GroupVisitor
+            {
+                Id = 2,
+                Group = true,
+                PlaceOfRecidense = "place 2",
+                CheckPoint = check2,
+                DateArrival = new DateTime(2018, 7, 30),
+                Visitors = new List<Visitor> { visitor2, visitor3 },
+
+                DateInSystem = new DateTime(2018, 05, 02),
+                TranscriptUser = "transcript test",
+                UserInSystem = "Test1"
+            };
+
+            visitor1.Group = group1;
+            visitor2.Group = group2;
+            visitor3.Group = group2;
+
+            listOfVisitorsForGroupService = new List<Visitor> { visitor1, visitor2, visitor3 };
+            listOfGroupsForGroupService = new List<GroupVisitor> { group1, group2 };
+        }
 
         public CreateTestRepositories()
         {
@@ -79,90 +191,18 @@ namespace BezvizSystem.BLL.Tests.TestServises
             user2.OperatorProfile = profile2;
             user3.OperatorProfile = profile3;
             user4.OperatorProfile = profile4;
-
-            groupForVisitor = new GroupVisitor {DateArrival = new DateTime(2018,7,1), DaysOfStay = 3, CheckPoint = check1, User = user1};
-
-            GroupVisitor groupForVisitor1 = new GroupVisitor { DateArrival = new DateTime(2018, 7, 2), DaysOfStay = 1, CheckPoint = check2, User = user2 };
-            GroupVisitor groupForVisitor2 = new GroupVisitor { DateArrival = new DateTime(2018, 5, 1), DaysOfStay = 3, CheckPoint = check3, User = user3, ExtraSend = true };
-
-            visitor1 = new Visitor { Id = 1, Surname = "surname1", BithDate = new DateTime(1987, 07, 01),
-                                     Nationality = nat1, Group = groupForVisitor, StatusOfRecord = StatusOfRecord.Recd, Gender = gender1 };
-            visitor2 = new Visitor { Id = 2, Surname = "surname2", Gender = gender2, Name = "Name2", UserInSystem = "user", 
-                                     BithDate = new DateTime(2005, 1, 1),
-                                     Nationality = nat2, DateInSystem = new DateTime(2018, 07, 01),
-                                     Group = groupForVisitor, StatusOfRecord = StatusOfRecord.Send, Arrived = true };
-
-            visitor3 = new Visitor { Id = 3, Surname = "surname3", Nationality = nat3, Group = groupForVisitor1, StatusOfRecord = StatusOfRecord.Save, Arrived = true, Gender = gender1 };
-            visitor4 = new Visitor { Id = 4, Surname = "surname4", Nationality = nat1, BithDate = new DateTime(1960, 2, 6),
-                                     Group = groupForVisitor1, StatusOfRecord = StatusOfRecord.Save, Arrived = true, Gender = gender2 };
-            visitor5 = new Visitor { Id = 5, Surname = "surname5", Nationality = nat3, Group = groupForVisitor2, StatusOfRecord = StatusOfRecord.Save, Gender = gender1 };
-            visitor6 = new Visitor { Id = 6, Surname = "surname6", Nationality = nat2, Group = groupForVisitor2, StatusOfRecord = StatusOfRecord.Send, Arrived = true, Gender = gender2};
-            visitor7 = new Visitor { Id = 7, Surname = "surname7", Nationality = nat3, Group = groupForVisitor, StatusOfRecord = StatusOfRecord.Send, Gender = gender1 };
-
-            visitor8 = new Visitor { Id = 9,
-                                     StatusOfOperation = StatusOfOperation.Add,
-                                     Name = "Name", Surname = "surname",
-                                     Nationality = nat3, Group = groupForVisitor,
-                                     BithDate = new DateTime(1987,07,26),
-                                     Gender = gender1,
-                                     SerialAndNumber = "AB344",
-                                     DocValid = null,                             
-                                     StatusOfRecord = StatusOfRecord.Save
-            };
-            visitor9 = new Visitor { Id = 10, Surname = "surname9", Nationality = nat3, Group = group6,
-                                     StatusOfOperation = StatusOfOperation.Remove, StatusOfRecord = StatusOfRecord.Send, Gender = gender1 };
-            visitor10 = new Visitor { Id = 11, Surname = "surname10", Nationality = nat2, Group = group6,
-                                      StatusOfOperation = StatusOfOperation.Remove, StatusOfRecord = StatusOfRecord.Send, Arrived = true, Gender = gender2 };
-
-
-            group1 = new GroupVisitor { Id = 1, CheckPoint = check1, PlaceOfRecidense = "place1", DateArrival = new DateTime(2018, 6, 1), Group = true,
-                                        Visitors = new List<Visitor> { visitor1, visitor2 }, User = user4 };
-
-            group2 = new GroupVisitor { Id = 2, CheckPoint = check2, PlaceOfRecidense = "place2", Group = true,
-                                        Visitors = new List<Visitor> { visitor3, visitor4 }, DateArrival = new DateTime(2018, 07, 21),
-                                        User = user4, UserInSystem = "Admin", DateInSystem = new DateTime(2018, 07, 01) };
-
-            group3 = new GroupVisitor { Id = 3, CheckPoint = check3, PlaceOfRecidense = "place3", DateArrival = new DateTime(2018, 07, 26),
-                                        Visitors = new List<Visitor> { visitor5, visitor6, visitor7 }, Group = true, User = user1
-            };
-            group4 = new GroupVisitor { Id = 4, CheckPoint = check4, PlaceOfRecidense = "place4",
-                                        Visitors = new List<Visitor> { visitor6 }, DateArrival = new DateTime(2018, 5, 1) };
-
-           
-            group5 = new GroupVisitor {
-                Id = 5, CheckPoint = check2,
-                PlaceOfRecidense = "place5",
-                Visitors = new List<Visitor> { visitor7 },
-                User = user4,
-                UserInSystem = "Admin",
-                DateInSystem = new DateTime(2018, 07, 01),
-                DateArrival = new DateTime(2018, 07, 30)
-            };
-
-            group6 = new GroupVisitor { Id = 6, CheckPoint = check1,
-                                        PlaceOfRecidense = "place6", Visitors = new List<Visitor> { visitor9, visitor10 },
-                                        User = user1 };
-            group7 = new GroupVisitor { Id = 7, CheckPoint = check1,
-                                        PlaceOfRecidense = "place7", Visitors = new List<Visitor> { visitor8, visitor10 },
-                                        User = user1 };
-
-            activity1 = new UserActivity { Id = 1, Login = "login1", Ip = "Ip1", TimeActivity = DateTime.Now, Operation = operation1 };
-            activity2 = new UserActivity { Id = 2, Login = "login2", Ip = "Ip2", TimeActivity = DateTime.Now, Operation = operation2 };
-            activity3 = new UserActivity { Id = 3, Login = "login1", Ip = "Ip3", TimeActivity = DateTime.Now, Operation = operation3 };
-            activity4 = new UserActivity { Id = 4, Login = "login3", Ip = "Ip4", TimeActivity = DateTime.Now, Operation = operation1 };
-
-            listOfVisitors = new List<Visitor> { visitor1, visitor2, visitor3, visitor4, visitor5, visitor6, visitor7, visitor8 };
-            listOfGroups = new List<GroupVisitor> { group1, group2, group3, group4, group5, group6, group7 };
         }
-
 
         private IRepository<OperatorProfile, string> CreateOperatorManager()
         {
             List<OperatorProfile> list = new List<OperatorProfile> { profile1, profile2, profile3, profile4 };
             Mock<IRepository<OperatorProfile, string>> operatorMng = new Mock<IRepository<OperatorProfile, string>>();
 
-            operatorMng.Setup(m => m.Delete(It.IsAny<string>())).Returns<string>(id => { var profile = list.Where(p => p.Id == id).FirstOrDefault();
-                                                                                         list.Remove(profile); return profile; });
+            operatorMng.Setup(m => m.Delete(It.IsAny<string>())).Returns<string>(id =>
+            {
+                var profile = list.Where(p => p.Id == id).FirstOrDefault();
+                list.Remove(profile); return profile;
+            });
 
             operatorMng.Setup(m => m.GetById(It.IsAny<string>())).Returns<string>(id => { return list.Where(p => p.Id == id).FirstOrDefault(); });
             operatorMng.Setup(m => m.GetAll()).Returns(() => list);
@@ -175,7 +215,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
             List<BezvizUser> userList = new List<BezvizUser> { user1, user2, user3, user4 };
             List<OperatorProfile> profiles = new List<OperatorProfile> { profile1, profile2, profile3, profile4 };
 
-            Mock<IUserStore<BezvizUser>> userStore = new Mock<IUserStore<BezvizUser>>();     
+            Mock<IUserStore<BezvizUser>> userStore = new Mock<IUserStore<BezvizUser>>();
             return new UserManagerTest(userList, profiles, userStore.Object);
         }
 
@@ -185,46 +225,46 @@ namespace BezvizSystem.BLL.Tests.TestServises
             Mock<IRoleStore<BezvizRole, string>> roleStore = new Mock<IRoleStore<BezvizRole, string>>();
 
             roleStore.Setup(m => m.FindByNameAsync(It.IsAny<string>())).Returns<string>(id =>
-                                                                            Task<BezvizRole>.FromResult<BezvizRole>( 
+                                                                            Task<BezvizRole>.FromResult<BezvizRole>(
                                                                             list.Where(u => u.Name == id).FirstOrDefault()));
 
-            roleStore.Setup(m => m.CreateAsync(It.IsAny<BezvizRole>())).Returns<BezvizRole>( role => Task.FromResult(Task.Run(() => list.Add(role))));
-
+            roleStore.Setup(m => m.CreateAsync(It.IsAny<BezvizRole>())).Returns<BezvizRole>(role => Task.FromResult(Task.Run(() => list.Add(role))));
 
             return new BezvizRoleManager(roleStore.Object);
         }
 
-      
+
         private IRepository<CheckPoint, int> CreateCheckPointManager()
         {
-            List<CheckPoint> list = new List<CheckPoint> { check1, check2, check3, check4};
+            List<CheckPoint> list = new List<CheckPoint> { check1, check2, check3, check4 };
             Mock<IRepository<CheckPoint, int>> mock = new Mock<IRepository<CheckPoint, int>>();
             mock.Setup(m => m.GetAll()).Returns(list);
             return mock.Object;
         }
 
-
         private IRepository<Visitor, int> CreateVisitorManager()
-        {     
+        {
+            ListForVisitorService();
+
             Mock<IRepository<Visitor, int>> mockVisitors = new Mock<IRepository<Visitor, int>>();
-            mockVisitors.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => listOfVisitors.Where(v => v.Id == id).FirstOrDefault());
+            mockVisitors.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => listOfVisitorsForVisitorService.Where(v => v.Id == id).FirstOrDefault());
             mockVisitors.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
                                                                                         Task<Visitor>.FromResult<Visitor>(
-                                                                                        listOfVisitors.Where(v => v.Id == id).FirstOrDefault()));
+                                                                                        listOfVisitorsForVisitorService.Where(v => v.Id == id).FirstOrDefault()));
 
-            mockVisitors.Setup(m => m.GetAll()).Returns(listOfVisitors);
-            mockVisitors.Setup(m => m.Create(It.IsAny<Visitor>())).Returns<Visitor>(v => { listOfVisitors.Add(v); return v; });
+            mockVisitors.Setup(m => m.GetAll()).Returns(listOfVisitorsForVisitorService);
+            mockVisitors.Setup(m => m.Create(It.IsAny<Visitor>())).Returns<Visitor>(v => { listOfVisitorsForVisitorService.Add(v); return v; });
             mockVisitors.Setup(m => m.Delete(It.IsAny<int>())).Returns<int>(id =>
             {
-                var item = listOfVisitors.Where(i => i.Id == id).FirstOrDefault();
-                var result = listOfVisitors.Remove(item);
+                var item = listOfVisitorsForVisitorService.Where(i => i.Id == id).FirstOrDefault();
+                var result = listOfVisitorsForVisitorService.Remove(item);
                 return null;
             });
             mockVisitors.Setup(m => m.Update(It.IsAny<Visitor>())).Returns<Visitor>(v =>
             {
-                var item = listOfVisitors.Where(i => i.Id == v.Id).FirstOrDefault();
-                listOfVisitors.Remove(item);
-                listOfVisitors.Add(v);
+                var item = listOfVisitorsForVisitorService.Where(i => i.Id == v.Id).FirstOrDefault();
+                listOfVisitorsForVisitorService.Remove(item);
+                listOfVisitorsForVisitorService.Add(v);
                 return v;
             });
 
@@ -232,24 +272,35 @@ namespace BezvizSystem.BLL.Tests.TestServises
         }
 
         private IRepository<GroupVisitor, int> CreateGroupVisitorManager()
-        {          
+        {
+            ListForGroupVisitorService();
+
             Mock<IRepository<GroupVisitor, int>> mock = new Mock<IRepository<GroupVisitor, int>>();
-            mock.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => listOfGroups.Where(v => v.Id == id).FirstOrDefault());
+            mock.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => listOfGroupsForGroupService.Where(v => v.Id == id).FirstOrDefault());
             mock.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
                                                                                Task<GroupVisitor>.FromResult<GroupVisitor>(
-                                                                               listOfGroups.Where(v => v.Id == id).FirstOrDefault()));
+                                                                               listOfGroupsForGroupService.Where(v => v.Id == id).FirstOrDefault()));
 
-            mock.Setup(m => m.GetAll()).Returns(listOfGroups);
-            mock.Setup(m => m.Create(It.IsAny<GroupVisitor>())).Returns<GroupVisitor>(v => { listOfGroups.Add(v); listOfVisitors.AddRange(v.Visitors); return v; });
+            mock.Setup(m => m.GetAll()).Returns(listOfGroupsForGroupService);
+            mock.Setup(m => m.Create(It.IsAny<GroupVisitor>())).Returns<GroupVisitor>(v => { listOfGroupsForGroupService.Add(v); listOfVisitorsForGroupService.AddRange(v.Visitors); return v; });
             mock.Setup(m => m.Delete(It.IsAny<int>())).Returns<int>(id =>
             {
-                listOfGroups.RemoveAt(id - 1);
-                return null;
+                var deleteGroup = listOfGroupsForGroupService.SingleOrDefault(g => g.Id == id);
+                foreach (var item in deleteGroup.Visitors)
+                    listOfVisitorsForGroupService.Remove(item);
+                listOfGroupsForGroupService.Remove(deleteGroup);
+                return deleteGroup;
             });
             mock.Setup(m => m.Update(It.IsAny<GroupVisitor>())).Returns<GroupVisitor>(v =>
             {
-                listOfGroups.RemoveAt(v.Id - 1);
-                listOfGroups.Insert(v.Id - 1, v);
+                var deleteGroup = listOfGroupsForGroupService.SingleOrDefault(g => g.Id == v.Id);
+                foreach (var item in deleteGroup.Visitors)
+                    listOfVisitorsForGroupService.Remove(item);
+                listOfGroupsForGroupService.Remove(deleteGroup);
+
+                listOfGroupsForGroupService.Add(v);
+                foreach (var item in v.Visitors)
+                    listOfVisitorsForGroupService.Add(item);
                 return v;
             });
 
@@ -258,23 +309,11 @@ namespace BezvizSystem.BLL.Tests.TestServises
 
         private IRepository<Nationality, int> CreateNationalitiesManager()
         {
-            List<Nationality> list = new List<Nationality> { nat1, nat2, nat3};
+            List<Nationality> list = new List<Nationality> { nat1, nat2, nat3 };
             Mock<IRepository<Nationality, int>> mockNat = new Mock<IRepository<Nationality, int>>();
             mockNat.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.Where(v => v.Id == id).FirstOrDefault());
             mockNat.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
                                                                                   Task<Nationality>.FromResult<Nationality>(
-                                                                                  list.Where(v => v.Id == id).FirstOrDefault()));
-            mockNat.Setup(m => m.GetAll()).Returns(list);
-            return mockNat.Object;
-        }
-
-        private IRepository<TypeOfOperation, int> CreateTypeOfOperationManager()
-        {
-            List<TypeOfOperation> list = new List<TypeOfOperation> { operation1, operation2, operation3};
-            Mock<IRepository<TypeOfOperation, int>> mockNat = new Mock<IRepository<TypeOfOperation, int>>();
-            mockNat.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.Where(v => v.Id == id).FirstOrDefault());
-            mockNat.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
-                                                                                  Task<TypeOfOperation>.FromResult<TypeOfOperation>(
                                                                                   list.Where(v => v.Id == id).FirstOrDefault()));
             mockNat.Setup(m => m.GetAll()).Returns(list);
             return mockNat.Object;
@@ -292,18 +331,34 @@ namespace BezvizSystem.BLL.Tests.TestServises
             return mockNat.Object;
         }
 
-        private IRepository<UserActivity, int> CreateUserActivityManager()
+        private IRepository<XMLDispatch, int> CreateXMLDispatcherManager()
         {
-            List<UserActivity> list = new List<UserActivity> { activity1, activity2, activity3, activity4};
-            Mock<IRepository<UserActivity, int>> mock = new Mock<IRepository<UserActivity, int>>();
-
-            mock.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.Where(v => v.Id == id).FirstOrDefault());
+            List<XMLDispatch> list = new List<XMLDispatch> { dispatch1, dispatch2 };
+            Mock<IRepository<XMLDispatch, int>> mock = new Mock<IRepository<XMLDispatch, int>>();
+            mock.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.SingleOrDefault(v => v.Id == id));
             mock.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>
-                                                                               Task<UserActivity>.FromResult<UserActivity>(
-                                                                               list.Where(v => v.Id == id).FirstOrDefault()));
-
+                                                                                  Task<XMLDispatch>.FromResult<XMLDispatch>(
+                                                                                  list.Where(v => v.Id == id).FirstOrDefault()));
             mock.Setup(m => m.GetAll()).Returns(list);
-            mock.Setup(m => m.Create(It.IsAny<UserActivity>())).Returns<UserActivity>(v => { list.Add(v); return v; });    
+
+            mock.Setup(m => m.Create(It.IsAny<XMLDispatch>())).Returns<XMLDispatch>((XMLDispatch xml) =>
+            {
+                list.Add(xml);
+                return xml;
+            });
+            mock.Setup(m => m.Delete(It.IsAny<int>())).Returns((int id) =>
+            {
+                var deleteXML = list.SingleOrDefault(g => g.Id == id);        
+                list.Remove(deleteXML);
+                return deleteXML;
+            });
+            mock.Setup(m => m.Update(It.IsAny<XMLDispatch>())).Returns<XMLDispatch>(xml =>
+            {
+                var deleteGroup = list.SingleOrDefault(g => g.Id == xml.Id);
+                list.Remove(deleteGroup);
+                list.Add(xml);            
+                return xml;
+            });
 
             return mock.Object;
         }
@@ -316,11 +371,11 @@ namespace BezvizSystem.BLL.Tests.TestServises
             mockDB.Setup(m => m.OperatorManager).Returns(CreateOperatorManager());
             mockDB.Setup(m => m.RoleManager).Returns(CreateRoleManager());
             mockDB.Setup(m => m.VisitorManager).Returns(CreateVisitorManager());
-            mockDB.Setup(m => m.NationalityManager).Returns(CreateNationalitiesManager());          
-            mockDB.Setup(m => m.CheckPointManager).Returns(CreateCheckPointManager());
             mockDB.Setup(m => m.GroupManager).Returns(CreateGroupVisitorManager());
-            mockDB.Setup(m => m.TypeOfOperations).Returns(CreateTypeOfOperationManager());
-            mockDB.Setup(m => m.UserActivities).Returns(CreateUserActivityManager());
+            mockDB.Setup(m => m.XMLDispatchManager).Returns(CreateXMLDispatcherManager());
+
+            mockDB.Setup(m => m.Nationalities).Returns(CreateNationalitiesManager());
+            mockDB.Setup(m => m.CheckPoints).Returns(CreateCheckPointManager());
             mockDB.Setup(m => m.Genders).Returns(CreateGenderManager());
 
             return mockDB.Object;

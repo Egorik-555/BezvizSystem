@@ -31,18 +31,21 @@ namespace BezvizSystem.BLL.Tests
         public void Get_All_Anketa()
         {
             var anketas = _service.GetAll();
-            var group = anketas.Where(v => v.Id == 1).FirstOrDefault();
-            var group3 = anketas.Where(v => v.Id == 3).FirstOrDefault();
+            var group1 = anketas.Where(v => v.Id == 1).FirstOrDefault();
+            var group2 = anketas.Where(v => v.Id == 2).FirstOrDefault();
 
-            Assert.AreEqual(7, anketas.Count());
-            Assert.IsTrue(group.DateArrival == new DateTime(2018, 6, 1));
-            Assert.IsTrue(group.CheckPoint == "check1");
-            Assert.IsTrue(group.Operator == "AdminTran");
-            Assert.IsTrue(group.CountMembers == 2);
-            Assert.IsTrue(group.Status == "Передано");
+            Assert.AreEqual(2, anketas.Count());
 
-            Assert.IsTrue(group3.CountMembers == 3);
-            Assert.IsTrue(group3.Status == "Сохранено");
+            Assert.AreEqual(new DateTime(2018, 6, 1), group1.DateArrival);
+            Assert.AreEqual("check1", group1.CheckPoint);
+            Assert.AreEqual("transcript User", group1.Operator);
+            Assert.AreEqual(1, group1.CountMembers);
+            Assert.AreEqual("Сохранено", group1.Status );
+            Assert.AreEqual(1, group1.Visitors.Count());
+
+            Assert.AreEqual(2, group2.CountMembers);
+            Assert.AreEqual("Сохранено", group2.Status);
+            Assert.AreEqual(2, group2.Visitors.Count());
         }
 
         [TestMethod]
@@ -50,9 +53,9 @@ namespace BezvizSystem.BLL.Tests
         {
             var anketa = _service.GetById(2);
 
-            Assert.IsTrue(anketa.CountMembers == 2);
-            Assert.IsTrue(anketa.CheckPoint == "check2");
-            Assert.IsTrue(anketa.Status == "Сохранено");
+            Assert.AreEqual(2, anketa.CountMembers);
+            Assert.AreEqual("check2", anketa.CheckPoint);
+            Assert.AreEqual("Сохранено", anketa.Status);
         }
 
         [TestMethod]
@@ -60,25 +63,29 @@ namespace BezvizSystem.BLL.Tests
         {
             var anketa = await _service.GetByIdAsync(2);
 
-            Assert.IsTrue(anketa.CountMembers == 2);
-            Assert.IsTrue(anketa.CheckPoint == "check2");
-            Assert.IsTrue(anketa.Status == "Сохранено");
+            Assert.AreEqual(2, anketa.CountMembers);
+            Assert.AreEqual("check2", anketa.CheckPoint);
+            Assert.AreEqual("Сохранено", anketa.Status);
         }
 
         [TestMethod]
         public async Task Get_ForUser_AnketaAsync()
         {
-            var anketa = await _service.GetForUserAsync("Test1");
+            var anketas1 = await _service.GetForUserAsync("Test1");
+            var anketas2 = await _service.GetForUserAsync("Test");
+            var anketa1 = await _service.GetByIdAsync(1);
+            var anketa2 = await _service.GetByIdAsync(2);
 
-            var anketa1 = await _service.GetByIdAsync(3);
-            var anketa2 = await _service.GetByIdAsync(7);
+            Assert.IsNotNull(anketas1);
+            Assert.IsNotNull(anketas2);
+            Assert.AreEqual(2, anketas1.Count());
 
-            Assert.AreEqual(2, anketa.Count());
-            Assert.AreEqual("Частично", anketa1.Arrived);
-            Assert.AreEqual("X", anketa2.Arrived);
-
-            Assert.AreEqual("Save", anketa1.Status);
-            Assert.AreEqual("Save", anketa2.Status);
+            Assert.AreEqual("V", anketa1.Arrived);
+            Assert.AreEqual(1, anketa1.Visitors.Count);
+            Assert.AreEqual("Частично", anketa2.Arrived);
+            Assert.AreEqual("Сохранено", anketa1.Status);
+            Assert.AreEqual("Сохранено", anketa2.Status);
+            Assert.AreEqual(2, anketa2.Visitors.Count);
         }
     }
 }

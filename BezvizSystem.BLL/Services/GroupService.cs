@@ -18,12 +18,22 @@ namespace BezvizSystem.BLL.Services
     {
         IUnitOfWork _database;
         IMapper _mapper;
+        IXMLDispatcher _xmlDispatcher;
 
-        public GroupService(IUnitOfWork uow)
+        public GroupService(IUnitOfWork uow, IXMLDispatcher xmlDispatcher)
         {
             _database = uow;
-
+            _xmlDispatcher = xmlDispatcher;
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database))).CreateMapper();
+        }
+
+        private void DateAndUserForVisitors(ICollection<Visitor> visitors, string user, DateTime? date)
+        {
+            foreach (var visitor in visitors)
+            {
+                visitor.DateInSystem = date;
+                visitor.UserInSystem = user;
+            }
         }
 
         public async Task<OperationDetails> Create(GroupVisitorDTO group)
@@ -33,21 +43,18 @@ namespace BezvizSystem.BLL.Services
                 var model = _mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
                 var user = await _database.UserManager.FindByNameAsync(group.UserInSystem);
 
-                //data of visitors
-                foreach (var visitor in model.Visitors)
+                if (user != null)
                 {
-                    visitor.StatusOfRecord = StatusOfRecord.Save;
-                    visitor.StatusOfOperation = StatusOfOperation.Add; // new record
-                    visitor.DateInSystem = DateTime.Now;
-                    visitor.UserInSystem = model.UserInSystem;
+                    model.TranscriptUser = user.OperatorProfile.Transcript;
+                    //data for visitors
+                    DateAndUserForVisitors(model.Visitors, model.UserInSystem, model.DateInSystem);                 
+                    //create visitor
+                    _database.GroupManager.Create(model);
+                    //xml dispatch
+                    await _xmlDispatcher.New(model.Visitors);
+                    return new OperationDetails(true, "Группа туристов создана", "");
                 }
-
-                //data for group of visitors
-                model.User = user;
-                model.DateInSystem = DateTime.Now;
-
-                _database.GroupManager.Create(model);
-                return new OperationDetails(true, "Группа туристов создана", "");
+                else return new OperationDetails(false, "Пользователь не найден", "");
             }
             catch (Exception ex)
             {
@@ -61,35 +68,9 @@ namespace BezvizSystem.BLL.Services
             {
                 var group = await _database.GroupManager.GetByIdAsync(id);
                 if (group != null)
-                {                  
-                    var visitors = group.Visitors.ToList();
-
-                    int k = 0;
-
-                    foreach (var item in visitors)
-                    {
-                        //if item have status code = 1 (new)
-                        if (item.StatusOfRecord == StatusOfRecord.Save)
-                        {
-                            _database.VisitorManager.Delete(item.Id); // remove item
-                            k++;
-                        }
-                        // if item send to pogran
-                        else
-                        {
-                            item.StatusOfRecord = StatusOfRecord.Save; // mark to upload
-                            item.StatusOfOperation = StatusOfOperation.Remove; //mark to delete
-                            _database.VisitorManager.Update(item);
-                        }
-                    }
-
-                    //if deleted all visitors in group
-                    if (group.Visitors.Count() == k)
-                    {
-                        _database.GroupManager.Delete(group.Id);
-                        
-                    }
-
+                {
+                    await _xmlDispatcher.Remove(group.Visitors);
+                    _database.GroupManager.Delete(group.Id);
                     return new OperationDetails(true, "Группа туристов удалена", "");
                 }
                 else return new OperationDetails(false, "Группа туристов не найдена", "");
@@ -99,19 +80,20 @@ namespace BezvizSystem.BLL.Services
                 return new OperationDetails(false, ex.Message, "");
             }
         }
-      
+
         public async Task<OperationDetails> Update(GroupVisitorDTO group)
         {
             try
             {
-                var model = await _database.GroupManager.GetByIdAsync(group.Id);   
-               
+                var model = await _database.GroupManager.GetByIdAsync(group.Id);
+                var newModel = _mapper.Map<GroupVisitor>(group);
                 if (model != null)
                 {
-                    var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelGroup(_database, model))).CreateMapper();
+                    await _xmlDispatcher.Edit(model.Visitors, newModel.Visitors);
 
-                    var modelNew = mapper.Map<GroupVisitorDTO, GroupVisitor>(group); 
-                    
+                    var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelGroup(_database, model))).CreateMapper();
+                    var modelNew = mapper.Map<GroupVisitor>(group);
+
                     _database.GroupManager.Update(modelNew);
                     return new OperationDetails(true, "Группа туристов изменена", "");
                 }

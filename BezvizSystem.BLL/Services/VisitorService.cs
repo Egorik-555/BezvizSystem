@@ -18,11 +18,12 @@ namespace BezvizSystem.BLL.Services
     {
         IUnitOfWork _database;
         IMapper _mapper;
+        IXMLDispatcher _xmlDispatcher;
 
-
-        public VisitorService(IUnitOfWork uow)
+        public VisitorService(IUnitOfWork uow, IXMLDispatcher xmlDispatcher)
         {
             _database = uow;
+            _xmlDispatcher = xmlDispatcher;
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database))).CreateMapper();
         }
 
@@ -31,8 +32,8 @@ namespace BezvizSystem.BLL.Services
             try
             {              
                 var model = _mapper.Map<VisitorDTO, Visitor>(visitor);
-                model.DateInSystem = DateTime.Now;
-                _database.VisitorManager.Create(model);
+                await _xmlDispatcher.New(model);
+                var newVisitor = _database.VisitorManager.Create(model);          
                 return new OperationDetails(true, "Турист создан", "");
             }
             catch (Exception ex)
@@ -48,7 +49,8 @@ namespace BezvizSystem.BLL.Services
                 var visitor = await _database.VisitorManager.GetByIdAsync(id);
                 if (visitor != null)
                 {
-                    _database.VisitorManager.Delete(visitor.Id);
+                    await _xmlDispatcher.Remove(visitor);
+                    _database.VisitorManager.Delete(id);                 
                     return new OperationDetails(true, "Турист удален", "");
                 }
                 else return new OperationDetails(false, "Турист не найден", "");
@@ -67,10 +69,11 @@ namespace BezvizSystem.BLL.Services
                 if (model != null)
                 {
                     var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelVisitor(_database, model))).CreateMapper();
-
                     var m = mapper.Map<VisitorDTO, Visitor>(visitor);
-                    m.DateEdit = DateTime.Now;
+
+                    await _xmlDispatcher.Edit(model);
                     _database.VisitorManager.Update(m);
+                    
                     return new OperationDetails(true, "Турист изменен", "");
                 }
                 else return new OperationDetails(false, "Турист не найден", "");
@@ -88,7 +91,7 @@ namespace BezvizSystem.BLL.Services
 
         public IEnumerable<VisitorDTO> GetAll()
         {
-            var visitors = _database.VisitorManager.GetAll().AsQueryable().Include(v => v.Group).ToList();
+            var visitors = _database.VisitorManager.GetAll();
             var visitorsDto = _mapper.Map<IEnumerable<Visitor>, IEnumerable<VisitorDTO>>(visitors);
             return visitorsDto;
         }

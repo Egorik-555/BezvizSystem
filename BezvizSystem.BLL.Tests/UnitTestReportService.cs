@@ -25,13 +25,13 @@ namespace BezvizSystem.BLL.Tests
         {
             var r = report.GetReport(DateTime.Parse("01.06.2016"), DateTime.Parse("30.07.2018"), DateTime.Parse("21.07.2018"));
            
-            Assert.IsTrue(r.AllRegistrated == 9);
-            Assert.IsTrue(r.AllArrived == 5);
-            Assert.IsTrue(r.WaitArrived == 3);
-            Assert.IsTrue(r.NotArriverd == 1);
-            Assert.IsTrue(r.AllTourist == 2);
-            Assert.IsTrue(r.AllGroup == 3);
-            Assert.IsTrue(r.AllTouristInGroup == 7);
+            Assert.AreEqual(3, r.AllRegistrated);
+            Assert.AreEqual(2, r.AllArrived);
+            Assert.AreEqual(1, r.WaitArrived);
+            Assert.AreEqual(0, r.NotArriverd);
+            Assert.AreEqual(1, r.AllTourist);
+            Assert.AreEqual(1, r.AllGroup);
+            Assert.AreEqual(2, r.AllTouristInGroup);
           
         }
 
@@ -41,11 +41,11 @@ namespace BezvizSystem.BLL.Tests
             var r = report.GetReport(DateTime.Parse("01.06.2016"), DateTime.Parse("30.07.2018"), DateTime.Parse("21.07.2018"));
             var list = r.AllByNatAndAge;
 
-            Assert.IsTrue(list.Count() == 3);
-            Assert.IsTrue(list.Where(l => l.Natiolaty == "n1").FirstOrDefault().All == 2);
-            Assert.IsTrue(list.Where(l => l.Natiolaty == "n1").FirstOrDefault().ManMore18 == 1);
-            Assert.IsTrue(list.Where(l => l.Natiolaty == "n1").FirstOrDefault().WomanMore18 == 1);
-            Assert.IsTrue(list.Where(l => l.Natiolaty == "n2").FirstOrDefault().All == 2);
+            Assert.AreEqual(2, list.Count());
+            Assert.AreEqual(1, list.SingleOrDefault(l => l.Natiolaty == "n1").All);
+            Assert.AreEqual(1, list.SingleOrDefault(l => l.Natiolaty == "n1").ManMore18);
+            Assert.AreEqual(0, list.SingleOrDefault(l => l.Natiolaty == "n1").WomanMore18);
+            Assert.AreEqual(1, list.SingleOrDefault(l => l.Natiolaty == "n2").All);
         }
 
         [TestMethod]
@@ -54,9 +54,9 @@ namespace BezvizSystem.BLL.Tests
             var r = report.GetReport(DateTime.Parse("01.06.2018"), DateTime.Parse("30.07.2018"), DateTime.Parse("21.07.2018"));
             var list = r.AllByDateArrivalCount;
 
-            Assert.IsTrue(list.Count() == 2);
-            Assert.IsTrue(list.Where(l => l.DateArrival.Value == new DateTime(2018, 7, 1)).FirstOrDefault().Count == 4);
-            Assert.IsTrue(list.Where(l => l.DateArrival.Value == new DateTime(2018, 7, 2)).FirstOrDefault().Count == 2);
+            Assert.AreEqual(1, list.Count());
+            Assert.AreEqual(2, list.SingleOrDefault(l => l.DateArrival.Value == new DateTime(2018, 6, 1)).Count);
+            Assert.IsNull(list.SingleOrDefault(l => l.DateArrival.Value == new DateTime(2018, 7, 2)));
         }
 
         [TestMethod]
@@ -65,9 +65,9 @@ namespace BezvizSystem.BLL.Tests
             var r = report.GetReport(DateTime.Parse("01.06.2018"), DateTime.Parse("30.07.2018"), DateTime.Parse("21.07.2018"));
             var list = r.AllByCheckPointCount;
 
-            Assert.IsTrue(list.Count() == 2);
-            Assert.IsTrue(list.Where(l => l.CheckPoint == "check1").FirstOrDefault().Count == 4);
-            Assert.IsTrue(list.Where(l => l.CheckPoint == "check2").FirstOrDefault().Count == 2);
+            Assert.AreEqual(1, list.Count());
+            Assert.AreEqual(2, list.SingleOrDefault(l => l.CheckPoint == "check1").Count);
+            Assert.IsNull(list.SingleOrDefault(l => l.CheckPoint == "check2"));
         }
 
         [TestMethod]
@@ -76,9 +76,9 @@ namespace BezvizSystem.BLL.Tests
             var r = report.GetReport(DateTime.Parse("01.06.2018"), DateTime.Parse("30.07.2018"), DateTime.Parse("21.07.2018"));
             var list = r.AllByDaysCount;
 
-            Assert.IsTrue(list.Count() == 2);
-            Assert.IsTrue(list.Where(l => l.Days == 1).FirstOrDefault().Count == 2);
-            Assert.IsTrue(list.Where(l => l.Days == 3).FirstOrDefault().Count == 4);
+            Assert.AreEqual(1, list.Count());
+            Assert.AreEqual(2, list.SingleOrDefault(l => l.Days == 4).Count);
+            Assert.IsNull(list.SingleOrDefault(l => l.Days == 3));
         }
 
         [TestMethod]
@@ -87,9 +87,9 @@ namespace BezvizSystem.BLL.Tests
             var r = report.GetReport(DateTime.Parse("01.06.2018"), DateTime.Parse("30.07.2018"), DateTime.Parse("21.07.2018"));
             var list = r.AllByOperatorCount;
 
-            Assert.IsTrue(list.Count() == 2);
-            Assert.IsTrue(list.Where(l => l.Operator == "operator1").FirstOrDefault().Count == 4);
-            Assert.IsTrue(list.Where(l => l.Operator == "operator2").FirstOrDefault().Count == 2);
+            Assert.AreEqual(1, list.Count());
+            Assert.AreEqual(2, list.SingleOrDefault(l => l.Operator == "transcript User").Count);
+            Assert.IsNull(list.SingleOrDefault(l => l.Operator == "operator2"));
         }
     }
 }

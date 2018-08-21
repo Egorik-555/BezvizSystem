@@ -90,11 +90,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Gender.cs" />
-    <Compile Include="Entities\Log\TypeOfOperation.cs" />
-    <Compile Include="Entities\Log\Unload.cs" />
-    <Compile Include="Entities\Log\UserActivity.cs" />
-    <Compile Include="Helpers\StatusOfOperation.cs" />
-    <Compile Include="Helpers\StatusOfRecord.cs" />
+    <Compile Include="Entities\XMLDispatch.cs" />
+    <Compile Include="Helpers\Operation.cs" />
+    <Compile Include="Helpers\Status.cs" />
     <Compile Include="Interfaces\IOperatorManager.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
@@ -110,14 +108,13 @@
     <Compile Include="Identity\BezvizUserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\GenderManager.cs" />
-    <Compile Include="Repositories\TypeOfOperationManager.cs" />
     <Compile Include="Repositories\CheckPointManager.cs" />
     <Compile Include="Repositories\GroupManager.cs" />
     <Compile Include="Repositories\IdentityUnitOfWork.cs" />
     <Compile Include="Repositories\NationalityManager.cs" />
     <Compile Include="Repositories\OperatorManager.cs" />
-    <Compile Include="Repositories\UserActivityManager.cs" />
     <Compile Include="Repositories\VisitorManager.cs" />
+    <Compile Include="Repositories\XMLDispatchManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

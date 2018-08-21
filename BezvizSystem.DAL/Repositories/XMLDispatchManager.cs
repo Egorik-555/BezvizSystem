@@ -11,50 +11,35 @@ using System.Threading.Tasks;
 
 namespace BezvizSystem.DAL.Repositories
 {
-    public class VisitorManager : IRepository<Visitor, int>
+    public class XMLDispatchManager : IRepository<XMLDispatch, int>
     {
-        public BezvizContext Database { get; set; }
+        private BezvizContext Database { get; set; }
 
-        public VisitorManager(BezvizContext db)
+        public XMLDispatchManager(BezvizContext db)
         {
             Database = db;
         }
 
-        public IEnumerable<Visitor> GetAll()
-        {          
-            return Database.Visitors;
-        }
-
-        public Visitor GetById(int id)
+        public XMLDispatch Create(XMLDispatch item)
         {
-            return Database.Visitors.Find(id);
-        }
-
-        public Task<Visitor> GetByIdAsync(int id)
-        {
-            return Database.Visitors.FindAsync(id);
-        }
-
-        public Visitor Create(Visitor item)
-        {
-            var result = Database.Visitors.Add(item);
+            var result = Database.XMLDispatches.Add(item);
             Database.SaveChanges();
             return result;
         }
 
-        public Visitor Delete(int id)
+        public XMLDispatch Delete(int id)
         {
             var item = GetById(id);
-            Visitor result = null;
+            XMLDispatch result = null;
             if (item != null)
             {
-                result = Database.Visitors.Remove(item);
+                result = Database.XMLDispatches.Remove(item);
                 Database.SaveChanges();
             }
             return result;
         }
 
-        public Visitor Update(Visitor item)
+        public XMLDispatch Update(XMLDispatch item)
         {
             Database.Entry(item).State = EntityState.Modified;
             Database.SaveChanges();
@@ -64,6 +49,21 @@ namespace BezvizSystem.DAL.Repositories
         public void Dispose()
         {
             Database.Dispose();
-        }    
+        }
+
+        public IEnumerable<XMLDispatch> GetAll()
+        {
+            return Database.XMLDispatches;
+        }
+
+        public XMLDispatch GetById(int id)
+        {
+            return Database.XMLDispatches.Find(id);
+        }
+
+        public Task<XMLDispatch> GetByIdAsync(int id)
+        {
+            return Database.XMLDispatches.FindAsync(id);
+        }
     }
 }

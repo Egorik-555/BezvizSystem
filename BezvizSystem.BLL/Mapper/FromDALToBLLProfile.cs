@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.DTO.Dictionary;
-using BezvizSystem.BLL.DTO.Log;
+using BezvizSystem.BLL.Interfaces;
+using BezvizSystem.BLL.Services;
 using BezvizSystem.DAL;
 using BezvizSystem.DAL.Entities;
-using BezvizSystem.DAL.Entities.Log;
 using BezvizSystem.DAL.Helpers;
 using BezvizSystem.DAL.Interfaces;
 using System;
@@ -19,10 +19,12 @@ namespace BezvizSystem.BLL.Mapper
     {
         IMapper mapperVisitor;
         IUnitOfWork _database;
+        IXMLDispatcher _xmlDispatcher;
 
         public FromDALToBLLProfile(IUnitOfWork database)
         {
             _database = database;
+            _xmlDispatcher = new XMLDispatcher(database);
             mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelVisitor(database, null))).CreateMapper();
 
             //anketa service
@@ -30,31 +32,34 @@ namespace BezvizSystem.BLL.Mapper
                 ForMember(dest => dest.CountMembers, opt => opt.MapFrom(src => src.Visitors.Count())).
                 ForMember(dest => dest.DateArrival, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date : src.DateArrival)).
                 ForMember(dest => dest.Status, opt => opt.MapFrom(src => CheckAllStatuses(src.Visitors))).
-                ForMember(dest => dest.Operator, opt => opt.MapFrom(src => src.User.OperatorProfile.Transcript)).
+                ForMember(dest => dest.Operator, opt => opt.MapFrom(src => src.TranscriptUser)).
                 ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name)).
-                ForMember(dest => dest.Arrived, opt => opt.MapFrom(src => CheckAllArrivals(src.Visitors))).
-                AfterMap((d, e) => RemovedOrNotVisitors(d, e));
+                ForMember(dest => dest.Arrived, opt => opt.MapFrom(src => CheckAllArrivals(src.Visitors)));
+            //.AfterMap((d, e) => RemovedOrNotVisitors(d, e));
 
+            //visitors
             CreateMap<Visitor, VisitorDTO>().
                ForMember(dest => dest.Group, opt => opt.Ignore()).
-               ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name));
+               ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name)).
+               ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Name));
+
+            CreateMap<VisitorDTO, Visitor>().
+                ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => database.Nationalities.GetAll().SingleOrDefault(n => n.Name == src.Nationality))).
+                ForMember(dest => dest.Gender, opt => opt.MapFrom(src => database.Genders.GetAll().SingleOrDefault(n => n.Name == src.Gender)));
             /////
 
             //group service
             CreateMap<GroupVisitorDTO, GroupVisitor>().
-                     ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault()));
-            CreateMap<VisitorDTO, Visitor>().
-                ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
-                ForMember(dest => dest.Gender, opt => opt.MapFrom(src => database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
+                     ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => database.CheckPoints.GetAll().SingleOrDefault(n => n.Name == src.CheckPoint)));            
 
             CreateMap<GroupVisitor, GroupVisitorDTO>().
                 ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => src.CheckPoint.Name));
-            CreateMap<Visitor, VisitorDTO>().
-                ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name)).
-                ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Name));
+            //CreateMap<Visitor, VisitorDTO>().
+            //    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name)).
+            //    ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Name));
             ///
 
-            //User service
+            //User
             CreateMap<ProfileUserDTO, OperatorProfile>();
             CreateMap<OperatorProfile, ProfileUserDTO>();
 
@@ -68,16 +73,16 @@ namespace BezvizSystem.BLL.Mapper
 
             CreateMap<Nationality, NationalityDTO>();
             CreateMap<CheckPoint, CheckPointDTO>();
-            CreateMap<TypeOfOperation, TypeOfOperationDTO>();
             CreateMap<Gender, GenderDTO>();
         }
+
 
         private string CheckAllArrivals(IEnumerable<Visitor> list)
         {
             int count = 0;
             foreach (var item in list)
             {
-                if (item.Arrived && item.StatusOfOperation != StatusOfOperation.Remove)
+                if (item.Arrived)
                 {
                     count++;
                 }
@@ -92,49 +97,26 @@ namespace BezvizSystem.BLL.Mapper
 
         private string CheckAllStatuses(IEnumerable<Visitor> list)
         {
-            int countSave = 0;
+            int countNew = 0;
             int countSend = 0;
             int countRecieve = 0;
 
-            foreach (var item in list)
-            {
-                if (item.StatusOfRecord == StatusOfRecord.Save)
-                {
-                    countSave++;
-                }
-                else if (item.StatusOfRecord == StatusOfRecord.Send)
-                {
-                    countSend++;
-                }
-                else if (item.StatusOfRecord == StatusOfRecord.Recd)
-                {
-                    countRecieve++;
-                }
-            }
+            //foreach (var item in list)
+            //{
+            //    var itemInDispatches = _database.XMLDispatchManager.GetAll().SingleOrDefault(i => i.IdVisitor == item.Id && i.Status == Status.New);
+            //}
 
-            if (countSave > 0 && countSave <= list.Count())
-            {
-                return StatusOfRecord.Save.ToString();
-            }
-            else if (countSend > 0 && countSend <= list.Count())
-            {
-                return StatusOfRecord.Send.ToString();
-            }
-            else return StatusOfRecord.Recd.ToString();
-        }
+            //if (countSend == list.Count())
+            //{
+            //    return StatusOfRecord.Send.ToString();
+            //}
+            //else if (countRecieve == list.Count())
+            //{
+            //    return StatusOfRecord.Recd.ToString();
+            //}
+            //else return StatusOfRecord.New.ToString();
 
-        private void RemovedOrNotVisitors(GroupVisitor groupVisitor, AnketaDTO anketa)
-        {
-            ICollection<Visitor> result = new List<Visitor>();
-            foreach (var visitor in groupVisitor.Visitors)
-            {
-                if (visitor.StatusOfOperation != StatusOfOperation.Remove)
-                {
-                    result.Add(visitor);
-                }
-            }
-
-            mapperVisitor.Map(result, anketa.Visitors);
+            return "Сохранено";
         }
     }
 
@@ -143,8 +125,8 @@ namespace BezvizSystem.BLL.Mapper
         public FromDALToBLLProfileWithModelVisitor(IUnitOfWork _database, Visitor model)
         {
             CreateMap<VisitorDTO, Visitor>().ConstructUsing(v => model).
-                    ForMember(dest => dest.Group, opt => opt.Ignore()).
-                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => _database.NationalityManager.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
+                    ForMember(dest => dest.Group, opt => opt.MapFrom(src => _database.GroupManager.GetById(src.Group.Id))).
+                    ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => _database.Nationalities.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
                     ForMember(dest => dest.Gender, opt => opt.MapFrom(src => _database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
 
             CreateMap<Visitor, VisitorDTO>().
@@ -163,68 +145,71 @@ namespace BezvizSystem.BLL.Mapper
             this._database = _database;
             mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database))).CreateMapper();
 
+            //CreateMap<VisitorDTO, Visitor>();
+            CreateMap<IEnumerable<VisitorDTO>, IEnumerable< Visitor>>().ConstructUsing(v => model.Visitors);
+
             CreateMap<GroupVisitorDTO, GroupVisitor>().ConstructUsing(v => model).
-                ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => _database.CheckPointManager.GetAll().Where(n => n.Name == src.CheckPoint).FirstOrDefault())).
-                ForMember(d => d.Visitors, opt => opt.Ignore()).
-                AfterMap((d, e) => AddOrUpdateVisitors(d, e));
+                ForMember(dest => dest.CheckPoint, opt => opt.MapFrom(src => _database.CheckPoints.GetAll().SingleOrDefault(n => n.Name == src.CheckPoint))).
+                ForMember(d => d.Visitors, opt => opt.MapFrom(src => mapperVisitor.Map<IEnumerable<VisitorDTO>, IEnumerable<Visitor>>(src.Visitors)));    
         }
 
-        private void AddOrUpdateVisitors(GroupVisitorDTO dto, GroupVisitor group)
+        private void AddOrUpdateVisitors(GroupVisitorDTO newGroupDto, GroupVisitor oldGroup)
         {
 
-            var oldVisitors = group.Visitors.ToList();
+            var oldVisitors = oldGroup.Visitors.ToList();
             foreach (var visitor in oldVisitors)
             {
-                if (dto.Visitors.SingleOrDefault(v => v.Id == visitor.Id) == null)
+                if (newGroupDto.Visitors.SingleOrDefault(v => v.Id == visitor.Id) == null)
                 {
-                    if (visitor.StatusOfRecord != StatusOfRecord.Save)
+                    //    if (visitor.StatusOfRecord != StatusOfRecord.New)
+                    //    {
+                    //        visitor.StatusOfRecord = StatusOfRecord.Remove;
+                    //    }
+                    //    else
+                    //    {
+                    //        oldGroup.Visitors.Remove(visitor);
+                    //    }
+                    //}
+                }
+
+                foreach (var visitorDTO in newGroupDto.Visitors)
+                {
+                    //visitorDTO.Group = dto;
+
+                    if (visitorDTO.Id == 0)
                     {
-                        visitor.StatusOfOperation = StatusOfOperation.Remove;
-                        visitor.StatusOfRecord = StatusOfRecord.Save;
+                        // visitorDTO.StatusOfRecord = StatusOfRecord.New;
+                        visitorDTO.DateInSystem = DateTime.Now;
+                        visitorDTO.UserInSystem = newGroupDto.UserInSystem;
+                        //oldGroup.Visitors.Add(mapperVisitor.Map<Visitor>(visitorDTO));
                     }
                     else
                     {
-                        group.Visitors.Remove(visitor);
+                        var oldVisitor = oldGroup.Visitors.SingleOrDefault(v => v.Id == visitorDTO.Id);
+                        //var newVisitor = mapperVisitor.Map<VisitorDTO, Visitor>(visitorDTO);
+                        //if (visitorDTO.StatusOfRecord == 0)
+                        //    visitorDTO.StatusOfRecord = StatusOfRecord.Save;
+                        //if (visitorDTO.StatusOfOperation == 0)
+                        //    visitorDTO.StatusOfOperation = StatusOfOperation.Add;
+
+                        //if (!oldVisitor.Equals(newVisitor) ||
+                        //        (newGroupDto.DateArrival.HasValue && oldGroup.DateArrival.HasValue && newGroupDto.DateArrival.Value != oldGroup.DateArrival.Value))
+                        //{
+                            //if (oldVisitor.StatusOfRecord != StatusOfRecord.New)
+                            //    visitorDTO.StatusOfRecord = StatusOfRecord.Edit;
+
+                            //visitorDTO.DateEdit = newGroupDto.DateEdit;
+                            //visitorDTO.UserEdit = newGroupDto.UserEdit;
+                       // }
+
+                        //mapperVisitor.Map(visitorDTO, oldVisitor);
                     }
-                }
-            }
-
-            foreach (var visitorDTO in dto.Visitors)
-            {
-                visitorDTO.Group = dto;
-
-                if (visitorDTO.Id == 0)
-                {
-                    visitorDTO.StatusOfOperation = StatusOfOperation.Add;
-                    visitorDTO.StatusOfRecord = StatusOfRecord.Save;
-                    visitorDTO.DateInSystem = DateTime.Now;
-                    visitorDTO.UserInSystem = dto.UserInSystem;
-                    group.Visitors.Add(mapperVisitor.Map<Visitor>(visitorDTO));
-                }
-                else
-                {
-                    var oldVisitor = group.Visitors.SingleOrDefault(v => v.Id == visitorDTO.Id);
-                    var newVisitor = mapperVisitor.Map<VisitorDTO, Visitor>(visitorDTO);
-
-                    if (!oldVisitor.Equals(newVisitor))
-                    {
-                        if (oldVisitor.StatusOfRecord != StatusOfRecord.Save)
-                            visitorDTO.StatusOfOperation = StatusOfOperation.Edit;
-                        else
-                            visitorDTO.StatusOfOperation = StatusOfOperation.Add;
-
-                        visitorDTO.StatusOfRecord = StatusOfRecord.Save;
-                        visitorDTO.DateEdit = dto.DateEdit;
-                        visitorDTO.UserEdit = dto.UserEdit;
-                    }
-
-                    mapperVisitor.Map(visitorDTO, oldVisitor);
                 }
             }
         }
     }
 
-    class FromDALToBLLProfileWithModelUser : Profile
+    public class FromDALToBLLProfileWithModelUser : Profile
     {
         public FromDALToBLLProfileWithModelUser(BezvizUser model)
         {
@@ -234,4 +219,5 @@ namespace BezvizSystem.BLL.Mapper
             CreateMap<ProfileUserDTO, OperatorProfile>().ConstructUsing(v => model.OperatorProfile);
         }
     }
+
 }
