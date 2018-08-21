@@ -128,7 +128,6 @@
     <Compile Include="Repositories\OperatorManager.cs" />
     <Compile Include="Repositories\VisitorManager.cs" />
     <Compile Include="Repositories\XMLDispatchManager.cs" />
-    <Compile Include="StateVisitor\IVisitorState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -8,8 +8,9 @@ using System.Data.Entity;
 
 namespace BezvizSystem.DAL.EF
 {
-    public class BezvizContext : IdentityDbContext<BezvizUser>, DbContextWithTriggers
-    {
+    public class BezvizContext : IdentityDbContext<BezvizUser>
+    { 
+
         static BezvizContext()
         {
             Database.SetInitializer(new Initializer());
