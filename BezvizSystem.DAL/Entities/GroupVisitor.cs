@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace BezvizSystem.DAL.Entities
 
         public int Id { get; set; }
 
+        [Required]
         public virtual ICollection<Visitor> Visitors { get; set; }
         public bool Group { get; set; }
 
@@ -48,16 +50,16 @@ namespace BezvizSystem.DAL.Entities
         public DateTime? DateEdit { get; set; }
         public string UserEdit { get; set; }
 
-        public bool EqualsDateArrival(object obj)
-        {
-            var group = obj as GroupVisitor;
-            if (group == null) return false;
+        //public bool EqualsDateArrival(object obj)
+        //{
+        //    var group = obj as GroupVisitor;
+        //    if (group == null) return false;
 
-            if (!group.DateArrival.HasValue || !this.DateArrival.HasValue) return false;
+        //    if (!group.DateArrival.HasValue || !this.DateArrival.HasValue) return false;
 
-            if (group.DateArrival.Value != this.DateArrival.Value) return false;
+        //    if (group.DateArrival.Value != this.DateArrival.Value) return false;
 
-            return true;
-        }
+        //    return true;
+        //}
     }
 }

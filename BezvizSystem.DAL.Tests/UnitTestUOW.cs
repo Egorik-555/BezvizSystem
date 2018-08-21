@@ -7,7 +7,6 @@ using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Helpers;
 using BezvizSystem.DAL.Interfaces;
 using BezvizSystem.DAL.Repositories;
-using BezvizSystem.DAL.StateVisitor;
 using Microsoft.AspNet.Identity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;

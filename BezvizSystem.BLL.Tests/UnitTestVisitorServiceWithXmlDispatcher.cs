@@ -21,7 +21,7 @@ namespace BezvizSystem.BLL.Tests
         {
             CreateTestRepositories repoes = new CreateTestRepositories();
             database = repoes.CreateIoWManager();
-            Service = new VisitorService(repoes.CreateIoWManager(), new XMLDispatcher(database));
+            Service = new VisitorService(database, new XMLDispatcher(database));
         }
 
         [TestMethod]
@@ -90,8 +90,7 @@ namespace BezvizSystem.BLL.Tests
             Assert.IsNull(visitor);
             Assert.IsTrue(result.Succedeed);
 
-            Assert.AreEqual(Status.New, dispatch.Status);
-            Assert.AreEqual(Operation.Add, dispatch.Operation);
+            Assert.IsNull(dispatch);
         }
     }
 }
