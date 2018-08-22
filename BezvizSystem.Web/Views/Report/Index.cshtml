@@ -27,7 +27,11 @@
                 </div>
             </td>
         </tr>
-        @Html.Action("DataReport", new { dateFrom = Model, dateTo = Model })
+        <tr>
+            <td id = "data">
+                @Html.Action("DataReport", new { dateFrom = Model, dateTo = Model })
+            </td>
+        </tr>      
     </table>
 </td>
 @section scripts{

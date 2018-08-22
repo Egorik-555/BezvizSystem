@@ -86,7 +86,37 @@ namespace BezvizSystem.BLL.Tests
         }
 
         [TestMethod]
-        public async Task Update_Group_Test()
+        public async Task Update_Group_Update_Visitors_Test()
+        {
+            GroupVisitorDTO group = new GroupVisitorDTO
+            {
+                Id = 1,
+                PlaceOfRecidense = "new Place",
+                CheckPoint = "check3",
+
+                Visitors = new List<VisitorDTO> {
+                    new VisitorDTO { Id = 1, Name = "new Name", Surname = "surname new", Nationality = "nat3"} },
+                  
+                UserInSystem = "Admin",
+                DateInSystem = new DateTime(2015, 01, 05),
+                UserEdit = "Test1",
+                DateEdit = DateTime.Now
+            };
+
+            var result = await Service.Update(group);
+            var findGroup = await Service.GetByIdAsync(1);
+            var visitor = findGroup.Visitors.SingleOrDefault(v => v.Id == 1);
+
+            Assert.AreEqual(1, findGroup.Visitors.Count());
+            Assert.AreEqual("Admin", findGroup.UserInSystem);
+            Assert.AreEqual(DateTime.Now.Date, findGroup.DateEdit.Value.Date);
+
+            Assert.AreEqual("surname new", visitor.Surname);
+            Assert.AreEqual("nat3", visitor.Nationality);
+        }
+
+        [TestMethod]
+        public async Task Update_Group_Add_New_Visitors_Test()
         {
             GroupVisitorDTO group = new GroupVisitorDTO
             {
