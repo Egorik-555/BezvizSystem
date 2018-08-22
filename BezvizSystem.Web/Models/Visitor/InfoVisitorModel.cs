@@ -37,17 +37,11 @@ namespace BezvizSystem.Web.Models.Visitor
         [Display(Name = "Гражданство")]
         public string Nationality { get; set; }
 
-        public string StatusName { get; set; }
-        public int StatusOfOperation { get; set; }
         public bool Arrived { get; set; }
 
         [Required]
         public DateTime? DateInSystem { get; set; }
         [Required]
         public string UserInSystem { get; set; }
-        //[Required]
-        //public DateTime? DateEdit { get; set; }
-        //[Required]
-        //public string UserEdit { get; set; }
     }
 }

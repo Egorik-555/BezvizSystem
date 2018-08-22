@@ -160,11 +160,12 @@ namespace BezvizSystem.BLL.Mapper
         private IEnumerable<Visitor> GetVisitors(IEnumerable<Visitor> oldModel, IEnumerable<VisitorDTO> newModel)
         {
             List<Visitor> result = new List<Visitor>();
-            //если в новом наборе туристов есть старые туристы
+            
             foreach (var newItem in newModel)
             {
                 foreach (var oldItem in oldModel)
                 {
+                    //если в новом наборе туристов есть старые туристы
                     if (oldItem.Id == newItem.Id)
                     {
                         mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelVisitor(_database, oldItem))).CreateMapper();

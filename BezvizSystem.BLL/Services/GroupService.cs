@@ -31,8 +31,11 @@ namespace BezvizSystem.BLL.Services
         {
             foreach (var visitor in visitors)
             {
-                visitor.DateInSystem = date;
-                visitor.UserInSystem = user;
+                if (visitor != null)
+                {
+                    visitor.DateInSystem = date;
+                    visitor.UserInSystem = user;
+                }
             }
         }
 
