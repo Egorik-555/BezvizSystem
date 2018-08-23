@@ -163,7 +163,8 @@ namespace BezvizSystem.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        private async Task SetInitDataAsync()
+        [NonAction]
+        public async Task SetInitDataAsync()
         {
             var user = new UserDTO
             {
