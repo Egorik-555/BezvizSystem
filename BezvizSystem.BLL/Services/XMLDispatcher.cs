@@ -133,7 +133,7 @@ namespace BezvizSystem.BLL.Services
         }
 
         public async Task<OperationDetails> Edit(Visitor visitor)
-        {
+        {            
             var dispatch = await _database.XMLDispatchManager.GetByIdAsync(visitor.Id);
             if (dispatch != null)
             {
@@ -164,7 +164,7 @@ namespace BezvizSystem.BLL.Services
           
             foreach (var visitor in newVisitors)
             {
-                //add visitors do not in old visitors
+                //add visitors are not in old visitors
                 if (!oldVisitors.Contains(visitor))
                 {
                     var result = await New(visitor);

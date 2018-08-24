@@ -22,7 +22,7 @@ namespace BezvizSystem.BLL.Tests
         {
             CreateTestRepositories repoes = new CreateTestRepositories();
             database = repoes.CreateIoWManager();
-            Service = new GroupService(database, new XMLDispatcher(database));
+            Service = new GroupService(database);
         }
 
         [TestMethod]

@@ -33,6 +33,7 @@ namespace BezvizSystem.Web.Tests
         IDictionaryService<CheckPointDTO> checkPoint;
         IDictionaryService<NationalityDTO> nationalities;
         IDictionaryService<GenderDTO> genders;
+        IXMLDispatcher xmlDispatcherService;
 
         VisitorController visitorController;
         GroupController groupController;
@@ -44,8 +45,10 @@ namespace BezvizSystem.Web.Tests
             database = new IdentityUnitOfWork(CONNECT);
             xmlDispatcher = database.XMLDispatchManager;
 
+            xmlDispatcherService = new XMLDispatcher(database);
             visitorService = serviceCreator.CreateVisitorService(CONNECT);
-            groupService = serviceCreator.CreateGroupService(CONNECT);
+            //groupService = serviceCreator.CreateGroupService(CONNECT);
+            groupService = new GroupService(database);
             checkPoint = serviceCreator.CreateCheckPointService(CONNECT);
             nationalities = serviceCreator.CreateNationalityService(CONNECT);
             genders = serviceCreator.CreateGenderService(CONNECT);
@@ -89,22 +92,22 @@ namespace BezvizSystem.Web.Tests
         {
             Surname = "surname test new",
             Name = "name test new",
-            SerialAndNumber = "test test",
+            SerialAndNumber = "test test new",
             Gender = "Мужчина",
             BithDate = new DateTime(1988, 5, 1),
-            Nationality = "Польша",
+            Nationality = "Польша",        
             Arrived = true,
             DateInSystem = DateTime.Now,
             UserInSystem = "Admin",
-            DateEdit = DateTime.Now,
-            UserEdit = "Admin"
+            UserEdit = "Admin",
+            DateEdit = new DateTime(2018, 01, 01)
         };
 
-        EditVisitorModel groupOfVisitorNew = new EditVisitorModel
+        EditVisitorModel groupVisitorNew = new EditVisitorModel
         {
-            DateArrival = DateTime.Now.AddDays(1),
-            DateDeparture = DateTime.Now.AddDays(2),
-            DaysOfStay = 1,
+            DateArrival = DateTime.Now,
+            DateDeparture = DateTime.Now,
+            DaysOfStay = 2,
             CheckPoint = "Брест (Тересполь)",
             PlaceOfRecidense = "place TEST new",
             ProgramOfTravel = "program of travel new",
@@ -112,10 +115,11 @@ namespace BezvizSystem.Web.Tests
             SiteOfOperator = "site new",
             TelNumber = "tel new",
             Email = "egorik-555@yandex.ru",
+            TranscriptUser = "Брестский облисполком",
             DateInSystem = DateTime.Now,
             UserInSystem = "Admin",
-            DateEdit = DateTime.Now,
-            UserEdit = "Admin"
+            UserEdit = "Admin",
+            DateEdit = new DateTime(2018, 01, 01)
         };
 
 
@@ -123,21 +127,14 @@ namespace BezvizSystem.Web.Tests
         public async Task Create_Group_Of_One_Visitor()
         {
             await accountController.SetInitDataAsync();
-
-            var countGroups = groupService.GetAll().Count();
-            var countVisitors = visitorService.GetAll().Count();
-
             createVisitor.Info = visitor1;
             var result = (await visitorController.Create(createVisitor)) as RedirectToRouteResult;
 
             Assert.IsNotNull(result);
 
-            var groups = groupService.GetAll();
-            var visitors = visitorService.GetAll();
-            var group = groupService.GetAll().LastOrDefault(g => g.PlaceOfRecidense.Contains("TEST"));        
+            var group = groupService.GetAll().LastOrDefault(g => g.PlaceOfRecidense.Contains("TEST"));
 
             //group
-            Assert.AreEqual(countGroups + 1, groups.Count());
             Assert.IsNotNull(group);
             Assert.AreEqual(DateTime.Now.Date, group.DateArrival.Value.Date);
             Assert.AreEqual(DateTime.Now.Date, group.DateDeparture.Value.Date);
@@ -154,10 +151,9 @@ namespace BezvizSystem.Web.Tests
             Assert.AreEqual("Admin", group.UserInSystem);
             Assert.AreEqual("Брестский облисполком", group.TranscriptUser);
 
-            var visitor = group.Visitors.LastOrDefault();
+            var visitor = group.Visitors.FirstOrDefault();
 
             //visitors
-            Assert.AreEqual(countVisitors + 1, visitors.Count());
             Assert.AreEqual(1, group.Visitors.Count);
             Assert.AreEqual("surname test", visitor.Surname);
             Assert.AreEqual("name test", visitor.Name);
@@ -169,42 +165,34 @@ namespace BezvizSystem.Web.Tests
             Assert.AreEqual(DateTime.Now.Date, visitor.DateInSystem.Value.Date);
             Assert.AreEqual("Admin", visitor.UserInSystem);
 
+            //XMLDispatcher
             var dispatch = database.XMLDispatchManager.GetById(visitor.Id);
 
-            //XMLDispatcher
-            Assert.AreEqual(Operation.Add, dispatch.Operation);
             Assert.AreEqual(Status.New, dispatch.Status);
+            Assert.AreEqual(Operation.Add, dispatch.Operation);
             Assert.AreEqual(DateTime.Now.Date, dispatch.DateInSystem.Value.Date);
         }
 
         [TestMethod]
         public async Task Edit_Group_Of_One_Visitor()
         {
-            await accountController.SetInitDataAsync();
-
             var group = groupService.GetAll().LastOrDefault();
+            groupVisitorNew.Id = group.Id;
+            visitorNew.Id = group.Visitors.LastOrDefault().Id;
+            groupVisitorNew.Info = visitorNew;
+            
             if (group == null) return;
 
-            groupOfVisitorNew.Id = group.Id;
-            groupOfVisitorNew.Info = visitorNew;
+            var result = (await anketaController.EditVisitor(groupVisitorNew, "Extra")) as RedirectToRouteResult;
 
-            var countGroups = groupService.GetAll().Count();
-            var countVisitors = visitorService.GetAll().Count();
-
-            //TODO выбрать группу из базы для информации по ID
-            var result = (await anketaController.EditVisitor(groupOfVisitorNew, "Extra")) as RedirectToRouteResult;
-         
-            var groups = groupService.GetAll();
-            var visitors = visitorService.GetAll();
-            group = groupService.GetAll().LastOrDefault(g => g.PlaceOfRecidense.Contains("TEST"));
+            group = groupService.GetById(group.Id);
 
             Assert.IsNotNull(result);
             //group
-            Assert.AreEqual(countGroups, groups.Count());
             Assert.IsNotNull(group);
-            Assert.AreEqual(DateTime.Now.AddDays(1).Date, group.DateArrival.Value.Date);
-            Assert.AreEqual(DateTime.Now.AddDays(1).Date, group.DateDeparture.Value.Date);
-            Assert.AreEqual(1, group.DaysOfStay);
+            Assert.AreEqual(DateTime.Now.Date, group.DateArrival.Value.Date);
+            Assert.AreEqual(DateTime.Now.Date, group.DateDeparture.Value.Date);
+            Assert.AreEqual(2, group.DaysOfStay);
             Assert.AreEqual("Брест (Тересполь)", group.CheckPoint);
             Assert.AreEqual("place TEST new", group.PlaceOfRecidense);
             Assert.AreEqual("program of travel new", group.ProgramOfTravel);
@@ -212,35 +200,86 @@ namespace BezvizSystem.Web.Tests
             Assert.AreEqual("site new", group.SiteOfOperator);
             Assert.AreEqual("tel new", group.TelNumber);
             Assert.AreEqual("egorik-555@yandex.ru", group.Email);
+            Assert.AreEqual(true, group.ExtraSend);
             Assert.AreEqual(DateTime.Now.Date, group.DateInSystem.Value.Date);
             Assert.AreEqual("Admin", group.UserInSystem);
             Assert.AreEqual("Брестский облисполком", group.TranscriptUser);
-            Assert.AreEqual(DateTime.Now.Date, group.DateEdit.Value.Date);
-            Assert.AreEqual("Admin", group.UserEdit);
+            Assert.AreEqual(new DateTime(2018, 1, 1).Date, group.DateEdit.Value.Date);
+            Assert.AreEqual("Admin", group.UserInSystem);
 
-            var visitor = group.Visitors.LastOrDefault();
+            var visitor = group.Visitors.FirstOrDefault();
 
             //visitors
-            Assert.AreEqual(countVisitors, visitors.Count());
             Assert.AreEqual(1, group.Visitors.Count);
             Assert.AreEqual("surname test new", visitor.Surname);
             Assert.AreEqual("name test new", visitor.Name);
-            Assert.AreEqual("test test", visitor.SerialAndNumber);
+            Assert.AreEqual("test test new", visitor.SerialAndNumber);
             Assert.AreEqual("Мужчина", visitor.Gender);
-            Assert.AreEqual(new DateTime(1988, 5, 1).Date, visitor.BithDate);
+            Assert.AreEqual(new DateTime(1988, 5, 1).Date, visitor.BithDate.Value.Date);
             Assert.AreEqual("Польша", visitor.Nationality);
             Assert.AreEqual(true, visitor.Arrived);
             Assert.AreEqual(DateTime.Now.Date, visitor.DateInSystem.Value.Date);
             Assert.AreEqual("Admin", visitor.UserInSystem);
-            Assert.AreEqual(DateTime.Now.Date, visitor.DateEdit.Value.Date);
-            Assert.AreEqual("Admin", visitor.UserEdit);
-
-            var dispatch = database.XMLDispatchManager.GetById(visitor.Id);
+            Assert.AreEqual(new DateTime(2018, 1, 1).Date, visitor.DateEdit.Value.Date);
+            Assert.AreEqual("Admin", visitor.UserInSystem);
 
             //XMLDispatcher
-            Assert.AreEqual(Operation.Add, dispatch.Operation);
-            Assert.AreEqual(Status.New, dispatch.Status);
+            var dispatch = database.XMLDispatchManager.GetById(visitor.Id);
+
+            Assert.AreEqual(DAL.Helpers.Status.New, dispatch.Status);
+            Assert.AreEqual(DAL.Helpers.Operation.Add, dispatch.Operation);
             Assert.AreEqual(DateTime.Now.Date, dispatch.DateInSystem.Value.Date);
+        }
+
+
+        private async Task<GroupVisitorDTO> CreateGroup()
+        {
+            await accountController.SetInitDataAsync();
+            createVisitor.Info = visitor1;
+            var result = (await visitorController.Create(createVisitor)) as RedirectToRouteResult;
+
+            if (result == null) return null;
+
+            var group = groupService.GetAll().LastOrDefault();
+                   
+            return group;
+        }
+
+        private async Task SendVisitor(VisitorDTO visitor)
+        {
+            Visitor v = new Visitor { Id = visitor.Id};
+            await xmlDispatcherService.Send(v);           
+        }
+
+        private async Task<GroupVisitorDTO> EditGroup(GroupVisitorDTO group)
+        {
+            visitorNew.Id = group.Visitors.FirstOrDefault().Id;
+            groupVisitorNew.Info = visitorNew;
+            groupVisitorNew.Id = group.Id;
+            var result = (await anketaController.EditVisitor(groupVisitorNew, "")) as RedirectToRouteResult;
+
+            if (result == null) return null;
+            var groupResult = groupService.GetById(group.Id);
+
+            return groupResult;
+        }
+
+        [TestMethod]
+        public async Task Edit_Group_Of_One_Send_Visitor()
+        {
+            var group = await CreateGroup();
+            await SendVisitor(group.Visitors.FirstOrDefault());
+            group = await EditGroup(group);
+
+            Assert.IsNotNull(group);
+                  
+            //XMLDispatcher
+            var dispatch = database.XMLDispatchManager.GetById(group.Visitors.FirstOrDefault().Id);
+
+            Assert.AreEqual(Status.Send, dispatch.Status);
+            Assert.AreEqual(Operation.Edit, dispatch.Operation);
+            Assert.AreEqual(DateTime.Now.Date, dispatch.DateInSystem.Value.Date);
+            Assert.AreEqual(DateTime.Now.Date, dispatch.DateEdit.Value.Date);
         }
     }
 }

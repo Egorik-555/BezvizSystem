@@ -20,10 +20,10 @@ namespace BezvizSystem.BLL.Services
         IMapper _mapper;
         IXMLDispatcher _xmlDispatcher;
 
-        public GroupService(IUnitOfWork uow, IXMLDispatcher xmlDispatcher)
+        public GroupService(IUnitOfWork uow)
         {
             _database = uow;
-            _xmlDispatcher = xmlDispatcher;
+            _xmlDispatcher = new XMLDispatcher(_database);
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database))).CreateMapper();
         }
 
