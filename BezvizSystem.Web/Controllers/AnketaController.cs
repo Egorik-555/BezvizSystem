@@ -118,7 +118,6 @@ namespace BezvizSystem.Web.Controllers
                     return RedirectToAction("Index");
                 }
                 else ModelState.AddModelError("", result.Message);
-
             }
 
             ViewBag.Genders = Gender();

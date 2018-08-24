@@ -23,7 +23,7 @@ namespace BezvizSystem.BLL.Tests
             var repo = repoes.CreateIoWManager();
 
             _service = new XmlCreatorPogran(repo);
-            _serviceVisitor = new VisitorService(repo, new XMLDispatcher(repo));
+            _serviceVisitor = new VisitorService(repo);
         }
 
 

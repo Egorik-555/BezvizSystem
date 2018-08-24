@@ -37,8 +37,6 @@ namespace BezvizSystem.Web.Models.Visitor
         [Display(Name = "Гражданство")]
         public string Nationality { get; set; }
 
-        public int StatusOFRecord { get; set; }
-        public int StatusOfOperation { get; set; }
         public bool Arrived { get; set; }
 
         [Required]
