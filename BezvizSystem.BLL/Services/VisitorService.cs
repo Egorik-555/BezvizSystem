@@ -91,7 +91,7 @@ namespace BezvizSystem.BLL.Services
 
         public IEnumerable<VisitorDTO> GetAll()
         {
-            var visitors = _database.VisitorManager.GetAll();
+            var visitors = _database.VisitorManager.GetAll().ToList();
             var visitorsDto = _mapper.Map<IEnumerable<Visitor>, IEnumerable<VisitorDTO>>(visitors);
             return visitorsDto;
         }
