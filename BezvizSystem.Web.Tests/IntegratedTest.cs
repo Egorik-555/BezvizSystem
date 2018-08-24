@@ -453,7 +453,7 @@ namespace BezvizSystem.Web.Tests
             Assert.AreEqual("Admin", group.UserInSystem);
             Assert.AreEqual("Брестский облисполком", group.TranscriptUser);
 
-            var visitor = group.Visitors.FirstOrDefault();
+            var visitor = group.Visitors.FirstOrDefault(v => v.Surname == "surname test");
 
             //visitors
             Assert.AreEqual(1, group.Visitors.Count);
