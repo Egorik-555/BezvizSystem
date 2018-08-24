@@ -13,6 +13,9 @@ using BezvizSystem.DAL.Interfaces;
 using BezvizSystem.DAL.Repositories;
 using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Helpers;
+using BezvizSystem.Web.Models.Anketa;
+using BezvizSystem.Web.Models.Group;
+using System.Collections.Generic;
 
 namespace BezvizSystem.Web.Tests
 {
@@ -72,6 +75,18 @@ namespace BezvizSystem.Web.Tests
             UserInSystem = "Admin"
         };
 
+        InfoVisitorModel visitor2 = new InfoVisitorModel
+        {
+            Surname = "surname2 test",
+            Name = "name2 test",
+            SerialAndNumber = "test2 test",
+            Gender = "Женщина",
+            BithDate = new DateTime(1950, 5, 1),
+            Nationality = "Германия",
+            DateInSystem = DateTime.Now,
+            UserInSystem = "Admin"
+        };
+
         CreateVisitorModel createVisitor = new CreateVisitorModel
         {
             DateArrival = DateTime.Now,
@@ -88,6 +103,23 @@ namespace BezvizSystem.Web.Tests
             UserInSystem = "Admin"
         };
 
+        CreateGroupModel createGroup = new CreateGroupModel
+        {
+            DateArrival = DateTime.Now,
+            DateDeparture = DateTime.Now,
+            DaysOfStay = 5,
+            CheckPoint = "Аэропорт Брест",
+            PlaceOfRecidense = "place TEST",
+            ProgramOfTravel = "program of travel",
+            OrganizeForm = "orginize form",
+            Name = "name",
+            NumberOfContract = "number of contract",
+            DateOfContract = new DateTime(2018, 6, 1),
+            OtherInfo = "Other info",
+            DateInSystem = DateTime.Now,
+            UserInSystem = "Admin"
+        };
+
         EditInfoVisitorModel visitorNew = new EditInfoVisitorModel
         {
             Surname = "surname test new",
@@ -97,6 +129,20 @@ namespace BezvizSystem.Web.Tests
             BithDate = new DateTime(1988, 5, 1),
             Nationality = "Польша",        
             Arrived = true,
+            DateInSystem = DateTime.Now,
+            UserInSystem = "Admin",
+            UserEdit = "Admin",
+            DateEdit = new DateTime(2018, 01, 01)
+        };
+
+        EditInfoVisitorModel visitorNew2 = new EditInfoVisitorModel
+        {
+            Surname = "surname2 test new",
+            Name = "name2 test new",
+            SerialAndNumber = "test2 test new",
+            Gender = "Мужчина",
+            BithDate = new DateTime(1951, 5, 1),
+            Nationality = "Польша",
             DateInSystem = DateTime.Now,
             UserInSystem = "Admin",
             UserEdit = "Admin",
@@ -123,16 +169,74 @@ namespace BezvizSystem.Web.Tests
         };
 
 
+
+        private async Task<GroupVisitorDTO> CreateGroup(CreateVisitorModel group, InfoVisitorModel visitor)
+        {
+            await accountController.SetInitDataAsync();
+            group.Info = visitor;
+            var result = (await visitorController.Create(group)) as RedirectToRouteResult;
+
+            if (result == null) return null;
+
+            var groupResult = groupService.GetAll().LastOrDefault();
+            return groupResult;
+        }
+
+        private async Task<GroupVisitorDTO> CreateGroup(CreateGroupModel group, params InfoVisitorModel[] visitor)
+        {
+            await accountController.SetInitDataAsync();
+            group.Infoes = visitor;
+            var result = (await groupController.Create(group)) as RedirectToRouteResult;
+
+            if (result == null) return null;
+
+            var groupResult = groupService.GetAll().LastOrDefault();
+            return groupResult;
+        }
+
+        private async Task<GroupVisitorDTO> EditGroup(EditVisitorModel group, EditInfoVisitorModel visitor)
+        {
+            var findGroup = groupService.GetAll().LastOrDefault();
+
+            visitor.Id = findGroup.Visitors.FirstOrDefault().Id;
+            group.Info = visitor;
+            group.Id = findGroup.Id;
+
+            var result = (await anketaController.EditVisitor(group, "Extra")) as RedirectToRouteResult;
+
+            if (result == null) return null;
+            var groupResult = groupService.GetById(group.Id);
+
+            return groupResult;
+        }
+
+        private async Task<RedirectToRouteResult> DeleteGroup(int id)
+        {
+            ViewAnketaModel model = new ViewAnketaModel{ Id = id};
+            var result = (await anketaController.Delete(model)) as RedirectToRouteResult;
+            return result;
+        }
+
+
+        private async Task SendVisitor(VisitorDTO visitor)
+        {
+            Visitor v = new Visitor { Id = visitor.Id };
+            await xmlDispatcherService.Send(v);
+        }
+
+        private async Task RecdVisitor(VisitorDTO visitor)
+        {
+            Visitor v = new Visitor { Id = visitor.Id };
+            await xmlDispatcherService.Recd(v);
+        }
+
+
         [TestMethod]
         public async Task Create_Group_Of_One_Visitor()
         {
-            await accountController.SetInitDataAsync();
-            createVisitor.Info = visitor1;
-            var result = (await visitorController.Create(createVisitor)) as RedirectToRouteResult;
-
-            Assert.IsNotNull(result);
-
-            var group = groupService.GetAll().LastOrDefault(g => g.PlaceOfRecidense.Contains("TEST"));
+            var group = await CreateGroup(createVisitor, visitor1);
+           
+            Assert.IsNotNull(group);
 
             //group
             Assert.IsNotNull(group);
@@ -172,22 +276,15 @@ namespace BezvizSystem.Web.Tests
             Assert.AreEqual(Operation.Add, dispatch.Operation);
             Assert.AreEqual(DateTime.Now.Date, dispatch.DateInSystem.Value.Date);
         }
-
+    
         [TestMethod]
         public async Task Edit_Group_Of_One_Visitor()
         {
-            var group = groupService.GetAll().LastOrDefault();
-            groupVisitorNew.Id = group.Id;
-            visitorNew.Id = group.Visitors.LastOrDefault().Id;
-            groupVisitorNew.Info = visitorNew;
-            
-            if (group == null) return;
+            var group = await CreateGroup(createVisitor, visitor1);
+            Assert.IsNotNull(group);
+            group = await EditGroup(groupVisitorNew, visitorNew);
+            Assert.IsNotNull(group);
 
-            var result = (await anketaController.EditVisitor(groupVisitorNew, "Extra")) as RedirectToRouteResult;
-
-            group = groupService.GetById(group.Id);
-
-            Assert.IsNotNull(result);
             //group
             Assert.IsNotNull(group);
             Assert.AreEqual(DateTime.Now.Date, group.DateArrival.Value.Date);
@@ -201,6 +298,7 @@ namespace BezvizSystem.Web.Tests
             Assert.AreEqual("tel new", group.TelNumber);
             Assert.AreEqual("egorik-555@yandex.ru", group.Email);
             Assert.AreEqual(true, group.ExtraSend);
+            Assert.AreEqual(false, group.Group);
             Assert.AreEqual(DateTime.Now.Date, group.DateInSystem.Value.Date);
             Assert.AreEqual("Admin", group.UserInSystem);
             Assert.AreEqual("Брестский облисполком", group.TranscriptUser);
@@ -226,51 +324,18 @@ namespace BezvizSystem.Web.Tests
             //XMLDispatcher
             var dispatch = database.XMLDispatchManager.GetById(visitor.Id);
 
-            Assert.AreEqual(DAL.Helpers.Status.New, dispatch.Status);
-            Assert.AreEqual(DAL.Helpers.Operation.Add, dispatch.Operation);
+            Assert.AreEqual(Status.New, dispatch.Status);
+            Assert.AreEqual(Operation.Add, dispatch.Operation);
             Assert.AreEqual(DateTime.Now.Date, dispatch.DateInSystem.Value.Date);
         }
-
-
-        private async Task<GroupVisitorDTO> CreateGroup()
-        {
-            await accountController.SetInitDataAsync();
-            createVisitor.Info = visitor1;
-            var result = (await visitorController.Create(createVisitor)) as RedirectToRouteResult;
-
-            if (result == null) return null;
-
-            var group = groupService.GetAll().LastOrDefault();
-                   
-            return group;
-        }
-
-        private async Task SendVisitor(VisitorDTO visitor)
-        {
-            Visitor v = new Visitor { Id = visitor.Id};
-            await xmlDispatcherService.Send(v);           
-        }
-
-        private async Task<GroupVisitorDTO> EditGroup(GroupVisitorDTO group)
-        {
-            visitorNew.Id = group.Visitors.FirstOrDefault().Id;
-            groupVisitorNew.Info = visitorNew;
-            groupVisitorNew.Id = group.Id;
-            var result = (await anketaController.EditVisitor(groupVisitorNew, "")) as RedirectToRouteResult;
-
-            if (result == null) return null;
-            var groupResult = groupService.GetById(group.Id);
-
-            return groupResult;
-        }
-
+     
         [TestMethod]
         public async Task Edit_Group_Of_One_Send_Visitor()
-        {
-            var group = await CreateGroup();
+        {                    
+            var group = await CreateGroup(createVisitor, visitor1);
+            Assert.IsNotNull(group);
             await SendVisitor(group.Visitors.FirstOrDefault());
-            group = await EditGroup(group);
-
+            group = await EditGroup(groupVisitorNew, visitorNew);
             Assert.IsNotNull(group);
                   
             //XMLDispatcher
@@ -280,6 +345,134 @@ namespace BezvizSystem.Web.Tests
             Assert.AreEqual(Operation.Edit, dispatch.Operation);
             Assert.AreEqual(DateTime.Now.Date, dispatch.DateInSystem.Value.Date);
             Assert.AreEqual(DateTime.Now.Date, dispatch.DateEdit.Value.Date);
+        }
+
+        [TestMethod]
+        public async Task Edit_Group_Of_One_Recd_Visitor()
+        {
+            var group = await CreateGroup(createVisitor, visitor1);
+            Assert.IsNotNull(group);
+            await RecdVisitor(group.Visitors.FirstOrDefault());
+            group = await EditGroup(groupVisitorNew, visitorNew);
+            Assert.IsNotNull(group);
+
+            //XMLDispatcher
+            var dispatch = database.XMLDispatchManager.GetById(group.Visitors.FirstOrDefault().Id);
+
+            Assert.AreEqual(Status.Recd, dispatch.Status);
+            Assert.AreEqual(Operation.Edit, dispatch.Operation);
+            Assert.AreEqual(DateTime.Now.Date, dispatch.DateInSystem.Value.Date);
+            Assert.AreEqual(DateTime.Now.Date, dispatch.DateEdit.Value.Date);
+        }
+
+        [TestMethod]
+        public async Task Delete_Group_Of_One_New_Visitor()
+        {
+            var group = await CreateGroup(createVisitor, visitor1);
+            Assert.IsNotNull(group);         
+            var result = await DeleteGroup(group.Id);
+            Assert.IsNotNull(result);
+
+            var findGroup = await groupService.GetByIdAsync(group.Id);
+            //group
+            Assert.IsNull(findGroup);
+
+            var visitor = await visitorService.GetByIdAsync(group.Visitors.FirstOrDefault().Id);
+            //visitors
+            Assert.IsNull(visitor);
+
+            //XMLDispatcher
+            var dispatch = database.XMLDispatchManager.GetById(group.Visitors.FirstOrDefault().Id);
+
+            Assert.IsNull(dispatch);       
+        }
+
+        [TestMethod]
+        public async Task Delete_Group_Of_One_Send_Visitor()
+        {
+            var group = await CreateGroup(createVisitor, visitor1);
+            Assert.IsNotNull(group);
+            await SendVisitor(group.Visitors.FirstOrDefault());
+            var result = await DeleteGroup(group.Id);
+            Assert.IsNotNull(result);
+
+            //XMLDispatcher
+            var dispatch = database.XMLDispatchManager.GetById(group.Visitors.FirstOrDefault().Id);
+
+            Assert.AreEqual(Status.Send, dispatch.Status);
+            Assert.AreEqual(Operation.Remove, dispatch.Operation);
+            Assert.AreEqual(DateTime.Now.Date, dispatch.DateInSystem.Value.Date);
+            Assert.AreEqual(DateTime.Now.Date, dispatch.DateEdit.Value.Date);
+        }
+
+        [TestMethod]
+        public async Task Delete_Group_Of_One_Recd_Visitor()
+        {
+            var group = await CreateGroup(createVisitor, visitor1);
+            Assert.IsNotNull(group);
+            await RecdVisitor(group.Visitors.FirstOrDefault());
+            var result = await DeleteGroup(group.Id);
+            Assert.IsNotNull(result);
+
+            //XMLDispatcher
+            var dispatch = database.XMLDispatchManager.GetById(group.Visitors.FirstOrDefault().Id);
+
+            Assert.AreEqual(Status.Recd, dispatch.Status);
+            Assert.AreEqual(Operation.Remove, dispatch.Operation);
+            Assert.AreEqual(DateTime.Now.Date, dispatch.DateInSystem.Value.Date);
+            Assert.AreEqual(DateTime.Now.Date, dispatch.DateEdit.Value.Date);
+        }
+
+
+
+
+
+        [TestMethod]
+        public async Task Create_Group_Of_Many_Visitors()
+        {
+            var group = await CreateGroup(createGroup, visitor1, visitor2);
+            
+            Assert.IsNotNull(group);
+
+            //group
+            Assert.IsNotNull(group);
+            Assert.AreEqual(DateTime.Now.Date, group.DateArrival.Value.Date);
+            Assert.AreEqual(DateTime.Now.Date, group.DateDeparture.Value.Date);
+            Assert.AreEqual(5, group.DaysOfStay);
+            Assert.AreEqual("Аэропорт Брест", group.CheckPoint);
+            Assert.AreEqual("place TEST", group.PlaceOfRecidense);
+            Assert.AreEqual("program of travel", group.ProgramOfTravel);
+            Assert.AreEqual("orginize form", group.OrganizeForm);
+            Assert.AreEqual("name", group.Name);
+            Assert.AreEqual("number of contract", group.NumberOfContract);
+            Assert.AreEqual(false, group.ExtraSend);
+            Assert.AreEqual(true, group.Group);
+            Assert.AreEqual(new DateTime(2018, 6, 1), group.DateOfContract);
+            Assert.AreEqual("Other info", group.OtherInfo);
+            Assert.AreEqual(DateTime.Now.Date, group.DateInSystem.Value.Date);
+            Assert.AreEqual("Admin", group.UserInSystem);
+            Assert.AreEqual("Брестский облисполком", group.TranscriptUser);
+
+            var visitor = group.Visitors.FirstOrDefault();
+
+            //visitors
+            Assert.AreEqual(1, group.Visitors.Count);
+            Assert.AreEqual("surname test", visitor.Surname);
+            Assert.AreEqual("name test", visitor.Name);
+            Assert.AreEqual("test test", visitor.SerialAndNumber);
+            Assert.AreEqual("Мужчина", visitor.Gender);
+            Assert.AreEqual(new DateTime(1987, 5, 1).Date, visitor.BithDate);
+            Assert.AreEqual("Польша", visitor.Nationality);
+            Assert.AreEqual(false, visitor.Arrived);
+            Assert.AreEqual(DateTime.Now.Date, visitor.DateInSystem.Value.Date);
+            Assert.AreEqual("Admin", visitor.UserInSystem);
+
+            //XMLDispatcher
+            var dispatch = database.XMLDispatchManager.GetById(visitor.Id);
+
+            Assert.AreEqual(Status.New, dispatch.Status);
+            Assert.AreEqual(Operation.Add, dispatch.Operation);
+            Assert.AreEqual(DateTime.Now.Date, dispatch.DateInSystem.Value.Date);
         }
     }
 }
