@@ -111,7 +111,7 @@ namespace BezvizSystem.BLL.Services
                 var user = await Database.UserManager.FindByIdAsync(userDto.Id);
                 if (user == null)
                     return new OperationDetails(false, "Пользователь не найден", "");
-            
+
                 var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelUser(user))).CreateMapper();
                 var m = mapper.Map<UserDTO, BezvizUser>(userDto);
 
@@ -231,6 +231,8 @@ namespace BezvizSystem.BLL.Services
         //tested
         public async Task<UserDTO> GetByNameAsync(string name)
         {
+            if (name == null) return null;
+
             var user = await Database.UserManager.FindByNameAsync(name);
             var userDto = mapper.Map<BezvizUser, UserDTO>(user);
             return userDto;
@@ -246,13 +248,11 @@ namespace BezvizSystem.BLL.Services
         //tested
         public IEnumerable<UserDTO> GetByRole(string roleName)
         {
-            if (roleName != null)
-            {
-                var users = GetAll();
-                var result = users.Where(u => u.ProfileUser != null ? u.ProfileUser.Role.ToUpper() == roleName.ToUpper() : false);
-                return result;
-            }
-            return null;
+            if (roleName != null) return null;
+
+            var users = GetAll();
+            var result = users.Where(u => u.ProfileUser != null ? u.ProfileUser.Role.ToUpper() == roleName.ToUpper() : false);
+            return result;
         }
     }
 }
