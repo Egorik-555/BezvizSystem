@@ -125,12 +125,19 @@ table.second form.pad_cent_red {
     font-weight: bold;
     text-transform: uppercase;
     font-size: 15px;
+    text-decoration: none;
 }
-
+a.simply_form_red {
+    padding: 20px 10px;
+}
+.visitor_str:hover{
+    background: rgba(10,146,0,0.6);
+    cursor:pointer;
+}
 .pad_cent {
     width: 208px;
     height: 55px;
-    white-space:inherit;
+    white-space: inherit;
     background-color: #fff;
     color: #313131;
     border: 1px solid #313131;
@@ -146,7 +153,6 @@ table.second form.pad_cent_red {
     width: 208px;
     background-color: #0a9200;
     color: #fff;
-    ;
     border: 1px solid #0a9200;
     line-height: 19px;
     padding: 6px;
@@ -542,14 +548,14 @@ td.orange {
     /*width: 45%;*/
 }
 
-form.darkorange {
+.darkorange {
     background-color: #ffba00;
     color: #1e1e1e;
     margin-left: 30px !important;
     border: 1px solid #fff;
 }
 
-form.green {
+.green {
     background-color: #0a9200;
     color: #fff;
     margin-left: 30px !important;
