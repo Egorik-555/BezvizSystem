@@ -4,6 +4,7 @@ using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.DAL;
 using BezvizSystem.Web.Mapper;
 using BezvizSystem.Web.Models.Operator;
+using BezvizSystem.Web.Views.Helpers.Pagging;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace BezvizSystem.Web.Controllers
             return View((object)id);
         }
 
-        public ActionResult DataOperators(string id)
+        public ActionResult DataOperators(string id, int page = 1)
         {
             var usersDto = _userService.GetByRole("operator").OrderByDescending(m => m.ProfileUser.DateInSystem);
             var model = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<ViewOperatorModel>>(usersDto);         
@@ -45,7 +46,13 @@ namespace BezvizSystem.Web.Controllers
             {
                 model = model.Where(m => m.ProfileUserTranscript.ToUpper().Contains(id.ToUpper()));
             }
-            return PartialView(model);
+
+            int pageSize = 3;
+            var modelForPaging = model.Skip((page - 1) * pageSize).Take(pageSize);
+            PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = model.Count()};
+            IndexViewModel<ViewOperatorModel> ivm = new IndexViewModel<ViewOperatorModel> {PageInfo = pageInfo, Models = modelForPaging };
+
+            return PartialView(ivm);
         }
 
         public ActionResult Create()

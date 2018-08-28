@@ -163,13 +163,14 @@ namespace BezvizSystem.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        private async Task SetInitDataAsync()
+        [NonAction]
+        public async Task SetInitDataAsync()
         {
             var user = new UserDTO
             {
                 UserName = "Admin",
-                Password = "qwerty",
-                ProfileUser = new ProfileUserDTO { Role = "admin", Active = true, DateInSystem = DateTime.Now, UserInSystem = "Autoinitilize" }             
+                Password = "rgg777",
+                ProfileUser = new ProfileUserDTO { Role = "admin", Active = true, Transcript = "Брестский облисполком", DateInSystem = DateTime.Now, UserInSystem = "Autoinitilize" }             
             };
 
             var roles = new List<string> { "admin", "operator" };

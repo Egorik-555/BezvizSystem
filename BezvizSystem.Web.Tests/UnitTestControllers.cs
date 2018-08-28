@@ -181,7 +181,8 @@ namespace BezvizSystem.Web.Tests
                 DateInSystem = DateTime.Now,
                 UserInSystem = "Test new",
                 DateEdit = new DateTime(2018, 1, 1),
-                UserEdit = "Test edit"
+                UserEdit = "Test edit",
+                TranscriptUser = "Test"
             };
 
             editGroup = new EditGroupModel
@@ -198,6 +199,7 @@ namespace BezvizSystem.Web.Tests
                 Name = "name new",
                 NumberOfContract = "number of contract 123",
                 DateOfContract = new DateTime(2018, 1, 3),
+                TranscriptUser = "transcript user",
                 DateInSystem = DateTime.Now,
                 UserInSystem = "Test",
                 DateEdit = new DateTime(2018, 1, 1),

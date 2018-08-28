@@ -59,6 +59,8 @@ namespace BezvizSystem.Web.Models.Visitor
 
         public bool ExtraSend { get; set; }
         [Required]
+        public string TranscriptUser { get; set; }
+        [Required]
         public DateTime? DateInSystem { get; set; }
         [Required]
         public string UserInSystem { get; set; }

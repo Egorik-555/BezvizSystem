@@ -1,6 +1,12 @@
-﻿@model IEnumerable<BezvizSystem.Web.Models.Operator.ViewOperatorModel>
+﻿
+@using BezvizSystem.Web.Views.Helpers.Pagging
+@using BezvizSystem.Web.Models.Operator
 
-@foreach (var item in Model)
+@model IndexViewModel<ViewOperatorModel>
+
+@*IEnumerable<BezvizSystem.Web.Models.Operator.ViewOperatorModel>*@
+
+@foreach (var item in Model.Models)
 {
     <tr>
         <td>
@@ -14,3 +20,7 @@
         </td>
     </tr>
 }
+
+<div class="btn-group">
+    @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }))
+</div>

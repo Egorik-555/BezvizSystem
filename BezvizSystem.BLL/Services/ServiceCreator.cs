@@ -26,13 +26,13 @@ namespace BezvizSystem.BLL.Services
         public IService<VisitorDTO> CreateVisitorService(string connection)
         {
             IdentityUnitOfWork uow = new IdentityUnitOfWork(connection);
-            return new VisitorService(uow, new XMLDispatcher(uow));
+            return new VisitorService(uow);
         }
 
         public IService<GroupVisitorDTO> CreateGroupService(string connection)
         {
             IdentityUnitOfWork uow = new IdentityUnitOfWork(connection);
-            return new GroupService(uow, new XMLDispatcher(uow));
+            return new GroupService(uow);
         }
 
         public IService<AnketaDTO> CreateAnketaService(string connection)

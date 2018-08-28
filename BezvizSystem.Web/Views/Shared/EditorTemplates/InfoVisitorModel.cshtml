@@ -48,7 +48,5 @@
     </td>
 </tr>
 
-@Html.EditorFor(model => model.StatusName, new { htmlAttributes = new { @type = "hidden", @Value = "Сохранено" } })
-@Html.EditorFor(model => model.StatusOfOperation, new { htmlAttributes = new { @type = "hidden", @Value = 1 } })
 @Html.EditorFor(model => model.UserInSystem, new { htmlAttributes = new { @type = "hidden", @Value = User.Identity.Name } })
 @Html.EditorFor(model => model.DateInSystem, new { htmlAttributes = new { @type = "hidden", @Value = DateTime.Now.ToString() } })

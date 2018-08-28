@@ -20,10 +20,10 @@ namespace BezvizSystem.BLL.Services
         IMapper _mapper;
         IXMLDispatcher _xmlDispatcher;
 
-        public VisitorService(IUnitOfWork uow, IXMLDispatcher xmlDispatcher)
+        public VisitorService(IUnitOfWork uow)
         {
             _database = uow;
-            _xmlDispatcher = xmlDispatcher;
+            _xmlDispatcher = new XMLDispatcher(_database);
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database))).CreateMapper();
         }
 
@@ -91,7 +91,7 @@ namespace BezvizSystem.BLL.Services
 
         public IEnumerable<VisitorDTO> GetAll()
         {
-            var visitors = _database.VisitorManager.GetAll();
+            var visitors = _database.VisitorManager.GetAll().ToList();
             var visitorsDto = _mapper.Map<IEnumerable<Visitor>, IEnumerable<VisitorDTO>>(visitors);
             return visitorsDto;
         }

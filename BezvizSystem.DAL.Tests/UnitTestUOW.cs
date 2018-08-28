@@ -166,17 +166,19 @@ namespace BezvizSystem.DAL.Tests
 
             //edit
             List<Visitor> newList = new List<Visitor>();
+            visitor1.Name = "new Name";
             newList.Add(visitor1);
+            newList.Add(new Visitor { Name = "Name in test" });
             group.PlaceOfRecidense = "new place";
             group.Visitors = newList;
 
             uow.GroupManager.Update(group);
             findGroup = uow.GroupManager.GetAll().Where(g => g.Id == group.Id).FirstOrDefault();
             Assert.AreEqual("new place", findGroup.PlaceOfRecidense);
-            Assert.IsTrue(findGroup.Visitors.Count == 1);
+            Assert.AreEqual(2, findGroup.Visitors.Count);
             ///
 
-            uow.VisitorManager.Delete(visitor1.Id);
+            //uow.VisitorManager.Delete(visitor1.Id);
             uow.VisitorManager.Delete(visitor2.Id);
             uow.GroupManager.Delete(findGroup.Id);
             findGroup = uow.GroupManager.GetAll().Where(g => g.Id == group.Id).FirstOrDefault();
