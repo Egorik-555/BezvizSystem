@@ -157,7 +157,7 @@ namespace BezvizSystem.BLL.Services
                 var result = await Database.UserManager.UpdateAsync(m);
 
                 if (!result.Succeeded)
-                    return new OperationDetails(result.Succeeded, "Произошла проблема при обновлении Email пользователя", "");
+                    return new OperationDetails(result.Succeeded, "Произошла проблема при обновлении данных пользователя", "");
 
                 //sending mail
                 await Database.UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты", message);
@@ -248,11 +248,12 @@ namespace BezvizSystem.BLL.Services
         //tested
         public IEnumerable<UserDTO> GetByRole(string roleName)
         {
-            if (roleName != null) return null;
-
             var users = GetAll();
-            var result = users.Where(u => u.ProfileUser != null ? u.ProfileUser.Role.ToUpper() == roleName.ToUpper() : false);
-            return result;
+
+            if (roleName != null) 
+                return users.Where(u => u.ProfileUser != null ? u.ProfileUser.Role.ToUpper() == roleName.ToUpper() : false);
+
+            return users;
         }
     }
 }

@@ -17,6 +17,8 @@ using BezvizSystem.Web.Models.Anketa;
 using BezvizSystem.Web.Models.Group;
 using System.Collections.Generic;
 using BezvizSystem.Web.Models.Operator;
+using BezvizSystem.Web.Views.Helpers.Pagging;
+using BezvizSystem.Web.Models;
 
 namespace BezvizSystem.Web.Tests
 {
@@ -206,7 +208,6 @@ namespace BezvizSystem.Web.Tests
         };
 
 
-
         private async Task<GroupVisitorDTO> CreateGroup(CreateVisitorModel group, InfoVisitorModel visitor)
         {
             await accountController.SetInitDataAsync();
@@ -327,6 +328,34 @@ namespace BezvizSystem.Web.Tests
 
             user = await userService.GetByNameAsync(model.UNP);
             return user;
+        }
+
+        private async Task<RedirectToRouteResult> DeleteUser(string id)
+        {
+            var user = await userService.GetByIdAsync(id);
+
+            var result = (await operatorController.Delete(user.Id)) as ViewResult;
+
+            if (result == null)
+                return null;
+            else
+                return (await operatorController.Delete((DeleteOperatorModel)result.Model)) as RedirectToRouteResult;
+        }
+
+        private async Task<RedirectToRouteResult> EditUser(string id)
+        {
+            var user = await userService.GetByIdAsync(id);
+
+            var result = (await operatorController.Edit(user.Id)) as ViewResult;
+
+            if (result == null) return null;
+
+            var model = result.Model as EditOperatorModel;
+            model.Email = "email";
+            model.EmailConfirmed = true;
+            model.ProfileUserTranscript = "new Transcript";
+
+            return (await operatorController.Edit(model)) as RedirectToRouteResult;
         }
 
 
@@ -817,5 +846,132 @@ namespace BezvizSystem.Web.Tests
             Assert.AreEqual(DateTime.Now.Date, operatorResult.ProfileUser.DateInSystem.Value.Date);
             Assert.AreEqual("Admin", operatorResult.ProfileUser.UserInSystem);
         }
+
+        [TestMethod]
+        public async Task Delete_Operator()
+        {
+            var operatorResult = await CreateUser(operatorModel);
+
+            var result = await DeleteUser(operatorResult.Id);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Index", result.RouteValues["action"]);
+        }
+
+        [TestMethod]
+        public async Task Edit_Operator()
+        {
+            var operatorResult = await CreateUser(operatorModel);
+
+            var result = await EditUser(operatorResult.Id);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Index", result.RouteValues["action"]);
+
+            var resultModel = await userService.GetByIdAsync(operatorResult.Id);
+            Assert.AreEqual("email", resultModel.Email);
+            Assert.IsTrue(resultModel.EmailConfirmed);
+            Assert.AreEqual("new Transcript", resultModel.ProfileUser.Transcript);
+        }
+
+        [TestMethod]
+        public async Task DataOperators_Operator()
+        {
+            var operatorResult = await CreateUser(operatorModel);
+
+            var result = operatorController.DataOperators("") as PartialViewResult;
+
+            Assert.IsNotNull(result);
+
+            var model = (IndexViewModel<ViewOperatorModel>)result.Model;
+            Assert.AreEqual(1, model.PageInfo.TotalItems);
+            Assert.AreEqual(1, model.PageInfo.PageNumber);
+
+            var opeartorInView = model.Models.FirstOrDefault();
+            Assert.AreEqual("123456789", opeartorInView.ProfileUserUNP);
+        }
+
+        [TestMethod]
+        public async Task Register_WarnUnp_Account()
+        {
+            var operatorResult = await CreateUser(operatorModel);
+
+            RegisterModel warnUnpModel = new RegisterModel { UNP = "1111" };
+
+            var result = await accountController.Register(warnUnpModel) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Туроператор с УНП - 1111 не найден", result.ViewData.ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage);
+        }
+
+        [TestMethod]
+        public async Task Register_WarnOKPO_Account()
+        {
+            var operatorResult = await CreateUser(operatorModel);
+
+            RegisterModel warnUnpModel = new RegisterModel { UNP = "123456789", OKPO = "1111" };
+
+            var result = await accountController.Register(warnUnpModel) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Туроператор с ОКПО - 1111 не найден", result.ViewData.ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage);
+        }
+
+        [TestMethod]
+        public async Task Register_NotActive_Account()
+        {
+            operatorModel.Active = false;
+            var operatorResult = await CreateUser(operatorModel);
+
+            RegisterModel warnUnpModel = new RegisterModel { UNP = "123456789", OKPO = "12345" };
+            var result = await accountController.Register(warnUnpModel) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Туроператор с УНП - 123456789 заблокирован", result.ViewData.ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage);
+        }
+
+        [TestMethod]
+        public async Task Confirm_Email_With_Null_Parameters_Account()
+        {          
+            var result = await accountController.ConfirmEmail(null, null) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Register", result.ViewName);
+            Assert.AreEqual("Неверные данные пользователя", result.ViewData.ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage);
+        }
+
+        [TestMethod]
+        public async Task Confirm_WrangToken_Account()
+        {
+            var operatorResult = await CreateUser(operatorModel);
+            var result = await accountController.ConfirmEmail("000", "egorik-555@yandex.ru") as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Register", result.ViewName);
+            Assert.AreEqual("Неверные данные пользователя", result.ViewData.ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage);
+        }
+
+        [TestMethod]
+        public async Task Confirm_Account()
+        {
+            var operatorResult = await CreateUser(operatorModel);
+            var result = await accountController.ConfirmEmail(operatorResult.Id, "egorik-555@yandex.ru") as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Login", result.RouteValues["action"]);       
+        }
+
+        //[TestMethod]
+        //public async Task Register_Registreted_Account()
+        //{
+        //    var operatorResult = await CreateUser(operatorModel);
+        //    userService.Update();
+
+        //    RegisterModel warnUnpModel = new RegisterModel { UNP = "123456789", OKPO = "12345" };
+        //    var result = await accountController.Register(warnUnpModel) as ViewResult;
+
+        //    Assert.IsNotNull(result);
+        //    Assert.AreEqual("Туроператор с УНП - 123456789 заблокирован", result.ViewData.ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage);
+        //}
     }
 }
