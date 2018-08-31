@@ -54,7 +54,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                         Authentication.SignOut();
                         Authentication.SignIn(new AuthenticationProperties
                         {
-                            IsPersistent = false,
+                            IsPersistent = true,
                         }, claim);
 
                         //_logger.Insert(new UserActivityDTO {

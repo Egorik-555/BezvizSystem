@@ -5,41 +5,34 @@
     Layout = "~/Views/Shared/_LayoutEnter.cshtml";
 }
 
-<h2>Cистема регистрации анкет иностранных туристов</h2>
-
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-
-<div class="form-horizontal">
     <input hidden="hidden" id="returnUrl" value="@ViewBag.returnUrl" />
-
-    <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-        </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Войти" class="btn btn-default" />
-        </div>
-    </div>
-
-</div>
+        <tr>
+            <td valign="top" colspan="2">
+                <h2 class="clr_black">СИСТЕМА РЕГИСТРАЦИИ АНКЕТ</h2>
+                <h2 class="clr_black">ИНОСТРАННЫХ ТУРИСТОВ</h2>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "long_but", placeholder="Логин"} })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "long_but", placeholder="Пароль" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+        <td class="zareg" colspan="2">
+            <input type="submit" value="Войти" class="simply_form_red back_yell" />
+        </td>
 }
 
 @section Scripts {

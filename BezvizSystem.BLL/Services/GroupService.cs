@@ -70,10 +70,12 @@ namespace BezvizSystem.BLL.Services
             try
             {
                 var group = await _database.GroupManager.GetByIdAsync(id);
+                ICollection<Visitor> oldVisitors = new List<Visitor>(group.Visitors);
                 if (group != null)
-                {
-                    await _xmlDispatcher.Remove(group.Visitors);
+                {                 
                     _database.GroupManager.Delete(group.Id);
+                    await _xmlDispatcher.Remove(oldVisitors);
+
                     return new OperationDetails(true, "Группа туристов удалена", "");
                 }
                 else return new OperationDetails(false, "Группа туристов не найдена", "");
@@ -89,15 +91,16 @@ namespace BezvizSystem.BLL.Services
             try
             {
                 var model = await _database.GroupManager.GetByIdAsync(group.Id);
-                var newModel = _mapper.Map<GroupVisitor>(group);
-                if (model != null)
-                {
-                    await _xmlDispatcher.Edit(model.Visitors, newModel.Visitors);
+                ICollection<Visitor> oldVisitors = new List<Visitor>(model.Visitors);
 
+                if (model != null)
+                {                  
                     var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new ProfileGroupDtoToDao(_database, model))).CreateMapper();
                     var modelNew = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
 
                     _database.GroupManager.Update(modelNew);
+                    await _xmlDispatcher.Edit(oldVisitors, modelNew.Visitors);
+
                     return new OperationDetails(true, "Группа туристов изменена", "");
                 }
                 else return new OperationDetails(false, "Группа туристов не найдена", "");

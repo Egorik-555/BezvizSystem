@@ -8,6 +8,7 @@ using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Helpers;
 using BezvizSystem.DAL.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -160,9 +161,11 @@ namespace BezvizSystem.BLL.Mapper
         private IEnumerable<Visitor> GetVisitors(IEnumerable<Visitor> oldModel, IEnumerable<VisitorDTO> newModel)
         {
             List<Visitor> result = new List<Visitor>();
-            
+
             foreach (var newItem in newModel)
             {
+                bool isOld = false;
+
                 foreach (var oldItem in oldModel)
                 {
                     //если в новом наборе туристов есть старые туристы
@@ -170,16 +173,34 @@ namespace BezvizSystem.BLL.Mapper
                     {
                         mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelVisitor(_database, oldItem))).CreateMapper();
                         result.Add(mapperVisitor.Map<VisitorDTO, Visitor>(newItem));
+                        isOld = true;
                         break;
                     }
+                }
 
-                    //если в новом наборе есть новые туристы
+                //если турист новый
+                if (!isOld)
+                {
                     mapperVisitor = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelVisitor(_database))).CreateMapper();
                     result.Add(mapperVisitor.Map<VisitorDTO, Visitor>(newItem));
                 }
+
             }
 
             return result;
+        }     
+    }
+
+    class VisitorComparer : IEqualityComparer<Visitor>
+    {
+        public bool Equals(Visitor x, Visitor y)
+        {
+            return x.Id == y.Id;
+        }
+
+        public int GetHashCode(Visitor obj)
+        {
+            return obj.Id.GetHashCode();
         }
     }
 
@@ -193,5 +214,4 @@ namespace BezvizSystem.BLL.Mapper
             CreateMap<ProfileUserDTO, OperatorProfile>().ConstructUsing(v => model.OperatorProfile);
         }
     }
-
 }
