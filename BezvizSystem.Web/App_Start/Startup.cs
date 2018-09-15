@@ -22,14 +22,14 @@ namespace BezvizSystem.Web.App_Start
 {
     public class Startup
     {
-        //IServiceCreator serviceCreator = new ServiceCreator();
-        //string CONNECTION = "BezvizContext";
+        IServiceCreator serviceCreator = new ServiceCreator();
+        string CONNECTION = "BezvizContext";
 
         public void Configuration(IAppBuilder app)
         {
-            //app.CreatePerOwinContext<BezvizContext>(CreateContext);
+            app.CreatePerOwinContext<BezvizContext>(CreateContext);
             //app.CreatePerOwinContext<IUserService>(CreateUserService);
-            //app.CreatePerOwinContext<BezvizUserManager>(BezvizUserManager.Create);
+            app.CreatePerOwinContext<BezvizUserManager>(BezvizUserManager.Create);
 
             //app.CreatePerOwinContext<IService<VisitorDTO>>(CreateVisitorService);
             //app.CreatePerOwinContext<IService<GroupVisitorDTO>>(CreateGroupService);
@@ -51,10 +51,10 @@ namespace BezvizSystem.Web.App_Start
         //    return serviceCreator.CreateUserService(CONNECTION);
         //}
 
-        //private BezvizContext CreateContext()
-        //{
-        //    return serviceCreator.CreateContext(CONNECTION);
-        //}
+        private BezvizContext CreateContext()
+        {
+            return serviceCreator.CreateContext(CONNECTION);
+        }
 
         //private IService<VisitorDTO> CreateVisitorService()
         //{

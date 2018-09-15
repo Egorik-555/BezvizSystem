@@ -61,7 +61,7 @@ namespace BezvizSystem.Web.Tests
             genders = serviceCreator.CreateGenderService(CONNECT);
             userService = serviceCreator.CreateUserService(CONNECT);
 
-            accountController = new AccountController(userService);
+            accountController = new AccountController(userService);          
             visitorController = new VisitorController(groupService, checkPoint, nationalities, genders);
             groupController = new GroupController(groupService, checkPoint, nationalities, genders);
             anketaController = new AnketaController(anketaService, groupService, checkPoint, nationalities, genders);
@@ -311,6 +311,7 @@ namespace BezvizSystem.Web.Tests
             Transcript = "transcript test",
             UNP = "123456789",
             OKPO = "12345",
+            Password = "123456",
             Active = true,
             DateInSystem = DateTime.Now,
             UserInSystem = "Admin"
@@ -931,6 +932,19 @@ namespace BezvizSystem.Web.Tests
         }
 
         [TestMethod]
+        public async Task Register_Account()
+        {
+            var operatorResult = await CreateUser(operatorModel);
+            //userService.Update();
+
+            RegisterModel warnUnpModel = new RegisterModel { UNP = "123456789", OKPO = "12345", Email = "egorik-555@yandex.ru" };
+            var result = await accountController.Register(warnUnpModel) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Туроператор с УНП - 123456789 заблокирован", result.ViewData.ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage);
+        }
+
+        [TestMethod]
         public async Task Confirm_Email_With_Null_Parameters_Account()
         {          
             var result = await accountController.ConfirmEmail(null, null) as ViewResult;
@@ -961,17 +975,50 @@ namespace BezvizSystem.Web.Tests
             Assert.AreEqual("Login", result.RouteValues["action"]);       
         }
 
+        [TestMethod]
+        public async Task Login_Wrang_Login_Pass_Account()
+        {         
+            var result = await accountController.Login(new LoginModel { Name = "1", Password = "2"}) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("", result.ViewName);
+            Assert.AreEqual("Неверный логин или пароль", result.ViewData.ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage);
+        }
+
+        [TestMethod]
+        public async Task Login_Wrang_Locked_Account()
+        {
+            operatorModel.Active = false;
+            var operatorResult = await CreateUser(operatorModel);
+            var result = await accountController.Login(new LoginModel { Name = "123456789", Password = "123456" }) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("", result.ViewName);
+            Assert.AreEqual("Пользователь заблокирован", result.ViewData.ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage);
+        }
+
+        [TestMethod]
+        public async Task Login_Email_Not_Confirmed_Account()
+        {
+            var operatorResult = await CreateUser(operatorModel);
+            var result = await accountController.Login(new LoginModel { Name = "123456789", Password = "123456" }) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("", result.ViewName);
+            Assert.AreEqual("Email не подтвержден", result.ViewData.ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage);
+        }
+
         //[TestMethod]
-        //public async Task Register_Registreted_Account()
+        //public async Task Login_Account()
         //{
         //    var operatorResult = await CreateUser(operatorModel);
-        //    userService.Update();
-
-        //    RegisterModel warnUnpModel = new RegisterModel { UNP = "123456789", OKPO = "12345" };
-        //    var result = await accountController.Register(warnUnpModel) as ViewResult;
+        //    operatorResult.EmailConfirmed = true;
+        //    await userService.Update(operatorResult);
+        //    var result = await accountController.Login(new LoginModel { Name = "123456789", Password = "123456" }) as RedirectToRouteResult;
 
         //    Assert.IsNotNull(result);
-        //    Assert.AreEqual("Туроператор с УНП - 123456789 заблокирован", result.ViewData.ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage);
+        //    Assert.AreEqual("Index", result.RouteValues["action"]);
+        //    Assert.AreEqual("Home", result.RouteValues["controller"]);
         //}
     }
 }

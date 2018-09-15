@@ -19,7 +19,6 @@ namespace BezvizSystem.Web.Controllers
     {
         private IUserService _service;
 
-
         private IAuthenticationManager Authentication
         {
             get { return HttpContext.GetOwinContext().Authentication; }
@@ -34,7 +33,6 @@ namespace BezvizSystem.Web.Controllers
         {
             _service = service;
         }
-
 
         public ActionResult Register()
         {
@@ -71,8 +69,7 @@ namespace BezvizSystem.Web.Controllers
                     return View(model);
                 }
 
-                user.Email = model.Email;
-                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { token = user.Id, email = user.Email },
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { token = user.Id, email = model.Email },
                                               protocol: Request.Url.Scheme);
 
                 _service.ManagerForChangePass = UserManager;
@@ -95,19 +92,24 @@ namespace BezvizSystem.Web.Controllers
                 result.ViewData.ModelState.AddModelError("", "Неверные данные пользователя");
                 return result;
             }
-                
+
             var user = await _service.GetByIdAsync(token);
             if (user == null)
             {
                 var result = View("Register");
-                result.ViewData.ModelState.AddModelError("", "Неверные данные пользователя");           
+                result.ViewData.ModelState.AddModelError("", "Неверные данные пользователя");
                 return result;
             }
 
-            if (user.Email == email)
+            user.Email = email;
+            user.EmailConfirmed = true;
+            var resultUpdate = await _service.Update(user);
+
+            if (!resultUpdate.Succedeed)
             {
-                user.EmailConfirmed = true;
-                await _service.Update(user);
+                var result = View("Register");
+                result.ViewData.ModelState.AddModelError("", resultUpdate.Message);
+                return result;
             }
 
             return RedirectToAction("Login");
@@ -128,39 +130,34 @@ namespace BezvizSystem.Web.Controllers
 
                 UserDTO user = new UserDTO { UserName = model.Name, Password = model.Password };
                 var claim = await _service.Authenticate(user);
-                if (claim != null)
-                {
-                    var findUser = await _service.GetByNameAsync(user.UserName);
-
-                    if (findUser.ProfileUser.Active)
-                    {
-                        if ((findUser.ProfileUser.Role == "admin") ||
-                                (findUser.ProfileUser.Role == "operator" && findUser.EmailConfirmed))
-                        {
-                            Authentication.SignOut();
-                            Authentication.SignIn(new AuthenticationProperties
-                            {
-                                IsPersistent = model.RememberMe,
-                            }, claim);
-
-                            return RedirectToAction("Index", "Home");
-                        }
-                        else if (findUser.ProfileUser.Role == "operator")
-                        {
-                            ModelState.AddModelError("", "Email не подтвержден");
-                        }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Пользователь заблокирован");
-                    }
-                }
-                else
+                if (claim == null)
                 {
                     ModelState.AddModelError("", "Неверный логин или пароль");
+                    return View(model);
                 }
-            }
 
+                var findUser = await _service.GetByNameAsync(user.UserName);
+
+                if (!findUser.ProfileUser.Active)
+                {
+                    ModelState.AddModelError("", "Пользователь заблокирован");
+                    return View(model);
+                }
+
+                if (findUser.ProfileUser.Role == "operator" && !findUser.EmailConfirmed)
+                {
+                    ModelState.AddModelError("", "Email не подтвержден");
+                    return View(model);
+                }
+
+                Authentication.SignOut();
+                Authentication.SignIn(new AuthenticationProperties
+                {
+                    IsPersistent = model.RememberMe,
+                }, claim);
+
+                return RedirectToAction("Index", "Home");
+            }
             return View(model);
         }
 
