@@ -932,19 +932,6 @@ namespace BezvizSystem.Web.Tests
         }
 
         [TestMethod]
-        public async Task Register_Account()
-        {
-            var operatorResult = await CreateUser(operatorModel);
-            //userService.Update();
-
-            RegisterModel warnUnpModel = new RegisterModel { UNP = "123456789", OKPO = "12345", Email = "egorik-555@yandex.ru" };
-            var result = await accountController.Register(warnUnpModel) as ViewResult;
-
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Туроператор с УНП - 123456789 заблокирован", result.ViewData.ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage);
-        }
-
-        [TestMethod]
         public async Task Confirm_Email_With_Null_Parameters_Account()
         {          
             var result = await accountController.ConfirmEmail(null, null) as ViewResult;

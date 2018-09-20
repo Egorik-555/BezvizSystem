@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
@@ -39,10 +40,10 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         }
      
 
-        public ActionResult GetAnketasDefault()
+        public async Task<ActionResult> GetAnketasDefault()
         {
             string file = HostingEnvironment.MapPath("~/App_Data/fileDefault.xml");
-            var result = _xmlService.SaveExtra(file);
+            var result = await _xmlService.SaveNew(file);
 
             string contentType = "application/xml";
 
@@ -54,10 +55,10 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             }
         }
 
-        public ActionResult GetAnketasExtra()
+        public async Task<ActionResult> GetAnketasExtra()
         {
             string file = HostingEnvironment.MapPath("~/App_Data/fileExtra.xml");
-            var result = _xmlService.SaveExtra(file);
+            var result = await _xmlService.SaveExtra(file);
 
             string contentType = "application/xml";
 

@@ -231,6 +231,21 @@ namespace BezvizSystem.BLL.Services
             }
 
             return list;
-        }     
+        }
+
+        public IEnumerable<XMLDispatch> GetAdded()
+        {
+            return _database.XMLDispatchManager.GetAll().Where(x => x.Operation == Operation.Add);
+        }
+
+        public IEnumerable<XMLDispatch> GetUpdated()
+        {
+            return _database.XMLDispatchManager.GetAll().Where(x => x.Operation == Operation.Edit);
+        }
+
+        public IEnumerable<XMLDispatch> GetRemoved()
+        {
+            return _database.XMLDispatchManager.GetAll().Where(x => x.Operation == Operation.Remove);
+        }
     }
 }

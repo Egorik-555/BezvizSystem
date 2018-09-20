@@ -68,6 +68,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
                 Id = 1,
                 Surname = "surname1",
                 BithDate = new DateTime(1987, 07, 01),
+                SerialAndNumber = "aa1234567",
                 Nationality = nat1,
                 Gender = gender1,
                 DateInSystem = new DateTime(2018, 07, 01),
@@ -81,6 +82,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
                 Name = "Name2",
                 Gender = gender2,
                 BithDate = new DateTime(2005, 1, 1),
+                SerialAndNumber = "aa9999999",
                 Nationality = nat2,
                 DateInSystem = new DateTime(2018, 07, 02),
                 UserInSystem = "Test"

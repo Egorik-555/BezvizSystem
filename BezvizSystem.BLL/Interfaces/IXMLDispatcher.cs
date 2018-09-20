@@ -21,5 +21,9 @@ namespace BezvizSystem.BLL.Interfaces
         Task<List<OperationDetails>> Remove(ICollection<Visitor> visitors);
         Task<OperationDetails> Edit(Visitor visitor);
         Task<List<OperationDetails>> Edit(ICollection<Visitor> oldVisitors, ICollection<Visitor> newVisitors);
+
+        IEnumerable<XMLDispatch> GetAdded();
+        IEnumerable<XMLDispatch> GetUpdated();
+        IEnumerable<XMLDispatch> GetRemoved();
     }
 }
