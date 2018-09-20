@@ -26,9 +26,24 @@ namespace BezvizSystem.BLL.Services.XML
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new MapperXMLProfile(_database))).CreateMapper();
         }
 
+        private void AddToListRemovedItems(List<ModelForXmlToPogran> list)
+        {
+            var removed = _database.XMLDispatchManager.GetAll().Where(x => x.Operation == Operation.Remove);
+            foreach (var item in removed)
+            {
+                ModelForXmlToPogran xml = new ModelForXmlToPogran
+                {
+                    Organization = 1,
+                    TypeOperation = (int)Operation.Remove - 1,
+                    Id = item.Id
+                };
+                list.Add(xml);
+            }
+        }
+
         private IEnumerable<ModelForXmlToPogran> GetItems()
         {
-            IEnumerable<ModelForXmlToPogran> visitors;
+            List<ModelForXmlToPogran> visitors;
             try
             {
                  visitors = _database.VisitorManager.GetAll().Join(_database.XMLDispatchManager.GetAll(),
@@ -59,7 +74,9 @@ namespace BezvizSystem.BLL.Services.XML
                         DayArrival = v.Group.DateArrival.HasValue ? v.Group.DateArrival.Value.Day.ToString() : null,
                         MonthArrival = v.Group.DateArrival.HasValue ? v.Group.DateArrival.Value.Month.ToString() : null,
                         YearArrival = v.Group.DateArrival.HasValue ? v.Group.DateArrival.Value.Year.ToString() : null
-                    });
+                    }).ToList();
+
+                AddToListRemovedItems(visitors);
             }
             catch
             {
@@ -114,7 +131,7 @@ namespace BezvizSystem.BLL.Services.XML
         {
             try
             {
-                var list = GetItems().Where(x => x.TypeOperation == 1);
+                var list = GetItems().Where(x => x.TypeOperation == 1 || x.TypeOperation == 2 || x.TypeOperation == 3);
                 if (list.Count() == 0)
                     return new OperationDetails(false, "Нет анкет для выгрузки", "");
 
@@ -135,7 +152,7 @@ namespace BezvizSystem.BLL.Services.XML
         {
             try
             {
-                var list = GetItems().Where(x => x.TypeOperation == 1 && x.ExtraSend);
+                var list = GetItems().Where(x => (x.TypeOperation == 1 || x.TypeOperation == 2 || x.TypeOperation == 3) && x.ExtraSend);
                 if (list.Count() == 0)
                     return new OperationDetails(false, "Нет анкет для выгрузки", "");
 
