@@ -8,31 +8,31 @@
     };
 }
 <td class="two_column2" valign="top">
-    <table class="text_only">
-        <tr>
-            <td class="tour40">
-                <h3 class="red"><b>Зарегистрированные туристы:</b></h3>
-            </td>
-            <td class="tour40"></td>
-            <td rowspan="2" tour20>
-                <input type="button" class="pad_cent_red" id="dates" name="dates" value="Выбор диапазона дат" />
-                <div id="panelDates" style="display: none">
-                    @using (Ajax.BeginForm(opt))
-                    {
-                        <input type="date" name="dateFrom" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                        <input type="date" name="dateTo" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+    @using (Ajax.BeginForm(opt))
+    {
+        <table class="text_only">
 
-                        <input type="submit" value="Отобрать" />
-                    }
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td id = "data">
+            <thead>
+                <tr>
+                    <td>
+                        <input type="button" class="pad_cent_red" id="dates" name="dates" value="Выбор диапазона дат" />
+                    </td>
+                    <td>
+                        <div id="panelDates" style="display: none">
+                            <input type="date" name="dateFrom" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <input type="date" name="dateTo" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <input type="submit" value="Отобрать" />
+                        </div>
+                    </td>
+                </tr>
+            </thead>
+
+            <tbody id="data">
                 @Html.Action("DataReport", new { dateFrom = Model, dateTo = Model })
-            </td>
-        </tr>      
-    </table>
+            </tbody>
+
+        </table>
+    }
 </td>
 @section scripts{
 
@@ -49,5 +49,4 @@
     </script>
 
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-
 }
