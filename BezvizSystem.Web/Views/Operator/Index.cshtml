@@ -7,8 +7,6 @@
     };
 }
 
-@*<h2>Туроператоры</h2>*@
-
 <td class="two_column2" valign="top">
     <table class="in_table3">
         @using (Ajax.BeginForm(opt))
@@ -21,8 +19,6 @@
                 <td class="no_border"></td>
                 <td class="no_border">@Html.ActionLink("Добавить", "Create", null, new { @class = "simply_form_red marbot20" })</td>
             </tr>
-            @*<p>@Html.ActionLink("Добавить", "Create")</p>*@
-
             <tr>
                 <td class="orange" style="width:50%">
                     @Html.DisplayName("Наименование туроператара")
@@ -33,13 +29,11 @@
                 <td class="orange" style="width:25%">
                     @Html.DisplayName("ОКПО")
                 </td>
-                @*<td></td>*@
             </tr>
 
             <tbody id="tabledata">
                 @Html.Action("DataOperators", new { id = Model })
             </tbody>
-
         }
     </table>
 </td>
