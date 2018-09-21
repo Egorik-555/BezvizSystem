@@ -23,33 +23,85 @@ namespace BezvizSystem.BLL.Services.XML
         public XmlCreatorPogran(IUnitOfWork database)
         {
             _database = database;
-            _mapper =  new MapperConfiguration(cfg => cfg.AddProfile(new MapperXMLProfile(_database))).CreateMapper();
+            _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new MapperXMLProfile(_database))).CreateMapper();
         }
 
-        //private IEnumerable<ModelForXmlToPogran> GetNewItems()
-        //{
-        //    var visitors = _database.VisitorManager.GetAll().ToList().Where(v => v.IsNew());
-        //    return _mapper.Map<IEnumerable<Visitor>, IEnumerable<ModelForXmlToPogran>>(visitors);
-        //}
+        private void AddToListRemovedItems(List<ModelForXmlToPogran> list)
+        {
+            var removed = _database.XMLDispatchManager.GetAll().Where(x => x.Operation == Operation.Remove);
+            foreach (var item in removed)
+            {
+                ModelForXmlToPogran xml = new ModelForXmlToPogran
+                {
+                    Organization = 1,
+                    TypeOperation = (int)Operation.Remove - 1,
+                    Id = item.Id
+                };
+                list.Add(xml);
+            }
+        }
 
-        //private IEnumerable<ModelForXmlToPogran> GetExtraNewItems()
-        //{
-        //    var visitors = _database.VisitorManager.GetAll().ToList().Where(v => v.IsNew()).Where(v => v.Group.ExtraSend);
-        //    return _mapper.Map<IEnumerable<Visitor>, IEnumerable<ModelForXmlToPogran>>(visitors);
-        //}
+        private IEnumerable<ModelForXmlToPogran> GetItems()
+        {
+            List<ModelForXmlToPogran> visitors;
+            try
+            {
+                 visitors = _database.VisitorManager.GetAll().Join(_database.XMLDispatchManager.GetAll(),
+                    v => v.Id,
+                    x => x.Id,
+                    (v, x) => new ModelForXmlToPogran
+                    {
+                        Organization = 1,
+                        StatusOperation = (int)x.Status,
+                        TypeOperation = (int)x.Operation - 1,
+                        ExtraSend = v.Group.ExtraSend,
 
-        //private void EditStatus(StatusOfRecord codeNew)
-        //{
-        //    var visitors = _database.VisitorManager.GetAll().Where(v => v.IsNew()).ToList();
+                        Id = v.Id,
+                        Surname = v.Surname,
+                        Name = v.Name,
+                        DayBith = v.BithDate.HasValue ? v.BithDate.Value.Day.ToString() : null,
+                        MonthBith = v.BithDate.HasValue ? v.BithDate.Value.Month.ToString() : null,
+                        YearBith = v.BithDate.HasValue ? v.BithDate.Value.Year.ToString() : null,
+                        TextSex = v.Gender?.Name,
+                        CodeSex = v.Gender?.Code,
 
-        //    foreach(var item in visitors)
-        //    {
-        //        item.EditStatus(codeNew);
-        //        _database.VisitorManager.Update(item);
-        //    }
-        //}
+                        SerialAndNumber = v.SerialAndNumber,
+                        DayValid = v.DocValid.HasValue ? v.DocValid.Value.Day.ToString() : null,
+                        MonthValid = v.DocValid.HasValue ? v.DocValid.Value.Month.ToString() : null,
+                        YearValid = v.DocValid.HasValue ? v.DocValid.Value.Year.ToString() : null,
 
-        private XDocument CreadeDoc(IEnumerable<ModelForXmlToPogran> list)
+                        DayOfStay = v.Group.DaysOfStay,
+                        DayArrival = v.Group.DateArrival.HasValue ? v.Group.DateArrival.Value.Day.ToString() : null,
+                        MonthArrival = v.Group.DateArrival.HasValue ? v.Group.DateArrival.Value.Month.ToString() : null,
+                        YearArrival = v.Group.DateArrival.HasValue ? v.Group.DateArrival.Value.Year.ToString() : null
+                    }).ToList();
+
+                AddToListRemovedItems(visitors);
+            }
+            catch
+            {
+                visitors = new List<ModelForXmlToPogran>();
+            }
+
+            return visitors;
+        }   
+
+        private async Task SendItems(IEnumerable<ModelForXmlToPogran> list)
+        {        
+            foreach (var item in list)
+            {
+                var xml = await _database.XMLDispatchManager.GetByIdAsync(item.Id);
+
+                if(xml != null)
+                {
+                    xml.Status = Status.Send;
+                    xml.Operation = Operation.Done;
+                    _database.XMLDispatchManager.Update(xml);
+                }             
+            }
+        }
+
+        private XDocument CreateDoc(IEnumerable<ModelForXmlToPogran> list)
         {
             XElement form = new XElement("EXPORT",
                                     list.Select(v =>
@@ -75,55 +127,55 @@ namespace BezvizSystem.BLL.Services.XML
             return new XDocument(form);
         }
 
-        public OperationDetails SaveNew(string name, SaveOptions options)
-        {                   
-            try
-            {
-                //var list = GetNewItems();
-                //if (list.Count() == 0)
-                //    return new OperationDetails(false, "Нет записей для выгрузки", "");
-
-                //XDocument xDoc = CreadeDoc(list);
-                //xDoc.Save(name, options);
-                //mark item unloaded
-                //EditStatus(StatusOfRecord.Send);
-           
-                return new OperationDetails(true, "XML файл создан", "");
-            }
-            catch(Exception ex)
-            {
-                return new OperationDetails(false, ex.Message, "");
-            }
-        }
-
-        public OperationDetails SaveExtra(string name, SaveOptions options)
+        public async Task<OperationDetails> SaveNew(string name, SaveOptions options)
         {
             try
             {
-               // var list = GetExtraNewItems();
-                //if (list.Count() == 0)
-                //    return new OperationDetails(false, "Нет записей для выгрузки", "");
+                var list = GetItems().Where(x => x.TypeOperation == 1 || x.TypeOperation == 2 || x.TypeOperation == 3);
+                if (list.Count() == 0)
+                    return new OperationDetails(false, "Нет анкет для выгрузки", "");
 
-                //XDocument xDoc = CreadeDoc(list);
-                //xDoc.Save(name, options);
+                XDocument xDoc = CreateDoc(list);
+                xDoc.Save(name, options);
                 //mark item unloaded
-               // EditStatus(StatusOfRecord.Send);
+                await SendItems(list);
 
                 return new OperationDetails(true, "XML файл создан", "");
             }
             catch (Exception ex)
             {
-                return new OperationDetails(false, ex.Message, "");
+                return new OperationDetails(false, "Не удалось выгрузить анкеты. " + ex.Message, "");
             }
         }
 
-        public OperationDetails SaveNew(string name)
+        public async Task<OperationDetails> SaveExtra(string name, SaveOptions options)
         {
-            return SaveNew(name, SaveOptions.None);
+            try
+            {
+                var list = GetItems().Where(x => (x.TypeOperation == 1 || x.TypeOperation == 2 || x.TypeOperation == 3) && x.ExtraSend);
+                if (list.Count() == 0)
+                    return new OperationDetails(false, "Нет анкет для выгрузки", "");
+
+                XDocument xDoc = CreateDoc(list);
+                xDoc.Save(name, options);
+                //mark item unloaded
+                await SendItems(list);
+
+                return new OperationDetails(true, "XML файл создан", "");
+            }
+            catch (Exception ex)
+            {
+                return new OperationDetails(false, "Не удалось выгрузить анкеты. " + ex.Message, "");
+            }
         }
-        public OperationDetails SaveExtra(string name)
+
+        public async Task<OperationDetails> SaveNew(string name)
         {
-            return SaveExtra(name, SaveOptions.None);
+            return await SaveNew(name, SaveOptions.None);
+        }
+        public async Task<OperationDetails> SaveExtra(string name)
+        {
+            return await SaveExtra(name, SaveOptions.None);
         }
     }
 }

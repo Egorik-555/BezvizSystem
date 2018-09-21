@@ -7,40 +7,36 @@
     };
 }
 
-<h2>Туроператоры</h2>
+<td class="two_column2" valign="top">
+    <table class="in_table3">
+        @using (Ajax.BeginForm(opt))
+        {
+            <tr class="no_border">
+                <td class="no_border">
+                    <input type="text" class="form-control" style="height:100%;width:70%" name="id" />
+                    <input type="submit" class="simply_form_red marbot20" style="width:28%;height:100%" value="Найти" />
+                </td>
+                <td class="no_border"></td>
+                <td class="no_border">@Html.ActionLink("Добавить", "Create", null, new { @class = "simply_form_red marbot20" })</td>
+            </tr>
+            <tr>
+                <td class="orange" style="width:50%">
+                    @Html.DisplayName("Наименование туроператара")
+                </td>
+                <td class="orange" style="width:25%">
+                    @Html.DisplayName("УНП")
+                </td>
+                <td class="orange" style="width:25%">
+                    @Html.DisplayName("ОКПО")
+                </td>
+            </tr>
 
-<p>@Html.ActionLink("Добавить", "Create")</p>
-
-@using (Ajax.BeginForm(opt))
-{
-
-    <div>
-        <label>Наименование туроператара</label>
-        <input type="text" name="id" />
-    </div>
-    <input type="submit" value="Найти" />
-
-    <table class="table">
-
-        <tr>
-            <th>
-                @Html.DisplayName("Наименование туроператара")
-            </th>
-            <th>
-                @Html.DisplayName("УНП")
-            </th>
-            <th>
-                @Html.DisplayName("ОКПО")
-            </th>
-            <th></th>
-        </tr>
-
-        <tbody id="tabledata">
-            @Html.Action("DataOperators", new { id = Model })
-        </tbody>
-
+            <tbody id="tabledata">
+                @Html.Action("DataOperators", new { id = Model })
+            </tbody>
+        }
     </table>
-}
+</td>
 
 @section scripts
 {

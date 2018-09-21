@@ -10,10 +10,10 @@ namespace BezvizSystem.BLL.Interfaces.XML
 {
     public interface IXmlCreator
     {
-        OperationDetails SaveNew(string name, SaveOptions options);
-        OperationDetails SaveNew(string name);
+        Task<OperationDetails> SaveNew(string name, SaveOptions options);
+        Task<OperationDetails> SaveNew(string name);
 
-        OperationDetails SaveExtra(string name, SaveOptions options);
-        OperationDetails SaveExtra(string name);
+        Task<OperationDetails> SaveExtra(string name, SaveOptions options);
+        Task<OperationDetails> SaveExtra(string name);
     }
 }

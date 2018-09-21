@@ -41,6 +41,7 @@ namespace BezvizSystem.Web.Controllers
         public ActionResult DataOperators(string id, int page = 1)
         {
             var usersDto = _userService.GetByRole("operator").OrderByDescending(m => m.ProfileUser.DateInSystem);
+
             var model = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<ViewOperatorModel>>(usersDto);         
             if (!string.IsNullOrEmpty(id))
             {

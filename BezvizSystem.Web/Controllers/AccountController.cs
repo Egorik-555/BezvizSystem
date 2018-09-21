@@ -19,7 +19,6 @@ namespace BezvizSystem.Web.Controllers
     {
         private IUserService _service;
 
-
         private IAuthenticationManager Authentication
         {
             get { return HttpContext.GetOwinContext().Authentication; }
@@ -35,7 +34,6 @@ namespace BezvizSystem.Web.Controllers
             _service = service;
         }
 
-      
         public ActionResult Register()
         {
             return View();
@@ -52,39 +50,36 @@ namespace BezvizSystem.Web.Controllers
                     ModelState.AddModelError("", "Туроператор с УНП - " + model.UNP + " не найден");
                     return View(model);
                 }
-                // send mail
-                if (user.ProfileUser.OKPO == model.OKPO)
-                {
-                    if (user.ProfileUser.Active)
-                    {
-                        if (user.Email == null || !user.EmailConfirmed)
-                        {
-                            user.Email = model.Email;
-                            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { token = user.Id, email = user.Email },
-                                                          protocol: Request.Url.Scheme);
 
-                            _service.ManagerForChangePass = UserManager;
-                            var result = await _service.Registrate(user, callbackUrl, new SimpleGeneratePass());
-
-                            if (result.Succedeed)
-                                return View("ConfirmEmail");
-                            else ModelState.AddModelError("", result.Message);
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("", "Туроператор с УНП - " + user.ProfileUser.UNP + " уже зарегистрирован");
-                        }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Туроператор с УНП - " + user.ProfileUser.UNP + " заблокирован");
-                    }
-                }
-                else
+                if (user.ProfileUser.OKPO != model.OKPO)
                 {
                     ModelState.AddModelError("", "Туроператор с ОКПО - " + model.OKPO + " не найден");
+                    return View(model);
                 }
+
+                if (!user.ProfileUser.Active)
+                {
+                    ModelState.AddModelError("", "Туроператор с УНП - " + user.ProfileUser.UNP + " заблокирован");
+                    return View(model);
+                }
+
+                if (user.Email != null && user.EmailConfirmed)
+                {
+                    ModelState.AddModelError("", "Туроператор с УНП - " + user.ProfileUser.UNP + " уже зарегистрирован");
+                    return View(model);
+                }
+
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { token = user.Id, email = model.Email },
+                                              protocol: Request.Url.Scheme);
+
+                _service.ManagerForChangePass = UserManager;
+                var result = await _service.Registrate(user, callbackUrl, new SimpleGeneratePass());
+
+                if (result.Succedeed)
+                    return View("ConfirmEmail");
+                else ModelState.AddModelError("", result.Message);
             }
+
             return View(model);
         }
 
@@ -92,17 +87,31 @@ namespace BezvizSystem.Web.Controllers
         public async Task<ActionResult> ConfirmEmail(string token, string email)
         {
             if (token == null || email == null)
-                return RedirectToAction("Index", "Home");
-            var user = await _service.GetByIdAsync(token);
-
-            if (user != null)
             {
-                if (user.Email == email)
-                {
-                    user.EmailConfirmed = true;
-                    await _service.Update(user);
-                }
+                var result = View("Register");
+                result.ViewData.ModelState.AddModelError("", "Неверные данные пользователя");
+                return result;
             }
+
+            var user = await _service.GetByIdAsync(token);
+            if (user == null)
+            {
+                var result = View("Register");
+                result.ViewData.ModelState.AddModelError("", "Неверные данные пользователя");
+                return result;
+            }
+
+            user.Email = email;
+            user.EmailConfirmed = true;
+            var resultUpdate = await _service.Update(user);
+
+            if (!resultUpdate.Succedeed)
+            {
+                var result = View("Register");
+                result.ViewData.ModelState.AddModelError("", resultUpdate.Message);
+                return result;
+            }
+
             return RedirectToAction("Login");
         }
 
@@ -121,39 +130,34 @@ namespace BezvizSystem.Web.Controllers
 
                 UserDTO user = new UserDTO { UserName = model.Name, Password = model.Password };
                 var claim = await _service.Authenticate(user);
-                if (claim != null)
-                {
-                    var findUser = await _service.GetByNameAsync(user.UserName);
-
-                    if (findUser.ProfileUser.Active)
-                    {
-                        if ((findUser.ProfileUser.Role == "admin") ||
-                                (findUser.ProfileUser.Role == "operator" && findUser.EmailConfirmed))
-                        {
-                            Authentication.SignOut();
-                            Authentication.SignIn(new AuthenticationProperties
-                            {
-                                IsPersistent = model.RememberMe,
-                            }, claim);
-
-                            return RedirectToAction("Index", "Home");
-                        }
-                        else if (findUser.ProfileUser.Role == "operator")
-                        {
-                            ModelState.AddModelError("", "Email не подтвержден");
-                        }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Пользователь заблокирован");
-                    }
-                }
-                else
+                if (claim == null)
                 {
                     ModelState.AddModelError("", "Неверный логин или пароль");
+                    return View(model);
                 }
-            }
 
+                var findUser = await _service.GetByNameAsync(user.UserName);
+
+                if (!findUser.ProfileUser.Active)
+                {
+                    ModelState.AddModelError("", "Пользователь заблокирован");
+                    return View(model);
+                }
+
+                if (findUser.ProfileUser.Role == "operator" && !findUser.EmailConfirmed)
+                {
+                    ModelState.AddModelError("", "Email не подтвержден");
+                    return View(model);
+                }
+
+                Authentication.SignOut();
+                Authentication.SignIn(new AuthenticationProperties
+                {
+                    IsPersistent = model.RememberMe,
+                }, claim);
+
+                return RedirectToAction("Index", "Home");
+            }
             return View(model);
         }
 
@@ -170,7 +174,7 @@ namespace BezvizSystem.Web.Controllers
             {
                 UserName = "Admin",
                 Password = "rgg777",
-                ProfileUser = new ProfileUserDTO { Role = "admin", Active = true, Transcript = "Брестский облисполком", DateInSystem = DateTime.Now, UserInSystem = "Autoinitilize" }             
+                ProfileUser = new ProfileUserDTO { Role = "admin", Active = true, Transcript = "Брестский облисполком", DateInSystem = DateTime.Now, UserInSystem = "Autoinitilize" }
             };
 
             var roles = new List<string> { "admin", "operator" };

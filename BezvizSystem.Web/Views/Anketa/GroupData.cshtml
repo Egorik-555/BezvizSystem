@@ -26,8 +26,8 @@
     </td>
 </tr>
 
-    @foreach (var item in Model)
-    {
+@foreach (var item in Model)
+{
     <tr class="visitor_str mainTableRow" id="@item.Id" onclick="onRowClickHandler(event);">
         <td>
             @(++i)
@@ -51,4 +51,4 @@
             @Html.DisplayFor(modelItem => item.Operator)
         </td>
     </tr>
-    }
+}

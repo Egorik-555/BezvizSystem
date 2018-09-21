@@ -29,10 +29,6 @@ namespace BezvizSystem.BLL.Mapper.XML
                 ForMember(dest => dest.MonthValid, opt => opt.MapFrom(src => src.DocValid.HasValue ? src.DocValid.Value.Month.ToString() : null)).
                 ForMember(dest => dest.YearValid, opt => opt.MapFrom(src => src.DocValid.HasValue ? src.DocValid.Value.Year.ToString() : null)).
 
-                ForMember(dest => dest.DayArrival, opt => opt.MapFrom(src => src.DocValid.HasValue ? src.DocValid.Value.Day.ToString() : null)).
-                ForMember(dest => dest.MonthValid, opt => opt.MapFrom(src => src.DocValid.HasValue ? src.DocValid.Value.Month.ToString() : null)).
-                ForMember(dest => dest.YearValid, opt => opt.MapFrom(src => src.DocValid.HasValue ? src.DocValid.Value.Year.ToString() : null)).
-
                 ForMember(dest => dest.DayOfStay, opt => opt.MapFrom(src => src.Group.DaysOfStay)).
                 ForMember(dest => dest.DayArrival, opt => opt.MapFrom(src => src.Group.DateArrival.HasValue ? src.Group.DateArrival.Value.Day.ToString() : null)).
                 ForMember(dest => dest.MonthArrival, opt => opt.MapFrom(src => src.Group.DateArrival.HasValue ? src.Group.DateArrival.Value.Month.ToString() : null)).

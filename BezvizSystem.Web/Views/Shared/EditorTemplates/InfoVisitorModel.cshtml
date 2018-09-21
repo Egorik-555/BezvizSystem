@@ -2,11 +2,6 @@
 
 <tr>
     <td colspan="2">
-        <h3 class="red">Информация о туристе</h3>
-    </td>
-</tr>
-<tr>
-    <td colspan="2">
         @Html.HiddenFor(model => model.Id, new { @Value = 0 })
 
         @Html.LabelFor(model => model.Surname, htmlAttributes: new { @class = "control-label" })
