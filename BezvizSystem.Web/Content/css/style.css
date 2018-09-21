@@ -224,7 +224,7 @@ ul {
 }
 
 .sfr_auto {
-    margin: 15px auto;
+    margin: 5px auto;
 }
 
 .punkt {
@@ -239,6 +239,12 @@ span.low_txt {
 }
 
 td.two_column input {
+    width: 100%;
+    height: 45px;
+    text-align: center;
+}
+
+td.two_column select {
     width: 100%;
     height: 45px;
     text-align: center;
