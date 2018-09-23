@@ -48,6 +48,7 @@
     <Compile Include="App_Start\Ninject.Web.Common.cs" />
     <Compile Include="DI\NinjectRegistrations.cs" />
     <Compile Include="DTO\AnketaDTO.cs" />
+    <Compile Include="DTO\ObjectForDiagram.cs" />
     <Compile Include="DTO\XMLDispatchDTO.cs" />
     <Compile Include="DTO\Dictionary\CheckPointDTO.cs" />
     <Compile Include="DTO\Dictionary\DictionaryDTO.cs" />

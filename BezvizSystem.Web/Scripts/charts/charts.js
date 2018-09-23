@@ -23,8 +23,8 @@ function drawChart() {
     // Set chart options
     var options = {
         'title': 'Countries',
-        'width': 650,
-        'height': 450
+        'width': 400,
+        'height': 200
     };
 
     // Instantiate and draw our chart, passing in some options.
