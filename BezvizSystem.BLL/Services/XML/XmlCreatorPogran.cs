@@ -46,7 +46,7 @@ namespace BezvizSystem.BLL.Services.XML
             List<ModelForXmlToPogran> visitors;
             try
             {
-                 visitors = _database.VisitorManager.GetAll().Join(_database.XMLDispatchManager.GetAll(),
+                 visitors = _database.VisitorManager.GetAll().ToList().Join(_database.XMLDispatchManager.GetAll().ToList(),
                     v => v.Id,
                     x => x.Id,
                     (v, x) => new ModelForXmlToPogran
@@ -78,7 +78,7 @@ namespace BezvizSystem.BLL.Services.XML
 
                 AddToListRemovedItems(visitors);
             }
-            catch
+            catch (Exception ex)
             {
                 visitors = new List<ModelForXmlToPogran>();
             }
