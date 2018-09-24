@@ -97,22 +97,27 @@ namespace BezvizSystem.BLL.Mapper
             int countSend = 0;
             int countRecieve = 0;
 
-            //foreach (var item in list)
-            //{
-            //    var itemInDispatches = _database.XMLDispatchManager.GetAll().SingleOrDefault(i => i.IdVisitor == item.Id && i.Status == Status.New);
-            //}
+            foreach (var item in list)
+            {
+                var itemInDispatch = _database.XMLDispatchManager.GetById(item.Id);
 
-            //if (countSend == list.Count())
-            //{
-            //    return StatusOfRecord.Send.ToString();
-            //}
-            //else if (countRecieve == list.Count())
-            //{
-            //    return StatusOfRecord.Recd.ToString();
-            //}
-            //else return StatusOfRecord.New.ToString();
+                if (itemInDispatch != null)
+                {
+                    if (itemInDispatch.Status == Status.New) countNew++;
+                    else if (itemInDispatch.Status == Status.Send) countSend++;
+                    else if (itemInDispatch.Status == Status.Recd) countRecieve++;
+                }
+            }
 
-            return "Сохранено";
+            if (countSend == list.Count())
+            {
+                return "Передано в пограничную службу";
+            }
+            else if (countRecieve == list.Count())
+            {
+                return "Принято пограничной службой";
+            }
+            else return "Сохранено";
         }
     }
 
@@ -188,7 +193,7 @@ namespace BezvizSystem.BLL.Mapper
             }
 
             return result;
-        }     
+        }
     }
 
     class VisitorComparer : IEqualityComparer<Visitor>
