@@ -1,55 +1,61 @@
 ﻿@model IEnumerable<BezvizSystem.Web.Models.Mark.ViewVisitorModel>
 
+@{
+    ViewBag.Title = "Участники группы";
+}
 
-<table class="table">
-    <tr>
-        @{
-            int i = 0;
-        }
-        <th>
-            @Html.DisplayNameFor(model => model.GroupId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Surname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Nationality)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SerialAndNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Arrived)
-        </th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr class="infoTableRow">
-            <td>
-                @Html.DisplayFor(modelItem => item.GroupId)             
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Surname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nationality)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SerialAndNumber)
-            </td>
-            <td>
-                @Html.CheckBox("[" + @i + "].Arrived", item.Arrived, new { dataId = item.Id})
-            </td>
+<td class="two_column2" valign="top">
+    <table class="in_table3">
+        <tr>
+            @{
+                int i = 0;
+            }
+            <th>
+                №
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Surname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nationality)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SerialAndNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Arrived)
+            </th>
         </tr>
 
-        i++;
-    }
-</table>
+        @foreach (var item in Model)
+        {
+            <tr class="infoTableRow">
+                <td>
+                    @(++i)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nationality)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SerialAndNumber)
+                </td>
+                <td>
+                    @Html.CheckBox("[" + @i + "].Arrived", item.Arrived, new { dataId = item.Id })
+                </td>
+            </tr>
+
+            i++;
+        }
+    </table>
+
+</td>
 
