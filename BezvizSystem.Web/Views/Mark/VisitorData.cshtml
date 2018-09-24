@@ -50,13 +50,37 @@
                     @Html.DisplayFor(modelItem => item.SerialAndNumber)
                 </td>
                 <td>
-                    @Html.CheckBox("[" + @i + "].Arrived", item.Arrived, new { dataId = item.Id })
+                    @Html.CheckBox("[" + @i + "].Arrived", item.Arrived, new { dataId = item.Id, onclick = "onClickInput(event);" })
                 </td>
             </tr>
-
-            i++;
         }
+
+        @Html.ActionLink("Назад","Index")
     </table>
 
 </td>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script>
+
+        function onClickInput(e) {
+
+            var target = e.target;
+            if (target.tagName == 'INPUT') {
+
+                var id = target.getAttribute("dataId");
+                var value = target.checked;
+
+                $.ajax({
+                    url: '@Url.Action("Edit")?id=' + id + "&arrived=" + value
+                });
+            }
+        };
+
+    </script>
+
+}
 
