@@ -999,9 +999,6 @@ namespace BezvizSystem.Web.Tests
             Assert.AreEqual("Email не подтвержден", result.ViewData.ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage);
         }
 
-
-
-
         //ReportController
         [TestMethod]
         public void Test_Report_Controller_GetDataByDateCount()
