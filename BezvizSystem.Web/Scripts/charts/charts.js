@@ -11,6 +11,14 @@ function drawChart() {
 
     // Create the data table.
     var data = new google.visualization.DataTable();
+
+    var jsonData = $.ajax({
+        url: @Html. ,
+        dataType: "json",
+        async: false
+    }).responseText;
+
+
     data.addColumn('string', 'Country');
     data.addColumn('number', 'Population');
     data.addRows([
@@ -28,6 +36,6 @@ function drawChart() {
     };
 
     // Instantiate and draw our chart, passing in some options.
-    var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
     chart.draw(data, options);
 }
