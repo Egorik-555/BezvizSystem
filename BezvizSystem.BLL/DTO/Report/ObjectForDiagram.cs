@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BezvizSystem.BLL.DTO
+namespace BezvizSystem.BLL.DTO.Report
 {
     public class ObjectForDiagram
     {

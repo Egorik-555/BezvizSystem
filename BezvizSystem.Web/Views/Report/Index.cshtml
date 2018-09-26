@@ -1,14 +1,12 @@
-﻿@{
+﻿@model BezvizSystem.Web.Models.Report.ReportModel
+
+@{
     ViewBag.Title = "Отчеты";
     ViewBag.SubTitle = "Отчеты";
-    AjaxOptions opt = new AjaxOptions
-    {
-        UpdateTargetId = "data",
-        Url = Url.Action("DataReport")
-    };
+
 }
 <td class="two_column2" valign="top">
-    @using (Ajax.BeginForm(opt))
+    @using (Html.BeginForm())
     {
         <table class="text_only">
 
@@ -21,24 +19,24 @@
                         <div id="panelDates" style="display: none">
                             <input type="date" name="dateFrom" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                             <input type="date" name="dateTo" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                            <input type="submit" onclick="drawChart();" value="Отобрать" />
+                            <input type="submit" @*onclick="drawChart();"*@ value="Отобрать" />
                         </div>
                     </td>
                 </tr>
             </thead>
 
             <tbody id="data">
-                @Html.Action("DataReport", new { dateFrom = Model, dateTo = Model })
+                @Html.Partial("DataReport", Model)
             </tbody>
-            <tr>
-                <td colspan="2">
-                    <h3 class="red"><b>Количество зарегистрированных туристов на дату прибытия</b></h3>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" id="chart1">            
-                </td>
-            </tr>
+            @*<tr>
+                    <td colspan="2">
+                        <h3 class="red"><b>Количество зарегистрированных туристов на дату прибытия</b></h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" id="chart1">
+                    </td>
+                </tr>*@
 
         </table>
     }
@@ -73,22 +71,25 @@
             var dateFrom = document.getElementsByName("dateFrom")[0].value;
             var dateTo = document.getElementsByName("dateTo")[0].value;
 
-            var jsonData = $.ajax({
-                url: '@Url.Action("GetDataByDateCount")?dateFrom=' + dateFrom + '&dateTo=' + dateTo,
-                dataType: "json",
-                async: false
-            }).responseText;
-
-            //console.log(JSON.parse(jsonData));
-            var data = new google.visualization.DataTable(JSON.parse(jsonData));
+        @*var jsonData = $.ajax({
+            url: '@Url.Action("GetDataByDateCount")?dateFrom=' + dateFrom + '&dateTo=' + dateTo,
+            dataType: "json",
+            async: false
+        }).responseText;*@
+          
+            console.log('@Model.StringDateByArrivalCount');
+            var data = new google.visualization.DataTable(@Model.StringDateByArrivalCount /*JSON.parse(jsonData)*/);
 
             var options = {
-                'width': 800,
-                'height': 200
+                    colors: ['#ffba00'],
+                    legend: {position: 'none'},
+                    backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2},
+                    'height': 200
             };
-            
+
             var chart = new google.visualization.ColumnChart(document.getElementById('chart1'));
             chart.draw(data, options);
+
         }
 
     </script>

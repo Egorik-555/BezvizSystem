@@ -27,9 +27,11 @@ namespace BezvizSystem.Web.Controllers
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
 
-        public ActionResult Index()
+        public ActionResult Index(DateTime? dateFrom, DateTime? dateTo)
         {
-            var model = _reportService.GetReport();
+            ReportDTO model;
+            model = GetModelByValidDates(dateFrom, dateTo);
+
             var modelInView = _mapper.Map<ReportDTO, ReportModel>(model);
             return View(modelInView);
         }
@@ -58,42 +60,42 @@ namespace BezvizSystem.Web.Controllers
             }
         }
 
-        public ActionResult DataReport(DateTime? dateFrom, DateTime? dateTo)
-        {
-            ReportDTO model;
-            model = GetModelByValidDates(dateFrom, dateTo);
+        //public ActionResult DataReport(DateTime? dateFrom, DateTime? dateTo)
+        //{
+        //    ReportDTO model;
+        //    model = GetModelByValidDates(dateFrom, dateTo);
 
-            var modelInView = _mapper.Map<ReportDTO, ReportModel>(model);
-            return PartialView(modelInView);
-        }
+        //    var modelInView = _mapper.Map<ReportDTO, ReportModel>(model);
+        //    return PartialView(modelInView);
+        //}
 
-        private string GetString(string label1, string label2, IEnumerable<ObjectForDiagram> list)
-        {
-            string result = "{\"cols\" : [";
-            result += "{\"id\":\"\",\"label\":\"" + label1 + "\",\"pattern\":\"\",\"type\":\"string\"},";
-            result += "{\"id\":\"\",\"label\":\"" + label2 + "\",\"pattern\":\"\",\"type\":\"number\"}";
-            result += "],";
-            result += "\"rows\": [";
+        //private string GetString(string label1, string label2, IEnumerable<ObjectForDiagram> list)
+        //{
+        //    string result = "{\"cols\" : [";
+        //    result += "{\"id\":\"\",\"label\":\"" + label1 + "\",\"pattern\":\"\",\"type\":\"string\"},";
+        //    result += "{\"id\":\"\",\"label\":\"" + label2 + "\",\"pattern\":\"\",\"type\":\"number\"}";
+        //    result += "],";
+        //    result += "\"rows\": [";
 
-            foreach (var item in list)
-            {
-                result += "{ \"c\":[{\"v\":\"" + item.Value1 + "\",\"f\":null},{\"v\":" + item.Value2 + ",\"f\":null}]},";
-            }
+        //    foreach (var item in list)
+        //    {
+        //        result += "{ \"c\":[{\"v\":\"" + item.Value1 + "\",\"f\":null},{\"v\":" + item.Value2 + ",\"f\":null}]},";
+        //    }
 
-            result += "] }";
+        //    result += "] }";
 
-            return result;
-        }
+        //    return result;
+        //}
 
-        public JsonResult GetDataByDateCount(DateTime? dateFrom, DateTime? dateTo)
-        {
-            ReportDTO model;
-            model = GetModelByValidDates(dateFrom, dateTo);
+        //public JsonResult GetDataByDateCount(DateTime? dateFrom, DateTime? dateTo)
+        //{
+        //    ReportDTO model;
+        //    model = GetModelByValidDates(dateFrom, dateTo);
 
-            var list = _mapper.Map<IEnumerable<CountByDate>, IEnumerable<ObjectForDiagram>>(model.AllByDateArrivalCount);
-            string result = GetString("Дата прибытия", "Количество", list);
+        //    var list = _mapper.Map<IEnumerable<CountByDate>, IEnumerable<ObjectForDiagram>>(model.AllByDateArrivalCount);
+        //    string result = GetString("Дата прибытия", "Количество", list);
 
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(result, JsonRequestBehavior.AllowGet);
+        //}
     }
 }

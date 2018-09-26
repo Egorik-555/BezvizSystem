@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.DTO.Dictionary;
+using BezvizSystem.BLL.DTO.Report;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Services;
 using BezvizSystem.DAL;
@@ -69,7 +70,7 @@ namespace BezvizSystem.BLL.Mapper
 
             CreateMap<Nationality, NationalityDTO>();
             CreateMap<CheckPoint, CheckPointDTO>();
-            CreateMap<Gender, GenderDTO>();
+            CreateMap<Gender, GenderDTO>();         
         }
 
 

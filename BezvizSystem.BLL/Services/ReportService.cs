@@ -3,13 +3,15 @@ using BezvizSystem.BLL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.DAL.Interfaces;
 using BezvizSystem.DAL.Entities;
 using BezvizSystem.BLL.Report.DTO;
 using BezvizSystem.BLL.DTO.Report;
+using AutoMapper;
+using BezvizSystem.BLL.Mapper;
+using System.Web.Helpers;
+using Newtonsoft.Json;
+using System.Web;
 
 namespace BezvizSystem.BLL.Services
 {
@@ -18,10 +20,12 @@ namespace BezvizSystem.BLL.Services
         IUnitOfWork _database;
         IEnumerable<GroupVisitor> _groups;
         IEnumerable<Visitor> _visitors;
+        IMapper _mapper;
 
         public ReportService(IUnitOfWork database)
         {
             this._database = database;
+            _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new ReportServiceProfile())).CreateMapper();
         }
 
         public void Dispose()
@@ -63,10 +67,12 @@ namespace BezvizSystem.BLL.Services
                 AllTouristInGroup = GetAllTouristInGroup(),
 
                 AllByNatAndAge = GetByNatAndAge(dateMoment),
-                AllByDateArrivalCount = GetByDateArrivalCount(),
+                //AllByDateArrivalCount = GetByDateArrivalCount(),
                 AllByCheckPointCount = GetByCheckPointCount(),
                 AllByDaysCount = GetByDaysCount(),
-                AllByOperatorCount = GetByOperatorCount()
+                AllByOperatorCount = GetByOperatorCount(),
+
+                StringDateByArrivalCount = GetByDateArrivalCount()
             };
         }
 
@@ -91,10 +97,39 @@ namespace BezvizSystem.BLL.Services
             return list;
         }
 
-        private IEnumerable<CountByDate> GetByDateArrivalCount()
+        private string GetString(string label1, string label2, IEnumerable<ObjectForDiagram> list)
         {
-            var visitors = _visitors.GroupBy(v => v.Group.DateArrival.Value.Date).Select(g => new CountByDate { DateArrival = g.Key.Date, Count = g.Count()});
-            return visitors.ToList();
+            string result = "{\"cols\" : [";
+            result += "{\"id\":\"\",\"label\":\"" + label1 + "\",\"pattern\":\"\",\"type\":\"string\"},";
+            result += "{\"id\":\"\",\"label\":\"" + label2 + "\",\"pattern\":\"\",\"type\":\"number\"}";
+            result += "],";
+            result += "\"rows\": [";
+
+            foreach (var item in list)
+            {
+                result += "{ \"c\":[{\"v\":\"" + item.Value1 + "\",\"f\":null},{\"v\":" + item.Value2 + ",\"f\":null}]},";
+            }
+
+            result += "] }";
+
+            return result;
+        }
+
+        //private IEnumerable<CountByDate> GetByDateArrivalCount()
+        //{
+        //    var visitors = _visitors.GroupBy(v => v.Group.DateArrival.Value.Date).Select(g => new CountByDate { DateArrival = g.Key.Date, Count = g.Count()});
+        //    return visitors.OrderBy(o => o.DateArrival).ToList();
+        //}
+
+        private string GetByDateArrivalCount()
+        {
+            var visitors = _visitors.GroupBy(v => v.Group.DateArrival.Value.Date).Select(g => new CountByDate { DateArrival = g.Key.Date, Count = g.Count() });
+            visitors = visitors.OrderBy(o => o.DateArrival).ToList();
+
+            var list = _mapper.Map<IEnumerable<CountByDate>, IEnumerable<ObjectForDiagram>>(visitors);
+
+            var res = HttpUtility.JavaScriptStringEncode(@"Hello """"");
+            return res;
         }
 
         private IEnumerable<CountByCheckPoint> GetByCheckPointCount()
@@ -116,7 +151,7 @@ namespace BezvizSystem.BLL.Services
         }
 
         private int GetDiffDatesInYears(DateTime? date1, DateTime? date2)
-        { 
+        {
             int result = 0;
             if (date1.HasValue && date2.HasValue)
                 result = (date1.Value.Date - date2.Value.Date).Days / 365;
@@ -131,7 +166,7 @@ namespace BezvizSystem.BLL.Services
         }
 
         private int? GetAllArrived()
-        {        
+        {
             return _groups.Select(a => a.Visitors.Where(v => v.Arrived).Count()).Sum();
         }
 
@@ -157,7 +192,7 @@ namespace BezvizSystem.BLL.Services
         {
             var groups = _groups.Where(g => g.Group);
             return groups.Select(a => a.Id).Count();
-        }    
+        }
 
         private int? GetAllTouristInGroup()
         {
