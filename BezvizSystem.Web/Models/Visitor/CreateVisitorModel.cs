@@ -7,7 +7,7 @@ using System.Web;
 
 namespace BezvizSystem.Web.Models.Visitor
 {
-    [DateArrivalLess(ErrorMessage = "Дата прибытия позже даты убытия")]
+    [DateArrivalLess(ErrorMessage = "Дата прибытия должна быть раньше, чем дата убытия")]
     public class CreateVisitorModel
     {
         public int Id { get; set; }
@@ -15,23 +15,21 @@ namespace BezvizSystem.Web.Models.Visitor
 
         public InfoVisitorModel Info { get; set; }
 
-        [Required(ErrorMessage = "Дата прибытия не введена")]
         [Display(Name = "Дата прибытия")]
         [DataType(DataType.Date)]
-        [FutureDate(ErrorMessage = "Дата прибытия не может быть прошедшей")]
+        [FutureDate(ErrorMessage = "Укажите дату прибытия, относящуюся к будущему")]
         public DateTime? DateArrival { get; set; }
 
-        [Required(ErrorMessage = "Дата убытия не введена")]
+        [Required(ErrorMessage = "Укажите дату убытия")]
         [Display(Name = "Дата убытия")]      
         [DataType(DataType.Date)]
         public DateTime? DateDeparture { get; set; }
 
-        [RegularExpression(@"[0-9]{1,3}", ErrorMessage = "Только цифровые значения")]
         [Display(Name = "Количество дней пребывания")]
         public int? DaysOfStay { get; set; }
 
-        [Required(ErrorMessage = "Пункт пропуска для пребывания не введен")]
-        [Display(Name = "Пункт пропуска для пребывания")]
+        [Required(ErrorMessage = "Укажите пункт пропуска для прибытия")]
+        [Display(Name = "Пункт пропуска для прибытия")]
         public string CheckPoint { get; set; }
 
         [Display(Name = "Инфо о месте пребывания")]
@@ -55,7 +53,7 @@ namespace BezvizSystem.Web.Models.Visitor
         public string TelNumber { get; set; }
 
        // [Required(ErrorMessage = "E-mail не был введен")]
-        [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "Некорректный адрес")]
+        [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "Укажите корректный адрес")]
         [Display(Name = "E-mail")]
         public string Email { get; set; }
 

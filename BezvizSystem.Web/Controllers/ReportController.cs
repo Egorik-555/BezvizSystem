@@ -34,17 +34,34 @@ namespace BezvizSystem.Web.Controllers
             return View(modelInView);
         }
 
-        public ActionResult DataReport(DateTime? dateFrom, DateTime? dateTo)
+        private ReportDTO GetModelByValidDates(DateTime? dateFrom, DateTime? dateTo)
         {
-            ReportDTO model;
             if (dateFrom.HasValue && dateTo.HasValue)
             {
-                model = _reportService.GetReport(dateFrom, dateTo);
+                return _reportService.GetReport(dateFrom, dateTo);
             }
             else
             {
-                model = _reportService.GetReport();
+                if (!dateFrom.HasValue && dateTo.HasValue)
+                {
+                    dateFrom = DateTime.MinValue;
+                    return _reportService.GetReport(dateFrom, dateTo);
+                }
+
+                if (dateFrom.HasValue && !dateTo.HasValue)
+                {
+                    dateTo = DateTime.MaxValue;
+                    return _reportService.GetReport(dateFrom, dateTo);
+                }
+
+                return _reportService.GetReport();
             }
+        }
+
+        public ActionResult DataReport(DateTime? dateFrom, DateTime? dateTo)
+        {
+            ReportDTO model;
+            model = GetModelByValidDates(dateFrom, dateTo);
 
             var modelInView = _mapper.Map<ReportDTO, ReportModel>(model);
             return PartialView(modelInView);
@@ -71,14 +88,7 @@ namespace BezvizSystem.Web.Controllers
         public JsonResult GetDataByDateCount(DateTime? dateFrom, DateTime? dateTo)
         {
             ReportDTO model;
-            if (dateFrom.HasValue && dateTo.HasValue)
-            {
-                model = _reportService.GetReport(dateFrom, dateTo);
-            }
-            else
-            {
-                model = _reportService.GetReport();
-            }
+            model = GetModelByValidDates(dateFrom, dateTo);
 
             var list = _mapper.Map<IEnumerable<CountByDate>, IEnumerable<ObjectForDiagram>>(model.AllByDateArrivalCount);
             string result = GetString("Дата прибытия", "Количество", list);

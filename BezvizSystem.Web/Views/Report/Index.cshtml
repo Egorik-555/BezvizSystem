@@ -31,7 +31,12 @@
                 @Html.Action("DataReport", new { dateFrom = Model, dateTo = Model })
             </tbody>
             <tr>
-                <td colspan="2" id="chart_div2">            
+                <td colspan="2">
+                    <h3 class="red"><b>Количество зарегистрированных туристов на дату прибытия</b></h3>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" id="chart1">            
                 </td>
             </tr>
 
@@ -78,16 +83,12 @@
             var data = new google.visualization.DataTable(JSON.parse(jsonData));
 
             var options = {
-               // 'title': 'Countries',
                 'width': 800,
                 'height': 200
             };
-
-            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+            
+            var chart = new google.visualization.ColumnChart(document.getElementById('chart1'));
             chart.draw(data, options);
-
-            var chart2 = new google.visualization.ColumnChart(document.getElementById('chart_div2'));
-            chart2.draw(data, options);
         }
 
     </script>

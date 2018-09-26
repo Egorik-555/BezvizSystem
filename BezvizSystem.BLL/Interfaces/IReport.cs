@@ -1,4 +1,5 @@
 ﻿using BezvizSystem.BLL.DTO;
+using BezvizSystem.BLL.DTO.Report;
 using BezvizSystem.BLL.Report.DTO;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,6 @@ namespace BezvizSystem.BLL.Interfaces
         ReportDTO GetReport();
         ReportDTO GetReport(DateTime? dateMoment);
         ReportDTO GetReport(DateTime? dateFrom, DateTime? dateTo);
-        ReportDTO GetReport(DateTime? dateFrom, DateTime? dateTo, DateTime? dateMoment);       
+        ReportDTO GetReport(DateTime? dateFrom, DateTime? dateTo, DateTime? dateMoment);
     }
 }

@@ -93,7 +93,7 @@ namespace BezvizSystem.BLL.Services
 
         private IEnumerable<CountByDate> GetByDateArrivalCount()
         {
-            var visitors = _visitors.GroupBy(v => v.Group.DateArrival).Select(g => new CountByDate { DateArrival = g.Key, Count = g.Count()});
+            var visitors = _visitors.GroupBy(v => v.Group.DateArrival.Value.Date).Select(g => new CountByDate { DateArrival = g.Key.Date, Count = g.Count()});
             return visitors.ToList();
         }
 
