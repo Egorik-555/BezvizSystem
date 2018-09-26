@@ -1,6 +1,13 @@
 ﻿@model BezvizSystem.Web.Models.Report.ReportModel
 
 <tr>
+    <td class="tour40">
+        <h3 class="red"><b>Зарегистрированные туристы:</b></h3>
+    </td>
+    <td class="tour40"></td>
+</tr>
+
+<tr>
     <td>
         <p>Всего зарегистрировано:<b>@Model.AllRegistrated</b></p>
     </td>
@@ -24,5 +31,17 @@
 <tr>
     <td>
         <p>Не прибыло: <b>@Model.NotArriverd</b></p>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2">
+        <h3 class="red"><b>Количество туристов по половозрастному признаку</b></h3>
+    </td>
+</tr>
+
+<tr>
+    <td>
+        TABLE
     </td>
 </tr>

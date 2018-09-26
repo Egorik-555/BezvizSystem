@@ -8,7 +8,7 @@ using System.Web;
 
 namespace BezvizSystem.Web.Models.Group
 {
-    [DateArrivalLess(ErrorMessage = "Дата прибытия позже даты убытия")]
+    [DateArrivalLess(ErrorMessage = "Дата прибытия должна быть раньше, чем дата убытия")]
     public class CreateGroupModel
     {
         public CreateGroupModel()
@@ -23,22 +23,20 @@ namespace BezvizSystem.Web.Models.Group
         public ICollection<InfoVisitorModel> Infoes { get; set; }
       
         [Display(Name = "Дата прибытия")]
-        [Required(ErrorMessage = "Дата прибытия не введена")]
-        [FutureDate(ErrorMessage = "Дата прибытия не может быть прошедшей")]
+        [FutureDate(ErrorMessage = "Укажите дату прибытия, относящуюся к будущему")]
         [DataType(DataType.Date)]
         public DateTime? DateArrival { get; set; }
 
-        [Required(ErrorMessage = "Дата убытия не введена")]
+        [Required(ErrorMessage = "Укажите дату убытия")]
         [Display(Name = "Дата убытия")]      
         [DataType(DataType.Date)]
         public DateTime? DateDeparture { get; set; }
-
-        [RegularExpression(@"[0-9]{1,3}", ErrorMessage = "Только цифровые значения")]
+      
         [Display(Name = "Количество дней пребывания")]
         public int? DaysOfStay { get; set; }
 
-        [Required(ErrorMessage = "Пункт пропуска для пребывания не введен")]
-        [Display(Name = "Пункт пропуска для пребывания")]
+        [Required(ErrorMessage = "Укажите пункт пропуска для прибытия")]
+        [Display(Name = "Пункт пропуска для прибытия")]
         public string CheckPoint { get; set; }
 
         [Display(Name = "Инфо о месте пребывания")]
@@ -63,7 +61,7 @@ namespace BezvizSystem.Web.Models.Group
 
        // [Required(ErrorMessage = "Дата заключения договора не была введена")]
         [Display(Name = "Дата заключения договора")]
-        [PastDate(ErrorMessage = "Дата заключения договора не может быть будущей")]
+        [PastDate(ErrorMessage = "Укажите дату заключения договора, не относящуюся к будущему")]
         [DataType(DataType.Date)]
         public DateTime? DateOfContract { get; set; }
 

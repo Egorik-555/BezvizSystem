@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
+using BezvizSystem.BLL.DTO.Report;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Report.DTO;
 using BezvizSystem.Web.Mapper;
@@ -23,7 +24,7 @@ namespace BezvizSystem.Web.Controllers
         public ReportController(IReport reportService)
         {
             _reportService = reportService;
-            _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();         
+            _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
 
         public ActionResult Index()
@@ -33,20 +34,66 @@ namespace BezvizSystem.Web.Controllers
             return View(modelInView);
         }
 
-        public ActionResult DataReport(DateTime? dateFrom, DateTime? dateTo)
+        private ReportDTO GetModelByValidDates(DateTime? dateFrom, DateTime? dateTo)
         {
-            ReportDTO model;
             if (dateFrom.HasValue && dateTo.HasValue)
             {
-                model = _reportService.GetReport(dateFrom, dateTo);
+                return _reportService.GetReport(dateFrom, dateTo);
             }
             else
             {
-                model = _reportService.GetReport();
+                if (!dateFrom.HasValue && dateTo.HasValue)
+                {
+                    dateFrom = DateTime.MinValue;
+                    return _reportService.GetReport(dateFrom, dateTo);
+                }
+
+                if (dateFrom.HasValue && !dateTo.HasValue)
+                {
+                    dateTo = DateTime.MaxValue;
+                    return _reportService.GetReport(dateFrom, dateTo);
+                }
+
+                return _reportService.GetReport();
             }
+        }
+
+        public ActionResult DataReport(DateTime? dateFrom, DateTime? dateTo)
+        {
+            ReportDTO model;
+            model = GetModelByValidDates(dateFrom, dateTo);
 
             var modelInView = _mapper.Map<ReportDTO, ReportModel>(model);
             return PartialView(modelInView);
+        }
+
+        private string GetString(string label1, string label2, IEnumerable<ObjectForDiagram> list)
+        {
+            string result = "{\"cols\" : [";
+            result += "{\"id\":\"\",\"label\":\"" + label1 + "\",\"pattern\":\"\",\"type\":\"string\"},";
+            result += "{\"id\":\"\",\"label\":\"" + label2 + "\",\"pattern\":\"\",\"type\":\"number\"}";
+            result += "],";
+            result += "\"rows\": [";
+
+            foreach (var item in list)
+            {
+                result += "{ \"c\":[{\"v\":\"" + item.Value1 + "\",\"f\":null},{\"v\":" + item.Value2 + ",\"f\":null}]},";
+            }
+
+            result += "] }";
+
+            return result;
+        }
+
+        public JsonResult GetDataByDateCount(DateTime? dateFrom, DateTime? dateTo)
+        {
+            ReportDTO model;
+            model = GetModelByValidDates(dateFrom, dateTo);
+
+            var list = _mapper.Map<IEnumerable<CountByDate>, IEnumerable<ObjectForDiagram>>(model.AllByDateArrivalCount);
+            string result = GetString("Дата прибытия", "Количество", list);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

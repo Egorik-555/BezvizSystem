@@ -40,7 +40,6 @@ namespace BezvizSystem.Web.Controllers
         {
             if (id != null)
             {
-
                 var group = await _groupService.GetByIdAsync(id.Value);
                 if (group == null)
                 {
@@ -49,7 +48,7 @@ namespace BezvizSystem.Web.Controllers
 
                 var visitors = group.Visitors;
                 var model = mapper.Map<IEnumerable<VisitorDTO>, IEnumerable<ViewVisitorModel>>(visitors);
-                return PartialView("VisitorData", model);
+                return View("VisitorData", model);
 
             }
             else return new EmptyResult();

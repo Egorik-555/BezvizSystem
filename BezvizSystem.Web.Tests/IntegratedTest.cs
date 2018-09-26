@@ -40,12 +40,14 @@ namespace BezvizSystem.Web.Tests
         IDictionaryService<NationalityDTO> nationalities;
         IDictionaryService<GenderDTO> genders;
         IXMLDispatcher xmlDispatcherService;
+        IReport reportService;
 
         VisitorController visitorController;
         GroupController groupController;
         AnketaController anketaController;
         AccountController accountController;
         OperatorController operatorController;
+        ReportController reporterController;
 
         public IntegratedTest()
         {
@@ -60,12 +62,14 @@ namespace BezvizSystem.Web.Tests
             nationalities = serviceCreator.CreateNationalityService(CONNECT);
             genders = serviceCreator.CreateGenderService(CONNECT);
             userService = serviceCreator.CreateUserService(CONNECT);
+            reportService = serviceCreator.CreateReport(CONNECT);
 
             accountController = new AccountController(userService);          
             visitorController = new VisitorController(groupService, checkPoint, nationalities, genders);
             groupController = new GroupController(groupService, checkPoint, nationalities, genders);
             anketaController = new AnketaController(anketaService, groupService, checkPoint, nationalities, genders);
             operatorController = new OperatorController(userService);
+            reporterController = new ReportController(reportService);
         }
 
         InfoVisitorModel visitor1 = new InfoVisitorModel
@@ -995,17 +999,14 @@ namespace BezvizSystem.Web.Tests
             Assert.AreEqual("Email не подтвержден", result.ViewData.ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage);
         }
 
-        //[TestMethod]
-        //public async Task Login_Account()
-        //{
-        //    var operatorResult = await CreateUser(operatorModel);
-        //    operatorResult.EmailConfirmed = true;
-        //    await userService.Update(operatorResult);
-        //    var result = await accountController.Login(new LoginModel { Name = "123456789", Password = "123456" }) as RedirectToRouteResult;
+        //ReportController
+        [TestMethod]
+        public void Test_Report_Controller_GetDataByDateCount()
+        {
+            var result = reporterController.GetDataByDateCount(DateTime.Parse("01.06.2016"), DateTime.Parse("30.07.2018");
 
-        //    Assert.IsNotNull(result);
-        //    Assert.AreEqual("Index", result.RouteValues["action"]);
-        //    Assert.AreEqual("Home", result.RouteValues["controller"]);
-        //}
+            Assert.IsNotNull(result);
+        
+        }
     }
 }

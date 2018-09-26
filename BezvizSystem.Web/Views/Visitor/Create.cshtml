@@ -11,45 +11,43 @@
 
     <td class="two_column">
         <table class="second" cellpadding="0" cellspacing="15">
+
+            <tr>
+                <td colspan="2">
+                    @Html.ValidationSummary(false, "")
+                </td>
+            </tr>
+
             <tr>
                 <td><h2 class="top">Общие сведения</h2></td>
             </tr>
+
             <tr>
-                <td colspan="2">
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                </td>
-            </tr>
-            <tr>
-                <td class="left">                 
+                <td class="left">
                     @Html.LabelFor(model => model.DateArrival, htmlAttributes: new { @class = "control-label" })
-                    @Html.EditorFor(model => model.DateArrival, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.DateArrival, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.DateArrival, new { htmlAttributes = new { @class = "form-control" } })                 
                 </td>
                 <td class="left" align="right">
                     @Html.LabelFor(model => model.DateDeparture, htmlAttributes: new { @class = "control-label" })
-                    @Html.EditorFor(model => model.DateDeparture, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.DateDeparture, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.DateDeparture, new { htmlAttributes = new { @class = "form-control" } })                  
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
                     @Html.LabelFor(model => model.DaysOfStay, htmlAttributes: new { @class = "control-label" })
-                    @Html.EditorFor(model => model.DaysOfStay, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control bg_in" } })
-                    @Html.ValidationMessageFor(model => model.DaysOfStay, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.DaysOfStay, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control bg_in" } })                  
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
                     @Html.LabelFor(model => model.CheckPoint, htmlAttributes: new { @class = "control-label" })
-                    @Html.DropDownListFor(model => model.CheckPoint, ViewBag.CheckPoints as SelectList, new { @class = "form-control punkt" })
-                    @Html.ValidationMessageFor(model => model.CheckPoint, "", new { @class = "text-danger" })
+                    @Html.DropDownListFor(model => model.CheckPoint, ViewBag.CheckPoints as SelectList, new { @class = "form-control punkt" })                  
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
                     @Html.LabelFor(model => model.PlaceOfRecidense, htmlAttributes: new { @class = "control-label" })
-                    @Html.EditorFor(model => model.PlaceOfRecidense, new { htmlAttributes = new { @class = "form-control bg_in" } })
-                    @Html.ValidationMessageFor(model => model.PlaceOfRecidense, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.PlaceOfRecidense, new { htmlAttributes = new { @class = "form-control bg_in" } })                 
                     <p class="no_need">*Не обязательно к заполнению если турист не проживает в специализированных средствах размещения</p>
                 </td>
             </tr>
@@ -58,8 +56,9 @@
                     <h3 class="red">Информация о туристе</h3>
                 </td>
             </tr>
+
             @Html.EditorFor(model => model.Info)
-            @*@Html.ValidationMessageFor(model => model.Info)*@
+
             <tr>
                 <td colspan="2">
                     @Html.LabelFor(model => model.ProgramOfTravel, htmlAttributes: new { @class = "control-label" })

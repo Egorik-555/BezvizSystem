@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
+using BezvizSystem.BLL.DTO.Report;
 using BezvizSystem.BLL.Report.DTO;
 using BezvizSystem.Web.Models.Anketa;
 using BezvizSystem.Web.Models.Group;
@@ -72,6 +73,10 @@ namespace BezvizSystem.Web.Mapper
                     ForMember(dest => dest.DateArrival, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date : src.DateArrival));
             CreateMap<VisitorDTO, ViewVisitorModel>().
                     ForMember(dest => dest.GroupId, opt => opt.MapFrom(src => src.Group.Id));
+
+            CreateMap<CountByDate, ObjectForDiagram>().
+                    ForMember(dest => dest.Value1, opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.Date.ToString("dd.MM.yyyy") : null)).
+                    ForMember(dest => dest.Value2, opt => opt.MapFrom(src => src.Count));
         }
     }
 

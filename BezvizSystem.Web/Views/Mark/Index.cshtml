@@ -11,127 +11,23 @@
 @section scripts
 {
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
     <script>
 
-function listCheckBoxes(elem) {
-    if (elem)
-        return elem.querySelectorAll('input[type=checkbox]')
-}
 
-function allMark(elem) {
+        function onRowClickHandler(event) {
+            var target = event.target;
 
-    var list = listCheckBoxes(elem);
-    var checked = 0;
+            while (target.tagName != "TABLE") {
+                if (target.tagName == "TR") {
+                    var id = target.getAttribute('id');
 
-    for (var i = 0; i < list.length; i++) {
-        if (list[i].checked) {
-            checked++;
-        }
-    }
-
-    if (checked == list.length)
-        return "V";
-    else if (checked < list.length && checked > 0)
-        return "Частично";
-    else return "X";
-}
-
-function getPreviousTr(elem) {
-    if (elem) {
-        var td = elem.parentNode;
-        var tr = td.parentNode;
-        var previousTr = tr.previousElementSibling;
-        return previousTr;
-    }
-}
-
-function checkMark(divInfo) {
-    var tr = getPreviousTr(divInfo);
-    var mark = allMark(divInfo);
-
-    var tdMark = tr.querySelector('td[name=mark]');
-    tdMark.innerHTML = mark;
-}
-
-function visitorInfoAfterA(elem) {
-    elem.getElementById('visitorInfo');
-    if (elem) return true;
-}
-
-
-function onClickInfo(e) {
-
-    var target = e.target;
-    if (target.tagName == 'INPUT') {
-
-        var divInfo = document.getElementById("visitorInfo");
-        var mark = checkMark(divInfo);
-
-        var id = target.getAttribute("dataId");
-        var value = target.checked;
-
-        $.ajax({
-            url: '@Url.Action("Edit")?id=' + id + "&arrived=" + value
-        });
-    }
-};
-
-
-var mainTable = document.getElementById('mainTable');
-
-mainTable.onclick = function (e) {
-
-    var data = mainTable.getElementsByTagName('tbody')[0];
-
-    var target = e.target;
-
-    var tr = target.parentNode;
-    while (tr.tagName != "TR") {
-        tr = tr.parentNode;
-        if (tr.tagName == "BODY") return;
-    }
-    target = tr;
-
-    var attr = target.getAttribute("class");
-    if (attr == 'infoTableRow') return;
-
-    if (target.tagName == "TR") {
-
-        var divInfo = document.getElementById("visitorInfo");
-        var previosTr = getPreviousTr(divInfo);
-
-        if (divInfo) {
-            var td = divInfo.parentNode;
-            var tr = td.parentNode;
-            if (tr) data.removeChild(tr);
-        }
-
-        if (target === previosTr) return;
-
-        var newTr = document.createElement('tr');
-        var newTd = document.createElement('td');
-        var newDiv = document.createElement('div');
-
-        newTd.setAttribute("colspan", "8");
-        newDiv.setAttribute("id", "visitorInfo");
-
-        newTd.appendChild(newDiv);
-        newTr.appendChild(newTd);
-        data.insertBefore(newTr, target.nextElementSibling);
-
-        newDiv.onclick = onClickInfo;
-
-        var id = target.getAttribute('id');
-
-        $.ajax({
-            url: '@Url.Action("ShowVisitors")?id=' + id,
-            dataType: "html",
-            success: function (data) {
-                $("#visitorInfo").html(data)
+                    location.href = '@Url.Action("ShowVisitors", "Mark")/' + id;
+                    return;
+                }
+                target = target.parentNode;
             }
-        });
-    }
-}
+        }
 
     </script>
 }
