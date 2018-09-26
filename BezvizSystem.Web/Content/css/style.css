@@ -21,6 +21,8 @@ table.footer {
     background-color: #313131;
     height: 50px;
     color: #fff;
+    /*position: absolute;
+    bottom: 0;*/
 }
 
     table.footer th {
