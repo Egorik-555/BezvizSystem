@@ -4,9 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
-    <link rel="stylesheet" href="/Content/css/style.css">
-    @*@Styles.Render("~/Content/css")
-        @Scripts.Render("~/bundles/modernizr")*@
+    @*<link rel="stylesheet" href="/Content/css/style.css">*@
+    @Styles.Render("~/Content/css")
 </head>
 <body>
     <table class="header">
@@ -17,7 +16,7 @@
         </tr>
     </table>
     <table class="page" cellspacing="20">
-        <caption><b>Система регистрации анкет <br>иностранных туристов<b></caption>
+        <caption><b>Система регистрации анкет <br>иностранных туристов</b></caption>
         <tr>
             <td class="vhod">
                 <input type="button" value="Вход" onclick="location.href='@Url.Action("Login", "Account")'" class="simply_form" />
@@ -28,7 +27,7 @@
         </tr>
         @RenderBody()
 
-        <table class="footer">
+        <table class="footer" style="position:absolute; bottom:0">
             <tr>
                 <th>Управление спорта и туризма Брестского облисполкома. Дизайн и разработка BrainIT</th>
             </tr>

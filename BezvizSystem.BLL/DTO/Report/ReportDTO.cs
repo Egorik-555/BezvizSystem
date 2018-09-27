@@ -21,11 +21,13 @@ namespace BezvizSystem.BLL.Report.DTO
         public int? AllTouristInGroup { get; set; }
 
         public IEnumerable<NatAndAge> AllByNatAndAge { get; set; }
-       // public IEnumerable<CountByDate> AllByDateArrivalCount { get; set; }
-        public IEnumerable<CountByCheckPoint> AllByCheckPointCount { get; set; }
-        public IEnumerable<CountByDays> AllByDaysCount { get; set; }
+        //public IEnumerable<CountByDate> AllByDateArrivalCount { get; set; }
+        //public IEnumerable<CountByCheckPoint> AllByCheckPointCount { get; set; }
+        //public IEnumerable<CountByDays> AllByDaysCount { get; set; }
         public IEnumerable<CountByOperator> AllByOperatorCount { get; set; }
 
         public string StringDateByArrivalCount { get; set; }
+        public string StringCheckPointCount { get; set; }
+        public string StringDaysByCount { get; set; }
     }
 }

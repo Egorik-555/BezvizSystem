@@ -36,6 +36,8 @@ namespace BezvizSystem.Web.Controllers
             return View(modelInView);
         }
 
+
+
         private ReportDTO GetModelByValidDates(DateTime? dateFrom, DateTime? dateTo)
         {
             if (dateFrom.HasValue && dateTo.HasValue)
@@ -58,44 +60,6 @@ namespace BezvizSystem.Web.Controllers
 
                 return _reportService.GetReport();
             }
-        }
-
-        //public ActionResult DataReport(DateTime? dateFrom, DateTime? dateTo)
-        //{
-        //    ReportDTO model;
-        //    model = GetModelByValidDates(dateFrom, dateTo);
-
-        //    var modelInView = _mapper.Map<ReportDTO, ReportModel>(model);
-        //    return PartialView(modelInView);
-        //}
-
-        //private string GetString(string label1, string label2, IEnumerable<ObjectForDiagram> list)
-        //{
-        //    string result = "{\"cols\" : [";
-        //    result += "{\"id\":\"\",\"label\":\"" + label1 + "\",\"pattern\":\"\",\"type\":\"string\"},";
-        //    result += "{\"id\":\"\",\"label\":\"" + label2 + "\",\"pattern\":\"\",\"type\":\"number\"}";
-        //    result += "],";
-        //    result += "\"rows\": [";
-
-        //    foreach (var item in list)
-        //    {
-        //        result += "{ \"c\":[{\"v\":\"" + item.Value1 + "\",\"f\":null},{\"v\":" + item.Value2 + ",\"f\":null}]},";
-        //    }
-
-        //    result += "] }";
-
-        //    return result;
-        //}
-
-        //public JsonResult GetDataByDateCount(DateTime? dateFrom, DateTime? dateTo)
-        //{
-        //    ReportDTO model;
-        //    model = GetModelByValidDates(dateFrom, dateTo);
-
-        //    var list = _mapper.Map<IEnumerable<CountByDate>, IEnumerable<ObjectForDiagram>>(model.AllByDateArrivalCount);
-        //    string result = GetString("Дата прибытия", "Количество", list);
-
-        //    return Json(result, JsonRequestBehavior.AllowGet);
-        //}
+        }       
     }
 }

@@ -28,16 +28,7 @@
             <tbody id="data">
                 @Html.Partial("DataReport", Model)
             </tbody>
-            @*<tr>
-                    <td colspan="2">
-                        <h3 class="red"><b>Количество зарегистрированных туристов на дату прибытия</b></h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" id="chart1">
-                    </td>
-                </tr>*@
-
+     
         </table>
     }
 </td>
@@ -62,33 +53,52 @@
 
     <script>
 
-        google.charts.load('current', {'packages':['corechart']});
+        google.charts.load('current', { 'packages': ['corechart'] });
         google.charts.setOnLoadCallback(drawChart);
 
         function drawChart() {
 
+            //var dateFrom = document.getElementsByName("dateFrom")[0].value;
+            //var dateTo = document.getElementsByName("dateTo")[0].value;
 
-            var dateFrom = document.getElementsByName("dateFrom")[0].value;
-            var dateTo = document.getElementsByName("dateTo")[0].value;
+            //chart1
+            var data1 = new google.visualization.DataTable('@Model.StringDateByArrivalCount');
 
-        @*var jsonData = $.ajax({
-            url: '@Url.Action("GetDataByDateCount")?dateFrom=' + dateFrom + '&dateTo=' + dateTo,
-            dataType: "json",
-            async: false
-        }).responseText;*@
-          
-            console.log('@Model.StringDateByArrivalCount');
-            var data = new google.visualization.DataTable(@Model.StringDateByArrivalCount /*JSON.parse(jsonData)*/);
-
-            var options = {
+            var options1 = {
                     colors: ['#ffba00'],
                     legend: {position: 'none'},
                     backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2},
                     'height': 200
             };
 
-            var chart = new google.visualization.ColumnChart(document.getElementById('chart1'));
-            chart.draw(data, options);
+            var chart1 = new google.visualization.ColumnChart(document.getElementById('chart1'));
+            chart1.draw(data1, options1);
+
+            //chart2
+            var data2 = new google.visualization.DataTable('@Model.StringCheckPointCount');
+
+            var options2 = {
+                    colors: ['#ffba00'],
+                    legend: {position: 'none'},
+                    backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2},
+                    'height': 200
+            };
+
+            var chart2 = new google.visualization.ColumnChart(document.getElementById('chart2'));
+            chart2.draw(data2, options2);
+
+            //chart2
+            var data3 = new google.visualization.DataTable('@Model.StringDaysByCount');
+
+            var options3 = {
+                    colors: ['#ffba00'],
+                    legend: {position: 'none'},
+                    backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2},
+                    'height': 200
+            };
+
+            var chart3 = new google.visualization.ColumnChart(document.getElementById('chart3'));
+            chart3.draw(data3, options3);
 
         }
 

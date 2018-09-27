@@ -12,6 +12,7 @@ using BezvizSystem.BLL.Mapper;
 using System.Web.Helpers;
 using Newtonsoft.Json;
 using System.Web;
+using System.Text.Encodings.Web;
 
 namespace BezvizSystem.BLL.Services
 {
@@ -67,12 +68,13 @@ namespace BezvizSystem.BLL.Services
                 AllTouristInGroup = GetAllTouristInGroup(),
 
                 AllByNatAndAge = GetByNatAndAge(dateMoment),
-                //AllByDateArrivalCount = GetByDateArrivalCount(),
-                AllByCheckPointCount = GetByCheckPointCount(),
-                AllByDaysCount = GetByDaysCount(),
+               // AllByCheckPointCount = GetByCheckPointCount(),
+               // AllByDaysCount = GetByDaysCount(),
                 AllByOperatorCount = GetByOperatorCount(),
 
-                StringDateByArrivalCount = GetByDateArrivalCount()
+                StringDateByArrivalCount = GetByDateArrivalCount(),
+                StringCheckPointCount = GetByCheckPointCount(),
+                StringDaysByCount = GetByDaysCount()
             };
         }
 
@@ -114,13 +116,7 @@ namespace BezvizSystem.BLL.Services
 
             return result;
         }
-
-        //private IEnumerable<CountByDate> GetByDateArrivalCount()
-        //{
-        //    var visitors = _visitors.GroupBy(v => v.Group.DateArrival.Value.Date).Select(g => new CountByDate { DateArrival = g.Key.Date, Count = g.Count()});
-        //    return visitors.OrderBy(o => o.DateArrival).ToList();
-        //}
-
+   
         private string GetByDateArrivalCount()
         {
             var visitors = _visitors.GroupBy(v => v.Group.DateArrival.Value.Date).Select(g => new CountByDate { DateArrival = g.Key.Date, Count = g.Count() });
@@ -128,20 +124,26 @@ namespace BezvizSystem.BLL.Services
 
             var list = _mapper.Map<IEnumerable<CountByDate>, IEnumerable<ObjectForDiagram>>(visitors);
 
-            var res = HttpUtility.JavaScriptStringEncode(@"Hello """"");
-            return res;
+            return JavaScriptEncoder.Default.Encode(GetString("Дата прибытия", "Количество", list));
         }
-
-        private IEnumerable<CountByCheckPoint> GetByCheckPointCount()
+        private string GetByCheckPointCount()
         {
             var visitors = _visitors.GroupBy(v => v.Group.CheckPoint.Name).Select(g => new CountByCheckPoint { CheckPoint = g.Key, Count = g.Count() });
-            return visitors.ToList();
+            visitors = visitors.OrderBy(o => o.CheckPoint);
+
+            var list = _mapper.Map<IEnumerable<CountByCheckPoint>, IEnumerable<ObjectForDiagram>>(visitors);
+
+            return JavaScriptEncoder.Default.Encode(GetString("Пункт пропуска", "Количество", list));
         }
 
-        private IEnumerable<CountByDays> GetByDaysCount()
+        private string GetByDaysCount()
         {
             var visitors = _visitors.GroupBy(v => v.Group.DaysOfStay).Select(g => new CountByDays { Days = g.Key, Count = g.Count() });
-            return visitors.ToList();
+            visitors = visitors.OrderBy(o => o.Days);
+
+            var list = _mapper.Map<IEnumerable<CountByDays>, IEnumerable<ObjectForDiagram>>(visitors);
+
+            return JavaScriptEncoder.Default.Encode(GetString("Дней пребывания", "Количество", list));
         }
 
         private IEnumerable<CountByOperator> GetByOperatorCount()
