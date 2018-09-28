@@ -10,19 +10,18 @@
     @Html.AntiForgeryToken()
 
     <tr>
-        <input hidden="hidden" id="returnUrl" value="@ViewBag.returnUrl" />
-        <td colspan="2">
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
-            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control long_but" } })
-            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-        </td>
+        @*<input hidden="hidden" id="returnUrl" value="@ViewBag.returnUrl" />*@
+
+    <td colspan="2">
+        @Html.ValidationSummary(false, "")
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control long_but" } })
+    </td>
     </tr>
     <tr>
         <td colspan="2">
             @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })
             @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control long_but" } })
-            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
         </td>
     </tr>
     <tr class="mtauto">
@@ -30,7 +29,6 @@
             <div class="checkbox">
                 @Html.LabelFor(model => model.RememberMe, htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(model => model.RememberMe)
-                @Html.ValidationMessageFor(model => model.RememberMe, "", new { @class = "text-danger" })
             </div>
         </td>
     </tr>

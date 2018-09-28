@@ -61,16 +61,14 @@ namespace BezvizSystem.Web.Models.Group
 
        // [Required(ErrorMessage = "Дата заключения договора не была введена")]
         [Display(Name = "Дата заключения договора")]
-        [PastDate(ErrorMessage = "Укажите дату заключения договора, не относящуюся к будущему")]
+        [PastDate(ErrorMessage = "Укажите дату заключения договора, относящуюся к прошлому")]
         [DataType(DataType.Date)]
         public DateTime? DateOfContract { get; set; }
 
         [Display(Name = "Другая информация")]
         public string OtherInfo { get; set; }
 
-        [Required]
         public DateTime? DateInSystem { get; set; }
-        [Required]
         public string UserInSystem { get; set; }
     }
 }

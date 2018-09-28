@@ -4,134 +4,122 @@
     ViewBag.Title = "Группа туристов";
 }
 
-<h4>Группа туристов</h4>
-
 @using (Html.BeginForm("EditGroup", "Anketa"))
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.Id)
+    <td class="two_column">
+        <table class="second" cellpadding="0" cellspacing="15">
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.DateArrival, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.DateArrival, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.DateArrival, "", new { @class = "text-danger" })
-        </div>
-    </div>
+            <tr>
+                <td colspan="2">
+                    @Html.ValidationSummary(false, "")
+                </td>
+            </tr>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.DateDeparture, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.DateDeparture, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.DateDeparture, "", new { @class = "text-danger" })
-        </div>
-    </div>
+            <tr>
+                <td><h2 class="top">Общие сведения</h2></td>
+            </tr>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.DaysOfStay, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.DaysOfStay, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.DaysOfStay, "", new { @class = "text-danger" })
-        </div>
-    </div>
+            <tr>
+                <td class="left">
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.LabelFor(model => model.DateArrival, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.DateArrival, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control" } })
+                </td>
+                <td class="left" align="right">
+                    @Html.LabelFor(model => model.DateDeparture, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.DateDeparture, new { htmlAttributes = new { @class = "form-control" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.DaysOfStay, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.DaysOfStay, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control bg_in" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.CheckPoint, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.CheckPoint, ViewBag.CheckPoints as SelectList, new { @class = "form-control punkt" })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.PlaceOfRecidense, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.PlaceOfRecidense, new { htmlAttributes = new { @class = "form-control bg_in" } })
+                    <p class="no_need">*Не обязательно к заполнению если турист не проживает в специализированных средствах размещения</p>
+                </td>
+            </tr>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.CheckPoint, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.CheckPoint, ViewBag.CheckPoints as SelectList, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.CheckPoint, "", new { @class = "text-danger" })
-        </div>
-    </div>
+            <tr>
+                <td colspan="2">
+                    <h3 class="red">Информация о туристах</h3>
+                </td>
+            </tr>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.PlaceOfRecidense, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.PlaceOfRecidense, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.PlaceOfRecidense, "", new { @class = "text-danger" })
-        </div>
-    </div>
+            @Html.EditorFor(model => model.Infoes)
 
-    <div class="form-group">
-        @Html.EditorFor(model => model.Infoes)
-        @Html.ValidationMessageFor(model => model.Infoes, "")
-    </div>
+            <tr>
+                <td class="left">
+                    <input type="button" id="addVisitorBut" class="simply_form_red sfr_auto" value="Добавить туриста" />
+                </td>
+                <td class="left" align="right">
+                    <input type="button" id="deleteVisitorBut" class="simply_form_red sfr_auto" value="Удалить туриста">
+                </td>
+            </tr>
 
-    <hr />
-
-    <input type="button" id="addVisitorBut" value="Добавить туриста" />
-    <input type="button" id="deleteVisitorBut" value="Удалить туриста">
-
-    <hr />
-
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.ProgramOfTravel, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.ProgramOfTravel, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.ProgramOfTravel, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.OrganizeForm, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.OrganizeForm, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.OrganizeForm, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.NumberOfContract, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.NumberOfContract, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.NumberOfContract, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.DateOfContract, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.DateOfContract, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.DateOfContract, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.OtherInfo, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.OtherInfo, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.OtherInfo, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <input type="hidden" name="Group" value="true" />
-    <input type="hidden" name="DateInSystem" value="@Model.DateInSystem" />
-    <input type="hidden" name="UserInSystem" value="@Model.UserInSystem" />
-    <input type="hidden" name="TranscriptUser" value="@Model.TranscriptUser" />
-    <input type="hidden" name="UserEdit" value="@User.Identity.Name" />
-    <input type="hidden" name="DateEdit" value="@DateTime.Now" />
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <button type="submit" class="btn btn-default">Сохранить</button>
-            <button type="submit" name="button" value="Extra" class="btn btn-default">Сохранить для экстренной передачи</button> |
-            @Html.ActionLink("Удалить", "Delete", new { id = Model.Id })
-        </div>
-    </div>
-</div>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.ProgramOfTravel, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.ProgramOfTravel, new { htmlAttributes = new { @class = "form-control bg_in_long" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.OrganizeForm, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.OrganizeForm, new { htmlAttributes = new { @class = "form-control bg_in" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control bg_in" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.NumberOfContract, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.NumberOfContract, new { htmlAttributes = new { @class = "form-control bg_in" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.DateOfContract, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.DateOfContract, new { htmlAttributes = new { @class = "form-control bg_in" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.OtherInfo, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.OtherInfo, new { htmlAttributes = new { @class = "form-control bg_in" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="hidden" name="Group" value="true" />
+                    <input type="hidden" name="DateInSystem" value="@Model.DateInSystem" />
+                    <input type="hidden" name="UserInSystem" value="@Model.UserInSystem" />
+                    <input type="hidden" name="TranscriptUser" value="@Model.TranscriptUser" />
+                    <input type="hidden" name="UserEdit" value="@User.Identity.Name" />
+                    <input type="hidden" name="DateEdit" value="@DateTime.Now" />
+                    <input type="submit" class="simply_form_red sfr_auto" style="height:50px;" value="Сохранить"/>
+                    <button type="submit" name="button" value="Extra" class="simply_form_red sfr_auto" style="background-color:#ffba00; width:100%; border: 1px solid #ffba00;">Сохранить для экстренной передачи</button>
+                    @Html.ActionLink("Удалить", "Delete", new { id = Model.Id }, new { @class = "simply_form_red sfr_auto", style = "background-color:red; width:100%; padding:0;display: block; border: 1px solid red; font-family:Arial;" })
+                </td>
+            </tr>
+        </table>
+    </td>
 }
 
 @section Scripts{
