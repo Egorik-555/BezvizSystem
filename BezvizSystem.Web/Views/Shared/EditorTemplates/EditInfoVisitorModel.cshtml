@@ -5,40 +5,34 @@
     <td colspan="2">
         @Html.LabelFor(model => model.Surname, htmlAttributes: new { @class = "control-label" })
         @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control bg_in" } })
-        @Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })
     </td>
 </tr>
 <tr>
     <td colspan="2">
         @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
         @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control bg_in" } })
-        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
     </td>
 </tr>
 <tr>
     <td colspan="2">
         @Html.LabelFor(model => model.SerialAndNumber, htmlAttributes: new { @class = "control-label" })
         @Html.EditorFor(model => model.SerialAndNumber, new { htmlAttributes = new { @class = "form-control bg_in" } })
-        @Html.ValidationMessageFor(model => model.SerialAndNumber, "", new { @class = "text-danger" })
     </td>
 </tr>
 <tr>
     <td colspan="2">
         @Html.LabelFor(model => model.BithDate, htmlAttributes: new { @class = "control-label" })
         @Html.EditorFor(model => model.BithDate, new { htmlAttributes = new { @class = "form-control bg_in" } })
-        @Html.ValidationMessageFor(model => model.BithDate, "", new { @class = "text-danger" })
     </td>
 </tr>
 <tr>
     <td class="left">
         @Html.LabelFor(model => model.Nationality, htmlAttributes: new { @class = "control-label" })
         @Html.DropDownListFor(model => model.Nationality, ViewBag.Nationalities as SelectList, new { @class = "form-control sex" })
-        @Html.ValidationMessageFor(model => model.Nationality, "", new { @class = "text-danger" })
     </td>
     <td class="left" align="right">
         @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label left_text" })
         @Html.DropDownListFor(model => model.Gender, ViewBag.Genders as SelectList, new { @class = "form-control sex" })
-        @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
     </td>
 </tr>
 

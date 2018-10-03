@@ -1,124 +1,176 @@
-var addButton = document.getElementById('addVisitorBut');
-var deleteButton = document.getElementById('deleteVisitorBut');
 
-function changeAttributeSub(elem, nameTag, nameAttLabels){
-    var labels = elem.getElementsByTagName(nameTag);
-    var infoVisitors = document.querySelectorAll('div[name=infoVisitor]');
-    var count = infoVisitors.length;
+var inputTable = document.getElementById('inputTable');
+var tbody = inputTable.getElementsByTagName('tbody')[0];
+var addButton = document.getElementById("addVisitorBut");
+var removeButton = document.getElementById("deleteVisitorBut");
 
-    if (labels.length > 0) {
+addButton.onclick = clickAddHandler;
+removeButton.onclick = clickRemoveHandler;
 
-        var oldVal;
-        var newVal;
-
-        for(var i = 0; i < labels.length; i++){
-            oldVal = labels[i].getAttribute(nameAttLabels);
-            newVal = oldVal.replace(/_\d+__/g, '_' + (count).toString() + '__');
-            labels[i].setAttribute(nameAttLabels, newVal);
-        }
-    }
+function clickAddHandler() {
+    f('lastTr');
 }
 
-function changeAttributeBracket(elem, nameTag, nameAttLabels){
-    var labels = elem.getElementsByTagName(nameTag);
-    var infoVisitors = document.querySelectorAll('div[name=infoVisitor]');
-    var count = infoVisitors.length;
-
-    if (labels.length > 0) {
-
-        var oldVal;
-        var newVal;
-
-        for(var i = 0; i < labels.length; i++){
-            oldVal = labels[i].getAttribute(nameAttLabels);
-            newVal = oldVal.replace(/\[\d+\]/g, '['+(count).toString()+']');
-            labels[i].setAttribute(nameAttLabels, newVal);
-        }
-    }
+function clickRemoveHandler() {
+    removeFunction('lastTr');
 }
 
-function clearField(nameElem) {
-    var inputs = nameElem.getElementsByTagName('input');
-    for (var i = 0; i < inputs.length; i++) {
-        inputs[i].value = '';
-    }
+function removeFunction(fromWhere) {
+    let list = document.getElementsByName(fromWhere);
+    let lastTr = list[list.length - 1];
+    let count = lastNumber(lastTr);
+    if (count == 0) return;
+    let result1 = removeElement(count, 'UserInSystem');
+    let result2 = removeElement(count, 'DateInSystem');
+    if (!result1 || !result2) return;
 
-    var selects = nameElem.getElementsByTagName('select');
-    for (var i = 0; i < selects.length; i++) {
-        selects[i].value = '';
-    }
+    for(var i = 1; i <= 5; i++)
+        removeTR(fromWhere);
 }
 
-function onClickAdd(){
-    var infoVisitors = document.querySelectorAll('div[name=infoVisitor]');
-    var count = infoVisitors.length;
-    var infoVisitor = infoVisitors.item(count - 1);
+function f(whereInsert) {
+    var list = document.getElementsByName(whereInsert);
 
-    if (infoVisitor) {
-        var newInfoVisitor = infoVisitor.cloneNode(true);
-        changeAttributeSub(newInfoVisitor, 'label', 'for');
-        changeAttributeSub(newInfoVisitor, 'input', 'id');
-        changeAttributeSub(newInfoVisitor, 'select', 'id');
-        changeAttributeBracket(newInfoVisitor, 'input', 'name');
-        changeAttributeBracket(newInfoVisitor, 'span', 'data-valmsg-for');
-        changeAttributeBracket(newInfoVisitor, 'select', 'name');
+    // last element
+    var lastTr = list[list.length - 1];
+    // last number of visitors
+    var count = lastNumber(lastTr) + 1;
 
-        clearField(newInfoVisitor);
+    //create fragment of TR
+    let fragmentSurname = createFragmentOfInput(count, 'Surname', 'Фамилия', 'кажите фамилию туриста',true);
+    let fragmentName = createFragmentOfInput(count, 'Name', 'Имя','Укажите имя туриста');
+    let fragmentPassport = createFragmentOfInput(count, 'SerialAndNumber', 'Серия и номер паспорта','Укажите серию и номер паспорта туриста');
+    let fragmentNationality = createFragmentOfInput(count, 'Nationality', 'Гражданство','', false, true);
 
-        var parent = infoVisitor.parentNode;
-        parent.insertBefore(newInfoVisitor, infoVisitor.nextElementSibling);
 
-        var newId = document.getElementById("Infoes_" + count + "__Id");
-        newId.value = "0";     
-        var newStatusOfOperation = document.getElementById("Infoes_" + count + "__StatusOfOperation");
-        newStatusOfOperation.value = "1";   
-    }
+    let fragment = document.createDocumentFragment();
+    fragment.appendChild(fragmentSurname);
+    fragment.appendChild(fragmentName);
+    fragment.appendChild(fragmentPassport);
+    fragment.appendChild(fragmentNationality);
+    fragment.appendChild(createFragment(count, 'Gender', 'BithDate', 'Пол', 'Дата рождения', createByClone));
+
+    let hiddenInputUser = createByClone(count, 'UserInSystem');
+    let hiddenInputDate = createByClone(count, 'DateInSystem');
+    fragment.appendChild(hiddenInputUser);
+    fragment.appendChild(hiddenInputDate);
+
+    tbody.insertBefore(fragment, lastTr.nextSibling);
+}
+
+function createFragmentOfInput(id, field, caption, msg, separator, select){
+
+    let label = createLabel(id, field,'control-label', caption );
+    let input;
+    if (select) input = createByClone(id, field);
+    else input = createInput(id, field, 'text-box single-line', 'true', msg);
+
+    let td = document.createElement('td');
+    td.setAttribute('colspan', '2');
+
+    if (separator) td.appendChild(document.createElement('hr'));
+
+    td.appendChild(label);
+    td.appendChild(input);
+
+    let tr = document.createElement('tr');
+    tr.setAttribute('name','lastTr');
+    tr.appendChild(td);
+
+    return document.createDocumentFragment().appendChild(tr);
+}
+
+function createFragment(id, field1, field2, caption1, caption2, createFunction){
+
+    let label1 = createLabel(id, field1,'control-label', caption1);
+    let input1 = createFunction(id, field1);
+    input1.value = '';
+    let label2 = createLabel(id, field2,'control-label', caption2);
+    let input2 = createFunction(id, field2);
+    input2.value = '';
+
+    let tr = document.createElement('tr');
+    tr.setAttribute('name','lastTr');
+
+    let td = document.createElement('td');
+    td.className = 'left';
+    td.appendChild(label1);
+    td.appendChild(input1);
+    tr.appendChild(td);
+
+    td = document.createElement('td');
+    td.className = 'left';
+    td.setAttribute('align','right');
+    td.appendChild(label2);
+    td.appendChild(input2);
+    tr.appendChild(td);
+
+    return document.createDocumentFragment().appendChild(tr);
 }
 
 
-function onClickDelete() {
-    var infoVisitors = document.querySelectorAll('div[name=infoVisitor]');
-    //var hrs = document.querySelectorAll('div[name=infoVisitor] + hr');
-    var count = infoVisitors.length;
-
-    if (count > 1){
-        var parent = infoVisitors.item(count - 1).parentNode;
-        var delElem = infoVisitors.item(count - 1);
-        //var delHr = hrs.item(count - 1);
-
-        parent.removeChild(delElem);
-        //parent.removeChild(delHr)
-    }
+function createLabel(id, field, nameClass, caption) {
+    let attrId = makeId(id, field);
+    let label = document.createElement("label");
+    label.setAttribute('for', attrId);
+    label.className = nameClass;
+    label.innerHTML = caption;
+    return label;
 }
 
-
-if (addButton){
-    addButton.onclick = onClickAdd;
+function createInput(id, field, nameClass, dataVal, dataValRequired) {
+    let attrId = makeId(id, field);
+    let attrName = makeName(id, field);
+    var input = document.createElement("input");
+    input.setAttribute('data-val', dataVal);
+    input.setAttribute('data-val-required', dataValRequired);
+    input.setAttribute('id', attrId);
+    input.setAttribute('name', attrName);
+    input.className = nameClass;
+    return input;
 }
-if (deleteButton){
-    deleteButton.onclick = onClickDelete;
+
+function createByClone(id, field){
+    let prevId = makeId(id - 1, field);
+    let prevSelect = document.getElementById(prevId);
+
+    let newSelect = prevSelect.cloneNode(true);
+    let newID = makeId(id, field);
+    newSelect.setAttribute('id', newID);
+    let attrName = makeName(id, field);
+    newSelect.setAttribute('name', attrName);
+
+    return newSelect;
 }
 
+function makeId(id, field){
+    return 'Infoes_' + id + '__' + field;
+}
 
-//���������� ���� ����������
-var form = document.forms[0];
-var dateArrival = form.DateArrival;
-var dateDeparture = form.DateDeparture;
+function makeName(id, field) {
+    return 'Infoes[' + id + '].' + field;
+}
 
-dateArrival.addEventListener("change", changeHandler);
-dateDeparture.addEventListener("change", changeHandler);
+function lastNumber(lastTR) {
+    let label = lastTR.getElementsByTagName('label')[0];
+    let attrForValue = label.getAttribute('for');
+    let array = attrForValue.split('_');
+    return +array[1];
+}
 
-function changeHandler() {
+function removeElement(id, field){
+    let idCaption = makeId(id, field);
 
-    var form = document.forms[0];
-    var dateArrival = form.DateArrival;
-    var dateDeparture = form.DateDeparture;
+    let element = document.getElementById(idCaption);
+    if (!element) return false;
+    element.parentElement.removeChild(element);
+    return true;
+}
 
-    var date1 = new Date(dateArrival.value);
-    var date2 = new Date(dateDeparture.value);
-    var divDate = date2 - date1;
-    var daysLag = Math.ceil(Math.abs(divDate) / (1000 * 3600 * 24)) + 1;
-    form.DaysOfStay.value = daysLag;
+function removeTR(name){
+    let list = document.getElementsByName(name);
+    let lastTr = list[list.length - 1];
+    lastTr.parentElement.removeChild(lastTr);
 }
 
 
