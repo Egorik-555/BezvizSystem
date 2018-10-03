@@ -68,8 +68,6 @@ namespace BezvizSystem.BLL.Services
                 AllTouristInGroup = GetAllTouristInGroup(),
 
                 AllByNatAndAge = GetByNatAndAge(dateMoment),
-               // AllByCheckPointCount = GetByCheckPointCount(),
-               // AllByDaysCount = GetByDaysCount(),
                 AllByOperatorCount = GetByOperatorCount(),
 
                 StringDateByArrivalCount = GetByDateArrivalCount(),
@@ -111,7 +109,8 @@ namespace BezvizSystem.BLL.Services
             {
                 result += "{ \"c\":[{\"v\":\"" + item.Value1 + "\",\"f\":null},{\"v\":" + item.Value2 + ",\"f\":null}]},";
             }
-
+ 
+            result = result.TrimEnd(',');
             result += "] }";
 
             return result;
