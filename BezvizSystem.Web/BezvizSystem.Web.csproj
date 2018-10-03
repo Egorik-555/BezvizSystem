@@ -304,8 +304,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Scripts\MyScripts\AddDeleteVisitor.js" />
     <Content Include="Scripts\MyScripts\EditHelper.js" />
+    <Content Include="Scripts\MyScripts\_EditHelper.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
