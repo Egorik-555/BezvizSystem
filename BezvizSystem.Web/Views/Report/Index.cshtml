@@ -16,11 +16,11 @@
                         <input type="button" class="pad_cent_red" id="dates" name="dates" value="Выбор диапазона дат" />
                     </td>
                     <td>
-                        <div id="panelDates" style="display: none">
+                        <td id="panelDates" style="display: none">
                             <input type="date" name="dateFrom" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                             <input type="date" name="dateTo" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                             <input type="submit" @*onclick="drawChart();"*@ value="Отобрать" />
-                        </div>
+                        </td>
                     </td>
                 </tr>
             </thead>

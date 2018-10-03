@@ -117,6 +117,19 @@ table.second form.pad_cent_red {
     color:red;
     font-size:20px;
 }
+.simply_form_green {
+    width: 220px;
+    height: 50px;
+    line-height: 50px;
+    background-color: #0a9200;
+    color: #fff;
+    border: 1px solid #0a9200;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 15px;
+    text-decoration: none;
+}
 .simply_form_red {
     width: 220px;
     height: 50px;
@@ -339,6 +352,10 @@ td.left {
 
 h2.red {
     color: #0a9200;
+    font-size: 20px;
+}
+a.footer-brain {
+    color: #fff;
     font-size: 20px;
 }
 
@@ -785,4 +802,15 @@ span.red {
 table.second label{
     font-size:18px;
     font-weight:700;
+}
+
+
+table.td.th.a.footer-brain {
+    color: #fff;
+    font-size: 20px;
+}
+
+#panelDates input {
+    height:45px;
+    text-align:center;
 }

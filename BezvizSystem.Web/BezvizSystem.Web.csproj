@@ -286,6 +286,10 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Content\pdf\Постановление Совета Министров Республики Беларусь от 28.12.2017 №1017.PDF" />
+    <Content Include="Content\pdf\Положение о порядке посещения гражданами туристско-рекреационной зоны Брест.PDF" />
+    <Content Include="Content\pdf\Приложения к постановлению Совета Министров Республики Беларусь от 28.12.2017 №1017.PDF" />
+    <Content Include="Content\pdf\Указ Президента Республики Беларусь от 26.12.2017 №426.pdf" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Scripts\bootstrap.min.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />
@@ -318,7 +322,9 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

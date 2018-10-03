@@ -51,9 +51,9 @@
     </td>
 }
 
-<div>
-    @Html.ActionLink("Назад", "Index")
-</div>
+    <td>
+        @Html.ActionLink("Назад", "Index", null, new { @class = "simply_form_red", style = "padding:0;display: block;font-family:Arial;" })
+    </td>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
