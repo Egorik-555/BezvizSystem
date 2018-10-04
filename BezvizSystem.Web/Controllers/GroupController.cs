@@ -47,7 +47,7 @@ namespace BezvizSystem.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(CreateGroupModel model, InfoVisitorModel infoes)
+        public async Task<ActionResult> Create(CreateGroupModel model)
         {
             if (ModelState.IsValid)
             {
