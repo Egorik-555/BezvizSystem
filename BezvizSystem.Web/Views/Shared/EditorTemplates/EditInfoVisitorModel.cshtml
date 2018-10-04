@@ -22,6 +22,15 @@
 </tr>
 <tr>
     <td colspan="2">
+<<<<<<< HEAD
+=======
+        @Html.LabelFor(model => model.BithDate, htmlAttributes: new { @class = "control-label" })
+        @Html.EditorFor(model => model.BithDate, new { htmlAttributes = new { @class = "form-control bg_in" } })
+    </td>
+</tr>
+<tr>
+    <td class="left">
+>>>>>>> master
         @Html.LabelFor(model => model.Nationality, htmlAttributes: new { @class = "control-label" })
         @Html.DropDownListFor(model => model.Nationality, ViewBag.Nationalities as SelectList, new { @class = "form-control sex" })
     </td>
@@ -30,10 +39,13 @@
     <td class="left">
         @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label left_text" })
         @Html.DropDownListFor(model => model.Gender, ViewBag.Genders as SelectList, new { @class = "form-control sex" })
+<<<<<<< HEAD
     </td>
     <td class="left" align="right">
         @Html.LabelFor(model => model.BithDate, htmlAttributes: new { @class = "control-label" })
         @Html.EditorFor(model => model.BithDate, new { htmlAttributes = new { @class = "form-control bg_in" } })        
+=======
+>>>>>>> master
     </td>
 </tr>
 

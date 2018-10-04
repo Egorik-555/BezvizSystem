@@ -248,10 +248,13 @@
     <Content Include="Content\css\style.css" />
     <Content Include="Content\css\validate.css" />
     <Content Include="Content\img\bvs.png" />
+    <Content Include="Content\img\checkmark.png" />
+    <Content Include="Content\img\cross.png" />
     <Content Include="Content\img\fon.png" />
     <Content Include="Content\img\graf1.png" />
     <Content Include="Content\img\head1.png" />
     <Content Include="Content\img\head2.png" />
+    <Content Include="Content\img\icons8-тест-частично-пройден-50.png" />
     <Content Include="Content\img\logo_bezviz.png" />
     <Content Include="Content\img\mashina.png" />
     <Content Include="Content\img\sho.png" />
@@ -286,6 +289,10 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Content\pdf\Постановление Совета Министров Республики Беларусь от 28.12.2017 №1017.PDF" />
+    <Content Include="Content\pdf\Положение о порядке посещения гражданами туристско-рекреационной зоны Брест.PDF" />
+    <Content Include="Content\pdf\Приложения к постановлению Совета Министров Республики Беларусь от 28.12.2017 №1017.PDF" />
+    <Content Include="Content\pdf\Указ Президента Республики Беларусь от 26.12.2017 №426.pdf" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Scripts\bootstrap.min.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />
@@ -318,7 +325,9 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

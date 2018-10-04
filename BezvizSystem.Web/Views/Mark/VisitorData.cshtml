@@ -11,24 +11,24 @@
             @{
                 int i = 0;
             }
-            <th>
+            <td class="coly1">
                 №
-            </th>
-            <th>
+            </td>
+            <td class="coly2">
                 @Html.DisplayNameFor(model => model.Surname)
-            </th>
-            <th>
+            </td>
+            <td class="coly2">
                 @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
+            </td>
+            <td class="coly2">
                 @Html.DisplayNameFor(model => model.Nationality)
-            </th>
-            <th>
+            </td>
+            <td class="coly2">
                 @Html.DisplayNameFor(model => model.SerialAndNumber)
-            </th>
-            <th>
+            </td>
+            <td class="coly2">
                 @Html.DisplayNameFor(model => model.Arrived)
-            </th>
+            </td>
         </tr>
 
         @foreach (var item in Model)
@@ -55,7 +55,8 @@
             </tr>
         }
 
-        @Html.ActionLink("Назад","Index")
+        @Html.ActionLink("Назад", "Index", null, new { @class = "simply_form_red", style = "padding:0;display: block;font-family:Arial;" })
+
     </table>
 
 </td>

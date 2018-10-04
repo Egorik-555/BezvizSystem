@@ -25,12 +25,14 @@
                 <input type="button" value="Регистрация туроператора" onclick="location.href='@Url.Action("Register", "Account")'" class="pad_cent" />
             </td>
         </tr>
-        @RenderBody()
 
-        <table class="footer" style="position:absolute; bottom:0">
+        @RenderBody()
+         </table>
+        <table class="footer" style="position:fixed ; bottom:0">
             <tr>
-                <th>Управление спорта и туризма Брестского облисполкома. Дизайн и разработка BrainIT</th>
+                <th>Управление спорта и туризма Брестского облисполкома. Дизайн и разработка <a href="https://brain-it.by/ru/" target="_blank" style="color: #fff">BrainIT</a></th>
             </tr>
+
         </table>
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")

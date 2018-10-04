@@ -33,7 +33,7 @@
             @(++i)
         </td>
         <td>
-            @(item.DateArrival.HasValue ? item.DateArrival.Value.ToShortDateString() : "")
+            @(item.DateArrival.HasValue ? item.DateArrival.Value.ToString("dd.MM.yyyy") : "")
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.DaysOfStay)
