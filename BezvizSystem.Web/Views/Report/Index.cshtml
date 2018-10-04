@@ -15,12 +15,11 @@
                     <td>
                         <input type="button" class="pad_cent_red" id="dates" name="dates" value="Выбор диапазона дат" />
                     </td>
-                    <td>
-                        <td id="panelDates" style="display: none">
-                            <input type="date" name="dateFrom" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                            <input type="date" name="dateTo" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                            <input type="submit" @*onclick="drawChart();"*@ value="Отобрать" />
-                        </td>
+
+                    <td id="panelDates" style="display: none">
+                        <input type="date" name="dateFrom" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        <input type="date" name="dateTo" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        <input type="submit" value="Отобрать" />
                     </td>
                 </tr>
             </thead>
@@ -28,7 +27,7 @@
             <tbody id="data">
                 @Html.Partial("DataReport", Model)
             </tbody>
-     
+
         </table>
     }
 </td>
@@ -62,9 +61,10 @@
             var data1 = new google.visualization.DataTable('@Model.StringDateByArrivalCount');
 
             var options1 = {
+                    title: 'Количество зарегистрированных туристов на дату прибытия',
                     colors: ['#ffba00'],
                     legend: {position: 'none'},
-                    backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2},
+                    backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2 },
                     'height': 200
             };
 
@@ -77,7 +77,7 @@
             var options2 = {
                     colors: ['#ffba00'],
                     legend: {position: 'none'},
-                    backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2},
+                    backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2 },
                     'height': 200
             };
 
@@ -90,7 +90,7 @@
             var options3 = {
                     colors: ['#ffba00'],
                     legend: {position: 'none'},
-                    backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2},
+                    backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2 },
                     'height': 200
             };
 

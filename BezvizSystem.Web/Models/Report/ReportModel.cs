@@ -19,9 +19,6 @@ namespace BezvizSystem.Web.Models.Report
         public int? AllGroup { get; set; }
 
         public IEnumerable<NatAndAge> AllByNatAndAge { get; set; }
-        //public IEnumerable<CountByDate> AllByDateArrivalCount { get; set; }
-       // public IEnumerable<CountByCheckPoint> AllByCheckPointCount { get; set; }
-        //public IEnumerable<CountByDays> AllByDaysCount { get; set; }
         public IEnumerable<CountByOperator> AllByOperatorCount { get; set; }
 
         public string StringDateByArrivalCount { get; set; }

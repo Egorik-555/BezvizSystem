@@ -41,8 +41,10 @@
 </tr>
 
 <tr>
-    <td>
-        TABLE
+    <td colspan="2" class="two_column2" valign="top">
+        <table class="in_table3">
+            @Html.Partial("DataAllByNatAndAge", Model.AllByNatAndAge)
+        </table>
     </td>
 </tr>
 
@@ -70,4 +72,18 @@
     </td>
 </tr>
 <tr>
-    <td colspan="2" id="chart3"></td></tr>
+    <td colspan="2" id="chart3"></td>
+</tr>
+
+<tr>
+    <td colspan="2">
+        <h3 class="red"><b>Количество туристов, зарегистрированных туроператорами</b></h3>
+    </td>
+</tr>
+<tr>
+    <td colspan="2" class="two_column2" valign="top">
+        <table class="in_table3">
+            @Html.Partial("DataCountByOperator", Model.AllByOperatorCount)
+        </table>
+    </td>
+</tr>

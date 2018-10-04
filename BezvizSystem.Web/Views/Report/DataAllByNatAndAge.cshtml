@@ -1,0 +1,55 @@
+﻿@model IEnumerable<BezvizSystem.Web.Models.Report.NatAndAge>
+
+<tr>
+    <td class="orange coly2">
+        @Html.DisplayNameFor(model => model.Natiolaty)
+    </td>
+    <td class="orange coly1">
+        @Html.DisplayNameFor(model => model.ManLess18)
+    </td>
+    <td class="orange coly1">
+        @Html.DisplayNameFor(model => model.ManMore18)
+    </td>
+    <td class="orange coly1">
+        @Html.DisplayNameFor(model => model.WomanLess18)
+    </td>
+    <td class="orange coly1">
+        @Html.DisplayNameFor(model => model.WomanMore18)
+    </td>
+    <td class="orange coly1">
+        @Html.DisplayNameFor(model => model.All)
+    </td>
+</tr>
+
+@foreach (var item in Model)
+{
+    <tr @*class="visitor_str"*@>
+        <td>
+            @Html.DisplayFor(modelItem => item.Natiolaty)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ManLess18)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ManMore18)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.WomanLess18)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.WomanMore18)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.All)
+        </td>
+    </tr>
+}
+
+<tr>
+    <td>Итого:</td>
+    <td>@Model.Sum(m => m.ManLess18)</td>
+    <td>@Model.Sum(m => m.ManMore18)</td>
+    <td>@Model.Sum(m => m.WomanLess18)</td>
+    <td>@Model.Sum(m => m.WomanMore18)</td>
+    <td>@Model.Sum(m => m.All)</td>
+</tr>

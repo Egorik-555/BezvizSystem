@@ -229,6 +229,8 @@
     <Compile Include="Models\Enter\LoginModel.cs" />
     <Compile Include="Models\Enter\RegisterModel.cs" />
     <Compile Include="Models\Operator\ViewOperatorModel.cs" />
+    <Compile Include="Models\Report\CountByOperator.cs" />
+    <Compile Include="Models\Report\NatAndAge.cs" />
     <Compile Include="Models\Report\ReportModel.cs" />
     <Compile Include="Models\Visitor\EditInfoVisitorModel.cs" />
     <Compile Include="Models\Visitor\EditVisitorModel.cs" />
@@ -373,6 +375,8 @@
     <Content Include="Views\Anketa\GroupData.cshtml" />
     <Content Include="Views\Report\DataReport.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\EditInfoVisitorModel.cshtml" />
+    <Content Include="Views\Report\DataAllByNatAndAge.cshtml" />
+    <Content Include="Views\Report\DataCountByOperator.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

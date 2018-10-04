@@ -34,6 +34,8 @@ namespace BezvizSystem.Web.Mapper
             CreateMap<EditOperatorModel, UserDTO>();
             CreateMap<DeleteOperatorModel, UserDTO>();
 
+            CreateMap<BLL.DTO.Report.NatAndAge, Web.Models.Report.NatAndAge>();
+            CreateMap<BLL.DTO.Report.CountByOperator, Web.Models.Report.CountByOperator>();
             CreateMap<ReportDTO, ReportModel>();
             CreateMap<ReportModel, ReportDTO>();
 
