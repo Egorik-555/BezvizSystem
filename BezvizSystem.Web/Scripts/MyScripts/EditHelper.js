@@ -1,11 +1,15 @@
 
 var inputTable = document.getElementById('inputTable');
-var tbody = inputTable.getElementsByTagName('tbody')[0];
+if (inputTable)
+    var tbody = inputTable.getElementsByTagName('tbody')[0];
+
 var addButton = document.getElementById("addVisitorBut");
 var removeButton = document.getElementById("deleteVisitorBut");
 
-addButton.onclick = clickAddHandler;
-removeButton.onclick = clickRemoveHandler;
+if (addButton)
+    addButton.onclick = clickAddHandler;
+if(removeButton)
+    removeButton.onclick = clickRemoveHandler;
 
 function clickAddHandler() {
     f('lastTr');
@@ -30,14 +34,14 @@ function removeFunction(fromWhere) {
 
 function f(whereInsert) {
     var list = document.getElementsByName(whereInsert);
-
+    if (list.length == 0) return;
     // last element
     var lastTr = list[list.length - 1];
     // last number of visitors
     var count = lastNumber(lastTr) + 1;
 
     //create fragment of TR
-    let fragmentSurname = createFragmentOfInput(count, 'Surname', 'Фамилия', 'кажите фамилию туриста',true);
+    let fragmentSurname = createFragmentOfInput(count, 'Surname', 'Фамилия', 'Укажите фамилию туриста',true);
     let fragmentName = createFragmentOfInput(count, 'Name', 'Имя','Укажите имя туриста');
     let fragmentPassport = createFragmentOfInput(count, 'SerialAndNumber', 'Серия и номер паспорта','Укажите серию и номер паспорта туриста');
     let fragmentNationality = createFragmentOfInput(count, 'Nationality', 'Гражданство','', false, true);
@@ -69,7 +73,10 @@ function createFragmentOfInput(id, field, caption, msg, separator, select){
 
     let label = createLabel(id, field,'control-label', caption );
     let input;
-    if (select) input = createByClone(id, field);
+    if (select) {
+        input = createByClone(id, field);
+        input.value = '';
+    }
     else input = createInput(id, field, 'text-box single-line', 'true', msg);
 
     let td = document.createElement('td');
@@ -77,6 +84,12 @@ function createFragmentOfInput(id, field, caption, msg, separator, select){
 
     if (separator) td.appendChild(document.createElement('hr'));
 
+    if (field == 'Surname'){
+        let idInput = createInput(id, 'Id', '', 'true', 'Требуется поле Id.');
+        idInput.setAttribute('type', 'hidden');
+        idInput.value = '0';
+        td.appendChild(idInput);
+    }
     td.appendChild(label);
     td.appendChild(input);
 
@@ -198,6 +211,27 @@ function dateToString() {
     return formatterDate.format(date) + ' ' + formatterTime.format(date);
 }
 
+<<<<<<< HEAD
+=======
+//количество дней пребывания
+var dateArrival = document.getElementById('DateArrival');
+var dateDeparture = document.getElementById('DateDeparture');
+var daysOfStay = document.getElementById('DaysOfStay');
+
+dateArrival.onblur = changeHandler;// addEventListener("change", changeHandler);
+dateDeparture.onblur = changeHandler;// addEventListener("change", changeHandler);
+
+function changeHandler() {
+
+    var date1 = new Date(dateArrival.value);
+    var date2 = new Date(dateDeparture.value);
+    var divDate = date2 - date1;
+    if(isNaN(divDate)) return;
+    var daysLag = Math.ceil(Math.abs(divDate) / (1000 * 3600 * 24)) + 1;
+    daysOfStay.value = daysLag;
+}
+
+>>>>>>> 523e0592e423a946cbe0ba4b0e7fdfad22d79a1a
 
 
 
