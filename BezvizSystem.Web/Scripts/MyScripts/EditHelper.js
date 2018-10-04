@@ -50,8 +50,15 @@ function f(whereInsert) {
     fragment.appendChild(fragmentNationality);
     fragment.appendChild(createFragment(count, 'Gender', 'BithDate', 'Пол', 'Дата рождения', createByClone));
 
-    let hiddenInputUser = createByClone(count, 'UserInSystem');
+    let hiddenInputUser = createByClone(count, 'UserEdit');
+    if (hiddenInputUser){
+        hiddenInputUser.setAttribute('id', makeId(count, 'UserInSystem'));
+        hiddenInputUser.setAttribute('name', makeName(count, 'UserInSystem'));
+    }
+    else hiddenInputUser = createByClone(count, 'UserInSystem');
+
     let hiddenInputDate = createByClone(count, 'DateInSystem');
+    hiddenInputDate.value = dateToString();
     fragment.appendChild(hiddenInputUser);
     fragment.appendChild(hiddenInputDate);
 
@@ -134,6 +141,8 @@ function createByClone(id, field){
     let prevId = makeId(id - 1, field);
     let prevSelect = document.getElementById(prevId);
 
+    if(!prevSelect) return null;
+
     let newSelect = prevSelect.cloneNode(true);
     let newID = makeId(id, field);
     newSelect.setAttribute('id', newID);
@@ -171,6 +180,22 @@ function removeTR(name){
     let list = document.getElementsByName(name);
     let lastTr = list[list.length - 1];
     lastTr.parentElement.removeChild(lastTr);
+}
+
+function dateToString() {
+    let date = new Date();
+    let formatterDate = new Intl.DateTimeFormat('ru', {
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric'
+    });
+    let formatterTime = new Intl.DateTimeFormat('ru', {
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+    });
+
+    return formatterDate.format(date) + ' ' + formatterTime.format(date);
 }
 
 
