@@ -248,6 +248,8 @@
     <Content Include="Content\css\style.css" />
     <Content Include="Content\css\validate.css" />
     <Content Include="Content\img\bvs.png" />
+    <Content Include="Content\img\checkmark.png" />
+    <Content Include="Content\img\cross.png" />
     <Content Include="Content\img\fon.png" />
     <Content Include="Content\img\graf1.png" />
     <Content Include="Content\img\head1.png" />
