@@ -24,12 +24,16 @@ function removeFunction(fromWhere) {
     let lastTr = list[list.length - 1];
     let count = lastNumber(lastTr);
     if (count == 0) return;
-    let result1 = removeElement(count, 'UserInSystem');
-    let result2 = removeElement(count, 'DateInSystem');
-    if (!result1 || !result2) return;
+    removeElement(count, 'UserInSystem');
+    removeElement(count, 'DateInSystem');
+    removeElement(count, 'UserEdit');
+    removeElement(count, 'DateEdit');
 
-    for(var i = 1; i <= 5; i++)
-        removeTR(fromWhere);
+    removeTR(count, 'Surname');
+    removeTR(count, 'Name');
+    removeTR(count, 'SerialAndNumber');
+    removeTR(count, 'Nationality');
+    removeTR(count, 'Gender');
 }
 
 function f(whereInsert) {
@@ -189,10 +193,12 @@ function removeElement(id, field){
     return true;
 }
 
-function removeTR(name){
-    let list = document.getElementsByName(name);
-    let lastTr = list[list.length - 1];
-    lastTr.parentElement.removeChild(lastTr);
+function removeTR(id, field){
+    let idName = makeId(id, field);
+    let element = document.getElementById(idName);
+    if (!element) return;
+    let tr = element.parentElement.parentElement;
+    tr.parentElement.removeChild(tr);
 }
 
 function dateToString() {
@@ -211,8 +217,6 @@ function dateToString() {
     return formatterDate.format(date) + ' ' + formatterTime.format(date);
 }
 
-<<<<<<< HEAD
-=======
 //количество дней пребывания
 var dateArrival = document.getElementById('DateArrival');
 var dateDeparture = document.getElementById('DateDeparture');
@@ -231,7 +235,6 @@ function changeHandler() {
     daysOfStay.value = daysLag;
 }
 
->>>>>>> 523e0592e423a946cbe0ba4b0e7fdfad22d79a1a
 
 
 

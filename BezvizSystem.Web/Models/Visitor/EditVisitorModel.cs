@@ -58,15 +58,15 @@ namespace BezvizSystem.Web.Models.Visitor
         public string Email { get; set; }
 
         public bool ExtraSend { get; set; }
-        [Required]
+        //[Required]
         public string TranscriptUser { get; set; }
-        [Required]
+        //[Required]
         public DateTime? DateInSystem { get; set; }
-        [Required]
+        //[Required]
         public string UserInSystem { get; set; }
-        [Required]
+        //[Required]
         public DateTime? DateEdit { get; set; }
-        [Required]
+        //[Required]
         public string UserEdit { get; set; }
     }
 }
