@@ -23,11 +23,11 @@ namespace BezvizSystem.Web.Models.Group
         public ICollection<EditInfoVisitorModel> Infoes { get; set; }
 
         [Display(Name = "Дата прибытия")]
-        [Required(ErrorMessage = "Дата прибытия не введена")]
+        [Required(ErrorMessage = "Укажите дату прибытия")]
         [DataType(DataType.Date)]
         public DateTime? DateArrival { get; set; }
 
-        [Required(ErrorMessage = "Дата убытия не введена")]
+        [Required(ErrorMessage = "Укажите дату убытия")]
         [Display(Name = "Дата убытия")]
         [DataType(DataType.Date)]
         public DateTime? DateDeparture { get; set; }
@@ -35,7 +35,7 @@ namespace BezvizSystem.Web.Models.Group
         [Display(Name = "Количество дней пребывания")]
         public int? DaysOfStay { get; set; }
 
-        [Required(ErrorMessage = "Пункт пропуска для пребывания не введен")]
+        [Required(ErrorMessage = "Укажите пункт пропуска для прибытия")]
         [Display(Name = "Пункт пропуска для пребывания")]
         public string CheckPoint { get; set; }
 
@@ -62,7 +62,7 @@ namespace BezvizSystem.Web.Models.Group
         // [Required(ErrorMessage = "Дата заключения договора не была введена")]
         [Display(Name = "Дата заключения договора")]
         [DataType(DataType.Date)]
-        [PastDate(ErrorMessage = "Укажите дату заключения договора, относящуюся к прошлому")]
+        //[PastDate(ErrorMessage = "Укажите дату заключения договора, относящуюся к прошлому")]
         public DateTime? DateOfContract { get; set; }
 
         [Display(Name = "Другая информация")]

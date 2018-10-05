@@ -40,14 +40,19 @@ namespace BezvizSystem.BLL.Services
             }
         }
 
-        private void DateAndUserUpdate(GroupVisitor model, /*string userCreate,*/ string userEdit)
+        private void DateAndUserUpdate(GroupVisitorDTO model, GroupVisitor oldModel, string userEdit)
         {
-         //   model.
+            model.DateInSystem = oldModel.DateInSystem;
+            model.UserInSystem = oldModel.UserInSystem;
+            model.TranscriptUser = oldModel.TranscriptUser;
+            model.UserEdit = userEdit;
             model.DateEdit = DateTime.Now;
             foreach (var visitor in model.Visitors)
             {
                 if (visitor != null)
                 {
+                    visitor.DateInSystem = oldModel.DateInSystem;
+                    visitor.UserInSystem = oldModel.UserInSystem;
                     visitor.DateEdit = DateTime.Now;
                     visitor.UserEdit = userEdit;
                 }
@@ -109,11 +114,11 @@ namespace BezvizSystem.BLL.Services
                 ICollection<Visitor> oldVisitors = new List<Visitor>(model.Visitors);
 
                 if (model != null)
-                {                  
+                {
+                    DateAndUserUpdate(group, model, group.UserEdit);
                     var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new ProfileGroupDtoToDao(_database, model))).CreateMapper();
                     var modelNew = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
-
-                    DateAndUserUpdate(modelNew, group.UserEdit);
+               
                     _database.GroupManager.Update(modelNew);
                     await _xmlDispatcher.Edit(oldVisitors, modelNew.Visitors);
 

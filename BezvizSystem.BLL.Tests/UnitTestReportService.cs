@@ -52,33 +52,27 @@ namespace BezvizSystem.BLL.Tests
         public void Get_By_Date_Count_Test()
         {
             var r = report.GetReport(DateTime.Parse("01.06.2018"), DateTime.Parse("30.07.2018"), DateTime.Parse("21.07.2018"));
-            var list = r.AllByDateArrivalCount;
+            var list = r.StringDateByArrivalCount;
 
-            Assert.AreEqual(1, list.Count());
-            Assert.AreEqual(2, list.SingleOrDefault(l => l.DateArrival.Value == new DateTime(2018, 6, 1)).Count);
-            Assert.IsNull(list.SingleOrDefault(l => l.DateArrival.Value == new DateTime(2018, 7, 2)));
+            Assert.IsNotNull(list);
         }
 
         [TestMethod]
         public void Get_By_CheckPoint_Count_Test()
         {
             var r = report.GetReport(DateTime.Parse("01.06.2018"), DateTime.Parse("30.07.2018"), DateTime.Parse("21.07.2018"));
-            var list = r.AllByCheckPointCount;
+            var list = r.StringCheckPointCount;
 
-            Assert.AreEqual(1, list.Count());
-            Assert.AreEqual(2, list.SingleOrDefault(l => l.CheckPoint == "check1").Count);
-            Assert.IsNull(list.SingleOrDefault(l => l.CheckPoint == "check2"));
+            Assert.IsNotNull(list);
         }
 
         [TestMethod]
         public void Get_By_Days_Count_Test()
         {
             var r = report.GetReport(DateTime.Parse("01.06.2018"), DateTime.Parse("30.07.2018"), DateTime.Parse("21.07.2018"));
-            var list = r.AllByDaysCount;
+            var list = r.StringDaysByCount;
 
-            Assert.AreEqual(1, list.Count());
-            Assert.AreEqual(2, list.SingleOrDefault(l => l.Days == 4).Count);
-            Assert.IsNull(list.SingleOrDefault(l => l.Days == 3));
+            Assert.IsNotNull(list);
         }
 
         [TestMethod]

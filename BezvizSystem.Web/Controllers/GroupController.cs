@@ -51,6 +51,8 @@ namespace BezvizSystem.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.UserInSystem = User.Identity.Name;
+                model.Group = true;
                 var group = mapper.Map<CreateGroupModel, GroupVisitorDTO>(model);
                 
                 var result = await _groupService.Create(group);
