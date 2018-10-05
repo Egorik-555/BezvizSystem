@@ -5,21 +5,13 @@
     ViewBag.SubTitle = "Регистрация группы туристов";
 }
 
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-<<<<<<< HEAD
-<td class="two_column">
-    @using (Html.BeginForm())
-    {
-
-        @Html.AntiForgeryToken()
-
-        <table id="inputTable" class="second" cellpadding="0" cellspacing="15">
-
-=======
     <td class="two_column">
         <table id="inputTable" class="second" cellpadding="0" cellspacing="15">
            
->>>>>>> master
             <tr>
                 <td colspan="2">
                     @Html.ValidationSummary(false, "")
@@ -119,9 +111,8 @@
                 </td>
             </tr>
         </table>
-    }
-</td>
-
+    </td>
+}
 
 @section Scripts{
     <script src="~/Scripts/MyScripts/EditHelper.js"></script>
