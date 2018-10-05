@@ -107,6 +107,7 @@ namespace BezvizSystem.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                model.UserEdit = User.Identity.Name;
                 if (button == "Extra") model.ExtraSend = true;
                 else model.ExtraSend = false;
 

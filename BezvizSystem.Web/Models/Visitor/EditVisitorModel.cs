@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace BezvizSystem.Web.Models.Visitor
 {
@@ -58,15 +59,10 @@ namespace BezvizSystem.Web.Models.Visitor
         public string Email { get; set; }
 
         public bool ExtraSend { get; set; }
-        //[Required]
         public string TranscriptUser { get; set; }
-        //[Required]
         public DateTime? DateInSystem { get; set; }
-        //[Required]
         public string UserInSystem { get; set; }
-        //[Required]
         public DateTime? DateEdit { get; set; }
-        //[Required]
         public string UserEdit { get; set; }
     }
 }

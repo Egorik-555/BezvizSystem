@@ -57,9 +57,7 @@ namespace BezvizSystem.Web.Models.Visitor
         [Display(Name = "E-mail")]
         public string Email { get; set; }
 
-        [Required]
         public DateTime? DateInSystem { get; set; }
-        [Required]
         public string UserInSystem { get; set; }
     }
 }

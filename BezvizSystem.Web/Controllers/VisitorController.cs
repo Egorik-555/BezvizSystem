@@ -46,9 +46,11 @@ namespace BezvizSystem.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(CreateVisitorModel model)
         {
+
             if (ModelState.IsValid)
             {
-                var visitor = mapper.Map<CreateVisitorModel, GroupVisitorDTO>(model);
+                model.UserInSystem = User.Identity.Name;
+                var visitor = mapper.Map<CreateVisitorModel, GroupVisitorDTO>(model);          
                 var result = await _groupService.Create(visitor);
 
                 if (result.Succedeed)
