@@ -5,17 +5,11 @@
     ViewBag.SubTitle = "Группа туристов";
 }
 
-@using (Html.BeginForm("EditGroup", "Anketa"))
-{
-    @Html.AntiForgeryToken()
-
-    <td class="two_column">
-<<<<<<< HEAD
-        <table class="second" cellpadding="0" cellspacing="15">
-=======
+<td class="two_column">
+    @using (Html.BeginForm("EditGroup", "Anketa"))
+    {
+        @Html.AntiForgeryToken()
         <table id="inputTable" class="second" cellpadding="0" cellspacing="15">
->>>>>>> parent of fac325d... commit
-
             <tr>
                 <td colspan="2">
                     @Html.ValidationSummary(false, "")
@@ -118,14 +112,15 @@
                     <input type="hidden" name="TranscriptUser" value="@Model.TranscriptUser" />
                     <input type="hidden" name="UserEdit" value="@User.Identity.Name" />
                     <input type="hidden" name="DateEdit" value="@DateTime.Now" />
-                    <input type="submit" class="simply_form_red sfr_auto" style="height:50px;" value="Сохранить"/>
+                    <input type="submit" class="simply_form_red sfr_auto" style="height:50px;" value="Сохранить" />
                     <button type="submit" name="button" value="Extra" class="simply_form_red sfr_auto" style="background-color:#ffba00; width:100%; border: 1px solid #ffba00;">Сохранить для экстренной передачи</button>
                     @Html.ActionLink("Удалить", "Delete", new { id = Model.Id }, new { @class = "simply_form_red sfr_auto", style = "background-color:red; width:100%; padding:0;display: block; border: 1px solid red; font-family:Arial;" })
                 </td>
             </tr>
         </table>
-    </td>
-}
+    }
+</td>
+
 
 @section Scripts{
     <script src="~/Scripts/MyScripts/EditHelper.js"></script>

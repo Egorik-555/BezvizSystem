@@ -39,13 +39,9 @@ namespace BezvizSystem.Web.Models.Visitor
 
         public bool Arrived { get; set; }
 
-        [Required]
         public DateTime? DateInSystem { get; set; }
-        [Required]
         public string UserInSystem { get; set; }
-        [Required]
         public DateTime? DateEdit { get; set; }
-        [Required]
         public string UserEdit { get; set; }
 
     }
