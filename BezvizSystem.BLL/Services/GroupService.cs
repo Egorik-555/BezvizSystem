@@ -27,14 +27,34 @@ namespace BezvizSystem.BLL.Services
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database))).CreateMapper();
         }
 
-        private void DateAndUserForVisitors(ICollection<Visitor> visitors, string user, DateTime? date)
+        private void DateAndUserCreate(GroupVisitor model, string user)
         {
-            foreach (var visitor in visitors)
+            model.DateInSystem = DateTime.Now;
+            foreach (var visitor in model.Visitors)
             {
                 if (visitor != null)
                 {
-                    visitor.DateInSystem = date;
+                    visitor.DateInSystem = DateTime.Now;
                     visitor.UserInSystem = user;
+                }
+            }
+        }
+
+        private void DateAndUserUpdate(GroupVisitorDTO model, GroupVisitor oldModel, string userEdit)
+        {
+            model.DateInSystem = oldModel.DateInSystem;
+            model.UserInSystem = oldModel.UserInSystem;
+            model.TranscriptUser = oldModel.TranscriptUser;
+            model.UserEdit = userEdit;
+            model.DateEdit = DateTime.Now;
+            foreach (var visitor in model.Visitors)
+            {
+                if (visitor != null)
+                {
+                    visitor.DateInSystem = oldModel.DateInSystem;
+                    visitor.UserInSystem = oldModel.UserInSystem;
+                    visitor.DateEdit = DateTime.Now;
+                    visitor.UserEdit = userEdit;
                 }
             }
         }
@@ -49,8 +69,8 @@ namespace BezvizSystem.BLL.Services
                 if (user != null)
                 {
                     model.TranscriptUser = user.OperatorProfile.Transcript;
-                    //data for visitors
-                    DateAndUserForVisitors(model.Visitors, model.UserInSystem, model.DateInSystem);                 
+                    //system data
+                    DateAndUserCreate(model, model.UserInSystem);                 
                     //create visitor
                     _database.GroupManager.Create(model);
                     //xml dispatch
@@ -94,10 +114,11 @@ namespace BezvizSystem.BLL.Services
                 ICollection<Visitor> oldVisitors = new List<Visitor>(model.Visitors);
 
                 if (model != null)
-                {                  
+                {
+                    DateAndUserUpdate(group, model, group.UserEdit);
                     var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new ProfileGroupDtoToDao(_database, model))).CreateMapper();
                     var modelNew = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);
-
+               
                     _database.GroupManager.Update(modelNew);
                     await _xmlDispatcher.Edit(oldVisitors, modelNew.Visitors);
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace BezvizSystem.Web.Models.Visitor
 {
@@ -15,12 +16,12 @@ namespace BezvizSystem.Web.Models.Visitor
 
         public EditInfoVisitorModel Info { get; set; }
 
-        [Required(ErrorMessage = "Дата прибытия не введена")]
+        [Required(ErrorMessage = "Укажите дату прибытия")]
         [Display(Name = "Дата прибытия")]
         [DataType(DataType.Date)]
         public DateTime? DateArrival { get; set; }
 
-        [Required(ErrorMessage = "Дата убытия не введена")]
+        [Required(ErrorMessage = "Укажите дату убытия")]
         [Display(Name = "Дата убытия")]
         [DataType(DataType.Date)]
         public DateTime? DateDeparture { get; set; }
@@ -28,7 +29,7 @@ namespace BezvizSystem.Web.Models.Visitor
         [Display(Name = "Количество дней пребывания")]
         public int? DaysOfStay { get; set; }
 
-        [Required(ErrorMessage = "Пункт пропуска для пребывания не введен")]
+        [Required(ErrorMessage = "Укажите пункт пропуска для прибытия")]
         [Display(Name = "Пункт пропуска для пребывания")]
         public string CheckPoint { get; set; }
 
@@ -53,20 +54,15 @@ namespace BezvizSystem.Web.Models.Visitor
         public string TelNumber { get; set; }
 
         // [Required(ErrorMessage = "E-mail не был введен")]
-        [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "Некорректный адрес")]
+        [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "Укажите корректный адрес")]
         [Display(Name = "E-mail")]
         public string Email { get; set; }
 
         public bool ExtraSend { get; set; }
-        [Required]
         public string TranscriptUser { get; set; }
-        [Required]
         public DateTime? DateInSystem { get; set; }
-        [Required]
         public string UserInSystem { get; set; }
-        [Required]
         public DateTime? DateEdit { get; set; }
-        [Required]
         public string UserEdit { get; set; }
     }
 }

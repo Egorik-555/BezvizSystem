@@ -23,7 +23,8 @@ namespace BezvizSystem.Web.Models.Group
         public ICollection<InfoVisitorModel> Infoes { get; set; }
       
         [Display(Name = "Дата прибытия")]
-        [FutureDate(ErrorMessage = "Укажите дату прибытия, относящуюся к будущему")]
+        [Required(ErrorMessage = "Укажите дату прибытия")]
+        //[FutureDate(ErrorMessage = "Укажите дату прибытия, относящуюся к будущему")]
         [DataType(DataType.Date)]
         public DateTime? DateArrival { get; set; }
 
@@ -61,7 +62,7 @@ namespace BezvizSystem.Web.Models.Group
 
        // [Required(ErrorMessage = "Дата заключения договора не была введена")]
         [Display(Name = "Дата заключения договора")]
-        [PastDate(ErrorMessage = "Укажите дату заключения договора, относящуюся к прошлому")]
+        //[PastDate(ErrorMessage = "Укажите дату заключения договора, относящуюся к прошлому")]
         [DataType(DataType.Date)]
         public DateTime? DateOfContract { get; set; }
 

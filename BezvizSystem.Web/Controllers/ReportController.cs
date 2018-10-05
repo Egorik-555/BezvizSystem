@@ -37,7 +37,6 @@ namespace BezvizSystem.Web.Controllers
         }
 
 
-
         private ReportDTO GetModelByValidDates(DateTime? dateFrom, DateTime? dateTo)
         {
             if (dateFrom.HasValue && dateTo.HasValue)

@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Группа туристов";
+    ViewBag.SubTitle = "Группа туристов";
 }
 
 @using (Html.BeginForm("EditGroup", "Anketa"))
@@ -29,7 +30,7 @@
                 <td class="left">
                     @Html.HiddenFor(model => model.Id)
                     @Html.LabelFor(model => model.DateArrival, htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.EditorFor(model => model.DateArrival, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control" } })
+                    @Html.EditorFor(model => model.DateArrival, new { htmlAttributes = new { @class = "form-control" } })
                 </td>
                 <td class="left" align="right">
                     @Html.LabelFor(model => model.DateDeparture, htmlAttributes: new { @class = "control-label col-md-2" })
