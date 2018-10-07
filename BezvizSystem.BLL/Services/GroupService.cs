@@ -47,6 +47,7 @@ namespace BezvizSystem.BLL.Services
             model.TranscriptUser = oldModel.TranscriptUser;
             model.UserEdit = userEdit;
             model.DateEdit = DateTime.Now;
+            model.Group = oldModel.Group;
             foreach (var visitor in model.Visitors)
             {
                 if (visitor != null)

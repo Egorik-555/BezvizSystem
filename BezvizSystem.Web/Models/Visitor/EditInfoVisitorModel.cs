@@ -11,29 +11,28 @@ namespace BezvizSystem.Web.Models.Visitor
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Укажите фамилию туриста")]
         [Display(Name = "Фамилия")]
         public string Surname { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Укажите имя туриста")]
         [Display(Name = "Имя")]
         public string Name { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Укажите серию и номер паспорта туриста")]
         [Display(Name = "Серия и номер паспорта")]
         public string SerialAndNumber { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Укажите пол туриста")]
         [Display(Name = "Пол")]
         public string Gender { get; set; }
 
-        [Required]
+        [PastDate(ErrorMessage = "Укажите дату рождения, относящуюся к прошлому")]
         [Display(Name = "Дата рождения")]
-        [DataType(DataType.Date)]
-        [PastDate(ErrorMessage = "Дата рождения не может быть будущей")]
+        [DataType(DataType.Date)]     
         public DateTime? BithDate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Укажите гражданство туриста")]
         [Display(Name = "Гражданство")]
         public string Nationality { get; set; }
 

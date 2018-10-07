@@ -10,6 +10,7 @@
     {
         @Html.AntiForgeryToken()
         <table id="inputTable" class="second" cellpadding="0" cellspacing="15">
+
             <tr>
                 <td colspan="2">
                     @Html.ValidationSummary(false, "")
@@ -106,12 +107,12 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <input type="hidden" name="Group" value="true" />
+                    @*<input type="hidden" name="Group" value="true" />
                     <input type="hidden" name="DateInSystem" value="@Model.DateInSystem" />
                     <input type="hidden" name="UserInSystem" value="@Model.UserInSystem" />
                     <input type="hidden" name="TranscriptUser" value="@Model.TranscriptUser" />
                     <input type="hidden" name="UserEdit" value="@User.Identity.Name" />
-                    <input type="hidden" name="DateEdit" value="@DateTime.Now" />
+                    <input type="hidden" name="DateEdit" value="@DateTime.Now" />*@
                     <input type="submit" class="simply_form_red sfr_auto" style="height:50px;" value="Сохранить" />
                     <button type="submit" name="button" value="Extra" class="simply_form_red sfr_auto" style="background-color:#ffba00; width:100%; border: 1px solid #ffba00;">Сохранить для экстренной передачи</button>
                     @Html.ActionLink("Удалить", "Delete", new { id = Model.Id }, new { @class = "simply_form_red sfr_auto", style = "background-color:red; width:100%; padding:0;display: block; border: 1px solid red; font-family:Arial;" })
