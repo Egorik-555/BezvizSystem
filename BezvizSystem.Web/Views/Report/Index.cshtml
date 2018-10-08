@@ -61,11 +61,19 @@
             var data1 = new google.visualization.DataTable('@Model.StringDateByArrivalCount');
 
             var options1 = {
-                    title: 'Количество зарегистрированных туристов на дату прибытия',
-                    colors: ['#ffba00'],
-                    legend: {position: 'none'},
-                    backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2 },
-                    'height': 200
+                
+                title: 'Количество зарегистрированных туристов на дату прибытия',
+                titleTextStyle: { color: '#0a9200', fontSize: 20, bold: true, fontName: 'Times New Roman'},
+                colors: ['#ffba00'],
+                legend: { position: 'none' },
+                hAxis: {          
+                    textStyle: { fontSize: '12', bold: true, fontName: 'Times New Roman' }
+                },
+                vAxis: {
+                    textStyle: { fontSize: '12', bold: true, fontName: 'Times New Roman' }
+                },
+                backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2 },
+                'height': 200
             };
 
             var chart1 = new google.visualization.ColumnChart(document.getElementById('chart1'));
@@ -75,22 +83,38 @@
             var data2 = new google.visualization.DataTable('@Model.StringCheckPointCount');
 
             var options2 = {
-                    colors: ['#ffba00'],
+                title: 'Количество туристов по пунктам пропуска',
+                titleTextStyle: { color: '#0a9200', fontSize: 20, bold: true, fontName: 'Times New Roman' },
+                colors: ['brown'],
+                hAxis: {
+                    textStyle: { fontSize: '20', bold: true, fontName: 'Times New Roman' }
+                },
+                vAxis: {
+                    textStyle: { fontSize: '12', bold: true, fontName: 'Times New Roman' }
+                },
                     legend: {position: 'none'},
-                    backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2 },
+                backgroundColor: { fill: 'none', stroke: 'brown', strokeWidth: 2 },
                     'height': 200
             };
 
             var chart2 = new google.visualization.ColumnChart(document.getElementById('chart2'));
             chart2.draw(data2, options2);
 
-            //chart2
+            //chart3
             var data3 = new google.visualization.DataTable('@Model.StringDaysByCount');
 
             var options3 = {
-                    colors: ['#ffba00'],
+                title: 'Количество туристов по числу дней пребывания',
+                titleTextStyle: { color: '#0a9200', fontSize: 20, bold: true, fontName: 'Times New Roman' },
+                colors: ['#037d3c'],
+                hAxis: {
+                    textStyle: { fontSize: '15', bold: true, fontName: 'Times New Roman' }
+                },
+                vAxis: {
+                    textStyle: { fontSize: '12', bold: true, fontName: 'Times New Roman' }
+                },
                     legend: {position: 'none'},
-                    backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2 },
+                backgroundColor: { fill: 'none', stroke: '#037d3c', strokeWidth: 2 },
                     'height': 200
             };
 

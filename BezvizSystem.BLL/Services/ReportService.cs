@@ -137,7 +137,7 @@ namespace BezvizSystem.BLL.Services
 
         private string GetByDaysCount()
         {
-            var visitors = _visitors.GroupBy(v => v.Group.DaysOfStay).Select(g => new CountByDays { Days = g.Key, Count = g.Count() });
+            var visitors = _visitors.GroupBy(v => v.Group.DaysOfStay).Select(g => new CountByDays { Days = g.Key < 5 ? (g.Key == 1 ? g.Key + " день" : g.Key + " дня") : g.Key + " дней" , Count = g.Count() });
             visitors = visitors.OrderBy(o => o.Days);
 
             var list = _mapper.Map<IEnumerable<CountByDays>, IEnumerable<ObjectForDiagram>>(visitors);

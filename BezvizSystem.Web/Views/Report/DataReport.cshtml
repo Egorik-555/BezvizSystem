@@ -42,35 +42,21 @@
 
 <tr>
     <td colspan="2" class="two_column2" valign="top">
-        <table class="in_table3">
+        <table class="in_table4">
             @Html.Partial("DataAllByNatAndAge", Model.AllByNatAndAge)
         </table>
     </td>
 </tr>
 
-<tr>
-    <td colspan="2">
-        <h3 class="red"><b>Количество зарегистрированных туристов на дату прибытия</b></h3>
-    </td>
-</tr>
+
 <tr>
     <td colspan="2" id="chart1"></td>
 </tr>
 
 <tr>
-    <td colspan="2">
-        <h3 class="red"><b>Количество туристов по пунктам пропуска</b></h3>
-    </td>
-</tr>
-<tr>
     <td colspan="2" id="chart2"></td>
 </tr>
 
-<tr>
-    <td colspan="2">
-        <h3 class="red"><b>Количество туристов числу дней пребывания</b></h3>
-    </td>
-</tr>
 <tr>
     <td colspan="2" id="chart3"></td>
 </tr>
@@ -81,7 +67,7 @@
     </td>
 </tr>
 <tr>
-    <td colspan="2" class="two_column2" valign="top">
+    <td colspan="2" class="two_column2 valign="top">
         <table class="in_table3">
             @Html.Partial("DataCountByOperator", Model.AllByOperatorCount)
         </table>
