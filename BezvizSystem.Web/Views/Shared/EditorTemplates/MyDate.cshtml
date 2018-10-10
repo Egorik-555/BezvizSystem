@@ -10,14 +10,14 @@
     {
         htmlAttributes = new RouteValueDictionary();
     }
-   // htmlAttributes.Add("type", "date");
+    htmlAttributes.Add("type", "date");
 
     String format = "{0:d}";
     if (Request.UserAgent != null){
 
         if (Request.UserAgent.Contains("Chrome") || Request.UserAgent.Contains("Firefox"))
         {
-            format = "{0:dd.MM.yyyy}";
+            format = "{0:yyyy-MM-dd}";
         }
     }
 

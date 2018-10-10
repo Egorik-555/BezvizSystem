@@ -28,8 +28,7 @@ namespace BezvizSystem.Web.Models.Visitor
         public string Gender { get; set; }
 
         [PastDate(ErrorMessage = "Укажите дату рождения, относящуюся к прошлому")]
-        [Display(Name = "Дата рождения")]
-        [DataType(DataType.Date)]     
+        [Display(Name = "Дата рождения")]  
         public DateTime? BithDate { get; set; }
 
         [Required(ErrorMessage = "Укажите гражданство туриста")]

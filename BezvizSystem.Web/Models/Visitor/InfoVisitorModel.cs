@@ -28,7 +28,6 @@ namespace BezvizSystem.Web.Models.Visitor
         public string Gender { get; set; }
     
         [Display(Name = "Дата рождения")]
-        [DataType(DataType.Date)]
         [PastDate(ErrorMessage = "Укажите дату рождения, относящуюся к прошлому")]
         public DateTime? BithDate { get; set; }
 

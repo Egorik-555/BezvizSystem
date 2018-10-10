@@ -32,11 +32,6 @@
     </td>
     <td class="left" align="right">
         @Html.LabelFor(model => model.BithDate, htmlAttributes: new { @class = "control-label" })
-        @Html.EditorFor(model => model.BithDate, new { htmlAttributes = new { @class = "form-control bg_in" } })        
+        @Html.EditorFor(model => model.BithDate, new { htmlAttributes = new { @class = "form-control bg_in datepicker" } })        
     </td>
 </tr>
-
-@*@Html.EditorFor(model => model.UserInSystem, new { htmlAttributes = new { @type = "hidden", @Value = Model.UserInSystem } })
-@Html.EditorFor(model => model.DateInSystem, new { htmlAttributes = new { @type = "hidden", @Value = Model.DateInSystem.ToString() } })
-@Html.EditorFor(model => model.UserEdit, new { htmlAttributes = new { @type = "hidden", @Value = User.Identity.Name } })
-@Html.EditorFor(model => model.DateEdit, new { htmlAttributes = new { @type = "hidden", @Value = DateTime.Now.ToString() } })*@

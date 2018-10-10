@@ -250,6 +250,12 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\style.css" />
     <Content Include="Content\css\validate.css" />
+    <Content Include="Content\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\img\bvs.png" />
     <Content Include="Content\img\checkmark.png" />
     <Content Include="Content\img\cross.png" />
@@ -264,6 +270,9 @@
     <Content Include="Content\img\table2.png" />
     <Content Include="Content\img\table3.png" />
     <Content Include="Content\img\VISA.png" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.structure.css" />
+    <Content Include="Content\jquery-ui.theme.css" />
     <Content Include="Content\myStyle.css" />
     <Content Include="Content\MyStyle\Mark.css" />
     <Content Include="favicon.ico" />
@@ -305,6 +314,7 @@
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
+    <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -314,6 +324,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\MyScripts\EditHelper.js" />
+    <Content Include="Scripts\MyScripts\pikaday.js" />
     <Content Include="Scripts\MyScripts\_EditHelper.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
@@ -377,6 +388,7 @@
     <Content Include="Views\Shared\EditorTemplates\EditInfoVisitorModel.cshtml" />
     <Content Include="Views\Report\DataAllByNatAndAge.cshtml" />
     <Content Include="Views\Report\DataCountByOperator.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MyDate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

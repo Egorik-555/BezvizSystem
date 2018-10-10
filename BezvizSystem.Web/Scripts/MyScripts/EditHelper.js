@@ -210,8 +210,8 @@ dateDeparture.onchange = changeHandler;// addEventListener("change", changeHandl
 
 function changeHandler() {
 
-    var date1 = new Date(dateArrival.value);
-    var date2 = new Date(dateDeparture.value);
+    var date1 = getDate(dateArrival.value);
+    var date2 = getDate(dateDeparture.value);
     var divDate = date2 - date1;
     if(isNaN(divDate)) {
         daysOfStay.value = '';
@@ -220,6 +220,11 @@ function changeHandler() {
     var daysLag = Math.ceil(divDate / (1000 * 3600 * 24));
     if (daysLag >= 0) daysLag += 1;
     daysOfStay.value = daysLag;
+}
+
+function getDate(date){
+    var split = date.split('.');
+    return new Date(split[2] + '-' + split[1] + '-' + split[0]);
 }
 
 

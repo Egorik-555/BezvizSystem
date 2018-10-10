@@ -24,11 +24,11 @@
                 <td class="left">
                     @Html.HiddenFor(model => model.Id)
                     @Html.LabelFor(model => model.DateArrival, htmlAttributes: new { @class = "control-label" })
-                    @Html.EditorFor(model => model.DateArrival, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.DateArrival, "Date", new { htmlAttributes = new { @class = "form-control datepicker" } })
                 </td>
                 <td class="left" align="right">
                     @Html.LabelFor(model => model.DateDeparture, htmlAttributes: new { @class = "control-label" })
-                    @Html.EditorFor(model => model.DateDeparture, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.DateDeparture, "Date", new { htmlAttributes = new { @class = "form-control datepicker" } })
                 </td>
             </tr>
             <tr>
@@ -106,5 +106,7 @@
 </td>
 
 @section Scripts{
+    @Scripts.Render("~/bundles/jquery-ui")
+    <script src="~/Scripts/MyScripts/pikaday.js"></script>
     <script src="~/Scripts/MyScripts/EditHelper.js"></script>
 }

@@ -19,13 +19,11 @@ namespace BezvizSystem.Web.Models.Visitor
         [Required(ErrorMessage = "Укажите дату прибытия")]
         [Display(Name = "Дата прибытия")]
         [LessThanOtherDate("DateDeparture", ErrorMessage = "Укажите дату прибытия меньше либо равной дате убытия")]
-        [DataType(DataType.Date)]
         public DateTime? DateArrival { get; set; }
 
         [Required(ErrorMessage = "Укажите дату убытия")]
         [Display(Name = "Дата убытия")]
         [MoreThanOtherDate("DateArrival", ErrorMessage = "Укажите дату убытия больше либо равной дате прибытия")]
-        [DataType(DataType.Date)]
         public DateTime? DateDeparture { get; set; }
 
         [Display(Name = "Количество дней пребывания")]

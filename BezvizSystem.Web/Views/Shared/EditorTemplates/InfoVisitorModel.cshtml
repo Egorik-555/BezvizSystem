@@ -33,9 +33,6 @@
     </td>
     <td class="left" align="right">
         @Html.LabelFor(model => model.BithDate, htmlAttributes: new { @class = "control-label" })
-        @Html.EditorFor(model => model.BithDate, new { @class = "form-control" })
+        @Html.EditorFor(model => model.BithDate, new { htmlAttributes = new { @class = "form-control datepicker" } })
     </td>
 </tr>
-
-@*@Html.HiddenFor(model => model.UserInSystem, new { @Value = User.Identity.Name })
-@Html.HiddenFor(model => model.DateInSystem, new { @Value = DateTime.Now.ToString()})*@
