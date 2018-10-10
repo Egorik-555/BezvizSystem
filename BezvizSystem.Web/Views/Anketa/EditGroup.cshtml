@@ -25,11 +25,11 @@
                 <td class="left">
                     @Html.HiddenFor(model => model.Id)
                     @Html.LabelFor(model => model.DateArrival, htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.EditorFor(model => model.DateArrival, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.DateArrival, "Date", new { htmlAttributes = new { @class = "form-control datepicker" } })
                 </td>
                 <td class="left" align="right">
                     @Html.LabelFor(model => model.DateDeparture, htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.EditorFor(model => model.DateDeparture, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.DateDeparture, "Date", new { htmlAttributes = new { @class = "form-control datepicker" } })
                 </td>
             </tr>
             <tr>
@@ -96,7 +96,7 @@
             <tr>
                 <td colspan="2">
                     @Html.LabelFor(model => model.DateOfContract, htmlAttributes: new { @class = "control-label" })
-                    @Html.EditorFor(model => model.DateOfContract, new { htmlAttributes = new { @class = "form-control bg_in" } })
+                    @Html.EditorFor(model => model.DateOfContract, "Date", new { htmlAttributes = new { @class = "form-control bg_in datepicker" } })
                 </td>
             </tr>
             <tr>
@@ -107,12 +107,6 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    @*<input type="hidden" name="Group" value="true" />
-                    <input type="hidden" name="DateInSystem" value="@Model.DateInSystem" />
-                    <input type="hidden" name="UserInSystem" value="@Model.UserInSystem" />
-                    <input type="hidden" name="TranscriptUser" value="@Model.TranscriptUser" />
-                    <input type="hidden" name="UserEdit" value="@User.Identity.Name" />
-                    <input type="hidden" name="DateEdit" value="@DateTime.Now" />*@
                     <input type="submit" class="simply_form_red sfr_auto" style="height:50px;" value="Сохранить" />
                     <button type="submit" name="button" value="Extra" class="simply_form_red sfr_auto" style="background-color:#ffba00; width:100%; border: 1px solid #ffba00;">Сохранить для экстренной передачи</button>
                     @Html.ActionLink("Удалить", "Delete", new { id = Model.Id }, new { @class = "simply_form_red sfr_auto", style = "background-color:red; width:100%; padding:0;display: block; border: 1px solid red; font-family:Arial;" })
@@ -124,5 +118,7 @@
 
 
 @section Scripts{
+    @Scripts.Render("~/bundles/jquery-ui")
+    <script src="~/Scripts/MyScripts/pikaday.js"></script>
     <script src="~/Scripts/MyScripts/EditHelper.js"></script>
 }

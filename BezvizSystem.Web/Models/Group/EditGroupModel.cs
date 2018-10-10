@@ -25,13 +25,11 @@ namespace BezvizSystem.Web.Models.Group
         [Display(Name = "Дата прибытия")]
         [Required(ErrorMessage = "Укажите дату прибытия")]
         [LessThanOtherDate("DateDeparture", ErrorMessage = "Укажите дату прибытия меньше либо равной дате убытия")]
-        [DataType(DataType.Date)]
         public DateTime? DateArrival { get; set; }
 
         [Required(ErrorMessage = "Укажите дату убытия")]
         [Display(Name = "Дата убытия")]
         [MoreThanOtherDate("DateArrival", ErrorMessage = "Укажите дату убытия больше либо равной дате прибытия")]
-        [DataType(DataType.Date)]
         public DateTime? DateDeparture { get; set; }
 
         [Display(Name = "Количество дней пребывания")]
@@ -63,7 +61,6 @@ namespace BezvizSystem.Web.Models.Group
 
         // [Required(ErrorMessage = "Дата заключения договора не была введена")]
         [Display(Name = "Дата заключения договора")]
-        [DataType(DataType.Date)]
         //[PastDate(ErrorMessage = "Укажите дату заключения договора, относящуюся к прошлому")]
         public DateTime? DateOfContract { get; set; }
 

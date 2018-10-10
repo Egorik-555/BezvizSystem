@@ -388,7 +388,6 @@
     <Content Include="Views\Shared\EditorTemplates\EditInfoVisitorModel.cshtml" />
     <Content Include="Views\Report\DataAllByNatAndAge.cshtml" />
     <Content Include="Views\Report\DataCountByOperator.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\MyDate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

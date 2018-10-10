@@ -32,6 +32,6 @@
     </td>
     <td class="left" align="right">
         @Html.LabelFor(model => model.BithDate, htmlAttributes: new { @class = "control-label" })
-        @Html.EditorFor(model => model.BithDate, new { htmlAttributes = new { @class = "form-control bg_in datepicker" } })        
+        @Html.EditorFor(model => model.BithDate, "Date", new { htmlAttributes = new { @class = "form-control bg_in datepicker" } })        
     </td>
 </tr>
