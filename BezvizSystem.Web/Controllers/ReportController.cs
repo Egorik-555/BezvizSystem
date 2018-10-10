@@ -30,6 +30,8 @@ namespace BezvizSystem.Web.Controllers
         public ActionResult Index(DateTime? dateFrom, DateTime? dateTo)
         {
             ReportDTO model;
+            ViewBag.dateFrom = dateFrom ?? DateTime.Now;
+            ViewBag.dateTo = dateTo ?? DateTime.Now;
             model = GetModelByValidDates(dateFrom, dateTo);
 
             var modelInView = _mapper.Map<ReportDTO, ReportModel>(model);

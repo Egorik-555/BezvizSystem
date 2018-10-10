@@ -13,12 +13,12 @@
             <thead>
                 <tr>
                     <td>
-                        <input type="button" class="pad_cent_red" id="dates" name="dates" value="Выбор диапазона дат" />
+                        <input type="button" style="width:100%" class="simply_form_red marbot20" id="dates" name="dates" value="Выбор диапазона дат" />
                     </td>
 
                     <td id="panelDates" style="display: none">
-                        <input type="date" name="dateFrom" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                        <input type="date" name="dateTo" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        <input type="date" name="dateFrom" value="@(((DateTime)ViewBag.dateFrom).ToString("yyyy-MM-dd"))" />
+                        <input type="date" name="dateTo" value="@(((DateTime)ViewBag.dateTo).ToString("yyyy-MM-dd"))" />
                         <input type="submit" value="Отобрать" />
                     </td>
                 </tr>
@@ -87,7 +87,8 @@
                 titleTextStyle: { color: '#0a9200', fontSize: 20, bold: true, fontName: 'Times New Roman' },
                 colors: ['brown'],
                 hAxis: {
-                    textStyle: { fontSize: '20', bold: true, fontName: 'Times New Roman' }
+                    textStyle: { fontSize: '20', bold: true, fontName: 'Times New Roman' },
+                    showTextEvery: 1   
                 },
                 vAxis: {
                     textStyle: { fontSize: '12', bold: true, fontName: 'Times New Roman' }

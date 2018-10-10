@@ -58,7 +58,7 @@ namespace BezvizSystem.Web.Controllers
                 var result = await _groupService.Create(group);
                 if (result.Succedeed)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Anketa");
                 }
                 else ModelState.AddModelError("", result.Message);
             }

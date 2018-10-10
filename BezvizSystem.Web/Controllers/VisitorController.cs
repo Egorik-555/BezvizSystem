@@ -55,7 +55,7 @@ namespace BezvizSystem.Web.Controllers
 
                 if (result.Succedeed)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Anketa");
                 }
                 else ModelState.AddModelError("", result.Message);
             }
