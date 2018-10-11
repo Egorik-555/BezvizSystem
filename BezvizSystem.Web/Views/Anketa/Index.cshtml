@@ -12,7 +12,7 @@
             <td class="no_border"></td>
             <td class="no_border"></td>
             <td class="no_border"></td>
-            <td class="no_border">@Html.ActionLink("Экспортировать", "InExcel", null, new { @class = "simply_form_red marbot20" })</td>
+            <td class="no_border">@Html.ActionLink("Экспортировать", "InExcel", null, new { @class = "simply_form_red marbot20 linkParameters" })</td>
         </tr>
         @{Html.RenderPartial("GroupData", Model);}
     </table>
@@ -26,7 +26,6 @@
     <script>
 
         var table = document.getElementsByTagName('table')[0];
-        table.onclick = onRowClickHandler;
 
         function onRowClickHandler(event) {
             var target = event.target;

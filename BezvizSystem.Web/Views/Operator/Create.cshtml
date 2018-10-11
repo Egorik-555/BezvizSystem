@@ -5,55 +5,52 @@
     ViewBag.SubTitle = "Новый туроператор";
 }
 
+<td class="two_column" style="vertical-align: top">
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
 
-    <td class="two_column">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
         <table class="second" cellpadding="0" cellspacing="15">
-            @*<h4>Новый туроператор</h4>*@
-          
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <tr>
+                <td colspan="2">
+                    @Html.ValidationSummary(false, "")
+                </td>
+            </tr>
 
-            <input hidden="hidden" name="UserInSystem" value="@User.Identity.Name" />
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Transcript, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
+            <tr>
+                <td colspan="2">
+                    <input hidden="hidden" name="UserInSystem" value="@User.Identity.Name" />
+                    @Html.LabelFor(model => model.Transcript, htmlAttributes: new { @class = "control-label col-md-2" })
                     @Html.EditorFor(model => model.Transcript, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Transcript, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                </td>
+            </tr>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.UNP, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.UNP, htmlAttributes: new { @class = "control-label col-md-2" })
                     @Html.EditorFor(model => model.UNP, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.UNP, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                </td>
+            </tr>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.OKPO, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.OKPO, htmlAttributes: new { @class = "control-label col-md-2" })
                     @Html.EditorFor(model => model.OKPO, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.OKPO, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                </td>
+            </tr>
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Сохранить" class="btn btn-default" />
-                </div>
-            </div>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="Сохранить" class="simply_form_red" />
+                </td>
+            </tr>
+
         </table>
-    </td>
-}
+    }
+</td>
 
-    <td>
-        @Html.ActionLink("Назад", "Index", null, new { @class = "simply_form_red", style = "padding:0;display: block;font-family:Arial;" })
-    </td>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
