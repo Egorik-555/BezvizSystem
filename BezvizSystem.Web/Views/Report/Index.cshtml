@@ -17,8 +17,8 @@
                     </td>
 
                     <td id="panelDates" style="display: none">
-                        <input type="date" name="dateFrom" value="@(((DateTime)ViewBag.dateFrom).ToString("yyyy-MM-dd"))" />
-                        <input type="date" name="dateTo" value="@(((DateTime)ViewBag.dateTo).ToString("yyyy-MM-dd"))" />
+                        <input type="text" name="dateFrom" class="datepicker" value="@(((DateTime)ViewBag.dateFrom).ToString("dd.MM.yyyy"))" />
+                        <input type="text" name="dateTo" class="datepicker" value="@(((DateTime)ViewBag.dateTo).ToString("dd.MM.yyyy"))" />
                         <input type="submit" value="Отобрать" />
                     </td>
                 </tr>
@@ -47,8 +47,10 @@
 
     </script>
 
-    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    @Scripts.Render("~/bundles/jquery-ui")
+    <script src="~/Scripts/MyScripts/pikaday.js"></script>
 
     <script>
 
@@ -61,19 +63,19 @@
             var data1 = new google.visualization.DataTable('@Model.StringDateByArrivalCount');
 
             var options1 = {
-                
+
                 title: 'Количество зарегистрированных туристов на дату прибытия',
                 titleTextStyle: { color: '#0a9200', fontSize: 20, bold: true, fontName: 'Times New Roman'},
                 colors: ['#ffba00'],
                 legend: { position: 'none' },
-                hAxis: {          
+                hAxis: {
                     textStyle: { fontSize: '12', bold: true, fontName: 'Times New Roman' }
                 },
                 vAxis: {
                     textStyle: { fontSize: '12', bold: true, fontName: 'Times New Roman' }
                 },
                 backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2 },
-                'height': 200
+                'height': 400
             };
 
             var chart1 = new google.visualization.ColumnChart(document.getElementById('chart1'));
@@ -87,15 +89,15 @@
                 titleTextStyle: { color: '#0a9200', fontSize: 20, bold: true, fontName: 'Times New Roman' },
                 colors: ['brown'],
                 hAxis: {
-                    textStyle: { fontSize: '20', bold: true, fontName: 'Times New Roman' },
-                    showTextEvery: 1   
+                    textStyle: { fontSize: '15', bold: true, fontName: 'Times New Roman' },
+                    showTextEvery: 1
                 },
                 vAxis: {
                     textStyle: { fontSize: '12', bold: true, fontName: 'Times New Roman' }
                 },
                     legend: {position: 'none'},
                 backgroundColor: { fill: 'none', stroke: 'brown', strokeWidth: 2 },
-                    'height': 200
+                    'height': 400
             };
 
             var chart2 = new google.visualization.ColumnChart(document.getElementById('chart2'));
@@ -116,7 +118,7 @@
                 },
                     legend: {position: 'none'},
                 backgroundColor: { fill: 'none', stroke: '#037d3c', strokeWidth: 2 },
-                    'height': 200
+                    'height': 400
             };
 
             var chart3 = new google.visualization.ColumnChart(document.getElementById('chart3'));
