@@ -16,7 +16,7 @@
                     <input type="text" class="form-control" style="width:70%; height:45px" name="id" />
                     <input type="submit" class="simply_form_red marbot20 buttonParameters" style="width:28%" value="Найти" />
                 </td>
-                <td class="no_border">@Html.ActionLink("Добавить", "Create", null, new { @class = "simply_form_red marbot20 linkParameters"})</td>
+                <td class="no_border">@Html.ActionLink("Добавить", "Create", null, new { @class = "simply_form_red marbot20 linkParameters" })</td>
                 <td class="no_border"></td>
             </tr>
             <tr>
@@ -40,5 +40,24 @@
 
 @section scripts
 {
+
+    <script>
+        var table = document.getElementsByTagName('table')[0];
+
+        function onRowClickHandler(event) {
+            var target = event.target;
+
+            while (target != table) {
+                if (target.tagName == "TR") {
+                var id = target.getAttribute('id');
+
+                location.href = '@Url.Action("Edit", "Operator")/' + id;
+                return;
+                }
+                target = target.parentNode;
+            }
+        }
+    </script>
+
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 }
