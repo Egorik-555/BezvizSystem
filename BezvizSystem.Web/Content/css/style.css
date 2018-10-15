@@ -30,8 +30,7 @@ table.footer {
     }
 
 table.header form {
-   
-    background-color: #B00000; 
+    background-color: #B00000;
     width: 400px;
     height: 66px;
     margin: 0 auto 10px auto;
@@ -113,10 +112,12 @@ table.second form.pad_cent_red {
     text-transform: uppercase;
     font-size: 15px;
 }
-.field-validation-error{
-    color:red;
-    font-size:20px;
+
+.field-validation-error {
+    color: red;
+    font-size: 20px;
 }
+
 .simply_form_green {
     width: 220px;
     height: 50px;
@@ -130,6 +131,7 @@ table.second form.pad_cent_red {
     font-size: 15px;
     text-decoration: none;
 }
+
 .simply_form_red {
     width: 220px;
     height: 50px;
@@ -149,7 +151,7 @@ table.second form.pad_cent_red {
 }*/
 
 .buttonParameters {
-    height:52px;
+    height: 52px;
 }
 
 .linkParameters {
@@ -157,10 +159,11 @@ table.second form.pad_cent_red {
     height: 50px;
 }
 
-.visitor_str:hover{
+.visitor_str:hover {
     background: rgba(10,146,0,0.6);
-    cursor:pointer;
+    cursor: pointer;
 }
+
 .pad_cent {
     width: 208px;
     height: 55px;
@@ -271,10 +274,10 @@ td.two_column input {
     text-align: center;
 }
 
-td.two_column input[type="submit"] {
-    width: 101%;
-    height: 52px; 
-}
+    td.two_column input[type="submit"] {
+        width: 101%;
+        height: 52px;
+    }
 
 td.two_column select {
     width: 100%;
@@ -284,19 +287,19 @@ td.two_column select {
 
 select#Infoes_0__Nationality {
     width: 100%;
-    height:50px;
+    height: 50px;
 }
 
 
 select#Infoes_0__Gender {
     width: 100%;
-    height:50px;
+    height: 50px;
 }
 
-    td.two_column input.bg_in {
-        width: 100%;
-        margin: 0 auto;
-    }
+td.two_column input.bg_in {
+    width: 100%;
+    margin: 0 auto;
+}
 
 td.two_column .bg_in_long {
     width: 100%;
@@ -338,7 +341,7 @@ td h3.red {
     margin: 0;
     color: #0a9200;
     font-size: 20px;
-    color:#037d3c
+    color: #037d3c
 }
 
 .sex {
@@ -364,13 +367,14 @@ p.no_need {
 
 td.left {
     width: 50%;
-    text-align:left;
+    text-align: left;
 }
 
 h2.red {
     color: #0a9200;
     font-size: 20px;
 }
+
 a.footer-brain {
     color: #fff;
     font-size: 20px;
@@ -727,20 +731,20 @@ table.text_only {
         width: 20px;
     }
 
-    table.text_long caption {
-        color: #0a9200;
-        font-weight: bold;
-        font-size: 20px;
-        margin-bottom: 20px;
-    }
+table.text_long caption {
+    color: #0a9200;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
 
-    table.text_long span.red {
-        color: #0a9200;
-    }
+table.text_long span.red {
+    color: #0a9200;
+}
 
-    table.text_long td {
-        padding-bottom: 20px;
-    }
+table.text_long td {
+    padding-bottom: 20px;
+}
 
 table.page {
     margin: 80px auto;
@@ -814,12 +818,14 @@ span.green {
 span.red {
     color: #B22222;
 }
+
 .left_text {
     text-align: left;
 }
-table.second label{
-    font-size:18px;
-    font-weight:700;
+
+table.second label {
+    font-size: 18px;
+    font-weight: 700;
 }
 
 
@@ -829,8 +835,8 @@ table.td.th.a.footer-brain {
 }
 
 #panelDates input {
-    height:45px;
-    text-align:center;
+    height: 45px;
+    text-align: center;
 }
 
 .trSpace {
@@ -838,56 +844,29 @@ table.td.th.a.footer-brain {
 }
 
 /*for checkbox*/
-.boxes {
-    margin: auto;
-    /*padding: 50px;*/
-    /*background: #484848;*/
+td.two_column input[type="checkbox"] {
+    width: auto;
+    height: auto;
 }
 
-/*Checkboxes styles*/
-input[type="checkbox"] {
-    display: none;
+/*pagination*/
+.pagination {
+    display: inline-block;
 }
 
-    input[type="checkbox"] + label {
-        display: block;
-        position: relative;
-        padding-left: 35px;
-        margin-bottom: 20px;
-        font: 14px/20px 'Times New Roman', Arial, sans-serif 700;
-        color: black;
-        cursor: pointer;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-    }
+a.pagination {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid #ddd; /* Gray */
+}
 
-        input[type="checkbox"] + label:last-child {
-            margin-bottom: 0;
-        }
+a.active.pagination {
+    background-color: #4CAF50;
+    color: white;
+}
 
-        input[type="checkbox"] + label:before {
-            content: '';
-            display: block;
-            width: 20px;
-            height: 20px;
-            border: 1px solid black;
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: .6;
-            -webkit-transition: all .12s, border-color .08s;
-            transition: all .12s, border-color .08s;
-        }
-
-    input[type="checkbox"]:checked + label:before {
-        width: 10px;
-        top: -5px;
-        left: 5px;
-        border-radius: 0;
-        opacity: 1;
-        border-top-color: transparent;
-        border-left-color: transparent;
-        -webkit-transform: rotate(45deg);
-        transform: rotate(45deg);
-    }
+a:hover.pagination:not(.active) {
+    background-color: #ddd;
+}

@@ -19,27 +19,21 @@
                 </td>
             </tr>
 
-            @*<input hidden="hidden" name="UserName" value="@Model.UserName" />
-                <input hidden="hidden" name="ProfileUserRole" value="@Model.ProfileUserRole" />
-                <input hidden="hidden" name="ProfileUserUserInSystem" value="@Model.ProfileUserUserInSystem" />
-                <input hidden="hidden" name="ProfileUserDateInSystem" value="@Model.ProfileUserDateInSystem" />
-                <input hidden="hidden" name="ProfileUserUserEdit" value="@User.Identity.Name" />
-                <input hidden="hidden" name="ProfileUserDateEdit" value="@DateTime.Now" />*@
-
             <tr>
                 <td colspan="2">
                     @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.ProfileUserUNP)
                     @Html.LabelFor(model => model.ProfileUserTranscript, htmlAttributes: new { @class = "control-label col-md-2" })
                     @Html.EditorFor(model => model.ProfileUserTranscript, new { htmlAttributes = new { @class = "form-control" } })
                 </td>
             </tr>
 
-            <tr>
+            @*<tr>
                 <td colspan="2">
                     @Html.LabelFor(model => model.ProfileUserUNP, htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.EditorFor(model => model.ProfileUserUNP, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.ProfileUserUNP, new { htmlAttributes = new { @class = "form-control", @readonly="readonly" } })
                 </td>
-            </tr>
+            </tr>*@
 
             <tr>
                 <td colspan="2">
@@ -55,24 +49,10 @@
                 </td>
             </tr>
 
-            <tr @*class="mtauto"*@>
-                <td @*class="stright"*@ colspan="2">
-                    @*<div class="checkbox">*@
-                    @*@Html.LabelFor(model => model.EmailConfirmed, htmlAttributes: new { @class = "control-label" })*@
-                    @*@Html.EditorFor(model => model.EmailConfirmed)*@
-                    <div class="boxes">
-                        <input type="checkbox" name="EmailConfirmed" id="box-1">
-                        @*@Html.EditorFor(model => model.EmailConfirmed, new { htmlAttributes = new { id = "box-1" } })*@
-                        @*@Html.LabelFor(model => model.EmailConfirmed, htmlAttributes: new { @for = "box-1" })*@
-                        <label for="box-1">1111</label>
-
-                        @*<input type="checkbox" id="box-2" checked>
-                            <label for="box-2">Gentrify pickled kale chips </label>
-
-                            <input type="checkbox" id="box-3">
-                            <label for="box-3">Gastropub butcher</label>*@
-                    </div>
-                    @*</div>*@
+            <tr class="mtauto">
+                <td colspan="2">
+                    @Html.EditorFor(model => model.EmailConfirmed)
+                    @Html.LabelFor(model => model.EmailConfirmed, htmlAttributes: new { @class = "control-label" })
                 </td>
             </tr>
 
@@ -91,11 +71,9 @@
             </tr>
 
             <tr class="mtauto">
-                <td class="stright" colspan="2">
-                    <div class="checkbox">
-                        @Html.LabelFor(model => model.ProfileUserActive, htmlAttributes: new { @class = "control-label col-md-2" })
-                        @Html.EditorFor(model => model.ProfileUserActive, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
+                <td colspan="2">
+                    @Html.EditorFor(model => model.ProfileUserActive, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.LabelFor(model => model.ProfileUserActive, htmlAttributes: new { @class = "control-label col-md-2" })
                 </td>
             </tr>
 

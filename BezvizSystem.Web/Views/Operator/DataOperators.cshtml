@@ -20,6 +20,8 @@
     </tr>
 }
 
-<div class="btn-group">
-    @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }))
-</div>
+<tr>
+    <td style="border:none" colspan="3"> 
+        @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }))
+    </td>
+</tr>

@@ -29,9 +29,9 @@
     </tr>
     <tr class="mtauto">
         <td class="stright" colspan="2">
-            <div class="checkbox">
-                @Html.LabelFor(model => model.RememberMe, htmlAttributes: new { @class = "control-label" })
+            <div class="checkbox">             
                 @Html.EditorFor(model => model.RememberMe)
+                @Html.LabelFor(model => model.RememberMe, htmlAttributes: new { @class = "control-label" })
             </div>
         </td>
     </tr>

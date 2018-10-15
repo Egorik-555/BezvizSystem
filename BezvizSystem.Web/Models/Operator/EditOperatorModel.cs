@@ -13,18 +13,19 @@ namespace BezvizSystem.Web.Models.Operator
         public string Id { get; set; }
         [HiddenInput(DisplayValue = false)]
         public string UserName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Укажите наименование")]
         [Display(Name = "Туроператор")]
         public string ProfileUserTranscript { get; set; }
 
-        [Required(ErrorMessage = "УНП не был введён")]
-        [StringLength(9, MinimumLength = 9, ErrorMessage = "Длина строки должна быть 9 символов")]
-        [RegularExpression(@"[0-9]{3,10}", ErrorMessage = "Только цифровые значения")]
-        [Display(Name = "УНП")]
+        [Required(ErrorMessage = "Укажите УНП")]
+        [StringLength(9, MinimumLength = 9, ErrorMessage = "Длина УНП должна быть 9 символов")]
+        [RegularExpression(@"[0-9]*", ErrorMessage = "В УНП допустимы только цифровые символы")]
+        [Display(Name = "УНП - не редактируется")]
         public string ProfileUserUNP { get; set; }
 
-        [Required(ErrorMessage = "ОКПО не введён")]
-        [RegularExpression(@"[0-9]*", ErrorMessage = "Допустимы только цифровые символы")]
+        [Required(ErrorMessage = "Укажите ОКПО")]
+        [StringLength(10, MinimumLength = 3, ErrorMessage = "Длина ОКПО должна быть от 3 до 10 символов")]
+        [RegularExpression(@"[0-9]*", ErrorMessage = "В ОКПО допустимы только цифровые символы")]
         [Display(Name = "ОКПО")]
         public string ProfileUserOKPO { get; set; }
      

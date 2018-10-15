@@ -78,10 +78,7 @@ namespace BezvizSystem.BLL.Services
         //tested
         public async Task<OperationDetails> Delete(UserDTO userDto)
         {
-            if (userDto.UserName == null)
-                userDto.UserName = userDto.ProfileUser.UNP;
-
-            BezvizUser user = await Database.UserManager.FindByNameAsync(userDto.UserName);
+            BezvizUser user = await Database.UserManager.FindByIdAsync(userDto.Id);
             if (user != null)
             {
                 try
