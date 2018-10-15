@@ -20,12 +20,10 @@ namespace BezvizSystem.Web.Views.Helpers.Pagging
                 tag.InnerHtml = i.ToString();
                 // если текущая страница, то выделяем ее,
                 // например, добавляя класс
-                //if (i == pageInfo.PageNumber)
-                //{
-                //    tag.AddCssClass("selected");
-                //    tag.AddCssClass("btn-primary");
-                //}
-                //tag.AddCssClass("btn btn-default");
+                if (i == pageInfo.PageNumber)
+                {
+                    tag.AddCssClass("selected");
+                }
                 tag.AddCssClass("pagination");
                 result.Append(tag.ToString());
             }

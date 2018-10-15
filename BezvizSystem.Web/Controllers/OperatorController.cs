@@ -27,21 +27,22 @@ namespace BezvizSystem.Web.Controllers
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
 
-        public ActionResult Index()
-        {     
-            return View();
-        }
+        //public ActionResult Index()
+        //{     
+        //    return View();
+        //}
 
-        [HttpPost]
+        //[HttpPost]
         public ActionResult Index(string id)
         {
+            ViewBag.Id = id;
             return View((object)id);
         }
 
         public ActionResult DataOperators(string id, int page = 1)
         {
+            ViewBag.Id = id;
             var usersDto = _userService.GetByRole("operator").OrderByDescending(m => m.ProfileUser.DateInSystem);
-
             var model = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<ViewOperatorModel>>(usersDto);         
             if (!string.IsNullOrEmpty(id))
             {

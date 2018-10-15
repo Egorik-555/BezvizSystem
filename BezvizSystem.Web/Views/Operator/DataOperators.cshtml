@@ -22,6 +22,6 @@
 
 <tr>
     <td style="border:none" colspan="3"> 
-        @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }))
+        @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { id = ViewBag.Id, page = x }))
     </td>
 </tr>
