@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Туроператоры";
+    AjaxOptions opt = new AjaxOptions
+    {
+        UpdateTargetId = "tabledata",
+        Url = Url.Action("DataOperators")
+    };
+}
+
+<td class="two_column2" valign="top">
+    <table class="in_table3">
+        @using (Ajax.BeginForm(opt))
+        {
+            <tr class="no_border">
+                <td class="no_border">
+                    <input type="text" class="form-control" style="width:70%; height:45px" name="id" value="@ViewBag.Id" />
+                    <input type="submit" class="simply_form_red marbot20 buttonParameters" style="width:28%" value="Найти" />
+                </td>
+                <td class="no_border">@Html.ActionLink("Добавить", "Create", null, new { @class = "simply_form_red marbot20 linkParameters" })</td>
+                <td class="no_border"></td>
+            </tr>
+            <tr>
+                <td class="orange" style="width:50%">
+                    @Html.DisplayName("Наименование туроператара")
+                </td>
+                <td class="orange" style="width:25%">
+                    @Html.DisplayName("УНП")
+                </td>
+                <td class="orange" style="width:25%">
+                    @Html.DisplayName("ОКПО")
+                </td>
+            </tr>
+            <tbody id="tabledata">
+                @Html.Action("DataOperators", new { id = Model })
+            </tbody>
+        }
+    </table>
+</td>
+
+@section scripts
+{
+    <script>
+        var table = document.getElementsByTagName('table')[0];
+
+        function onRowClickHandler(event) {
+            var target = event.target;
+
+            while (target != table) {
+                if (target.tagName == "TR") {
+                var id = target.getAttribute('id');
+
+                location.href = '@Url.Action("Edit", "Operator")/' + id;
+                return;
+                }
+                target = target.parentNode;
+            }
+        }
+    </script>
+
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}

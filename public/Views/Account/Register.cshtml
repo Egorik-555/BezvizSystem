@@ -1,0 +1,43 @@
+﻿@model BezvizSystem.Web.Models.RegisterModel
+
+@{
+    ViewBag.Title = "Регистрация туроператора";
+    Layout = "~/Views/Shared/_LayoutEnter.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <tr>
+        <td colspan="2">
+            @Html.ValidationSummary(false, "")
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            @Html.LabelFor(model => model.OKPO, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.OKPO, new { htmlAttributes = new { @class = "form-control long_but" } })
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            @Html.LabelFor(model => model.UNP, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.UNP, new { htmlAttributes = new { @class = "form-control long_but" } })
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control long_but" } })
+        </td>
+    </tr>
+    <td class="zareg" colspan="2">
+        <input type="submit" value="Зарегистрироваться" class="simply_form_red" />
+    </td>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

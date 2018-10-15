@@ -1,0 +1,45 @@
+﻿@model BezvizSystem.Web.Models.LoginModel
+
+@{
+    ViewBag.Title = "Вход";
+    Layout = "~/Views/Shared/_LayoutEnter.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+    <tr>
+        <td colspan="2">
+            @Html.ValidationSummary(false, "")
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">        
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control long_but" } })
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control long_but" } })
+        </td>
+    </tr>
+    <tr class="mtauto">
+        <td class="stright" colspan="2">
+            <div class="checkbox">             
+                @Html.EditorFor(model => model.RememberMe)
+                @Html.LabelFor(model => model.RememberMe, htmlAttributes: new { @class = "control-label" })
+            </div>
+        </td>
+    </tr>
+    <td class="zareg" colspan="2">
+        <input type="submit" value="Войти" class="simply_form_red" />
+    </td>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

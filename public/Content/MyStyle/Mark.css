@@ -1,0 +1,8 @@
+﻿.mainTableRow {
+    cursor: pointer;  
+}
+
+.mainTableRow:hover {
+    background-color: #ff0000;
+    opacity: 0.8;
+}

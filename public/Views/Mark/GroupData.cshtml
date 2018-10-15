@@ -1,0 +1,79 @@
+﻿@model IEnumerable<BezvizSystem.Web.Models.Mark.ViewMarkModel>
+
+@{
+    int i = 0;
+}
+<td class="two_column2" valign="top">
+    <table class="in_table4">
+        <tr>
+            <td class="coly1">
+                №
+            </td>
+            <td class="coly2">
+                @Html.DisplayNameFor(model => model.DateArrival)
+            </td>
+            <td class=" coly1">
+                @Html.DisplayNameFor(model => model.DaysOfStay)
+            </td>
+            <td class=" coly2">
+                @Html.DisplayNameFor(model => model.CheckPoint)
+            </td>
+            <td class="coly1">
+                @Html.DisplayNameFor(model => model.CountMembers)
+            </td>
+            <td class="coly2">
+                @Html.DisplayNameFor(model => model.Status)
+            </td>
+            <td class="coly2">
+                @Html.DisplayNameFor(model => model.Operator)
+            </td>
+            <td class="coly1">
+                @Html.DisplayNameFor(model => model.Arrived)
+            </td>
+        </tr>
+
+        @foreach (var item in Model)
+            {
+            <tr class="visitor_str mainTableRow" id="@item.Id" onclick="onRowClickHandler(event);">
+                <td class="mainTableRow">
+                    @(++i)
+                </td>
+                <td>
+                    @(item.DateArrival.HasValue ? item.DateArrival.Value.ToString("dd.MM.yyyy") : "")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DaysOfStay)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckPoint)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CountMembers)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Operator)
+                </td>
+                <td name="mark">
+
+                    @if (item.Arrived == "V")
+                    {
+                        <img src="~/Content/img/checkmark.png" width="24" height="24" alt="Отмечено">
+                    }
+                    else if (item.Arrived == "X")
+                    {
+                        <img src="~/Content/img/cross.png" width="24" height="24"  alt="Нет отметки">
+                    }
+                    else
+                    {
+                        <img src="~/Content/img/icons8-тест-частично-пройден-50.png" width="24" height="24" alt="Нет отметки">
+                    }
+                    @*@Html.DisplayFor(modelItem => item.Arrived)*@
+                </td>
+            </tr>
+        }
+
+    </table>
+</td>
