@@ -1,0 +1,54 @@
+﻿@model BezvizSystem.Web.Models.Anketa.ViewAnketaModel
+
+@{
+    ViewBag.Title = "Удаление";
+}
+<td class="two_column2" valign="top">
+    <table class="in_table3">
+        <tr>
+            <td class="orange coly1" colspan="4" style="background-color:rgba(255,0,0,0.7); color:white;">
+                Вы действительно хотите удалить @(Model.Group ? "группу туристов" : "туриста")?
+            </td>
+        </tr>
+        <tr>
+            <td class="orange coly2">
+                @Html.DisplayNameFor(model => model.DateArrival)
+            </td>
+            <td class="orange coly1">
+                @Html.DisplayNameFor(model => model.DaysOfStay)
+            </td>
+            <td class="orange coly2">
+                @Html.DisplayNameFor(model => model.CheckPoint)
+            </td>
+            <td class="orange coly1">
+                @Html.DisplayNameFor(model => model.CountMembers)
+            </td>
+        </tr>
+        <tr class="vmainTableRow">
+            <td>
+                @Html.DisplayFor(model => model.DateArrival)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.DaysOfStay)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.CheckPoint)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.CountMembers)
+            </td>
+        </tr>
+        <tr class="vmainTableRow">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <td colspan="2" style="border:none;">
+                    <input type="submit" value="Удалить" class="simply_form_red sfr_auto" style="background-color:red; border: 1px solid red;" />
+                </td>
+                <td colspan="2" style="border:none;">
+                    @Html.ActionLink("Назад", "Index", null, new { @class = "simply_form_red sfr_auto", style = "padding:0;display: block; margin: 0 auto; font-family:Arial;" })
+                </td>
+            }
+            </tr>
+    </table>
+</td>

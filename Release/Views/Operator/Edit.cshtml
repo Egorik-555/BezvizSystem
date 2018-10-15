@@ -1,0 +1,88 @@
+﻿@model BezvizSystem.Web.Models.Operator.EditOperatorModel
+
+@{
+    ViewBag.Title = "Туроператор";
+}
+
+<td class="two_column" style="vertical-align: top">
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <table class="second" cellpadding="0" cellspacing="15">
+
+            <tr>
+                <td colspan="2">
+                    @Html.ValidationSummary(false, "")
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.ProfileUserUNP)
+                    @Html.LabelFor(model => model.ProfileUserTranscript, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.ProfileUserTranscript, new { htmlAttributes = new { @class = "form-control" } })
+                </td>
+            </tr>
+
+            @*<tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.ProfileUserUNP, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.ProfileUserUNP, new { htmlAttributes = new { @class = "form-control", @readonly="readonly" } })
+                </td>
+            </tr>*@
+
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.ProfileUserOKPO, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.ProfileUserOKPO, new { htmlAttributes = new { @class = "form-control" } })
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                </td>
+            </tr>
+
+            <tr class="mtauto">
+                <td colspan="2">
+                    @Html.EditorFor(model => model.EmailConfirmed)
+                    @Html.LabelFor(model => model.EmailConfirmed, htmlAttributes: new { @class = "control-label" })
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.ConfirmePassword, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.ConfirmePassword, new { htmlAttributes = new { @class = "form-control" } })
+                </td>
+            </tr>
+
+            <tr class="mtauto">
+                <td colspan="2">
+                    @Html.EditorFor(model => model.ProfileUserActive, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.LabelFor(model => model.ProfileUserActive, htmlAttributes: new { @class = "control-label col-md-2" })
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="Сохранить" class="simply_form_red" />
+                    @Html.ActionLink("Удалить", "Delete", new { id = Model.Id }, new { @class = "simply_form_red sfr_auto", style = "background-color:red; width:100%; padding:0;display: block; border: 1px solid red; font-family:Arial;" })
+                </td>
+            </tr>
+        </table>
+    }
+</td>

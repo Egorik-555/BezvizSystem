@@ -1,0 +1,111 @@
+﻿@model BezvizSystem.Web.Models.Visitor.CreateVisitorModel
+
+@{
+    ViewBag.Title = "Новый турист";
+    ViewBag.SubTitle = "Регистрация индивидуального туриста";
+}
+
+<td class="two_column">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <table class="second" cellpadding="0" cellspacing="15">
+
+            <tr>
+                <td colspan="2">
+                    @Html.ValidationSummary(false, "")
+                </td>
+            </tr>
+
+            <tr>
+                <td><h2 class="top">Общие сведения</h2></td>
+            </tr>
+
+            <tr>
+                <td class="left">
+                    @Html.LabelFor(model => model.DateArrival, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.DateArrival, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                </td>
+                <td class="left" align="right">
+                    @Html.LabelFor(model => model.DateDeparture, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.DateDeparture, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.DaysOfStay, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.DaysOfStay, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control bg_in" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.CheckPoint, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.CheckPoint, ViewBag.CheckPoints as SelectList, new { @class = "form-control punkt" })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.PlaceOfRecidense, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.PlaceOfRecidense, new { htmlAttributes = new { @class = "form-control bg_in" } })
+                    <p class="no_need">*Не обязательно к заполнению если турист не проживает в специализированных средствах размещения</p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <h3 class="red">Информация о туристе</h3>
+                </td>
+            </tr>
+
+            @Html.EditorFor(model => model.Info)
+
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.ProgramOfTravel, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.ProgramOfTravel, new { htmlAttributes = new { @class = "form-control bg_in_long" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.TimeOfWork, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.TimeOfWork, new { htmlAttributes = new { @class = "form-control bg_in" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <h3 class="red">Информация о туристическом операторе:</h3>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.SiteOfOperator, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.SiteOfOperator, new { htmlAttributes = new { @class = "form-control bg_in" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.TelNumber, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.TelNumber, new { htmlAttributes = new { @class = "form-control bg_in" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control bg_in" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="Сохранить" class="simply_form_red sfr_auto" />
+                </td>
+            </tr>
+        </table>
+    }
+</td>
+
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jquery-ui")
+    <script src="~/Scripts/MyScripts/pikaday.js"></script>
+    <script src="~/Scripts/MyScripts/EditHelper.js"></script>
+}

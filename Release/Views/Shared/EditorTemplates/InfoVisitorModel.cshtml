@@ -1,0 +1,38 @@
+@model BezvizSystem.Web.Models.Visitor.InfoVisitorModel
+
+<tr>
+    <td colspan="2">
+        @Html.HiddenFor(model => model.Id, new { @Value = 0 })
+
+        @Html.LabelFor(model => model.Surname, htmlAttributes: new { @class = "control-label" })
+        @Html.EditorFor(model => model.Surname, new { @class = "form-control" })
+    </td>
+</tr>
+<tr>
+    <td colspan="2">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+        @Html.EditorFor(model => model.Name, new { @class = "form-control" })
+    </td>
+</tr>
+<tr>
+    <td colspan="2">
+        @Html.LabelFor(model => model.SerialAndNumber, htmlAttributes: new { @class = "control-label" })
+        @Html.EditorFor(model => model.SerialAndNumber, new { @class = "form-control" })
+    </td>
+</tr>
+<tr>
+    <td colspan="2">
+        @Html.LabelFor(model => model.Nationality, htmlAttributes: new { @class = "control-label" })
+        @Html.DropDownListFor(model => model.Nationality, ViewBag.Nationalities as SelectList, new { @class = "form-control" })
+    </td>
+</tr>
+<tr name="lastTr">
+    <td class="left">
+        @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label" })
+        @Html.DropDownListFor(model => model.Gender, ViewBag.Genders as SelectList,new { @class = "form-control" })
+    </td>
+    <td class="left" align="right">
+        @Html.LabelFor(model => model.BithDate, htmlAttributes: new { @class = "control-label" })
+        @Html.EditorFor(model => model.BithDate, "Date", new { htmlAttributes = new { @class = "form-control datepicker" } })
+    </td>
+</tr>
