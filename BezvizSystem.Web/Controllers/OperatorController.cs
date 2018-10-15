@@ -65,7 +65,9 @@ namespace BezvizSystem.Web.Controllers
         public async Task<ActionResult> Create(CreateOperatorModel model)
         {
             if (ModelState.IsValid)
-            {          
+            {
+                model.UserInSystem = User.Identity.Name;
+                model.DateInSystem = DateTime.Now;
                 var user = _mapper.Map<CreateOperatorModel, UserDTO>(model);
                 var userProfile = _mapper.Map<CreateOperatorModel, ProfileUserDTO>(model);
                 user.ProfileUser = userProfile;
@@ -114,6 +116,7 @@ namespace BezvizSystem.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.ProfileUserUserEdit = User.Identity.Name;
                 var user = _mapper.Map<EditOperatorModel, UserDTO>(model);
                 var userProfile = _mapper.Map<EditOperatorModel, ProfileUserDTO>(model);
                 user.ProfileUser = userProfile;

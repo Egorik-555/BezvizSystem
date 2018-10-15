@@ -108,9 +108,15 @@ namespace BezvizSystem.BLL.Services
         {
             try
             {
-                var user = await Database.UserManager.FindByIdAsync(userDto.Id);
+                var user = await Database.UserManager.FindByIdAsync(userDto.Id);         
                 if (user == null)
                     return new OperationDetails(false, "Пользователь не найден", "");
+
+                userDto.UserName = user.UserName;
+                userDto.ProfileUser.Role = user.OperatorProfile.Role;
+                userDto.ProfileUser.UserInSystem = user.OperatorProfile.UserInSystem;
+                userDto.ProfileUser.DateInSystem = user.OperatorProfile.DateInSystem;
+                userDto.ProfileUser.DateEdit = DateTime.Now;         
 
                 var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelUser(user))).CreateMapper();
                 var m = mapper.Map<UserDTO, BezvizUser>(userDto);

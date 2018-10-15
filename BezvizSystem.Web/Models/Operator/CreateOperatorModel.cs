@@ -33,7 +33,7 @@ namespace BezvizSystem.Web.Models.Operator
         public string Password { get; set; }
         public bool Active { get; set; }
         [HiddenInput(DisplayValue = false)]
-        public DateTime DateInSystem { get; set; }
+        public DateTime? DateInSystem { get; set; }
         [HiddenInput(DisplayValue = false)]
         public string UserInSystem { get; set; }
 
