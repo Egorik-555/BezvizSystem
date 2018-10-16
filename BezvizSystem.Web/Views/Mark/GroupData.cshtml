@@ -37,6 +37,7 @@
             <tr class="visitor_str mainTableRow" id="@item.Id" onclick="onRowClickHandler(event);">
                 <td class="mainTableRow">
                     @(++i)
+                    @{var status = item.Status == "Сохранено" ? 1 : 2;}
                 </td>
                 <td>
                     @(item.DateArrival.HasValue ? item.DateArrival.Value.ToString("dd.MM.yyyy") : "")
@@ -50,7 +51,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.CountMembers)
                 </td>
-                <td>
+                <td style="color:@(status == 1 ? "red" : "green")">
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
                 <td>

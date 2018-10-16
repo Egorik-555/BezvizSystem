@@ -879,3 +879,9 @@ a.pagination {
 a:hover.pagination:not(.active) {
     background-color: #ddd;
 }
+
+.input-seach {
+    width: 100%;
+    height: 45px;
+    padding: 0 1px 0 1px
+}
