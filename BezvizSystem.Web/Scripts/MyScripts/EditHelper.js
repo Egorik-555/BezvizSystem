@@ -1,6 +1,7 @@
 
 var inputTable = document.getElementById('inputTable');
-
+if (inputTable)
+    var tbody = inputTable.getElementsByTagName('tbody')[0];
 
 var addButton = document.getElementById("addVisitorBut");
 var removeButton = document.getElementById("deleteVisitorBut");
@@ -54,6 +55,11 @@ function f(whereInsert) {
     fragment.appendChild(createFragment(count, 'Gender', 'BithDate', 'Пол', 'Дата рождения', createByClone));
 
     tbody.insertBefore(fragment, lastTr.nextSibling);
+
+    $(".datepicker").datepicker({
+        monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+        dayNamesMin: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'], dateFormat: 'dd.mm.yy'
+    });
 }
 
 function createFragmentOfInput(id, field, caption, msg, select){
@@ -91,7 +97,7 @@ function createFragment(id, field1, field2, caption1, caption2, createFunction){
     let input1 = createFunction(id, field1, 'form-control');
     input1.value = '';
     let label2 = createLabel(id, field2,'control-label', caption2);
-    let input2 = createFunction(id, field2, 'form-control');
+    let input2 = createFunction(id, field2, 'form-control datepicker');
     input2.value = '';
 
     let tr = document.createElement('tr');

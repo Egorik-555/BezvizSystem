@@ -33,6 +33,6 @@
     </td>
     <td class="left" align="right">
         @Html.LabelFor(model => model.BithDate, htmlAttributes: new { @class = "control-label" })
-        @Html.EditorFor(model => model.BithDate, "Date", new { htmlAttributes = new { @class = "form-control datepicker" } })
+        @Html.EditorFor(model => model.BithDate, "Date", new { htmlAttributes = new { @class = "form-control datepicker", autocomplete = "off" } })
     </td>
 </tr>

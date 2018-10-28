@@ -25,11 +25,11 @@
             <tr>
                 <td class="left">
                     @Html.LabelFor(model => model.DateArrival, htmlAttributes: new { @class = "control-label" })
-                    @Html.EditorFor(model => model.DateArrival, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                    @Html.EditorFor(model => model.DateArrival, new { htmlAttributes = new { @class = "form-control datepicker", autocomplete = "off" } })
                 </td>
                 <td class="left" align="right">
                     @Html.LabelFor(model => model.DateDeparture, htmlAttributes: new { @class = "control-label" })
-                    @Html.EditorFor(model => model.DateDeparture, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                    @Html.EditorFor(model => model.DateDeparture, new { htmlAttributes = new { @class = "form-control datepicker", autocomplete = "off" } })
                 </td>
             </tr>
             <tr>
