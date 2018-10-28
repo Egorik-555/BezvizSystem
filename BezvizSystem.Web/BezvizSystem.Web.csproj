@@ -327,7 +327,6 @@
     <Content Include="Scripts\MyScripts\EditHelper.js" />
     <Content Include="Scripts\MyScripts\pikaday.js" />
     <Content Include="Scripts\MyScripts\ShowPanels.js" />
-    <Content Include="Scripts\MyScripts\_EditHelper.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />

@@ -1,7 +1,6 @@
 
 var inputTable = document.getElementById('inputTable');
-if (inputTable)
-    var tbody = inputTable.getElementsByTagName('tbody')[0];
+
 
 var addButton = document.getElementById("addVisitorBut");
 var removeButton = document.getElementById("deleteVisitorBut");
