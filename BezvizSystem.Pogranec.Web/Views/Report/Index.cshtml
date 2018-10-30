@@ -2,43 +2,120 @@
 
 @{
     ViewBag.Title = "Отчеты";
+    ViewBag.SubTitle = "Отчеты";
+
 }
+<td class="two_column2" valign="top">
+    @using (Html.BeginForm())
+    {
+        <table class="text_only">
 
-<div>
-    <input type="button" id="dates" name="dates" value="Выбор диапазона дат" />
+            <thead>
+                <tr>
+                    <td>
+                        <input type="button" style="width:100%" class="simply_form_red marbot20" id="dates" name="dates" value="Выбор диапазона дат" />
+                    </td>
 
-    <div id="panelDates" style="display: none">
-        @using (Html.BeginForm())
-        {
-            <input type="date" name="dateFrom" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-            <input type="date" name="dateTo" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    <td id="panelDates" style="display: none">
+                        <input type="text" name="dateFrom" class="datepicker" value="@(((DateTime)ViewBag.dateFrom).ToString("dd.MM.yyyy"))" />
+                        <input type="text" name="dateTo" class="datepicker" value="@(((DateTime)ViewBag.dateTo).ToString("dd.MM.yyyy"))" />
+                        <input type="submit" class="simply_form_red marbot20" style="height:auto; width:95px" value="Найти" />
+                    </td>
+                </tr>
+            </thead>
 
-            <input type="submit" value="Отобрать"/>
-        }
+            <tbody id="data">
+                @Html.Partial("DataReport", Model)
+            </tbody>
 
-    </div>
-</div>
-
-<div>
-    <p> Зарегистрированные туристы (с @Model.DateFrom по @Model.DateTo):</p>
-    <p> Всего зарегистрировано: @Model.AllRegistrated</p>
-    <p> Прибыло: @Model.AllArrived</p>
-    <p> Ожидается к прибытию: @Model.WaitArrived</p>
-    <p> Не прибыло: @Model.NotArriverd</p>
-    <p> Индивидуальные туристы: @Model.AllTourist</p>
-    <p> Группы: @Model.AllGroup</p>
-</div>
+        </table>
+    }
+</td>
 
 @section scripts{
 
+    <script src="~/Scripts/MyScripts/ShowPanels.js"></script>
     <script>
-        var button = document.getElementById('dates');
-        var panel = document.getElementById('panelDates');
+        showPanel('dates', 'panelDates')
+    </script>
 
-        button.onclick = function () {
-            if (panel.style.display != 'none')
-                panel.style.display = 'none';
-            else panel.style.display = '';
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    @Scripts.Render("~/bundles/jquery-ui")
+    <script src="~/Scripts/MyScripts/pikaday.js"></script>
+
+    <script>
+
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            //chart1
+            var data1 = new google.visualization.DataTable('@Model.StringDateByArrivalCount');
+
+            var options1 = {
+
+                title: 'Количество зарегистрированных туристов на дату прибытия',
+                titleTextStyle: { color: '#0a9200', fontSize: 20, bold: true, fontName: 'Times New Roman'},
+                colors: ['#ffba00'],
+                legend: { position: 'none' },
+                hAxis: {
+                    textStyle: { fontSize: '12', bold: true, fontName: 'Times New Roman' }
+                },
+                vAxis: {
+                    textStyle: { fontSize: '12', bold: true, fontName: 'Times New Roman' }
+                },
+                backgroundColor: { fill: 'none', stroke: '#ffba00', strokeWidth: 2 },
+                'height': 400
+            };
+
+            var chart1 = new google.visualization.ColumnChart(document.getElementById('chart1'));
+            chart1.draw(data1, options1);
+
+            //chart2
+            var data2 = new google.visualization.DataTable('@Model.StringCheckPointCount');
+
+            var options2 = {
+                title: 'Количество туристов по пунктам пропуска',
+                titleTextStyle: { color: '#0a9200', fontSize: 20, bold: true, fontName: 'Times New Roman' },
+                colors: ['brown'],
+                hAxis: {
+                    textStyle: { fontSize: '15', bold: true, fontName: 'Times New Roman' },
+                    showTextEvery: 1
+                },
+                vAxis: {
+                    textStyle: { fontSize: '12', bold: true, fontName: 'Times New Roman' }
+                },
+                    legend: {position: 'none'},
+                backgroundColor: { fill: 'none', stroke: 'brown', strokeWidth: 2 },
+                    'height': 400
+            };
+
+            var chart2 = new google.visualization.ColumnChart(document.getElementById('chart2'));
+            chart2.draw(data2, options2);
+
+            //chart3
+            var data3 = new google.visualization.DataTable('@Model.StringDaysByCount');
+
+            var options3 = {
+                title: 'Количество туристов по числу дней пребывания',
+                titleTextStyle: { color: '#0a9200', fontSize: 20, bold: true, fontName: 'Times New Roman' },
+                colors: ['#037d3c'],
+                hAxis: {
+                    textStyle: { fontSize: '15', bold: true, fontName: 'Times New Roman' }
+                },
+                vAxis: {
+                    textStyle: { fontSize: '12', bold: true, fontName: 'Times New Roman' }
+                },
+                    legend: {position: 'none'},
+                backgroundColor: { fill: 'none', stroke: '#037d3c', strokeWidth: 2 },
+                    'height': 400
+            };
+
+            var chart3 = new google.visualization.ColumnChart(document.getElementById('chart3'));
+            chart3.draw(data3, options3);
+
         }
+
     </script>
 }

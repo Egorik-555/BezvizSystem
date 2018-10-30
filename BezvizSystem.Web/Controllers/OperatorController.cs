@@ -27,11 +27,6 @@ namespace BezvizSystem.Web.Controllers
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
 
-        //public ActionResult Index()
-        //{     
-        //    return View();
-        //}
-
         //[HttpPost]
         public ActionResult Index(string id)
         {

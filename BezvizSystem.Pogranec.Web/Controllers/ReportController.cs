@@ -30,19 +30,40 @@ namespace BezvizSystem.Pogranec.Web.Controllers.Api
             _mapper = new MapperPogranecConfiguration().CreateMapper();
         }
       
-        public ActionResult Index()
+        public ActionResult Index(DateTime? dateFrom, DateTime? dateTo)
         {
-            var model = _report.GetReport();
+            ReportDTO model;
+            ViewBag.dateFrom = dateFrom ?? DateTime.Now;
+            ViewBag.dateTo = dateTo ?? DateTime.Now;
+
+            model = GetModelByValidDates(dateFrom, dateTo);
+
             var modelInView = _mapper.Map<ReportDTO, ReportModel>(model);
             return View(modelInView);
         }
 
-        [HttpPost]
-        public ActionResult Index(DateTime dateFrom, DateTime dateTo)
+        private ReportDTO GetModelByValidDates(DateTime? dateFrom, DateTime? dateTo)
         {
-            var model = _report.GetReport(dateFrom, dateTo);
-            var modelInView = _mapper.Map<ReportDTO, ReportModel>(model);
-            return View(modelInView);
+            if (dateFrom.HasValue && dateTo.HasValue)
+            {
+                return _report.GetReport(dateFrom, dateTo);
+            }
+            else
+            {
+                if (!dateFrom.HasValue && dateTo.HasValue)
+                {
+                    dateFrom = DateTime.MinValue;
+                    return _report.GetReport(dateFrom, dateTo);
+                }
+
+                if (dateFrom.HasValue && !dateTo.HasValue)
+                {
+                    dateTo = DateTime.MaxValue;
+                    return _report.GetReport(dateFrom, dateTo);
+                }
+
+                return _report.GetReport();
+            }
         }
     }
 }

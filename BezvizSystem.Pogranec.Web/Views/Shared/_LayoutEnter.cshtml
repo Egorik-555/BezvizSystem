@@ -4,9 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
-    <link rel="stylesheet" href="/Content/css/style.css">
-    @*@Styles.Render("~/Content/css")
-        @Scripts.Render("~/bundles/modernizr")*@
+    @Styles.Render("~/Content/css")
 </head>
 <body>
     <table class="header">
@@ -17,7 +15,14 @@
         </tr>
     </table>
     <table class="page" cellspacing="20">
-   
+
+        <tr>
+            <td valign="top" colspan="2">
+                <h2 class="clr_black">СИСТЕМА РЕГИСТРАЦИИ АНКЕТ</h2>
+                <h2 class="clr_black">ИНОСТРАННЫХ ТУРИСТОВ</h2>
+            </td>
+        </tr>
+
         @RenderBody()
 
         <table class="footer" style="position:fixed ;bottom:0">

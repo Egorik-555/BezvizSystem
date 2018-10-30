@@ -210,7 +210,9 @@
     <Compile Include="Mapper\MapperPogranecConfiguration.cs" />
     <Compile Include="Models\Anketa\ArrivedPerson.cs" />
     <Compile Include="Models\Login\Model.cs" />
+    <Compile Include="Models\Report\CountByOperator.cs" />
     <Compile Include="Models\Report\FindModel.cs" />
+    <Compile Include="Models\Report\NatAndAge.cs" />
     <Compile Include="Models\Report\ReportModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -222,6 +224,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\style.css" />
+    <Content Include="Content\css\validate.css" />
+    <Content Include="Content\css\_style.css" />
     <Content Include="Content\img\bvs.png" />
     <Content Include="Content\img\fon.png" />
     <Content Include="Content\img\graf1.png" />
@@ -233,6 +237,9 @@
     <Content Include="Content\img\table2.png" />
     <Content Include="Content\img\table3.png" />
     <Content Include="Content\img\VISA.png" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.structure.css" />
+    <Content Include="Content\jquery-ui.theme.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -269,6 +276,7 @@
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -315,6 +323,9 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Report\DataAllByNatAndAge.cshtml" />
+    <Content Include="Views\Report\DataCountByOperator.cshtml" />
+    <Content Include="Views\Report\DataReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\XMLs\" />

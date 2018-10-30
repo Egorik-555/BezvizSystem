@@ -7,14 +7,21 @@ namespace BezvizSystem.Pogranec.Web.Models.Report
 {
     public class ReportModel
     {
-        public string DateFrom { get; set; }
-        public string DateTo { get; set; }
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
 
-        public string AllRegistrated { get; set; }
-        public string AllArrived { get; set; }
-        public string WaitArrived { get; set; }
-        public string NotArriverd { get; set; }
-        public string AllTourist { get; set; }
-        public string AllGroup { get; set; }
+        public int? AllRegistrated { get; set; }
+        public int? AllArrived { get; set; }
+        public int? WaitArrived { get; set; }
+        public int? NotArriverd { get; set; }
+        public int? AllTourist { get; set; }
+        public int? AllGroup { get; set; }
+
+        public IEnumerable<NatAndAge> AllByNatAndAge { get; set; }
+        public IEnumerable<CountByOperator> AllByOperatorCount { get; set; }
+
+        public string StringDateByArrivalCount { get; set; }
+        public string StringCheckPointCount { get; set; }
+        public string StringDaysByCount { get; set; }
     }
 }

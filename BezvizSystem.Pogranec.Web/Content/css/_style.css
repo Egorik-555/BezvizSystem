@@ -4,11 +4,6 @@
     margin: 0;
 }
 
-body {
-    padding-bottom: 110px;
-    height: 1000px; /* Force height on body */
-}
-
 table.header {
     width: 100%;
     background: url(../img/head1.png) repeat-x;
@@ -21,17 +16,11 @@ table.header {
         margin: 0 auto;
     }
 
-.footer {
-    position: fixed;
-    bottom: 0;
-    text-align: center;
-    right: 0;
-    left: 0;
+table.footer {
     width: 100%;
     background-color: #313131;
     height: 50px;
     color: #fff;
-
 }
 
     table.footer th {
@@ -121,26 +110,10 @@ table.second form.pad_cent_red {
     text-transform: uppercase;
     font-size: 15px;
 }
-
-.field-validation-error {
-    color: red;
-    font-size: 20px;
+.field-validation-error{
+    color:red;
+    font-size:20px;
 }
-
-.simply_form_green {
-    width: 220px;
-    height: 50px;
-    line-height: 50px;
-    background-color: #0a9200;
-    color: #fff;
-    border: 1px solid #0a9200;
-    text-align: center;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 15px;
-    text-decoration: none;
-}
-
 .simply_form_red {
     width: 220px;
     height: 50px;
@@ -153,26 +126,14 @@ table.second form.pad_cent_red {
     text-transform: uppercase;
     font-size: 15px;
     text-decoration: none;
-    font-family: "Times New Roman"
 }
-/*a.simply_form_red {
-    padding: 20px 10px;  
-}*/
-
-.buttonParameters {
-    height: 52px;
+a.simply_form_red {
+    padding: 20px 10px;
 }
-
-.linkParameters {
-    display: block;
-    height: 50px;
-}
-
-.visitor_str:hover {
+.visitor_str:hover{
     background: rgba(10,146,0,0.6);
-    cursor: pointer;
+    cursor:pointer;
 }
-
 .pad_cent {
     width: 208px;
     height: 55px;
@@ -263,7 +224,7 @@ ul {
 }
 
 .sfr_auto {
-    margin: 5px auto;
+    margin: 15px auto;
 }
 
 .punkt {
@@ -278,37 +239,15 @@ span.low_txt {
 }
 
 td.two_column input {
-    width: 100%;
+    width: 220px;
     height: 45px;
     text-align: center;
 }
 
-    td.two_column input[type="submit"] {
-        width: 101%;
-        height: 52px;
+    td.two_column input.bg_in {
+        width: 100%;
+        margin: 0 auto;
     }
-
-td.two_column select {
-    width: 100%;
-    height: 49px;
-    text-align: center;
-}
-
-/*select#Infoes_0__Nationality {
-    width: 100%;
-    height: 50px;
-}
-
-
-select#Infoes_0__Gender {
-    width: 100%;
-    height: 50px;
-}*/
-
-td.two_column input.bg_in {
-    width: 100%;
-    margin: 0 auto;
-}
 
 td.two_column .bg_in_long {
     width: 100%;
@@ -350,7 +289,6 @@ td h3.red {
     margin: 0;
     color: #0a9200;
     font-size: 20px;
-    color: #037d3c
 }
 
 .sex {
@@ -376,16 +314,11 @@ p.no_need {
 
 td.left {
     width: 50%;
-    text-align: left;
+    text-align:left;
 }
 
 h2.red {
     color: #0a9200;
-    font-size: 20px;
-}
-
-a.footer-brain {
-    color: #fff;
     font-size: 20px;
 }
 
@@ -474,7 +407,6 @@ table.in_table3 {
     margin-bottom: 350px;
     padding: 0;
 }
-
 
     table.in_table3 td {
         height: 60px;
@@ -616,14 +548,14 @@ td.orange {
     /*width: 45%;*/
 }
 
-form.darkorange {
+.darkorange {
     background-color: #ffba00;
     color: #1e1e1e;
     margin-left: 30px !important;
     border: 1px solid #fff;
 }
 
-form.green {
+.green {
     background-color: #0a9200;
     color: #fff;
     margin-left: 30px !important;
@@ -740,20 +672,20 @@ table.text_only {
         width: 20px;
     }
 
-table.text_long caption {
-    color: #0a9200;
-    font-weight: bold;
-    font-size: 20px;
-    margin-bottom: 20px;
-}
+    table.text_long caption {
+        color: #0a9200;
+        font-weight: bold;
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
 
-table.text_long span.red {
-    color: #0a9200;
-}
+    table.text_long span.red {
+        color: #0a9200;
+    }
 
-table.text_long td {
-    padding-bottom: 20px;
-}
+    table.text_long td {
+        padding-bottom: 20px;
+    }
 
 table.page {
     margin: 80px auto;
@@ -827,61 +759,10 @@ span.green {
 span.red {
     color: #B22222;
 }
-
 .left_text {
     text-align: left;
 }
-
-table.second label {
-    font-size: 18px;
-    font-weight: 700;
-}
-
-
-table.td.th.a.footer-brain {
-    color: #fff;
-    font-size: 20px;
-}
-
-#panelDates input {
-    height: 45px;
-    text-align: center;
-}
-
-.trSpace {
-    height: 20px;
-}
-
-/*for checkbox*/
-td.two_column input[type="checkbox"] {
-    width: auto;
-    height: auto;
-}
-
-/*pagination*/
-.pagination {
-    display: inline-block;
-}
-
-a.pagination {
-    color: black;
-    float: left;
-    padding: 8px 16px;
-    text-decoration: none;
-    border: 1px solid #ddd; /* Gray */
-}
-
-.pagination.selected {
-    background-color: #0a9200;
-    color: white;
-}
-
-a:hover.pagination:not(.active) {
-    background-color: #ddd;
-}
-
-.input-seach {
-    width: 100%;
-    height: 45px;
-    padding: 0 1px 0 1px
+table.second label{
+    font-size:18px;
+    font-weight:700;
 }
