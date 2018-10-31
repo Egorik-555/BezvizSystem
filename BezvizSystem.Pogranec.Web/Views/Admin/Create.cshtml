@@ -1,12 +1,11 @@
-﻿@model BezvizSystem.Web.Models.Operator.CreateOperatorModel
+﻿@model BezvizSystem.Pogranec.Web.Models.Admin.CreateUser
 
 @{
-    ViewBag.Title = "Новый туроператор";
-    ViewBag.SubTitle = "Новый туроператор";
+    ViewBag.Title = "Новый пользователь";
+    ViewBag.SubTitle = "Новый пользователь";
 }
 
 <td class="two_column" style="vertical-align: top">
-
 
     @using (Html.BeginForm())
     {
@@ -21,25 +20,37 @@
 
             <tr>
                 <td colspan="2">
+                    @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.ConfirmePassword, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.ConfirmePassword, new { htmlAttributes = new { @class = "form-control" } })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
                     @Html.LabelFor(model => model.Transcript, htmlAttributes: new { @class = "control-label col-md-2" })
                     @Html.EditorFor(model => model.Transcript, new { htmlAttributes = new { @class = "form-control" } })
                 </td>
             </tr>
-
             <tr>
                 <td colspan="2">
-                    @Html.LabelFor(model => model.UNP, htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.EditorFor(model => model.UNP, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.LabelFor(model => model.Ip, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Ip, new { htmlAttributes = new { @class = "form-control" } })
                 </td>
             </tr>
 
-            <tr>
-                <td colspan="2">
-                    @Html.LabelFor(model => model.OKPO, htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.EditorFor(model => model.OKPO, new { htmlAttributes = new { @class = "form-control" } })
-                </td>
-            </tr>
-
+         
             <tr>
                 <td colspan="2">
                     <input type="submit" value="Сохранить" class="simply_form_red" />

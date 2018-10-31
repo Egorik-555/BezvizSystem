@@ -3,7 +3,7 @@
     AjaxOptions opt = new AjaxOptions
     {
         UpdateTargetId = "tabledata",
-        Url = Url.Action("DataOperators")
+        Url = Url.Action("DataUsers")
     };
 }
 
@@ -31,7 +31,7 @@
                 </td>
             </tr>
             <tbody id="tabledata">
-                @Html.Action("DataOperators", new { id = Model })
+                @Html.Action("DataUsers", new { id = Model })
             </tbody>
         }
     </table>

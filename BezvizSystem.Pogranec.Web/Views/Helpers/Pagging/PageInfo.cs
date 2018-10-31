@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace BezvizSystem.Web.Views.Helpers.Pagging
+namespace BezvizSystem.Pogranec.Web.Views.Helpers.Pagging
 {
     public class PageInfo
     {
@@ -15,6 +15,7 @@ namespace BezvizSystem.Web.Views.Helpers.Pagging
             get { return (int)Math.Ceiling((decimal)TotalItems / PageSize); }
         }
     }
+
     public class IndexViewModel<T>
     {
         public IEnumerable<T> Models { get; set; }

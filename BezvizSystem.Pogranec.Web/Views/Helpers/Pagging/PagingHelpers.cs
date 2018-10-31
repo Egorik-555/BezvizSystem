@@ -5,7 +5,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
-namespace BezvizSystem.Web.Views.Helpers.Pagging
+namespace BezvizSystem.Pogranec.Web.Views.Helpers.Pagging
 {
     public static class PagingHelpers
     {
