@@ -7,6 +7,7 @@ using BezvizSystem.Pogranec.Web.Views.Helpers.Pagging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace BezvizSystem.Pogranec.Web.Controllers
@@ -54,27 +55,27 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult> Create(CreateOperatorModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        model.UserInSystem = User.Identity.Name;
-        //        model.DateInSystem = DateTime.Now;
-        //        var user = _mapper.Map<CreateOperatorModel, UserDTO>(model);
-        //        var userProfile = _mapper.Map<CreateOperatorModel, ProfileUserDTO>(model);
-        //        user.ProfileUser = userProfile;
+        [HttpPost]
+        public async Task<ActionResult> Create(CreateUser model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.UserInSystem = User.Identity.Name;
+                model.DateInSystem = DateTime.Now;
+                var user = _mapper.Map<CreateUser, UserDTO>(model);
+                var userProfile = _mapper.Map<CreateUser, ProfileUserDTO>(model);
+                user.ProfileUser = userProfile;
 
-        //        var result = await _userService.Create(user);
-        //        if (result.Succedeed)
-        //            return RedirectToAction("Index");
-        //        else
-        //        {
-        //            ModelState.AddModelError("", result.Message);
-        //        }
-        //    }
-        //    return View(model);
-        //}
+                var result = await _userService.Create(user);
+                if (result.Succedeed)
+                    return RedirectToAction("Index");
+                else
+                {
+                    ModelState.AddModelError("", result.Message);
+                }
+            }
+            return View(model);
+        }
 
         //public async Task<ActionResult> Delete(string id)
         //{

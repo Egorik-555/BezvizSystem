@@ -14,9 +14,9 @@ namespace BezvizSystem.Pogranec.Web.Mapper
         {
             CreateMap<ProfileUserDTO, DisplayUser>();
             CreateMap<UserDTO, DisplayUser>();
-
-            CreateMap<CreateUser, ProfileUserDTO>();
+            
             CreateMap<CreateUser, UserDTO>();
+            CreateMap<CreateUser, ProfileUserDTO>();
         }
     }
 }
