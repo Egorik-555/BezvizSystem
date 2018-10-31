@@ -39,7 +39,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             var model = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<DisplayUser>>(usersDto);
             if (!string.IsNullOrEmpty(id))
             {
-                model = model.Where(m => m.Transcript.ToUpper().Contains(id.ToUpper()));
+                model = model.Where(m => m.ProfileUserTranscript.ToUpper().Contains(id.ToUpper()));
             }
 
             int pageSize = 3;
@@ -96,35 +96,35 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         //    return RedirectToAction("Index");
         //}
 
-        //public async Task<ActionResult> Edit(string id)
-        //{
-        //    var user = await _userService.GetByIdAsync(id);
-        //    if (user == null)
-        //        return RedirectToAction("Index");
-        //    var model = _mapper.Map<UserDTO, EditOperatorModel>(user);
-        //    return View(model);
-        //}
+        public async Task<ActionResult> Edit(string id)
+        {
+            var user = await _userService.GetByIdAsync(id);
+            if (user == null)
+                return RedirectToAction("Index");
+            var model = _mapper.Map<UserDTO, EditOperatorModel>(user);
+            return View(model);
+        }
 
-        //[HttpPost]
-        //public async Task<ActionResult> Edit(EditOperatorModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        model.ProfileUserUserEdit = User.Identity.Name;
-        //        var user = _mapper.Map<EditOperatorModel, UserDTO>(model);
-        //        var userProfile = _mapper.Map<EditOperatorModel, ProfileUserDTO>(model);
-        //        user.ProfileUser = userProfile;
+        [HttpPost]
+        public async Task<ActionResult> Edit(EditOperatorModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.ProfileUserUserEdit = User.Identity.Name;
+                var user = _mapper.Map<EditOperatorModel, UserDTO>(model);
+                var userProfile = _mapper.Map<EditOperatorModel, ProfileUserDTO>(model);
+                user.ProfileUser = userProfile;
 
-        //        var result = await _userService.Update(user);
-        //        if (result.Succedeed)
-        //            return RedirectToAction("Index");
-        //        else
-        //        {
-        //            ModelState.AddModelError("", result.Message);
-        //        }
-        //    }
-        //    return View(model);
-        //}
+                var result = await _userService.Update(user);
+                if (result.Succedeed)
+                    return RedirectToAction("Index");
+                else
+                {
+                    ModelState.AddModelError("", result.Message);
+                }
+            }
+            return View(model);
+        }
 
     }
 }

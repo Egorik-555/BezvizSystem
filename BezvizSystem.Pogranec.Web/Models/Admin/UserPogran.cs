@@ -15,9 +15,9 @@ namespace BezvizSystem.Pogranec.Web.Models.Admin
         [Display(Name = "Логин")]
         public string UserName { get; set; }
         [Display(Name = "ФИО сотрудника")]
-        public string Transcript { get; set; }
+        public string ProfileUserTranscript { get; set; }
         [Display(Name = "Ip-адрес")]
-        public string Ip { get; set; }
+        public string ProfileUserIp { get; set; }
     }
 
 
@@ -45,11 +45,11 @@ namespace BezvizSystem.Pogranec.Web.Models.Admin
         [Required(ErrorMessage = "Укажите ФИО сотрудника")]
         public string Transcript { get; set; }
 
-        [Display(Name = "Ip-адрес")]
+        [Display(Name = "IP-адрес")]
         [Required(ErrorMessage = " Укажите ip-адрес")]
         public string Ip { get; set; }
-     
-        public string Role { get; set; }       
+
+        public string Role { get; set; }
         public bool Active { get; set; }
         //public DateTime? NotActiveToDate { get; set; }
 
@@ -61,9 +61,43 @@ namespace BezvizSystem.Pogranec.Web.Models.Admin
         public CreateUser()
         {
             Active = true;
-            Role = "pogranec";         
+            Role = "pogranec";
         }
     }
 
+    public class EditUser
+    {
+        [HiddenInput(DisplayValue = false)]
+        public string Id { get; set; }
 
+        [Display(Name = "Пароль")]
+        [Required(ErrorMessage = "Укажите пароль")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [System.ComponentModel.DataAnnotations.Compare("Password")]
+        [Display(Name = "Подтверждение пароля")]
+        [Required(ErrorMessage = "Укажите подтверждение пароля")]
+        [DataType(DataType.Password)]
+        public string ConfirmePassword { get; set; }
+
+        [Display(Name = "ФИО сотрудника")]
+        [Required(ErrorMessage = "Укажите ФИО сотрудника")]
+        public string Transcript { get; set; }
+
+        [Display(Name = "IP-адрес")]
+        [Required(ErrorMessage = " Укажите ip-адрес")]
+        public string Ip { get; set; }
+
+        [Display(Name = "Активен")]
+        public bool Active { get; set; }
+        [Display(Name = "До какого момента не активен")]
+        public DateTime? NotActiveToDate { get; set; }
+
+        public string Role { get; set; }
+        [HiddenInput(DisplayValue = false)]
+        public DateTime? DateInSystem { get; set; }
+        [HiddenInput(DisplayValue = false)]
+        public string UserInSystem { get; set; }
+    }
 }

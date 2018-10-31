@@ -11,10 +11,9 @@ namespace BezvizSystem.Pogranec.Web.Mapper
     public class FromBLLToWebProfile : Profile
     {
         public FromBLLToWebProfile()
-        {
-            CreateMap<ProfileUserDTO, DisplayUser>();
-            CreateMap<UserDTO, DisplayUser>();
-            
+        {         
+            CreateMap<UserDTO, DisplayUser>();          
+
             CreateMap<CreateUser, UserDTO>();
             CreateMap<CreateUser, ProfileUserDTO>();
         }
