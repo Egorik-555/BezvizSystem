@@ -201,13 +201,16 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AnketaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Mapper\FromBLLToWebProfile.cs" />
     <Compile Include="Mapper\MapperPogranecConfiguration.cs" />
+    <Compile Include="Models\Admin\UserPogran.cs" />
     <Compile Include="Models\Anketa\ArrivedPerson.cs" />
     <Compile Include="Models\Login\Model.cs" />
     <Compile Include="Models\Report\CountByOperator.cs" />
@@ -215,6 +218,8 @@
     <Compile Include="Models\Report\NatAndAge.cs" />
     <Compile Include="Models\Report\ReportModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Helpers\Pagging\PageInfo.cs" />
+    <Compile Include="Views\Helpers\Pagging\PagingHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -226,6 +231,12 @@
     <Content Include="Content\css\style.css" />
     <Content Include="Content\css\validate.css" />
     <Content Include="Content\css\_style.css" />
+    <Content Include="Content\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\img\bvs.png" />
     <Content Include="Content\img\fon.png" />
     <Content Include="Content\img\graf1.png" />
@@ -283,6 +294,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\MyScripts\EditHelper.js" />
+    <Content Include="Scripts\MyScripts\pikaday.js" />
+    <Content Include="Scripts\MyScripts\ShowPanels.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
@@ -326,6 +340,11 @@
     <Content Include="Views\Report\DataAllByNatAndAge.cshtml" />
     <Content Include="Views\Report\DataCountByOperator.cshtml" />
     <Content Include="Views\Report\DataReport.cshtml" />
+    <Content Include="Views\Admin\Create.cshtml" />
+    <Content Include="Views\Admin\DataOperators.cshtml" />
+    <Content Include="Views\Admin\Delete.cshtml" />
+    <Content Include="Views\Admin\Edit.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\XMLs\" />

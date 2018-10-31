@@ -19,8 +19,11 @@ namespace BezvizSystem.DAL.Entities
         public string UNP { get; set; }
         public string OKPO { get; set; }
         public string Transcript { get; set; }
+        public string Ip { get; set; }
         public string Role { get; set; }
         public bool Active { get; set; }
+        public DateTime? NotActiveToDate { get; set; }
+
         public DateTime? DateInSystem { get; set; }
         public string UserInSystem { get; set; }
         public DateTime? DateEdit { get; set; }

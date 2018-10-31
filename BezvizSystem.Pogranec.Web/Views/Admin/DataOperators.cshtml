@@ -1,0 +1,27 @@
+﻿
+@using BezvizSystem.Web.Views.Helpers.Pagging
+@using BezvizSystem.Web.Models.Operator
+
+@model IndexViewModel<ViewOperatorModel>
+
+
+@foreach (var item in Model.Models)
+{
+    <tr class="visitor_str" id="@item.Id" onclick="onRowClickHandler(event);">
+        <td>
+            @(item.ProfileUserTranscript == null ? "Туроператор" : item.ProfileUserTranscript)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProfileUserUNP)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProfileUserOKPO)
+        </td>
+    </tr>
+}
+
+<tr>
+    <td style="border:none" colspan="3"> 
+        @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { id = ViewBag.Id, page = x }))
+    </td>
+</tr>

@@ -89,7 +89,6 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
         [Authorize(Roles = "pogranecAdmin, pogranec") ]
         public ActionResult Index()
         {

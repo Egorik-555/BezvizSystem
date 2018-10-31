@@ -33,7 +33,6 @@ namespace BezvizSystem.Web.Models.Operator
         [Display(Name = "E-mail")]
         public string Email { get; set; }
 
-
         [Display(Name = "E-mail подтвержден")]
         public bool EmailConfirmed { get; set; }
 
