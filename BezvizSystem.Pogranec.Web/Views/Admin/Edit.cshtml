@@ -1,7 +1,7 @@
-﻿@model BezvizSystem.Web.Models.Operator.EditOperatorModel
+﻿@model BezvizSystem.Pogranec.Web.Models.Admin.EditUser
 
 @{
-    ViewBag.Title = "Туроператор";
+    ViewBag.Title = "Пользователь";
 }
 
 <td class="two_column" style="vertical-align: top">
@@ -22,37 +22,9 @@
             <tr>
                 <td colspan="2">
                     @Html.HiddenFor(model => model.Id)
-                    @Html.HiddenFor(model => model.ProfileUserUNP)
+                    @Html.HiddenFor(model => model.UserName)
                     @Html.LabelFor(model => model.ProfileUserTranscript, htmlAttributes: new { @class = "control-label col-md-2" })
                     @Html.EditorFor(model => model.ProfileUserTranscript, new { htmlAttributes = new { @class = "form-control" } })
-                </td>
-            </tr>
-
-            @*<tr>
-                <td colspan="2">
-                    @Html.LabelFor(model => model.ProfileUserUNP, htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.EditorFor(model => model.ProfileUserUNP, new { htmlAttributes = new { @class = "form-control", @readonly="readonly" } })
-                </td>
-            </tr>*@
-
-            <tr>
-                <td colspan="2">
-                    @Html.LabelFor(model => model.ProfileUserOKPO, htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.EditorFor(model => model.ProfileUserOKPO, new { htmlAttributes = new { @class = "form-control" } })
-                </td>
-            </tr>
-
-            <tr>
-                <td colspan="2">
-                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                </td>
-            </tr>
-
-            <tr class="mtauto">
-                <td colspan="2">
-                    @Html.EditorFor(model => model.EmailConfirmed)
-                    @Html.LabelFor(model => model.EmailConfirmed, htmlAttributes: new { @class = "control-label" })
                 </td>
             </tr>
 
@@ -70,10 +42,25 @@
                 </td>
             </tr>
 
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.ProfileUserIp, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.ProfileUserIp, new { htmlAttributes = new { @class = "form-control" } })
+                </td>
+            </tr>
+
+
             <tr class="mtauto">
                 <td colspan="2">
                     @Html.EditorFor(model => model.ProfileUserActive, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.LabelFor(model => model.ProfileUserActive, htmlAttributes: new { @class = "control-label col-md-2" })
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.ProfileUserNotActiveToDate, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.ProfileUserNotActiveToDate, "Date", new { htmlAttributes = new { @class = "form-control datepicker", autocomplete = "off" } })
                 </td>
             </tr>
 
@@ -86,3 +73,8 @@
         </table>
     }
 </td>
+
+@section scripts{
+    @Scripts.Render("~/bundles/jquery-ui")
+    <script src="~/Scripts/MyScripts/pikaday.js"></script>
+}

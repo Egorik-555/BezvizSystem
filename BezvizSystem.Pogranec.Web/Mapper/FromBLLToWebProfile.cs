@@ -11,11 +11,21 @@ namespace BezvizSystem.Pogranec.Web.Mapper
     public class FromBLLToWebProfile : Profile
     {
         public FromBLLToWebProfile()
-        {         
-            CreateMap<UserDTO, DisplayUser>();          
+        {
+            RecognizePrefixes("ProfileUser");
+
+            CreateMap<UserDTO, DisplayUser>();
+            CreateMap<UserDTO, EditUser>();
+            CreateMap<UserDTO, DeleteUser>();
 
             CreateMap<CreateUser, UserDTO>();
             CreateMap<CreateUser, ProfileUserDTO>();
+
+            CreateMap<EditUser, UserDTO>();
+            CreateMap<EditUser, ProfileUserDTO>();
+
+            CreateMap<DeleteUser, UserDTO>();
+            CreateMap<DeleteUser, ProfileUserDTO>();
         }
     }
 }

@@ -77,42 +77,42 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             return View(model);
         }
 
-        //public async Task<ActionResult> Delete(string id)
-        //{
-        //    var user = await _userService.GetByIdAsync(id);
-        //    if (user == null)
-        //        return RedirectToAction("Index");
+        public async Task<ActionResult> Delete(string id)
+        {
+            var user = await _userService.GetByIdAsync(id);
+            if (user == null)
+                return RedirectToAction("Index");
 
-        //    var model = _mapper.Map<UserDTO, DeleteOperatorModel>(user);
-        //    return View(model);
-        //}
+            var model = _mapper.Map<UserDTO, DeleteUser>(user);
+            return View(model);
+        }
 
-        //[HttpPost]
-        //public async Task<ActionResult> Delete(DeleteOperatorModel model)
-        //{
-        //    var user = _mapper.Map<DeleteOperatorModel, UserDTO>(model);
+        [HttpPost]
+        public async Task<ActionResult> Delete(DeleteUser model)
+        {
+            var user = _mapper.Map<DeleteUser, UserDTO>(model);
 
-        //    await _userService.Delete(user);
-        //    return RedirectToAction("Index");
-        //}
+            await _userService.Delete(user);
+            return RedirectToAction("Index");
+        }
 
         public async Task<ActionResult> Edit(string id)
         {
             var user = await _userService.GetByIdAsync(id);
             if (user == null)
                 return RedirectToAction("Index");
-            var model = _mapper.Map<UserDTO, EditOperatorModel>(user);
+            var model = _mapper.Map<UserDTO, EditUser>(user);
             return View(model);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(EditOperatorModel model)
+        public async Task<ActionResult> Edit(EditUser model)
         {
             if (ModelState.IsValid)
             {
                 model.ProfileUserUserEdit = User.Identity.Name;
-                var user = _mapper.Map<EditOperatorModel, UserDTO>(model);
-                var userProfile = _mapper.Map<EditOperatorModel, ProfileUserDTO>(model);
+                var user = _mapper.Map<EditUser, UserDTO>(model);
+                var userProfile = _mapper.Map<EditUser, ProfileUserDTO>(model);
                 user.ProfileUser = userProfile;
 
                 var result = await _userService.Update(user);

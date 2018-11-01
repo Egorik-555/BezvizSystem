@@ -70,34 +70,50 @@ namespace BezvizSystem.Pogranec.Web.Models.Admin
         [HiddenInput(DisplayValue = false)]
         public string Id { get; set; }
 
+        [Display(Name = "Логин - не редактируется")]
+        public string UserName { get; set; }
+
         [Display(Name = "Пароль")]
-        [Required(ErrorMessage = "Укажите пароль")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [System.ComponentModel.DataAnnotations.Compare("Password")]
         [Display(Name = "Подтверждение пароля")]
-        [Required(ErrorMessage = "Укажите подтверждение пароля")]
         [DataType(DataType.Password)]
         public string ConfirmePassword { get; set; }
 
         [Display(Name = "ФИО сотрудника")]
         [Required(ErrorMessage = "Укажите ФИО сотрудника")]
-        public string Transcript { get; set; }
+        public string ProfileUserTranscript { get; set; }
 
         [Display(Name = "IP-адрес")]
         [Required(ErrorMessage = " Укажите ip-адрес")]
-        public string Ip { get; set; }
+        public string ProfileUserIp { get; set; }
 
         [Display(Name = "Активен")]
-        public bool Active { get; set; }
+        public bool ProfileUserActive { get; set; }
         [Display(Name = "До какого момента не активен")]
-        public DateTime? NotActiveToDate { get; set; }
+        public DateTime? ProfileUserNotActiveToDate { get; set; }
 
-        public string Role { get; set; }
+
         [HiddenInput(DisplayValue = false)]
-        public DateTime? DateInSystem { get; set; }
+        public DateTime ProfileUserDateInSystem { get; set; }
         [HiddenInput(DisplayValue = false)]
-        public string UserInSystem { get; set; }
+        public string ProfileUserUserInSystem { get; set; }
+        [HiddenInput(DisplayValue = false)]
+        public DateTime ProfileUserDateEdit { get; set; }
+        [HiddenInput(DisplayValue = false)]
+        public string ProfileUserUserEdit { get; set; }
+    }
+
+    public class DeleteUser
+    {
+        [HiddenInput(DisplayValue = false)]
+        public string Id { get; set; }
+
+        [Display(Name = "Логин")]
+        public string UserName { get; set; }
+        [Display(Name = "ФИО сотрудника")]
+        public string ProfileUserTranscript { get; set; }
     }
 }
