@@ -57,7 +57,7 @@
                 </td>
             </tr>
 
-            <tr>
+            <tr id="activeDate">
                 <td colspan="2">
                     @Html.LabelFor(model => model.ProfileUserNotActiveToDate, htmlAttributes: new { @class = "control-label" })
                     @Html.EditorFor(model => model.ProfileUserNotActiveToDate, "Date", new { htmlAttributes = new { @class = "form-control datepicker", autocomplete = "off" } })
@@ -75,8 +75,7 @@
 </td>
 
 @section scripts{
+    <script src="~/Scripts/MyScripts/helper.js"></script>
     @Scripts.Render("~/bundles/jquery-ui")
     <script src="~/Scripts/MyScripts/pikaday.js"></script>
-
-
 }

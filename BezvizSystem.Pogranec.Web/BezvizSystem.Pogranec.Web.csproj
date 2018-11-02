@@ -295,6 +295,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\MyScripts\EditHelper.js" />
+    <Content Include="Scripts\MyScripts\helper.js" />
     <Content Include="Scripts\MyScripts\pikaday.js" />
     <Content Include="Scripts\MyScripts\ShowPanels.js" />
     <Content Include="Scripts\popper-utils.js" />
