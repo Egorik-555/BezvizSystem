@@ -45,40 +45,37 @@ namespace BezvizSystem.Pogranec.Web.Controllers
 
                 UserDTO user = new UserDTO { UserName = model.Name, Password = model.Password };
                 var claim = await _userService.Authenticate(user);
-                if (claim != null)
-                {
-                    var findUser = await _userService.GetByNameAsync(user.UserName);
-
-                    if (findUser.ProfileUser.Active)
-                    {
-                        Authentication.SignOut();
-                        Authentication.SignIn(new AuthenticationProperties
-                        {
-                            IsPersistent = true,
-                        }, claim);
-
-                        //_logger.Insert(new UserActivityDTO {
-                        //    Login = model.Name,
-                        //    Ip = HttpContext.Request.UserHostAddress,
-                        //    Operation = "Вход",
-                        //    TimeActivity = DateTime.Now
-                        //});
-
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else
-                    {
-                        errorMsg = "Пользователь заблокирован";
-                        ModelState.AddModelError("", errorMsg);
-                    }
-                }
-                else
+                if (claim == null)
                 {
                     errorMsg = "Неверный логин или пароль";
                     ModelState.AddModelError("", errorMsg);
+                    return View(model);
                 }
 
-            }           
+                var findUser = await _userService.GetByNameAsync(user.UserName);
+
+                if (!findUser.ProfileUser.Active && (!findUser.ProfileUser.NotActiveToDate.HasValue || findUser.ProfileUser.NotActiveToDate > DateTime.Now))
+                {
+                    errorMsg = "Пользователь заблокирован";
+                    ModelState.AddModelError("", errorMsg);
+                    return View(model);
+                }
+              
+                if (findUser.ProfileUser.Role != "pogranecAdmin" && findUser.ProfileUser.Ip != Request.UserHostAddress)
+                {
+                    errorMsg = "Не соответствует IP-адрес пользователя";
+                    ModelState.AddModelError("", errorMsg);
+                    return View(model);
+                }
+
+                Authentication.SignOut();
+                Authentication.SignIn(new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                }, claim);
+
+                return RedirectToAction("Index", "Home");
+            }
 
             return View(model);
         }

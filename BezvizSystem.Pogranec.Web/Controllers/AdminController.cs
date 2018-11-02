@@ -39,7 +39,8 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             var model = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<DisplayUser>>(usersDto);
             if (!string.IsNullOrEmpty(id))
             {
-                model = model.Where(m => m.ProfileUserTranscript.ToUpper().Contains(id.ToUpper()));
+                CleverSeach(id, ref model);
+                //model = model.Where(m => m.ProfileUserTranscript.ToUpper().Contains(id.ToUpper()));
             }
 
             int pageSize = 3;
@@ -48,6 +49,23 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             IndexViewModel<DisplayUser> ivm = new IndexViewModel<DisplayUser> { PageInfo = pageInfo, Models = modelForPaging };
 
             return PartialView(ivm);
+        }
+
+        private void CleverSeach(string id, ref IEnumerable<DisplayUser> model)
+        {
+            var temp = new List<DisplayUser>(model);
+
+            model = model.Where(m => m.UserName.ToUpper().Contains(id.ToUpper()));
+
+            if (model.Count() == 0)
+            {
+                model = temp.Where(m => m.ProfileUserTranscript.ToUpper().Contains(id.ToUpper()));
+            }
+
+            if (model.Count() == 0)
+            {
+                model = temp.Where(m => m.ProfileUserIp.ToUpper().Contains(id.ToUpper()));
+            }
         }
 
         public ActionResult Create()

@@ -32,6 +32,7 @@ namespace BezvizSystem.Pogranec.Web.Models.Admin
 
         [Display(Name = "Пароль")]
         [Required(ErrorMessage = "Укажите пароль")]
+        [StringLength(99, MinimumLength = 6, ErrorMessage = "Длина УНП должна быть не менее 6 символов")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
@@ -47,6 +48,7 @@ namespace BezvizSystem.Pogranec.Web.Models.Admin
 
         [Display(Name = "IP-адрес")]
         [Required(ErrorMessage = " Укажите ip-адрес")]
+        [RegularExpression(@"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$", ErrorMessage = "Некорректный IP-адрес")]
         public string Ip { get; set; }
 
         public string Role { get; set; }
@@ -79,6 +81,7 @@ namespace BezvizSystem.Pogranec.Web.Models.Admin
 
         [System.ComponentModel.DataAnnotations.Compare("Password")]
         [Display(Name = "Подтверждение пароля")]
+        [StringLength(99, MinimumLength = 6, ErrorMessage = "Длина УНП должна быть не менее 6 символов")]
         [DataType(DataType.Password)]
         public string ConfirmePassword { get; set; }
 
@@ -88,6 +91,7 @@ namespace BezvizSystem.Pogranec.Web.Models.Admin
 
         [Display(Name = "IP-адрес")]
         [Required(ErrorMessage = " Укажите ip-адрес")]
+        [RegularExpression(@"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$", ErrorMessage = "Некорректный IP-адрес")]
         public string ProfileUserIp { get; set; }
 
         [Display(Name = "Активен")]
