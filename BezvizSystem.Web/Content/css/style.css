@@ -885,3 +885,48 @@ a:hover.pagination:not(.active) {
     height: 45px;
     padding: 0 1px 0 1px
 }
+
+
+
+.CheckPoint {
+    position: relative;
+    display: inline-block;
+}
+
+.CheckPoint-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+    /* support: IE7 */
+    *height: 1.7em;
+    *top: 0.1em;
+}
+
+.CheckPoint-input {
+    margin: 0;
+    padding: 0.3em;
+}
+
+
+.Nationality {
+    position: relative;
+    display: inline-block;
+}
+
+.Nationality-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+    /* support: IE7 */
+    *height: 1.7em;
+    *top: 0.1em;
+}
+
+.Nationality-input {
+    margin: 0;
+    padding: 0.3em;
+}

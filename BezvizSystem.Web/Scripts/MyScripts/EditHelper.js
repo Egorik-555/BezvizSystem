@@ -44,22 +44,36 @@ function f(whereInsert) {
     let fragmentSurname = createFragmentOfInput(count, 'Surname', 'Фамилия', 'Укажите фамилию туриста');
     let fragmentName = createFragmentOfInput(count, 'Name', 'Имя','Укажите имя туриста');
     let fragmentPassport = createFragmentOfInput(count, 'SerialAndNumber', 'Серия и номер паспорта','Укажите серию и номер паспорта туриста');
-    let fragmentNationality = createFragmentOfInput(count, 'Nationality', 'Гражданство','',  true);
+    let fragmentNationality = createFragmentOfInput(count, 'Nationality', 'Гражданство', '', true);
+//let fragmnetSpan = createFragmentOfSpan();
 
 
     let fragment = document.createDocumentFragment();
     fragment.appendChild(fragmentSurname);
     fragment.appendChild(fragmentName);
     fragment.appendChild(fragmentPassport);
-    fragment.appendChild(fragmentNationality);
+    fragment.appendChild(fragmentNationality);    
     fragment.appendChild(createFragment(count, 'Gender', 'BithDate', 'Пол', 'Дата рождения', createByClone));
 
     tbody.insertBefore(fragment, lastTr.nextSibling);
+
+    var id = makeId(count, 'Nationality');
+    $(function () {
+        $("#"+id).combobox();
+        $("#toggle").click(function () {
+            $("#" + id).toggle();
+        });
+    });
 
     $(".datepicker").datepicker({
         monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
         dayNamesMin: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'], dateFormat: 'dd.mm.yy'
     });
+}
+
+function createFragmentOfSpan() {
+    let span = document.getElementsByClassName("custom-combobox")[0];
+    return span.cloneNode(true);
 }
 
 function createFragmentOfInput(id, field, caption, msg, select){
@@ -82,7 +96,15 @@ function createFragmentOfInput(id, field, caption, msg, select){
         td.appendChild(idInput);
     }
     td.appendChild(label);
+
     td.appendChild(input);
+
+    //if (field == "Nationality") {
+        
+    //    input.className += " nationality";
+    //    var span = createFragmentOfSpan();
+    //    td.appendChild(span);
+    //}    
 
     let tr = document.createElement('tr');
     tr.setAttribute('name','lastTr');
@@ -231,7 +253,4 @@ function getDate(date){
     var split = date.split('.');
     return new Date(split[2] + '-' + split[1] + '-' + split[0]);
 }
-
-
-
 
