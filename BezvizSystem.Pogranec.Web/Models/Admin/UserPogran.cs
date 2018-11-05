@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BezvizSystem.Pogranec.Web.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -51,9 +52,10 @@ namespace BezvizSystem.Pogranec.Web.Models.Admin
         [RegularExpression(@"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$", ErrorMessage = "Некорректный IP-адрес")]
         public string Ip { get; set; }
 
-        public string Role { get; set; }
+        [Display(Name = "Уровень доступа")]
+        public UserLevel Role { get; set; }
+
         public bool Active { get; set; }
-        //public DateTime? NotActiveToDate { get; set; }
 
         [HiddenInput(DisplayValue = false)]
         public DateTime? DateInSystem { get; set; }
@@ -63,7 +65,7 @@ namespace BezvizSystem.Pogranec.Web.Models.Admin
         public CreateUser()
         {
             Active = true;
-            Role = "pogranec";
+            Role = UserLevel.GPKUser;
         }
     }
 
@@ -93,6 +95,10 @@ namespace BezvizSystem.Pogranec.Web.Models.Admin
         [Required(ErrorMessage = " Укажите ip-адрес")]
         [RegularExpression(@"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$", ErrorMessage = "Некорректный IP-адрес")]
         public string ProfileUserIp { get; set; }
+
+        [Display(Name = "Уровень доступа")]
+        [Required(ErrorMessage = " Укажите уровень доступа")]
+        public UserLevel ProfileUserRole { get; set; }
 
         [Display(Name = "Активен")]
         public bool ProfileUserActive { get; set; }

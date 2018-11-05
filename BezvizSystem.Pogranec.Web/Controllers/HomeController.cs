@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using BezvizSystem.Pogranec.Web.Infrastructure;
 
 namespace BezvizSystem.Pogranec.Web.Controllers
 {
@@ -61,7 +62,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                     return View(model);
                 }
               
-                if (findUser.ProfileUser.Role != "pogranecAdmin" && findUser.ProfileUser.Ip != Request.UserHostAddress)
+                if (findUser.ProfileUser.Role != UserLevel.GPKAdmin.ToString() && findUser.ProfileUser.Ip != Request.UserHostAddress)
                 {
                     errorMsg = "Не соответствует IP-адрес пользователя";
                     ModelState.AddModelError("", errorMsg);
@@ -86,7 +87,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [Authorize(Roles = "pogranecAdmin, pogranec") ]
+        [Authorize(Roles = "GPKAdmin, GPKMiddle, GPKUser") ]
         public ActionResult Index()
         {
             return View();
@@ -98,10 +99,10 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             {
                 UserName = "Pogranec",
                 Password = "qwerty",
-                ProfileUser = new ProfileUserDTO { Role = "pogranecAdmin", Active = true, DateInSystem = DateTime.Now, UserInSystem = "Autoinitilize" }
+                ProfileUser = new ProfileUserDTO { Role = UserLevel.GPKAdmin.ToString(), Active = true, DateInSystem = DateTime.Now, UserInSystem = "Autoinitilize" }
             };
 
-            var roles = new List<string> { "pogranecAdmin", "pogranec" };
+            var roles = new List<string> { "GPKAdmin", "GPKMiddle", "GPKUser" };
             await _userService.SetInitialData(user, roles);
         }
     }

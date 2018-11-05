@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.Interfaces;
+using BezvizSystem.Pogranec.Web.Infrastructure;
 using BezvizSystem.Pogranec.Web.Mapper;
 using BezvizSystem.Pogranec.Web.Models.Admin;
 using BezvizSystem.Pogranec.Web.Views.Helpers.Pagging;
@@ -13,7 +14,7 @@ using System.Web.Mvc;
 namespace BezvizSystem.Pogranec.Web.Controllers
 {
 
-    [Authorize(Roles = "pogranecAdmin")]
+    [Authorize(Roles = "GPKAdmin")]
     public class AdminController : Controller
     { 
         IUserService _userService;
@@ -35,15 +36,15 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         public ActionResult DataUsers(string id, int page = 1)
         {
             ViewBag.Id = id;
-            var usersDto = _userService.GetByRole("pogranec").OrderByDescending(m => m.ProfileUser.Transcript);
+            var usersDto = _userService.GetAll().Where(u => u.UserName.ToUpper() != User.Identity.Name.ToUpper()).Where(u => u.UserName.ToUpper() != "Pogranec".ToUpper());
+            usersDto = usersDto.OrderByDescending(m => m.ProfileUser.Transcript);
             var model = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<DisplayUser>>(usersDto);
             if (!string.IsNullOrEmpty(id))
             {
                 CleverSeach(id, ref model);
-                //model = model.Where(m => m.ProfileUserTranscript.ToUpper().Contains(id.ToUpper()));
             }
 
-            int pageSize = 3;
+            int pageSize = 10;
             var modelForPaging = model.Skip((page - 1) * pageSize).Take(pageSize);
             PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = model.Count() };
             IndexViewModel<DisplayUser> ivm = new IndexViewModel<DisplayUser> { PageInfo = pageInfo, Models = modelForPaging };
@@ -68,8 +69,27 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             }
         }
 
+        private SelectList GetLevels()
+        {
+            List<string> list = new List<string>(Enum.GetNames(typeof(UserLevel)));
+            List<SelectListItem> result = new List<SelectListItem>();
+            foreach (var item in list)
+            {
+                if (item == UserLevel.GPKAdmin.ToString())
+                    result.Add(new SelectListItem {Text = "Админ", Value = item});
+                else if (item == UserLevel.GPKMiddle.ToString())
+                    result.Add(new SelectListItem { Text = "Средний уровень", Value = item });       
+                else if (item == UserLevel.GPKUser.ToString())
+                    result.Add(new SelectListItem { Text = "Пользователь", Value = item });
+                else result.Add(new SelectListItem { Text = item, Value = item });
+            }
+
+            return new SelectList(result, "Value", "Text", UserLevel.GPKUser);
+        }
+
         public ActionResult Create()
         {
+            ViewBag.Levels = GetLevels();
             return View();
         }
 
@@ -92,6 +112,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                     ModelState.AddModelError("", result.Message);
                 }
             }
+            ViewBag.Levels = GetLevels();
             return View(model);
         }
 
@@ -119,6 +140,8 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             var user = await _userService.GetByIdAsync(id);
             if (user == null)
                 return RedirectToAction("Index");
+
+            ViewBag.Levels = GetLevels();
             var model = _mapper.Map<UserDTO, EditUser>(user);
             return View(model);
         }
@@ -141,6 +164,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                     ModelState.AddModelError("", result.Message);
                 }
             }
+            ViewBag.Levels = GetLevels();
             return View(model);
         }
 
