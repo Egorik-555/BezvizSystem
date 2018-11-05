@@ -32,16 +32,18 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             return View((object)id);
         }
 
-        private async Task GetUsers(IEnumerable<DisplayUser> list)
-        {     
-            string role = (await _userService.GetByNameAsync(User.Identity.Name)).ProfileUser.Role;
+        private IEnumerable<DisplayUser> GetUsers(IEnumerable<DisplayUser> list)
+        {
+            string role = _userService.GetByName(User.Identity.Name).ProfileUser.Role;
             UserLevel level = (UserLevel)Enum.Parse(typeof(UserLevel), role);
 
-            list = list.Where(x => (int)x.ProfileUserRole > (int)level);         
+            list = list.Where(x => (int)x.ProfileUserRole > (int)level);
+
+            return list;
         }
 
         [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle")]
-        public async Task<ActionResult> DataUsers(string id, int page = 1)
+        public ActionResult DataUsers(string id, int page = 1)
         {
             ViewBag.Id = id;
             var usersDto = _userService.GetAll();
@@ -50,7 +52,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
 
             usersDto = usersDto.OrderByDescending(m => m.ProfileUser.Transcript);
             var model = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<DisplayUser>>(usersDto);
-            await GetUsers(model);
+            model = GetUsers(model);
 
             if (!string.IsNullOrEmpty(id))
             {
@@ -84,7 +86,11 @@ namespace BezvizSystem.Pogranec.Web.Controllers
 
         private SelectList GetLevels()
         {
-            List<string> list = new List<string>(Enum.GetNames(typeof(UserLevel)));
+            string role = _userService.GetByName(User.Identity.Name).ProfileUser.Role;
+            UserLevel level = (UserLevel)Enum.Parse(typeof(UserLevel), role);
+            var levels = Enum.GetValues(typeof(UserLevel)).Cast<UserLevel>().Where(x => (int)x > (int)level);
+
+            List<string> list = new List<string>(levels.Select(x => x.ToString()));
             List<SelectListItem> result = new List<SelectListItem>();
             foreach (var item in list)
             {

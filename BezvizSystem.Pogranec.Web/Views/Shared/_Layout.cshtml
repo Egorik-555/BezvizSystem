@@ -12,48 +12,45 @@
     @Styles.Render("~/Content/jqcss")
 </head>
 <body>
-    <table class="header">
-        </table>
-        <table class="first_page" cellpadding="0" cellspacing="20">
-            <tr>
-                <td class="perc25" valign="top">
-                    <ul class="pad_null">
-                        <input class="simply_form" type="button" value="Главная" onclick="location.href='@Url.Action("Index", "Home")'" />
-                        <input class="simply_form" type="button" value="Анкеты" onclick="location.href='@Url.Action("Index", "Anketa")'" />
-                        <input class="simply_form" type="button" value="Отчеты" onclick="location.href='@Url.Action("Index", "Report")'" />
-                        
-                        @if (User.IsInRole(UserLevel.GPKAdmin.ToString()) || 
-                             User.IsInRole(UserLevel.GPKSuperAdmin.ToString()))
-                        {
-                            <input class="simply_form" type="button" value="История активности" onclick="location.href='@Url.Action("Index", "Anketa")'" />                           
-                        }
-                        @if (User.IsInRole(UserLevel.GPKSuperAdmin.ToString()) ||
-                             User.IsInRole(UserLevel.GPKAdmin.ToString()) || 
-                             User.IsInRole(UserLevel.GPKMiddle.ToString()))
-                        {
-                            <input class="simply_form" type="button" value="Администрирование пользователей" onclick="location.href='@Url.Action("Index", "Admin")'" />
-                        }
-                        <input class="simply_form" type="button" value="Выход" onclick="location.href='@Url.Action("Logout", "Home")'" />
+    <table class="header"></table>
+    <table class="first_page" cellpadding="0" cellspacing="20">
+        <tr>
+            <td class="perc25" valign="top">
+                <ul class="pad_null">
+                    <input class="simply_form" type="button" value="Главная" onclick="location.href='@Url.Action("Index", "Home")'" />
+                    <input class="simply_form" type="button" value="Анкеты" onclick="location.href='@Url.Action("Index", "Anketa")'" />
+                    <input class="simply_form" type="button" value="Отчеты" onclick="location.href='@Url.Action("Index", "Report")'" />
 
-                        <img src="/Content/img/sho.png" style="width: 100%">
+                    @if (User.IsRole(UserLevel.GPKAdmin, UserLevel.GPKSuperAdmin))
+                    {
+                        <input class="simply_form" type="button" value="История активности" onclick="location.href='@Url.Action("Index", "Anketa")'" />
+                    }
 
-                    </ul>
-                </td>
-                <td class="two_column2" valign="top">
-                    @RenderBody()      
-                </td>
-            </tr>
-        </table>
-                </td>
-            </tr>
+                    @if (User.IsRole(UserLevel.GPKAdmin, UserLevel.GPKSuperAdmin, UserLevel.GPKMiddle))
+                    {
+                        <input class="simply_form" type="button" value="Администрирование пользователей" onclick="location.href='@Url.Action("Index", "Admin")'" />
+                    }
+                    <input class="simply_form" type="button" value="Выход" onclick="location.href='@Url.Action("Logout", "Home")'" />
+
+                    <img src="/Content/img/sho.png" style="width: 100%">
+
+                </ul>
+            </td>
+            <td class="two_column2" valign="top">
+                @RenderBody()
+            </td>
+        </tr>
+    </table>
+    </td>
+    </tr>
 
 
-        </table>
-        <table class="footer" style="position:fixed ;bottom:0">
-            <tr>
-                <th>Управление спорта и туризма Брестского облисполкома. Дизайн и разработка <a href="https://brain-it.by/ru/" target="_blank" style="color: white">BrainIT</a></th>
-            </tr>
-        </table>
+    </table>
+    <table class="footer" style="position:fixed ;bottom:0">
+        <tr>
+            <th>Управление спорта и туризма Брестского облисполкома. Дизайн и разработка <a href="https://brain-it.by/ru/" target="_blank" style="color: white">BrainIT</a></th>
+        </tr>
+    </table>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

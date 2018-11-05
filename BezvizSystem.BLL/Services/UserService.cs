@@ -242,6 +242,15 @@ namespace BezvizSystem.BLL.Services
             return userDto;
         }
 
+        public UserDTO GetByName(string name)
+        {
+            if (name == null) return null;
+
+            var user = Database.UserManager.FindByName(name);
+            var userDto = mapper.Map<BezvizUser, UserDTO>(user);
+            return userDto;
+        }
+
         //tested
         public IEnumerable<UserDTO> GetAll()
         {

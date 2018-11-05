@@ -1,4 +1,6 @@
-﻿@model BezvizSystem.Pogranec.Web.Models.Admin.EditUser
+﻿@using BezvizSystem.Pogranec.Web.Infrastructure
+
+@model BezvizSystem.Pogranec.Web.Models.Admin.EditUser
 
 @{
     ViewBag.Title = "Пользователь";
@@ -70,12 +72,17 @@
                 </td>
             </tr>
 
+
             <tr>
                 <td colspan="2">
                     <input type="submit" value="Сохранить" class="simply_form_red" />
-                    @Html.ActionLink("Удалить", "Delete", new { id = Model.Id }, new { @class = "simply_form_red sfr_auto", style = "background-color:red; width:100%; padding:0;display: block; border: 1px solid red; font-family:Arial;" })
+                    @if (User.IsRole(UserLevel.GPKSuperAdmin, UserLevel.GPKAdmin))
+                    {
+                        @Html.ActionLink("Удалить", "Delete", new { id = Model.Id }, new { @class = "simply_form_red sfr_auto", style = "background-color:red; width:100%; padding:0;display: block; border: 1px solid red; font-family:Arial;" })
+                    }
                 </td>
             </tr>
+
         </table>
     }
 </td>

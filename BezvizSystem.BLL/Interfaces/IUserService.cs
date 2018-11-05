@@ -26,6 +26,7 @@ namespace BezvizSystem.BLL.Interfaces
 
         Task<UserDTO> GetByIdAsync(string id);
         Task<UserDTO> GetByNameAsync(string name);
+        UserDTO GetByName(string name);
         IEnumerable<UserDTO> GetByRole(string roleName);
         IEnumerable<UserDTO> GetAll();
     }
