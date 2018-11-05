@@ -13,7 +13,7 @@ using System.Web.Mvc;
 
 namespace BezvizSystem.Pogranec.Web.Controllers.Api
 {
-    [Authorize(Roles = "pogranecAdmin, pogranec")]
+    [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle")]
     public class ReportController : Controller
     {
         private IReport _report;

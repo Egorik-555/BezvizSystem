@@ -39,7 +39,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         public async Task<ActionResult> Login(LoginModel model)
         {
             string errorMsg = null;
-
+                
             if (ModelState.IsValid)
             {
                 await SetInitDataAsync();
@@ -61,13 +61,14 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                     ModelState.AddModelError("", errorMsg);
                     return View(model);
                 }
-              
-                if (findUser.ProfileUser.Role != UserLevel.GPKAdmin.ToString() && findUser.ProfileUser.Ip != Request.UserHostAddress)
-                {
-                    errorMsg = "Не соответствует IP-адрес пользователя";
-                    ModelState.AddModelError("", errorMsg);
-                    return View(model);
-                }
+
+
+                //if (findUser.ProfileUser.Role != UserLevel.GPKAdmin.ToString() && findUser.ProfileUser.Ip != Request.UserHostAddress)
+                //{
+                //    errorMsg = "Не соответствует IP-адрес пользователя";
+                //    ModelState.AddModelError("", errorMsg);
+                //    return View(model);
+                //}
 
                 Authentication.SignOut();
                 Authentication.SignIn(new AuthenticationProperties
@@ -87,7 +88,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [Authorize(Roles = "GPKAdmin, GPKMiddle, GPKUser") ]
+        [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle, GPKUser") ]
         public ActionResult Index()
         {
             return View();
@@ -99,10 +100,10 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             {
                 UserName = "Pogranec",
                 Password = "qwerty",
-                ProfileUser = new ProfileUserDTO { Role = UserLevel.GPKAdmin.ToString(), Active = true, DateInSystem = DateTime.Now, UserInSystem = "Autoinitilize" }
+                ProfileUser = new ProfileUserDTO { Role = UserLevel.GPKSuperAdmin.ToString(), Active = true, DateInSystem = DateTime.Now, UserInSystem = "Autoinitilize" }
             };
 
-            var roles = new List<string> { "GPKAdmin", "GPKMiddle", "GPKUser" };
+            var roles = new List<string> { "GPKSuperAdmin", "GPKAdmin", "GPKMiddle", "GPKUser" };
             await _userService.SetInitialData(user, roles);
         }
     }

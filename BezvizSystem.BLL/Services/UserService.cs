@@ -110,7 +110,8 @@ namespace BezvizSystem.BLL.Services
                     return new OperationDetails(false, "Пользователь не найден", "");
 
                 userDto.UserName = user.UserName;
-                userDto.ProfileUser.Role = user.OperatorProfile.Role;
+                if (userDto.ProfileUser.Role == null)
+                    userDto.ProfileUser.Role = user.OperatorProfile.Role;
                 userDto.ProfileUser.UserInSystem = user.OperatorProfile.UserInSystem;
                 userDto.ProfileUser.DateInSystem = user.OperatorProfile.DateInSystem;
                 userDto.ProfileUser.DateEdit = DateTime.Now;         

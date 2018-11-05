@@ -14,9 +14,8 @@ using System.Web.Mvc;
 namespace BezvizSystem.Pogranec.Web.Controllers
 {
 
-    [Authorize(Roles = "GPKAdmin")]
     public class AdminController : Controller
-    { 
+    {
         IUserService _userService;
         IMapper _mapper;
 
@@ -26,19 +25,33 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
 
-        //[HttpPost]
+        [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle")]
         public ActionResult Index(string id)
         {
             ViewBag.Id = id;
             return View((object)id);
         }
 
-        public ActionResult DataUsers(string id, int page = 1)
+        private async Task GetUsers(IEnumerable<DisplayUser> list)
+        {     
+            string role = (await _userService.GetByNameAsync(User.Identity.Name)).ProfileUser.Role;
+            UserLevel level = (UserLevel)Enum.Parse(typeof(UserLevel), role);
+
+            list = list.Where(x => (int)x.ProfileUserRole > (int)level);         
+        }
+
+        [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle")]
+        public async Task<ActionResult> DataUsers(string id, int page = 1)
         {
             ViewBag.Id = id;
-            var usersDto = _userService.GetAll().Where(u => u.UserName.ToUpper() != User.Identity.Name.ToUpper()).Where(u => u.UserName.ToUpper() != "Pogranec".ToUpper());
+            var usersDto = _userService.GetAll();
+            usersDto = usersDto.Where(u => u.UserName.ToUpper() != User.Identity.Name.ToUpper());
+            usersDto = usersDto.Where(u => u.UserName.ToUpper() != "Pogranec".ToUpper());
+
             usersDto = usersDto.OrderByDescending(m => m.ProfileUser.Transcript);
             var model = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<DisplayUser>>(usersDto);
+            await GetUsers(model);
+
             if (!string.IsNullOrEmpty(id))
             {
                 CleverSeach(id, ref model);
@@ -75,10 +88,12 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             List<SelectListItem> result = new List<SelectListItem>();
             foreach (var item in list)
             {
+                if (item == UserLevel.GPKSuperAdmin.ToString()) continue;
+
                 if (item == UserLevel.GPKAdmin.ToString())
-                    result.Add(new SelectListItem {Text = "Админ", Value = item});
+                    result.Add(new SelectListItem { Text = "Админ", Value = item });
                 else if (item == UserLevel.GPKMiddle.ToString())
-                    result.Add(new SelectListItem { Text = "Средний уровень", Value = item });       
+                    result.Add(new SelectListItem { Text = "Средний уровень", Value = item });
                 else if (item == UserLevel.GPKUser.ToString())
                     result.Add(new SelectListItem { Text = "Пользователь", Value = item });
                 else result.Add(new SelectListItem { Text = item, Value = item });
@@ -87,12 +102,14 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             return new SelectList(result, "Value", "Text", UserLevel.GPKUser);
         }
 
+        [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle")]
         public ActionResult Create()
         {
             ViewBag.Levels = GetLevels();
             return View();
         }
 
+        [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle")]
         [HttpPost]
         public async Task<ActionResult> Create(CreateUser model)
         {
@@ -116,6 +133,8 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             return View(model);
         }
 
+
+        [Authorize(Roles = "GPKSuperAdmin, GPKAdmin")]
         public async Task<ActionResult> Delete(string id)
         {
             var user = await _userService.GetByIdAsync(id);
@@ -126,6 +145,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "GPKSuperAdmin, GPKAdmin")]
         [HttpPost]
         public async Task<ActionResult> Delete(DeleteUser model)
         {
@@ -135,6 +155,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle")]
         public async Task<ActionResult> Edit(string id)
         {
             var user = await _userService.GetByIdAsync(id);
@@ -146,6 +167,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle")]
         [HttpPost]
         public async Task<ActionResult> Edit(EditUser model)
         {

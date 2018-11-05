@@ -19,6 +19,8 @@ namespace BezvizSystem.Pogranec.Web.Models.Admin
         public string ProfileUserTranscript { get; set; }
         [Display(Name = "Ip-адрес")]
         public string ProfileUserIp { get; set; }
+
+        public UserLevel ProfileUserRole { get; set; }
     }
 
 

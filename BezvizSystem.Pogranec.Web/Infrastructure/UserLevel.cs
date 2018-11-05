@@ -7,8 +7,9 @@ namespace BezvizSystem.Pogranec.Web.Infrastructure
 {
     public enum UserLevel
     {
-        GPKAdmin = 10,
-        GPKMiddle = 11,
-        GPKUser = 12
+        GPKSuperAdmin = 10,
+        GPKAdmin = 11,
+        GPKMiddle = 12,
+        GPKUser = 13
     }
 }

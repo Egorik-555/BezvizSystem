@@ -14,7 +14,7 @@ using System.Web.Mvc;
 
 namespace BezvizSystem.Pogranec.Web.Controllers
 {
-    [Authorize(Roles = "pogranecAdmin, pogranec")]
+    [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle, GPKUser")]
     public class AnketaController : Controller
     {
         IService<AnketaDTO> _anketaService;

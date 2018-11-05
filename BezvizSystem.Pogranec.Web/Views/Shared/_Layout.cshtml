@@ -21,9 +21,16 @@
                         <input class="simply_form" type="button" value="Главная" onclick="location.href='@Url.Action("Index", "Home")'" />
                         <input class="simply_form" type="button" value="Анкеты" onclick="location.href='@Url.Action("Index", "Anketa")'" />
                         <input class="simply_form" type="button" value="Отчеты" onclick="location.href='@Url.Action("Index", "Report")'" />
-                        @if (User.IsInRole(UserLevel.GPKAdmin.ToString()))
+                        
+                        @if (User.IsInRole(UserLevel.GPKAdmin.ToString()) || 
+                             User.IsInRole(UserLevel.GPKSuperAdmin.ToString()))
                         {
-                            <input class="simply_form" type="button" value="История активности" onclick="location.href='@Url.Action("Index", "Anketa")'" />
+                            <input class="simply_form" type="button" value="История активности" onclick="location.href='@Url.Action("Index", "Anketa")'" />                           
+                        }
+                        @if (User.IsInRole(UserLevel.GPKSuperAdmin.ToString()) ||
+                             User.IsInRole(UserLevel.GPKAdmin.ToString()) || 
+                             User.IsInRole(UserLevel.GPKMiddle.ToString()))
+                        {
                             <input class="simply_form" type="button" value="Администрирование пользователей" onclick="location.href='@Url.Action("Index", "Admin")'" />
                         }
                         <input class="simply_form" type="button" value="Выход" onclick="location.href='@Url.Action("Logout", "Home")'" />
