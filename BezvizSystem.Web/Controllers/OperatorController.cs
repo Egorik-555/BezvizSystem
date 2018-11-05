@@ -41,15 +41,33 @@ namespace BezvizSystem.Web.Controllers
             var model = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<ViewOperatorModel>>(usersDto);         
             if (!string.IsNullOrEmpty(id))
             {
-                model = model.Where(m => m.ProfileUserTranscript.ToUpper().Contains(id.ToUpper()));
+                CleverSeach(id, ref model);
+                //model = model.Where(m => m.ProfileUserTranscript.ToUpper().Contains(id.ToUpper()));
             }
 
-            int pageSize = 3;
+            int pageSize = 10;
             var modelForPaging = model.Skip((page - 1) * pageSize).Take(pageSize);
             PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = model.Count()};
             IndexViewModel<ViewOperatorModel> ivm = new IndexViewModel<ViewOperatorModel> {PageInfo = pageInfo, Models = modelForPaging };
 
             return PartialView(ivm);
+        }
+
+        private void CleverSeach(string id, ref IEnumerable<ViewOperatorModel> model)
+        {
+            var temp = new List<ViewOperatorModel>(model);
+
+            model = model.Where(m => m.ProfileUserTranscript.ToUpper().Contains(id.ToUpper()));
+
+            if (model.Count() == 0)
+            {
+                model = temp.Where(m => m.ProfileUserUNP.ToUpper().Contains(id.ToUpper()));
+            }
+
+            if (model.Count() == 0)
+            {
+                model = temp.Where(m => m.ProfileUserOKPO.ToUpper().Contains(id.ToUpper()));
+            }
         }
 
         public ActionResult Create()
