@@ -1,4 +1,5 @@
-﻿@using BezvizSystem.BLL.Interfaces
+﻿@using BezvizSystem.Web.Infrustructure
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +30,7 @@
                     <input type="button" class="pad_cent" value="Зарегистрированные анкеты" onclick="location.href='@Url.Action("Index", "Anketa")'" />
                     <input type="button" class="pad_cent" value="Отметка о прибытии" onclick="location.href='@Url.Action("Index", "Mark")'" />
                     <input type="button" class="pad_cent" value="Отчеты" onclick="location.href='@Url.Action("Index", "Report")'" />
-                    @if (User.IsInRole("admin"))
+                    @if (User.IsRole(UserLevel.OBLSuperAdmin, UserLevel.OBLAdmin))
                     {
                         <input type="button" class="pad_cent" id="btn2" value="Администрирование туроператоров" onclick="location.href='@Url.Action("Index", "Operator")'" />
                     }
@@ -39,6 +40,8 @@
             </td>
             @RenderBody()
         </tr>
+        <tr></tr>
+        <tr></tr>
     </table>
 
     <table class="footer" bottom:0">

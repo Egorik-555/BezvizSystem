@@ -14,7 +14,7 @@ using System.Web.Mvc;
 
 namespace BezvizSystem.Web.Controllers
 {
-    [Authorize(Roles = "admin, operator")]
+    [Authorize(Roles = "OBLSuperAdmin, OBLAdmin, OBLUser")]
     public class VisitorController : Controller
     {
 
@@ -55,6 +55,7 @@ namespace BezvizSystem.Web.Controllers
 
                 if (result.Succedeed)
                 {
+                    ViewBag.Add = "Visitor";
                     return RedirectToAction("Index", "Anketa");
                 }
                 else ModelState.AddModelError("", result.Message);

@@ -7,7 +7,8 @@ namespace BezvizSystem.Web.Infrustructure
 {
     public enum UserLevel
     {
-        Admin = 1,
-        User = 2
+        OBLSuperAdmin = 1,
+        OBLAdmin = 2,
+        OBLUser = 3
     }
 }

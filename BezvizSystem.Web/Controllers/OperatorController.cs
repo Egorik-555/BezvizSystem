@@ -15,7 +15,7 @@ using System.Web.Mvc;
 
 namespace BezvizSystem.Web.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "OBLSuperAdmin, OBLAdmin")]
     public class OperatorController : Controller
     {
         IUserService _userService;

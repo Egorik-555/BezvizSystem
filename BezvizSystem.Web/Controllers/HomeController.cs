@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace BezvizSystem.Web.Controllers
 {
-    [Authorize(Roles = "admin, operator")]
+    [Authorize(Roles = "OBLSuperAdmin, OBLAdmin, OBLUser")]
     public class HomeController : Controller
     {
         private IUserService Service

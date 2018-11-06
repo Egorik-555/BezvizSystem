@@ -1,0 +1,12 @@
+﻿@model int?
+
+@{ 
+    IDictionary<string, object> htmlAttributes;
+    htmlAttributes = new RouteValueDictionary();
+
+    htmlAttributes.Add("type", "text");
+    htmlAttributes.Add("readonly", "readonly");
+
+    @Html.TextBox("", Model, htmlAttributes)
+}
+

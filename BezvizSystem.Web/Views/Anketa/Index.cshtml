@@ -45,6 +45,10 @@
 
     <script>
 
+        if (@ViewBag.Add == "Visitor") {
+            alert("Visitor was added!!");
+        }
+
         var table = document.getElementsByTagName('table')[0];
 
         function onRowClickHandler(event) {

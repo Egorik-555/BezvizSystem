@@ -2,6 +2,7 @@
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Utils;
 using BezvizSystem.DAL.Identity;
+using BezvizSystem.Web.Infrustructure;
 using BezvizSystem.Web.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -172,12 +173,12 @@ namespace BezvizSystem.Web.Controllers
         {
             var user = new UserDTO
             {
-                UserName = "Admin",
-                Password = "rgg777",
-                ProfileUser = new ProfileUserDTO { Role = "admin", Active = true, Transcript = "Брестский облисполком", DateInSystem = DateTime.Now, UserInSystem = "Autoinitilize" }
+                UserName = "Komitet",
+                Password = "tetimok",
+                ProfileUser = new ProfileUserDTO { Role = UserLevel.OBLSuperAdmin.ToString(), Active = true, Transcript = "Брестский облисполком", DateInSystem = DateTime.Now, UserInSystem = "Autoinitilize" }
             };
 
-            var roles = new List<string> { "admin", "operator" };
+            var roles = new List<string> { UserLevel.OBLSuperAdmin.ToString(), UserLevel.OBLAdmin.ToString(), UserLevel.OBLUser.ToString() };
             await _service.SetInitialData(user, roles);
         }
     }
