@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
+using BezvizSystem.BLL.DTO.Dictionary;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Interfaces.XML;
 using BezvizSystem.Pogranec.Web.Models.Anketa;
@@ -18,27 +19,51 @@ namespace BezvizSystem.Pogranec.Web.Controllers
     public class AnketaController : Controller
     {
         IService<AnketaDTO> _anketaService;
+        private IDictionaryService<CheckPointDTO> _checkPointService;
         IXmlCreator _xmlService;
 
-        public AnketaController(IService<AnketaDTO> anketaService, IXmlCreator xmlService)
+        public AnketaController(IService<AnketaDTO> anketaService, IDictionaryService<CheckPointDTO> checkPointService, IXmlCreator xmlService)
         {
+            _checkPointService = checkPointService;
             _anketaService = anketaService;
             _xmlService = xmlService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(DateTime? dateFrom, DateTime? dateTo, string checkPoint)
         {
-            var date = DateTime.Now.Date;
-            var list = _anketaService.GetAll();
-            var group = list.Where(g => g.DateArrival.Value.Date == date).
-                             GroupBy(a => a.CheckPoint, a => a.CountMembers).
-                             Select(a => new ArrivedInfo { CheckPoint = a.Key, Count = a.Sum()}).ToList();
-
-            var model = new ArrivedPerson { Infoes = group, Count = group.Sum(a => a.Count) };
-
-            return View(model);
+            ViewBag.dateFrom = dateFrom;
+            ViewBag.dateTo = dateTo;
+            ViewBag.checkPoint = checkPoint;
+            ViewBag.CheckPoints = CheckPoints();
+            return View();
         }
-     
+
+        public ActionResult DataAnketa(DateTime? dateFrom, DateTime? dateTo, string checkPoint)
+        {
+            var list = GetModelByValidDates(dateFrom, dateTo, checkPoint);
+            var group = list.GroupBy(a => a.CheckPoint, a => a.CountMembers).
+                             Select(a => new ArrivedInfo { CheckPoint = a.Key, Count = a.Sum() }).ToList();
+
+            
+            var model = new ArrivedPerson { Infoes = group, Count = group.Sum(a => a.Count), ArriveFrom = dateFrom, ArriveTo = dateTo };
+            return PartialView(model);
+        }
+
+        private IEnumerable<AnketaDTO> GetModelByValidDates(DateTime? dateFrom, DateTime? dateTo, string checkPoint)
+        {
+            var list = _anketaService.GetAll();
+
+            if (!dateFrom.HasValue)
+                dateFrom = DateTime.Now.Date;
+
+            if (!dateTo.HasValue)
+                dateTo = DateTime.Now.Date;
+
+            if (!String.IsNullOrEmpty(checkPoint))
+                list = list.Where(a => a.CheckPoint == checkPoint);
+
+            return list.Where(a => a.DateArrival.Value <= dateTo && a.DateArrival >= dateFrom);
+        }
 
         public async Task<ActionResult> GetAnketasDefault()
         {
@@ -66,8 +91,15 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                 return File(file, contentType, Path.GetFileName(file));
             else
             {
-               return RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
+        }
+
+        private SelectList CheckPoints()
+        {
+            List<string> list = new List<string>(_checkPointService.Get().Select(c => c.Name));
+            list.Insert(0, "");
+            return new SelectList(list, "");
         }
     }
 }

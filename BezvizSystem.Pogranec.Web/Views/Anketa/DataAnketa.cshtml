@@ -1,0 +1,49 @@
+﻿@model BezvizSystem.Pogranec.Web.Models.Anketa.ArrivedPerson
+
+<tr>
+    <td class="no_border" colspan="2">
+        <input id="filterBtn" type="button" class="simply_form_red marbot20 buttonParameters" style="width:100%" value="Фильтр" />
+    </td>
+</tr>
+
+<tr>
+    <td class="no_th" colspan="3" valign="top">
+        <h3 class="red">Прибывающие туристы:</h3>
+        <p>Ожидается к прибытию @(Model.ArriveFrom.HasValue ? "c " + @Model.ArriveFrom.Value.ToShortDateString() : "")
+                                @(Model.ArriveTo.HasValue ? " по " + @Model.ArriveFrom.Value.ToShortDateString() : "на " + @DateTime.Now.ToShortDateString()) : 
+            <b>@Model.Count</b></p>
+    </td>
+
+    <td class="no_th">
+        <p> <input type="button" class="simply_form_red darkorange" onclick="location.href='@Url.Action("GetAnketasDefault")'" value="Получение анкет" /></p>
+    </td>
+</tr>
+<tr>
+    <td class="no_th" colspan="3"></td>
+</tr>
+<tr>
+    <td class="orange">
+        @Html.DisplayName("Пункт пропуска")
+    </td>
+    <td class="orange">
+        @Html.DisplayName("Количество прибывающих")
+    </td>
+    <td style="border:none;"></td>
+    <td class="no_th">
+        <p> <input class="simply_form_red green" style="background-color: #ff2929; border: none" type="button" onclick="location.href='@Url.Action("GetAnketasExtra")'" value="Экстренное получение" /> </p>
+    </td>
+</tr>
+
+
+@foreach (var item in Model.Infoes)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CheckPoint)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Count)
+        </td>
+    </tr>
+}
+

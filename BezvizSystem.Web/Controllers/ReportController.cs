@@ -38,7 +38,6 @@ namespace BezvizSystem.Web.Controllers
             return View(modelInView);
         }
 
-
         private ReportDTO GetModelByValidDates(DateTime? dateFrom, DateTime? dateTo)
         {
             if (dateFrom.HasValue && dateTo.HasValue)
@@ -61,6 +60,6 @@ namespace BezvizSystem.Web.Controllers
 
                 return _reportService.GetReport();
             }
-        }       
+        }
     }
 }

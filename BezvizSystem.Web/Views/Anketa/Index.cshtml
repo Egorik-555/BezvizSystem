@@ -45,8 +45,19 @@
 
     <script>
 
-        if (@ViewBag.Add == "Visitor") {
-            alert("Visitor was added!!");
+        var added = "@ViewBag.Add";
+
+        if (added == "Visitor") {
+            alert("Турист успешно добавлен.");
+        }
+        else if (added == "Group") {
+            alert("Группа успешно добавлена.");
+        }
+        else if (added == "EditVisitor") {
+            alert("Турист успешно изменен.");
+        }
+        else if (added == "EditGroup") {
+            alert("Группа успешно изменена.");
         }
 
         var table = document.getElementsByTagName('table')[0];

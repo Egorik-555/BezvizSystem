@@ -500,6 +500,11 @@ table.in_table3 {
             cursor: pointer;
         }
 
+table.in_table7 {
+    width: 512px;    
+    padding: 0;
+}
+
 table.in_table4 {
     width: 900px;
     text-align: center;
@@ -844,6 +849,12 @@ table.td.th.a.footer-brain {
 }
 
 #panelDates input {
+    height: 45px;
+    text-align: center;
+}
+
+#panelReport input {
+    width: 92%;
     height: 45px;
     text-align: center;
 }

@@ -45,6 +45,7 @@ namespace BezvizSystem.Web.Controllers
         {
             var anketas = await _anketaService.GetForUserAsync(User != null ? User.Identity.Name : null);
             var model = mapper.Map<IEnumerable<AnketaDTO>, IEnumerable<ViewAnketaModel>>(anketas.OrderBy(m => m.DateArrival));
+
             return View(model);
         }
 

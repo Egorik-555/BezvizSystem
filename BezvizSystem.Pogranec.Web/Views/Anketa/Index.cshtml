@@ -1,47 +1,56 @@
-﻿@model BezvizSystem.Pogranec.Web.Models.Anketa.ArrivedPerson
+﻿@*@model BezvizSystem.Pogranec.Web.Models.Anketa.ArrivedPerson*@
 
 @{
     ViewBag.Title = "Анкета";
+
+    AjaxOptions opt = new AjaxOptions
+    {
+        UpdateTargetId = "data",
+        Url = Url.Action("DataAnketa")
+    };
 }
 
-<table class="in_table2">
-    <tr>
-        <td class="no_th" colspan="3" valign="top"><h3 class="red">Прибывающие туристы:</h3>
-        <p>Ожидается к прибытию на @DateTime.Now.ToShortDateString(): <b>@Model.Count</b></p></td>
-    
-        <td class="no_th">
-            <p> <input type="button" class="simply_form_red darkorange" onclick="location.href='@Url.Action("GetAnketasDefault")'" value="Получение анкет" /></p>
-        </td>
-    </tr>
-    <tr>
-        <td class="no_th" colspan="3">
-            
-        </td>
-    </tr>
-    <tr>
-        <td class="orange">
-            @Html.DisplayName("Пункт пропуска")
-        </td>
-        <td class="orange">
-            @Html.DisplayName("Количество прибывающих")
-        </td>
-        <td style="border:none;">
-        </td>
-        <td class="no_th">
-            <p> <input class="simply_form_red green" style="background-color: #ff2929; border: none" type="button" onclick="location.href='@Url.Action("GetAnketasExtra")'" value="Экстренное получение" /> </p>
-        </td>
-    </tr>
-    <tr id="tabledata">
-    @foreach (var item in Model.Infoes)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CheckPoint)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Count)
-                </td>
-            </tr>
-        }
-    </tr>
-</table>
+@using (Ajax.BeginForm(opt))
+{
+    <table id="panelReport" style="display:none" class="in_table7">
+
+        <tr>
+            <td class="left no_border">
+                <label for="dateFrom">Дата прибытия с</label>
+                <input type="text" id="dateFrom" name="dateFrom" class="datepicker form-control" @*value="@(((DateTime?)ViewBag.dateFrom).ToString(" dd.MM.yyyy"))"*@ />
+            </td>
+            <td class="left no_border" align="right">
+                <label for="dateTo">по</label>
+                <input type="text" id="dateTo" name="dateTo" class="datepicker form-control" @*value="@(((DateTime?)ViewBag.dateTo).ToString(" dd.MM.yyyy"))"*@ />
+            </td>
+        </tr>
+        <tr>
+            <td class="no_border">
+                <label>Пункт пропуска</label>
+                @Html.DropDownList("checkPoint", ViewBag.CheckPoints as SelectList, new { @class = "form-control punkt"})
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <input type="submit" class="simply_form_red marbot20" style="height:auto; width:95px" value="Найти" />
+            </td>
+        </tr>
+    </table>
+
+
+    <table class="in_table2" id="data">
+        @Html.Action("DataAnketa", new { id = Model })
+    </table>
+
+}
+
+<script src="~/Scripts/MyScripts/ShowPanels.js"></script>
+<script>
+    showPanel('filterBtn', 'panelReport');
+</script>
+@Scripts.Render("~/bundles/jquery")
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+@Scripts.Render("~/bundles/jquery-ui")
+<script src="~/Scripts/MyScripts/pikaday.js"></script>
+<script src="~/Scripts/MyScripts/combobox.js"></script>

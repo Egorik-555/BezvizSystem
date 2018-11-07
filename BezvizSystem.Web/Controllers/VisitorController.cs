@@ -55,7 +55,6 @@ namespace BezvizSystem.Web.Controllers
 
                 if (result.Succedeed)
                 {
-                    ViewBag.Add = "Visitor";
                     return RedirectToAction("Index", "Anketa");
                 }
                 else ModelState.AddModelError("", result.Message);
