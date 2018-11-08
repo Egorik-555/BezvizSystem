@@ -4,6 +4,9 @@
     ViewBag.Title = "Отчеты";
     ViewBag.SubTitle = "Отчеты";
 
+    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    string list = serializer.Serialize(Model.AllByNatAndAge);
+    list = System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(list);  
 }
 <td class="two_column2" valign="top">
 
@@ -46,9 +49,9 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <script>
-         var buttonTable1 = document.getElementById("Table1");
+        var buttonTable1 = document.getElementById("Table1");
         buttonTable1.onclick = makeRequest;
-
+    
         function makeRequest() {
             // Отправка асинхронного запроса на сервер.
             // url - адрес ресурса, которому направляется запрос.
@@ -57,6 +60,7 @@
             // success - функция, которая запустится при успешной обработке запроса.
             $.ajax({
                 url: "@Url.Action("InExcel")",
+                data: {id : '@list'},
                 type: "POST"
             });
         }
