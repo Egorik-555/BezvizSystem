@@ -48,6 +48,10 @@
             @Html.Partial("DataAllByNatAndAge", Model.AllByNatAndAge)
         </table>
     </td>
+    <td>
+        <button id="Table1">Excel</button>
+       @*/ @Html.ActionLink("Excel", "InExcel", new { id = Model}, new {id = "Table1", @class = "simply_form_red marbot20 linkParameters" })*@
+    </td>
 </tr>
 
 <tr class="trSpace"></tr>

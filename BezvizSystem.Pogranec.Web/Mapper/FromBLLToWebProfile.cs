@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.DTO.Report;
-using BezvizSystem.BLL.Report.DTO;
 using BezvizSystem.Pogranec.Web.Models.Admin;
-using System.Collections.Generic;
-using System.Linq;
+using BezvizSystem.Pogranec.Web.Models.Report;
+
 
 namespace BezvizSystem.Pogranec.Web.Mapper
 {

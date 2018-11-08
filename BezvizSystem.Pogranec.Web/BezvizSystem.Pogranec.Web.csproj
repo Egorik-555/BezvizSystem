@@ -219,6 +219,7 @@
     <Compile Include="Models\Report\FindModel.cs" />
     <Compile Include="Models\Report\NatAndAge.cs" />
     <Compile Include="Models\Report\ReportModel.cs" />
+    <Compile Include="Models\Report\ViewTable1InExcel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Helpers\Pagging\PageInfo.cs" />
     <Compile Include="Views\Helpers\Pagging\PagingHelpers.cs" />

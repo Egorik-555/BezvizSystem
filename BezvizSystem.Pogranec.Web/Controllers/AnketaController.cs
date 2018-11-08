@@ -44,7 +44,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             var group = list.GroupBy(a => a.CheckPoint, a => a.CountMembers).
                              Select(a => new ArrivedInfo { CheckPoint = a.Key, Count = a.Sum() }).ToList();
 
-            
+
             var model = new ArrivedPerson { Infoes = group, Count = group.Sum(a => a.Count), ArriveFrom = dateFrom, ArriveTo = dateTo };
             return PartialView(model);
         }

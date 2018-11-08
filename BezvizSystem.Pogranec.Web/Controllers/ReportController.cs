@@ -2,12 +2,14 @@
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Report.DTO;
+using BezvizSystem.BLL.Utils;
 using BezvizSystem.Pogranec.Web.Mapper;
 using BezvizSystem.Pogranec.Web.Models.Report;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -64,6 +66,17 @@ namespace BezvizSystem.Pogranec.Web.Controllers.Api
 
                 return _report.GetReport();
             }
+        }
+
+        [HttpPost]
+        public ActionResult InExcel()
+        {
+           //список всех туристовIEnumerable<
+           // var modelForExcel = _mapper.Map<IEnumerable<NatAndAge>, IEnumerable<ViewTable1InExcel>>(id);    
+            IExcel print = new Excel();
+           // string workString = await print.InExcelAsync<ViewTable1InExcel>(modelForExcel);
+
+            return new EmptyResult();//ExcelResult("Зарегистрированные анкеты.xls", workString);
         }
     }
 }

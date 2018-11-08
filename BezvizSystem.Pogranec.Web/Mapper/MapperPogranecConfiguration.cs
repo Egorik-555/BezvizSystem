@@ -31,6 +31,7 @@ namespace BezvizSystem.Pogranec.Web.Mapper
                 cfg.CreateMap<ReportDTO, ReportModel>();
                 cfg.CreateMap<ReportModel, ReportDTO>();
 
+                cfg.CreateMap<BLL.DTO.Report.NatAndAge, ViewTable1InExcel>();
             })
         {   
         }

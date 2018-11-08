@@ -9,8 +9,9 @@
 <tr>
     <td class="no_th" colspan="3" valign="top">
         <h3 class="red">Прибывающие туристы:</h3>
-        <p>Ожидается к прибытию @(Model.ArriveFrom.HasValue ? "c " + @Model.ArriveFrom.Value.ToShortDateString() : "")
-                                @(Model.ArriveTo.HasValue ? " по " + @Model.ArriveFrom.Value.ToShortDateString() : "на " + @DateTime.Now.ToShortDateString()) : 
+        <p>Ожидается к прибытию @(Model.ArriveFrom.HasValue ? "c " + @Model.ArriveFrom.Value.ToShortDateString() : Model.ArriveTo.HasValue ? "c " + @DateTime.Now.ToShortDateString() : "")
+                                @(Model.ArriveTo.HasValue ? " по " + @Model.ArriveTo.Value.ToShortDateString() : Model.ArriveFrom.HasValue ? "по " + @DateTime.Now.ToShortDateString() : 
+                                                                                                                                             "на " + @DateTime.Now.ToShortDateString()) : 
             <b>@Model.Count</b></p>
     </td>
 
@@ -46,4 +47,9 @@
         </td>
     </tr>
 }
+
+<script src="~/Scripts/MyScripts/ShowPanels.js"></script>
+<script>
+    showPanel('filterBtn', 'panelReport');
+</script>
 

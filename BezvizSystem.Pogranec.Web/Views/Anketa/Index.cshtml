@@ -27,7 +27,7 @@
         <tr>
             <td class="no_border">
                 <label>Пункт пропуска</label>
-                @Html.DropDownList("checkPoint", ViewBag.CheckPoints as SelectList, new { @class = "form-control punkt"})
+                @Html.DropDownList("CheckPoint", ViewBag.CheckPoints as SelectList, new { @class = "form-control punkt"})
             </td>
         </tr>
 
@@ -39,16 +39,12 @@
     </table>
 
 
-    <table class="in_table2" id="data">
+    <table class="in_table2" id="data">      
         @Html.Action("DataAnketa", new { id = Model })
     </table>
 
 }
 
-<script src="~/Scripts/MyScripts/ShowPanels.js"></script>
-<script>
-    showPanel('filterBtn', 'panelReport');
-</script>
 @Scripts.Render("~/bundles/jquery")
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 @Scripts.Render("~/bundles/jquery-ui")

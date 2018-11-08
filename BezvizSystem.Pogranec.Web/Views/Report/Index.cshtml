@@ -6,10 +6,10 @@
 
 }
 <td class="two_column2" valign="top">
-    @using (Html.BeginForm())
-    {
-        <table class="text_only">
 
+    <table class="text_only">
+        @using (Html.BeginForm())
+        {
             <thead>
                 <tr>
                     <td>
@@ -23,13 +23,14 @@
                     </td>
                 </tr>
             </thead>
+        }
 
-            <tbody id="data">
-                @Html.Partial("DataReport", Model)
-            </tbody>
+        <tbody id="data">
+            @Html.Partial("DataReport", Model)
+        </tbody>
 
-        </table>
-    }
+    </table>
+
 </td>
 
 @section scripts{
@@ -45,6 +46,23 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <script>
+         var buttonTable1 = document.getElementById("Table1");
+        buttonTable1.onclick = makeRequest;
+
+        function makeRequest() {
+            // Отправка асинхронного запроса на сервер.
+            // url - адрес ресурса, которому направляется запрос.
+            // type - HTTP метод используемый для отправки запроса.
+            // data - данные передаваемые на сервер.
+            // success - функция, которая запустится при успешной обработке запроса.
+            $.ajax({
+                url: "@Url.Action("InExcel")",
+                type: "POST"
+            });
+        }
+    </script>
+
+    <script>
 
         google.charts.load('current', { 'packages': ['corechart'] });
         google.charts.setOnLoadCallback(drawChart);
@@ -57,7 +75,7 @@
             var options1 = {
 
                 title: 'Количество зарегистрированных туристов на дату прибытия',
-                titleTextStyle: { color: '#0a9200', fontSize: 20, bold: true, fontName: 'Times New Roman'},
+                titleTextStyle: { color: '#0a9200', fontSize: 20, bold: true, fontName: 'Times New Roman' },
                 colors: ['#ffba00'],
                 legend: { position: 'none' },
                 hAxis: {
@@ -87,9 +105,9 @@
                 vAxis: {
                     textStyle: { fontSize: '12', bold: true, fontName: 'Times New Roman' }
                 },
-                    legend: {position: 'none'},
+                legend: { position: 'none' },
                 backgroundColor: { fill: 'none', stroke: 'brown', strokeWidth: 2 },
-                    'height': 400
+                'height': 400
             };
 
             var chart2 = new google.visualization.ColumnChart(document.getElementById('chart2'));
@@ -108,15 +126,14 @@
                 vAxis: {
                     textStyle: { fontSize: '12', bold: true, fontName: 'Times New Roman' }
                 },
-                    legend: {position: 'none'},
+                legend: { position: 'none' },
                 backgroundColor: { fill: 'none', stroke: '#037d3c', strokeWidth: 2 },
-                    'height': 400
+                'height': 400
             };
 
             var chart3 = new google.visualization.ColumnChart(document.getElementById('chart3'));
             chart3.draw(data3, options3);
 
         }
-
     </script>
 }
