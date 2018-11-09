@@ -4,6 +4,7 @@ using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Report.DTO;
 using BezvizSystem.BLL.Utils;
 using BezvizSystem.Pogranec.Web.Infrastructure;
+using BezvizSystem.Pogranec.Web.Infrustructure;
 using BezvizSystem.Pogranec.Web.Mapper;
 using BezvizSystem.Pogranec.Web.Models.Report;
 using Microsoft.AspNet.Identity.Owin;
@@ -72,14 +73,17 @@ namespace BezvizSystem.Pogranec.Web.Controllers.Api
         public async Task<ActionResult> InExcel(string id)
         {      
             var serialize = new System.Web.Script.Serialization.JavaScriptSerializer();
+            var list = serialize.Deserialize<IEnumerable<NatAndAge>>(id).ToList();
 
-            var list = serialize.Deserialize<IEnumerable<NatAndAge>>(id);       
-         
-            var modelForExcel = _mapper.Map<IEnumerable<NatAndAge>, IEnumerable<ViewTable1InExcel>>(list);
+            //добавить итог
+            list.Add(new NatAndAge { Natiolaty = "", ManLess18 = list.Sum(s => s.ManLess18), ManMore18 = list.Sum(s => s.ManMore18),
+                                                     WomanLess18 = list.Sum(s => s.WomanLess18), WomanMore18 = list.Sum(s => s.WomanMore18), All = list.Sum(s => s.All)});
+
+            var modelForExcel = _mapper.Map<IEnumerable<NatAndAge>, IEnumerable<ViewTable1InExcel>>(list);                
             IExcel print = new Excel();
             string workString = await print.InExcelAsync<ViewTable1InExcel>(modelForExcel);
-
-            return new ExcelResult("Половозрастной признак.xls", workString);
+            return //new ExcelResult("Половозрастной признак.xls", workString);
+              new TestResult();
         }
     }
 }
