@@ -78,7 +78,7 @@ namespace BezvizSystem.BLL.Services.XML
 
                 AddToListRemovedItems(visitors);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 visitors = new List<ModelForXmlToPogran>();
             }

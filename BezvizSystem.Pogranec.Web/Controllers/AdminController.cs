@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
+using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.Pogranec.Web.Infrastructure;
 using BezvizSystem.Pogranec.Web.Mapper;

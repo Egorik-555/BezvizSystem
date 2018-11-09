@@ -1,4 +1,5 @@
-﻿using BezvizSystem.Pogranec.Web.Infrastructure;
+﻿using BezvizSystem.BLL.Infrastructure;
+using BezvizSystem.Pogranec.Web.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

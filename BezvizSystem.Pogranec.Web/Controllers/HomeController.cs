@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BezvizSystem.Pogranec.Web.Infrastructure;
+using BezvizSystem.BLL.Infrastructure;
 
 namespace BezvizSystem.Pogranec.Web.Controllers
 {
@@ -61,14 +62,6 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                     ModelState.AddModelError("", errorMsg);
                     return View(model);
                 }
-
-
-                //if (findUser.ProfileUser.Role != UserLevel.GPKAdmin.ToString() && findUser.ProfileUser.Ip != Request.UserHostAddress)
-                //{
-                //    errorMsg = "Не соответствует IP-адрес пользователя";
-                //    ModelState.AddModelError("", errorMsg);
-                //    return View(model);
-                //}
 
                 Authentication.SignOut();
                 Authentication.SignIn(new AuthenticationProperties

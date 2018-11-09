@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace BezvizSystem.Pogranec.Web.Infrastructure
+namespace BezvizSystem.BLL.Infrastructure
 {
     public enum UserLevel
     {
+        OBLSuperAdmin = 1,
+        OBLAdmin = 2,
+        OBLUser = 3,
+
         GPKSuperAdmin = 10,
         GPKAdmin = 11,
         GPKMiddle = 12,

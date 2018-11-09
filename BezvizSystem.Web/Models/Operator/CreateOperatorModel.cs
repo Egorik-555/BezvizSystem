@@ -40,7 +40,7 @@ namespace BezvizSystem.Web.Models.Operator
         public CreateOperatorModel()
         {
             Active = true;
-            Role = "operator";
+            Role = "OBLUser";
             Password = "111222";
         }
     }

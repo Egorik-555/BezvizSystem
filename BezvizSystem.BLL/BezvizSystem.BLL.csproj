@@ -66,6 +66,7 @@
     <Compile Include="DTO\VisitorDTO.cs" />
     <Compile Include="DTO\XML\ModelForXmlToPogran.cs" />
     <Compile Include="Infrastructure\OperationDetails.cs" />
+    <Compile Include="Infrastructure\UserLevel.cs" />
     <Compile Include="Interfaces\Docs\IDocCreator.cs" />
     <Compile Include="Interfaces\IExcel.cs" />
     <Compile Include="Interfaces\IGeneratePass.cs" />

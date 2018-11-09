@@ -221,7 +221,6 @@
     <Compile Include="Infrustructure\FutureDateAttribute.cs" />
     <Compile Include="Infrustructure\HelperExtensions.cs" />
     <Compile Include="Infrustructure\JSONDeserialise.cs" />
-    <Compile Include="Infrustructure\UserLevel.cs" />
     <Compile Include="Infrustructure\PastDateAttribute.cs" />
     <Compile Include="Mapper\FromBLLToWebProfile.cs" />
     <Compile Include="Models\Anketa\ViewAnketaExcel.cs" />
