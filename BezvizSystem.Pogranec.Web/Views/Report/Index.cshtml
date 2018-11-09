@@ -3,10 +3,6 @@
 @{
     ViewBag.Title = "Отчеты";
     ViewBag.SubTitle = "Отчеты";
-
-    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-    string list = serializer.Serialize(Model.AllByNatAndAge);
-    list = System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(list);  
 }
 <td class="two_column2" valign="top">
 
@@ -48,7 +44,7 @@
     <script src="~/Scripts/MyScripts/pikaday.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-    <script>
+    @*<script>
         var buttonTable1 = document.getElementById("Table1");
         buttonTable1.onclick = makeRequest;
     
@@ -61,10 +57,10 @@
             $.ajax({
                 url: "@Url.Action("InExcel")",
                 data: {id : '@list'},
-                type: "POST"
+                type: "GET"
             });
         }
-    </script>
+    </script>*@
 
     <script>
 
