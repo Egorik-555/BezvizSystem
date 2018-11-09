@@ -4,6 +4,7 @@
     ViewBag.Title = "Отчеты";
     ViewBag.SubTitle = "Отчеты";
 }
+
 <td class="two_column2" valign="top">
 
     <table class="text_only">
@@ -49,15 +50,13 @@
         buttonTable1.onclick = makeRequest;
     
         function makeRequest() {
-            // Отправка асинхронного запроса на сервер.
-            // url - адрес ресурса, которому направляется запрос.
-            // type - HTTP метод используемый для отправки запроса.
-            // data - данные передаваемые на сервер.
-            // success - функция, которая запустится при успешной обработке запроса.
-            $.ajax({
+            $.get({
                 url: "@Url.Action("InExcel")",
-                data: {id : '@list'},
-                type: "GET"
+                data: { id: '@list' },
+                
+                contentType: 'application/vnd.ms-excel',
+                success: function (data) { alert(data) }
+                
             });
         }
     </script>*@

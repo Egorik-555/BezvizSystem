@@ -35,18 +35,17 @@ namespace BezvizSystem.Pogranec.Web.Controllers.Api
       
         public ActionResult Index(DateTime? dateFrom, DateTime? dateTo)
         {
-            ReportDTO model;
-            ViewBag.dateFrom = dateFrom ?? DateTime.Now;
-            ViewBag.dateTo = dateTo ?? DateTime.Now;
-
-            model = GetModelByValidDates(dateFrom, dateTo);
+            var model = GetModelByValidDates(dateFrom, dateTo);
 
             var modelInView = _mapper.Map<ReportDTO, ReportModel>(model);
             return View(modelInView);
         }
 
         private ReportDTO GetModelByValidDates(DateTime? dateFrom, DateTime? dateTo)
-        {
+        {       
+            ViewBag.dateFrom = dateFrom ?? DateTime.Now;
+            ViewBag.dateTo = dateTo ?? DateTime.Now;
+
             if (dateFrom.HasValue && dateTo.HasValue)
             {
                 return _report.GetReport(dateFrom, dateTo);
@@ -71,11 +70,12 @@ namespace BezvizSystem.Pogranec.Web.Controllers.Api
 
         [HttpPost]
         public async Task<ActionResult> InExcel(string id)
-        {
-            var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-            var desialize = serializer.Deserialize<IEnumerable<NatAndAge>>(id);
+        {      
+            var serialize = new System.Web.Script.Serialization.JavaScriptSerializer();
 
-            var modelForExcel = _mapper.Map<IEnumerable<NatAndAge>, IEnumerable<ViewTable1InExcel>>(desialize);
+            var list = serialize.Deserialize<IEnumerable<NatAndAge>>(id);       
+         
+            var modelForExcel = _mapper.Map<IEnumerable<NatAndAge>, IEnumerable<ViewTable1InExcel>>(list);
             IExcel print = new Excel();
             string workString = await print.InExcelAsync<ViewTable1InExcel>(modelForExcel);
 

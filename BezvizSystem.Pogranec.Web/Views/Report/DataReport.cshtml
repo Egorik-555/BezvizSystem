@@ -1,11 +1,10 @@
 ﻿@model BezvizSystem.Pogranec.Web.Models.Report.ReportModel
 
-@{
+@{ 
     var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
     string list = serializer.Serialize(Model.AllByNatAndAge);
-    list = System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(list);
+    //list = System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(list);
 }
-
 
 <tr>
     <td class="tour40">
@@ -50,15 +49,20 @@
 </tr>
 
 <tr>
+    @using (Html.BeginForm("InExcel", "Report"))
+    {
     <td colspan="2" class="two_column2" valign="top">
         <table class="in_table4">
+            @Html.Hidden("id", list)
             @Html.Partial("DataAllByNatAndAge", Model.AllByNatAndAge)
         </table>
     </td>
     <td>
         @*<button id="Table1">Excel</button>*@
-        @Html.ActionLink("Excel", "InExcel", new { id = list}, new {@class = "simply_form_red marbot20 linkParameters" })
+        <input type="submit" value="Excel" />
+        @*@Html.ActionLink("Excel", "InExcel", new { dateForm = "asdas", dateTo = "2222"}, new {@class = "simply_form_red marbot20 linkParameters" })*@
     </td>
+    }
 </tr>
 
 <tr class="trSpace"></tr>
