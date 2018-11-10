@@ -112,13 +112,13 @@ namespace BezvizSystem.BLL.Services
             {
                 result += "{ \"c\":[{\"v\":\"" + item.Value1 + "\",\"f\":null},{\"v\":" + item.Value2 + ",\"f\":null}]},";
             }
- 
+
             result = result.TrimEnd(',');
             result += "] }";
 
             return result;
         }
-   
+
         private string GetStringByDateArrivalCount()
         {
             var visitors = _visitors.GroupBy(v => v.Group.DateArrival.Value.Date).Select(g => new CountByDate { DateArrival = g.Key.Date, Count = g.Count() });
@@ -128,12 +128,12 @@ namespace BezvizSystem.BLL.Services
             return JavaScriptEncoder.Default.Encode(GetString("Дата прибытия", "Количество", list));
         }
 
-        private IEnumerable<CountByDate> GetByDateArrivalCount()  
+        private IEnumerable<CountByDate> GetByDateArrivalCount()
         {
             var visitors = _visitors.GroupBy(v => v.Group.DateArrival.Value.Date).Select(g => new CountByDate { DateArrival = g.Key.Date, Count = g.Count() });
             visitors = visitors.OrderBy(o => o.DateArrival).ToList();
 
-            return visitors;     
+            return visitors;
         }
 
         private IEnumerable<CountByCheckPoint> GetByCheckPointCount()
@@ -156,16 +156,26 @@ namespace BezvizSystem.BLL.Services
 
         private IEnumerable<CountByDays> GetByDaysCount()
         {
-            var visitors = _visitors.GroupBy(v => v.Group.DaysOfStay).Select(g => new CountByDays { Days = g.Key < 5 ? (g.Key == 1 ? g.Key + " день" : g.Key + " дня") : g.Key + " дней", Count = g.Count() });
-            visitors = visitors.OrderBy(o => o.Days);
+            var visitors = _visitors.GroupBy(v => v.Group.DaysOfStay).Select(g => new CountByDays
+            {
+                IntDays = g.Key,
+                Days = g.Key < 5 ? (g.Key == 1 ? g.Key + " день" : g.Key + " дня") : g.Key + " дней",
+                Count = g.Count()
+            });
+            visitors = visitors.OrderBy(o => o.IntDays);
 
             return visitors;
         }
 
         private string GetStringByDaysCount()
         {
-            var visitors = _visitors.GroupBy(v => v.Group.DaysOfStay).Select(g => new CountByDays { Days = g.Key < 5 ? (g.Key == 1 ? g.Key + " день" : g.Key + " дня") : g.Key + " дней" , Count = g.Count() });
-            visitors = visitors.OrderBy(o => o.Days);
+            var visitors = _visitors.GroupBy(v => v.Group.DaysOfStay).Select(g => new CountByDays
+            {
+                IntDays = g.Key,
+                Days = g.Key < 5 ? (g.Key == 1 ? g.Key + " день" : g.Key + " дня") : g.Key + " дней",
+                Count = g.Count()
+            });
+            visitors = visitors.OrderBy(o => o.IntDays);
 
             var list = _mapper.Map<IEnumerable<CountByDays>, IEnumerable<ObjectForDiagram>>(visitors);
 

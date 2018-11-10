@@ -86,7 +86,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers.Api
             IExcel<XLWorkbook> print = new CloseXmlExcel();
             XLWorkbook book = await print.InExcelAsync<NatAndAgeExcel>(modelForExcel);
 
-            return new ExcelResult("Половозрастной признак.xlsx", book);
+            return new ExcelResult("По половозрастному признаку.xlsx", book);
         }
 
         [HttpPost]
@@ -107,7 +107,70 @@ namespace BezvizSystem.Pogranec.Web.Controllers.Api
             IExcel<XLWorkbook> print = new CloseXmlExcel();
             XLWorkbook book = await print.InExcelAsync<CountByDateModelExcel>(modelForExcel);
 
-            return new ExcelResult("Половозрастной признак.xlsx", book);
+            return new ExcelResult("По дате прибытия.xlsx", book);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> InExcel3(string id)
+        {
+            var serialize = new System.Web.Script.Serialization.JavaScriptSerializer();
+            var list = serialize.Deserialize<IEnumerable<CountByCheckPointModel>>(id).ToList();
+
+            ////добавить итог
+            list.Add(new CountByCheckPointModel
+            {
+                CheckPoint = "Итого",
+                Count = list.Sum(s => s.Count)
+            });
+
+            var modelForExcel = _mapper.Map<IEnumerable<CountByCheckPointModel>, IEnumerable<CountByCheckPointModelExcel>>(list);
+
+            IExcel<XLWorkbook> print = new CloseXmlExcel();
+            XLWorkbook book = await print.InExcelAsync<CountByCheckPointModelExcel>(modelForExcel);
+
+            return new ExcelResult("По пунктам пропуска.xlsx", book);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> InExcel4(string id)
+        {
+            var serialize = new System.Web.Script.Serialization.JavaScriptSerializer();
+            var list = serialize.Deserialize<IEnumerable<CountByDaysModel>>(id).ToList();
+
+            ////добавить итог
+            list.Add(new CountByDaysModel
+            {
+                Days = "Итого",
+                Count = list.Sum(s => s.Count)
+            });
+
+            var modelForExcel = _mapper.Map<IEnumerable<CountByDaysModel>, IEnumerable<CountByDaysModelExcel>>(list);
+
+            IExcel<XLWorkbook> print = new CloseXmlExcel();
+            XLWorkbook book = await print.InExcelAsync<CountByDaysModelExcel>(modelForExcel);
+
+            return new ExcelResult("По дням пребывания.xlsx", book);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> InExcel5(string id)
+        {
+            var serialize = new System.Web.Script.Serialization.JavaScriptSerializer();
+            var list = serialize.Deserialize<IEnumerable<CountByOperatorModel>>(id).ToList();
+
+            ////добавить итог
+            list.Add(new CountByOperatorModel
+            {
+                Operator = "Итого",
+                Count = list.Sum(s => s.Count)
+            });
+
+            var modelForExcel = _mapper.Map<IEnumerable<CountByOperatorModel>, IEnumerable<CountByOperatorModelExcel>>(list);
+
+            IExcel<XLWorkbook> print = new CloseXmlExcel();
+            XLWorkbook book = await print.InExcelAsync<CountByOperatorModelExcel>(modelForExcel);
+
+            return new ExcelResult("По туроператорам.xlsx", book);
         }
     }
 }

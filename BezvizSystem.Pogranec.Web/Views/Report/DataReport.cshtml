@@ -4,6 +4,9 @@
     var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
     string AllByNatAndAge = serializer.Serialize(Model.AllByNatAndAge);
     string AllByDateArrivalCount = serializer.Serialize(Model.AllByDateArrivalCount);
+    string AllByCheckPointCount = serializer.Serialize(Model.AllByCheckPointCount);
+    string AllByDaysCount = serializer.Serialize(Model.AllByDaysCount);
+    string AllByOperatorCount = serializer.Serialize(Model.AllByOperatorCount);
     //list = System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(list);
 }
 
@@ -82,7 +85,7 @@
 <tr>
     @using (Html.BeginForm("InExcel3", "Report"))
     {
-        @Html.Hidden("id", AllByDateArrivalCount)
+        @Html.Hidden("id", AllByCheckPointCount)
         <td colspan="2" id="chart2"></td>
         <td>
             <input type="submit" value="Excel" />
@@ -93,7 +96,12 @@
 <tr class="trSpace"></tr>
 
 <tr>
-    <td colspan="2" id="chart3"></td>
+    @using (Html.BeginForm("InExcel4", "Report"))
+    {
+        @Html.Hidden("id", AllByDaysCount)
+        <td colspan="2" id="chart3"></td>
+        <td><input type="submit" value="Excel" /></td>
+    }
 </tr>
 
 <tr class="trSpace"></tr>
@@ -105,9 +113,16 @@
 </tr>
 
 <tr>
-    <td colspan="2" class="two_column2 valign="top">
-        <table class="in_table3">
-            @Html.Partial("DataCountByOperator", Model.AllByOperatorCount)
-        </table>
-    </td>
+    @using (Html.BeginForm("InExcel5", "Report"))
+    {
+        <td colspan="2" class="two_column2 valign="top">
+            <table class="in_table4">
+                @Html.Hidden("id", AllByOperatorCount)
+                @Html.Partial("DataCountByOperator", Model.AllByOperatorCount)
+            </table>
+        </td>
+        <td><input type="submit" value="Excel" /></td>
+    }
 </tr>
+
+<tr style="height: 100px"></tr>

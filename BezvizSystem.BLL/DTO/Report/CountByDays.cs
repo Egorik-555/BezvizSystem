@@ -8,6 +8,7 @@ namespace BezvizSystem.BLL.DTO.Report
 {
     public class CountByDays
     {
+        public int? IntDays { get; set; }
         public string Days { get; set; }
         public int? Count { get; set; }
     }
