@@ -1,34 +1,29 @@
-﻿using BezvizSystem.BLL.Infrastructure;
-using BezvizSystem.BLL.Interfaces;
-using Calabonga.Xml.Exports;
+﻿using BezvizSystem.BLL.Interfaces;
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BezvizSystem.BLL.Utils
 {
-    public class Excel : IExcel<string>
+    public class CloseXmlExcel : IExcel<XLWorkbook>
     {
-        Workbook wb = new Workbook();
-        Worksheet ws;
+        private XLWorkbook book;
+        private IXLWorksheet sheet;
 
-        public Excel()
+        public CloseXmlExcel()
         {
-            wb.ExcelWorkbook.ActiveSheet = 1;
-            wb.ExcelWorkbook.DisplayInkNotes = false;
-            wb.ExcelWorkbook.FirstVisibleSheet = 1;
-            wb.ExcelWorkbook.ProtectStructure = false;
-
-            ws = new Worksheet("Анкеты");
-            wb.AddWorksheet(ws);
+            book = new XLWorkbook();
+            sheet = book.Worksheets.Add("Данные");
         }
 
-        private void MakeHead<T>(T item)
+        private void MakeHead<T>()
         {
             Type t = typeof(T);
-            int i = 0;
+            int i = 1;
 
             foreach (var info in t.GetProperties())
             {
@@ -38,43 +33,46 @@ namespace BezvizSystem.BLL.Utils
                 if (uiAttr != null && uiAttr.UIHint == "HiddenInput") continue;
 
                 if (dispAttr != null)
-                    ws.AddCell(0, i, dispAttr.Name);
+                    sheet.Cell(1, i).SetValue(dispAttr.Name);
                 else
-                    ws.AddCell(0, i, info.Name);
+                    sheet.Cell(1, i).SetValue(info.Name);
                 i++;
             }
         }
 
-        public string InExcel<T>(IEnumerable<T> list)
+
+        public XLWorkbook InExcel<T>(IEnumerable<T> list)
         {
-            if (list == null) return null; 
+            if (list == null) return null;
 
             Type t = typeof(T);
-            MakeHead<T>(list.FirstOrDefault());
+            MakeHead<T>();
 
-            if (list.Count() == 0) return wb.ExportToXML();
+            if (list.Count() == 0) return book;
 
-            int r = 1;
+            int r = 2;
             foreach (var item in list)
             {
-                int c = 0;
+                int c = 1;
                 foreach (var info in t.GetProperties())
                 {
                     UIHintAttribute uiAttr = (UIHintAttribute)Attribute.GetCustomAttribute(info, typeof(UIHintAttribute));
                     if (uiAttr != null && uiAttr.UIHint == "HiddenInput") continue;
-                    ws.AddCell(r, c, info.GetValue(item) != null ? info.GetValue(item).ToString() : "");
+
+                    sheet.Cell(r, c).SetValue(info.GetValue(item) != null ? info.GetValue(item).ToString() : "");
                     c++;
                 }
                 r++;
             }
-            return wb.ExportToXML();
+
+            return book;
         }
 
-        public Task<string> InExcelAsync<T>(IEnumerable<T> list)
+        public Task<XLWorkbook> InExcelAsync<T>(IEnumerable<T> list)
         {
             return Task.Run(() =>
             {
-               return InExcel(list);
+                return InExcel(list);
             });
         }
     }

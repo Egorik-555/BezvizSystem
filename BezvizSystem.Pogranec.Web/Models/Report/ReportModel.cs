@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BezvizSystem.BLL.DTO.Report;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -17,8 +18,12 @@ namespace BezvizSystem.Pogranec.Web.Models.Report
         public int? AllTourist { get; set; }
         public int? AllGroup { get; set; }
 
-        public IEnumerable<NatAndAge> AllByNatAndAge { get; set; }
-        public IEnumerable<CountByOperator> AllByOperatorCount { get; set; }
+        public IEnumerable<NatAndAgeModel> AllByNatAndAge { get; set; }
+        public IEnumerable<CountByOperatorModel> AllByOperatorCount { get; set; }
+
+        public IEnumerable<CountByDateModel> AllByDateArrivalCount { get; set; }
+        public IEnumerable<CountByCheckPointModel> AllByCheckPointCount { get; set; }
+        public IEnumerable<CountByDaysModel> AllByDaysCount { get; set; }
 
         public string StringDateByArrivalCount { get; set; }
         public string StringCheckPointCount { get; set; }

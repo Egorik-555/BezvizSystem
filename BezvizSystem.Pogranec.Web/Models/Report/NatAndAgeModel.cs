@@ -6,7 +6,7 @@ using System.Web;
 
 namespace BezvizSystem.Pogranec.Web.Models.Report
 {
-    public class NatAndAge
+    public class NatAndAgeModel
     {
         [Display(Name = "Страна")]
         public string Natiolaty { get; set; }

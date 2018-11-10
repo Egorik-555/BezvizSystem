@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.Configuration;
-using BezvizSystem.BLL.DTO;
+using BezvizSystem.BLL.DTO.Report;
 using BezvizSystem.BLL.Report.DTO;
 using BezvizSystem.Pogranec.Web.Models.Report;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BezvizSystem.Pogranec.Web.Mapper
 {
@@ -29,9 +25,16 @@ namespace BezvizSystem.Pogranec.Web.Mapper
             :base(cfg =>
             {
                 cfg.CreateMap<ReportDTO, ReportModel>();
+                cfg.CreateMap<NatAndAge, NatAndAgeModel>();
+                cfg.CreateMap<CountByOperator, CountByOperatorModel>();
+                cfg.CreateMap<CountByDate, CountByDateModel>().ForMember(dest => dest.DateArrival, 
+                                                                         opt => opt.MapFrom(src => src.DateArrival.HasValue ? src.DateArrival.Value.ToShortDateString() : ""));
+                cfg.CreateMap<CountByCheckPoint, CountByCheckPointModel>();
+                cfg.CreateMap<CountByDays, CountByDaysModel>();
+
                 cfg.CreateMap<ReportModel, ReportDTO>();
 
-                cfg.CreateMap<BLL.DTO.Report.NatAndAge, ViewTable1InExcel>();
+                cfg.CreateMap<NatAndAgeModel, NatAndAgeExcel>();
             })
         {   
         }

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace BezvizSystem.BLL.Interfaces
 {
-    public interface IExcel
+    public interface IExcel<TOutput>
     {
-        string InExcel<T>(IEnumerable<T> list);
-        Task<string> InExcelAsync<T>(IEnumerable<T> list);
+        TOutput InExcel<T>(IEnumerable<T> list);
+        Task<TOutput> InExcelAsync<T>(IEnumerable<T> list);
     }
 }

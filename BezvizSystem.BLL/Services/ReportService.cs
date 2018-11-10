@@ -69,10 +69,13 @@ namespace BezvizSystem.BLL.Services
 
                 AllByNatAndAge = GetByNatAndAge(dateMoment),
                 AllByOperatorCount = GetByOperatorCount(),
+                AllByDateArrivalCount = GetByDateArrivalCount(),
+                AllByCheckPointCount = GetByCheckPointCount(),
+                AllByDaysCount = GetByDaysCount(),
 
-                StringDateByArrivalCount = GetByDateArrivalCount(),
-                StringCheckPointCount = GetByCheckPointCount(),
-                StringDaysByCount = GetByDaysCount()
+                StringDateByArrivalCount = GetStringByDateArrivalCount(),
+                StringCheckPointCount = GetStringByCheckPointCount(),
+                StringDaysByCount = GetStringByDaysCount()
             };
         }
 
@@ -116,16 +119,32 @@ namespace BezvizSystem.BLL.Services
             return result;
         }
    
-        private string GetByDateArrivalCount()
+        private string GetStringByDateArrivalCount()
         {
             var visitors = _visitors.GroupBy(v => v.Group.DateArrival.Value.Date).Select(g => new CountByDate { DateArrival = g.Key.Date, Count = g.Count() });
             visitors = visitors.OrderBy(o => o.DateArrival).ToList();
 
             var list = _mapper.Map<IEnumerable<CountByDate>, IEnumerable<ObjectForDiagram>>(visitors);
-
             return JavaScriptEncoder.Default.Encode(GetString("Дата прибытия", "Количество", list));
         }
-        private string GetByCheckPointCount()
+
+        private IEnumerable<CountByDate> GetByDateArrivalCount()  
+        {
+            var visitors = _visitors.GroupBy(v => v.Group.DateArrival.Value.Date).Select(g => new CountByDate { DateArrival = g.Key.Date, Count = g.Count() });
+            visitors = visitors.OrderBy(o => o.DateArrival).ToList();
+
+            return visitors;     
+        }
+
+        private IEnumerable<CountByCheckPoint> GetByCheckPointCount()
+        {
+            var visitors = _visitors.GroupBy(v => v.Group.CheckPoint.Name).Select(g => new CountByCheckPoint { CheckPoint = g.Key, Count = g.Count() });
+            visitors = visitors.OrderBy(o => o.CheckPoint);
+
+            return visitors;
+        }
+
+        private string GetStringByCheckPointCount()
         {
             var visitors = _visitors.GroupBy(v => v.Group.CheckPoint.Name).Select(g => new CountByCheckPoint { CheckPoint = g.Key, Count = g.Count() });
             visitors = visitors.OrderBy(o => o.CheckPoint);
@@ -135,7 +154,15 @@ namespace BezvizSystem.BLL.Services
             return JavaScriptEncoder.Default.Encode(GetString("Пункт пропуска", "Количество", list));
         }
 
-        private string GetByDaysCount()
+        private IEnumerable<CountByDays> GetByDaysCount()
+        {
+            var visitors = _visitors.GroupBy(v => v.Group.DaysOfStay).Select(g => new CountByDays { Days = g.Key < 5 ? (g.Key == 1 ? g.Key + " день" : g.Key + " дня") : g.Key + " дней", Count = g.Count() });
+            visitors = visitors.OrderBy(o => o.Days);
+
+            return visitors;
+        }
+
+        private string GetStringByDaysCount()
         {
             var visitors = _visitors.GroupBy(v => v.Group.DaysOfStay).Select(g => new CountByDays { Days = g.Key < 5 ? (g.Key == 1 ? g.Key + " день" : g.Key + " дня") : g.Key + " дней" , Count = g.Count() });
             visitors = visitors.OrderBy(o => o.Days);

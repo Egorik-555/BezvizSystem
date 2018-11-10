@@ -6,7 +6,7 @@ using System.Web;
 
 namespace BezvizSystem.Pogranec.Web.Models.Report
 {
-    public class ViewTable1InExcel
+    public class NatAndAgeExcel
     {
 
         [Display(Name = "Страна")]

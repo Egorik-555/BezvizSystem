@@ -1,8 +1,9 @@
 ﻿@model BezvizSystem.Pogranec.Web.Models.Report.ReportModel
 
-@{ 
+@{
     var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-    string list = serializer.Serialize(Model.AllByNatAndAge);
+    string AllByNatAndAge = serializer.Serialize(Model.AllByNatAndAge);
+    string AllByDateArrivalCount = serializer.Serialize(Model.AllByDateArrivalCount);
     //list = System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(list);
 }
 
@@ -49,30 +50,44 @@
 </tr>
 
 <tr>
-    @using (Html.BeginForm("InExcel", "Report"))
+    @using (Html.BeginForm("InExcel1", "Report"))
     {
-    <td colspan="2" class="two_column2" valign="top">
-        <table class="in_table4">
-            @Html.Hidden("id", list)
-            @Html.Partial("DataAllByNatAndAge", Model.AllByNatAndAge)
-        </table>
-    </td>
-    <td>
-        <input type="submit" value="Excel" />   
-    </td>
+        <td colspan="2" class="two_column2" valign="top">
+            <table class="in_table4">
+                @Html.Hidden("id", AllByNatAndAge)
+                @Html.Partial("DataAllByNatAndAge", Model.AllByNatAndAge)
+            </table>
+        </td>
+        <td>
+            <input type="submit" value="Excel" />
+        </td>
     }
 </tr>
 
 <tr class="trSpace"></tr>
 
 <tr>
-    <td colspan="2" id="chart1"></td>
+    @using (Html.BeginForm("InExcel2", "Report"))
+    {
+        @Html.Hidden("id", AllByDateArrivalCount)
+        <td colspan="2" id="chart1"></td>
+        <td>
+            <input type="submit" value="Excel" />
+        </td>
+    }
 </tr>
 
 <tr class="trSpace"></tr>
 
 <tr>
-    <td colspan="2" id="chart2"></td>
+    @using (Html.BeginForm("InExcel3", "Report"))
+    {
+        @Html.Hidden("id", AllByDateArrivalCount)
+        <td colspan="2" id="chart2"></td>
+        <td>
+            <input type="submit" value="Excel" />
+        </td>
+    }
 </tr>
 
 <tr class="trSpace"></tr>

@@ -71,7 +71,7 @@ namespace BezvizSystem.Web.Controllers
                 }
             }
                   
-            IExcel print = new Excel();
+            IExcel<string> print = new Excel();
             string workString = await print.InExcelAsync<ViewAnketaExcel>(visitors);
 
             return new ExcelResult("Зарегистрированные анкеты.xls", workString);

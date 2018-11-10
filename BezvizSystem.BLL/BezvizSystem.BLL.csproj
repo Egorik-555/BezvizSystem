@@ -91,6 +91,7 @@
     <Compile Include="Services\VisitorService.cs" />
     <Compile Include="Services\XMLDispatcher.cs" />
     <Compile Include="Services\XML\XmlCreatorPogran.cs" />
+    <Compile Include="Utils\CloseXmlExcel.cs" />
     <Compile Include="Utils\Excel.cs" />
     <Compile Include="Utils\SimpleGeneratePass.cs" />
   </ItemGroup>

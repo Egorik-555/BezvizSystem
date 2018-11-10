@@ -6,7 +6,7 @@ using System.Web;
 
 namespace BezvizSystem.Pogranec.Web.Models.Report
 {
-    public class CountByOperator
+    public class CountByOperatorModel
     {
         [Display(Name = "Туроператор")]
         public string Operator { get; set; }
