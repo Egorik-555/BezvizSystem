@@ -1,6 +1,4 @@
-﻿@*@model BezvizSystem.Pogranec.Web.Models.Anketa.ArrivedPerson*@
-
-@{
+﻿@{
     ViewBag.Title = "Анкета";
 
     AjaxOptions opt = new AjaxOptions
@@ -17,11 +15,11 @@
         <tr>
             <td class="left no_border">
                 <label for="dateFrom">Дата прибытия с</label>
-                <input type="text" id="dateFrom" autocomplete="off" name="dateFrom" class="datepicker form-control" @*value="@(((DateTime?)ViewBag.dateFrom).ToString(" dd.MM.yyyy"))"*@ />
+                <input type="text" id="dateFrom" autocomplete="off" name="dateFrom" class="datepicker form-control" />
             </td>
             <td class="left no_border" align="right">
                 <label for="dateTo">по</label>
-                <input type="text" id="dateTo" autocomplete="off" name="dateTo" class="datepicker form-control" @*value="@(((DateTime?)ViewBag.dateTo).ToString(" dd.MM.yyyy"))"*@ />
+                <input type="text" id="dateTo" autocomplete="off" name="dateTo" class="datepicker form-control" />
             </td>
         </tr>
         <tr>

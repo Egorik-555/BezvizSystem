@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
+using BezvizSystem.BLL.DTO.Dictionary;
 using BezvizSystem.BLL.DTO.Report;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Report.DTO;
@@ -23,11 +24,13 @@ namespace BezvizSystem.Pogranec.Web.Controllers.Api
     public class ReportController : Controller
     {
         private IReport _report;
+        private IDictionaryService<CheckPointDTO> _checkPointService;
         IMapper _mapper;
 
-        public ReportController(IReport report)
+        public ReportController(IReport report, IDictionaryService<CheckPointDTO> checkPointService)
         {
             _report = report;
+            _checkPointService = checkPointService;
             _mapper = new MapperPogranecConfiguration().CreateMapper();
         }
 
@@ -36,39 +39,35 @@ namespace BezvizSystem.Pogranec.Web.Controllers.Api
             _mapper = new MapperPogranecConfiguration().CreateMapper();
         }
       
-        public ActionResult Index(DateTime? dateFrom, DateTime? dateTo)
+        public ActionResult Index(DateTime? dateFrom, DateTime? dateTo, string checkPoint)
         {
-            var model = GetModelByValidDates(dateFrom, dateTo);
+            var model = GetModelByValidDates(dateFrom, dateTo, checkPoint);                 
+
+            ViewBag.dateFrom = dateFrom;
+            ViewBag.dateTo = dateTo;
+            ViewBag.checkPoint = checkPoint;
+
+            ViewBag.CheckPoints = CheckPoints();
 
             var modelInView = _mapper.Map<ReportDTO, ReportModel>(model);
             return View(modelInView);
         }
 
-        private ReportDTO GetModelByValidDates(DateTime? dateFrom, DateTime? dateTo)
+        private ReportDTO GetModelByValidDates(DateTime? dateFrom, DateTime? dateTo, string checkPoint)
         {       
-            ViewBag.dateFrom = dateFrom ?? DateTime.Now;
-            ViewBag.dateTo = dateTo ?? DateTime.Now;
-
-            if (dateFrom.HasValue && dateTo.HasValue)
+            if (!dateFrom.HasValue && !dateTo.HasValue)
             {
-                return _report.GetReport(dateFrom, dateTo);
+                return _report.GetReport(checkPoint);             
             }
-            else
-            {
-                if (!dateFrom.HasValue && dateTo.HasValue)
-                {
-                    dateFrom = DateTime.MinValue;
-                    return _report.GetReport(dateFrom, dateTo);
-                }
 
-                if (dateFrom.HasValue && !dateTo.HasValue)
-                {
-                    dateTo = DateTime.MaxValue;
-                    return _report.GetReport(dateFrom, dateTo);
-                }
+            return _report.GetReport(dateFrom, dateTo, checkPoint);
+        }
 
-                return _report.GetReport();
-            }
+        private SelectList CheckPoints()
+        {
+            List<string> list = new List<string>(_checkPointService.Get().Select(c => c.Name));
+            list.Insert(0, "");
+            return new SelectList(list, "");
         }
 
         [HttpPost]

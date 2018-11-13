@@ -31,38 +31,76 @@ namespace BezvizSystem.Pogranec.Web.Controllers
 
         public ActionResult Index(DateTime? dateFrom, DateTime? dateTo, string checkPoint)
         {
-            ViewBag.dateFrom = dateFrom;
-            ViewBag.dateTo = dateTo;
-            ViewBag.checkPoint = checkPoint;
             ViewBag.CheckPoints = CheckPoints();
             return View();
         }
 
         public ActionResult DataAnketa(DateTime? dateFrom, DateTime? dateTo, string checkPoint)
         {
-            var list = GetModelByValidDates(dateFrom, dateTo, checkPoint);
+            var list = GetModelByValidDates(ref dateFrom, ref dateTo, checkPoint);
             var group = list.GroupBy(a => a.CheckPoint, a => a.CountMembers).
                              Select(a => new ArrivedInfo { CheckPoint = a.Key, Count = a.Sum() }).ToList();
 
+            string info = "Ожидается к прибытию ";
+            if (dateFrom == dateTo)
+            {
+                info += "на " + dateFrom.Value.ToShortDateString();
+            }
+            else if (dateFrom == DateTime.MinValue && dateTo != DateTime.MaxValue)
+            {
+                info += "по " + dateTo.Value.ToShortDateString();
+            }
+            else if (dateFrom != DateTime.MinValue && dateTo == DateTime.MaxValue)
+            {
+                info += "с " + dateFrom.Value.ToShortDateString();
+            }
+            else if (dateFrom != DateTime.MinValue && dateTo != DateTime.MaxValue)
+            {
+                info += "с " + dateFrom.Value.ToShortDateString() + " по " + dateTo.Value.ToShortDateString();
+            }
 
-            var model = new ArrivedPerson { Infoes = group, Count = group.Sum(a => a.Count), ArriveFrom = dateFrom, ArriveTo = dateTo };
+            if (!string.IsNullOrEmpty(checkPoint))
+            {
+                info += " в пункте пропуска - " + checkPoint;
+            }
+
+            var model = new ArrivedPerson
+            {
+                Infoes = group,
+                Info = info,
+                Count = group.Sum(a => a.Count),
+                ArriveFrom = dateFrom,
+                ArriveTo = dateTo
+            };
             return PartialView(model);
         }
 
-        private IEnumerable<AnketaDTO> GetModelByValidDates(DateTime? dateFrom, DateTime? dateTo, string checkPoint)
+        private IEnumerable<AnketaDTO> GetModelByValidDates(ref DateTime? dateFrom, ref DateTime? dateTo, string checkPoint)
         {
             var list = _anketaService.GetAll();
 
-            if (!dateFrom.HasValue)
-                dateFrom = DateTime.Now.Date;
-
-            if (!dateTo.HasValue)
-                dateTo = DateTime.Now.Date;
+            var date1 = dateFrom;
+            var date2 = dateTo;
+            if (!dateFrom.HasValue && !dateTo.HasValue)
+            {
+                date1 = DateTime.Now.Date;
+                date2 = DateTime.Now.Date;
+            }
+            else if (!dateFrom.HasValue && dateTo.HasValue)
+            {
+                date1 = DateTime.MinValue;
+            }
+            else if (dateFrom.HasValue && !dateTo.HasValue)
+            {
+                date2 = DateTime.MaxValue;
+            }
 
             if (!String.IsNullOrEmpty(checkPoint))
                 list = list.Where(a => a.CheckPoint == checkPoint);
 
-            return list.Where(a => a.DateArrival.Value <= dateTo && a.DateArrival >= dateFrom);
+            dateFrom = date1;
+            dateTo = date2;
+            return list.Where(a => a.DateArrival.Value <= date2 && a.DateArrival >= date1);
         }
 
         public async Task<ActionResult> GetAnketasDefault()

@@ -39,6 +39,11 @@ namespace BezvizSystem.BLL.Services
             return GetReport(DateTime.Now.Date, DateTime.Now.Date);
         }
 
+        public ReportDTO GetReport(string checkPoint)
+        {
+            return GetReport(DateTime.Now.Date, DateTime.Now.Date, checkPoint);
+        }
+
         public ReportDTO GetReport(DateTime? dateMoment)
         {
             return GetReport(DateTime.Now.Date, DateTime.Now.Date, dateMoment);
@@ -49,15 +54,68 @@ namespace BezvizSystem.BLL.Services
             return GetReport(dateFrom, dateTo, DateTime.Now.Date);
         }
 
+        public ReportDTO GetReport(DateTime? dateFrom, DateTime? dateTo, string checkPoint)
+        {
+            return GetReport(dateFrom, dateTo, checkPoint, DateTime.Now.Date);
+        }
+
         public ReportDTO GetReport(DateTime? dateFrom, DateTime? dateTo, DateTime? dateMoment)
         {
-            _groups = _database.GroupManager.GetAll().Where(g => g.DateArrival >= dateFrom && g.DateArrival <= dateTo).ToList();
-            _visitors = _database.VisitorManager.GetAll().Where(v => v.Group != null && v.Group.DateArrival >= dateFrom && v.Group.DateArrival <= dateTo).ToList();
+            return GetReport(dateFrom, dateTo, null, dateMoment);
+        }
+
+        public ReportDTO GetReport(DateTime? dateFrom, DateTime? dateTo, string checkPoint, DateTime? dateMoment)
+        {
+            var date1 = dateFrom;
+            var date2 = dateTo;
+
+            if (!date1.HasValue)
+            {
+                date1 = DateTime.MinValue;        
+            }
+
+            if (!date2.HasValue)
+            {
+                date2 = DateTime.MaxValue;            
+            }
+
+            _groups = _database.GroupManager.GetAll().Where(g => g.DateArrival >= date1 && g.DateArrival <= date2).ToList();
+            _visitors = _database.VisitorManager.GetAll().Where(v => v.Group != null && v.Group.DateArrival >= date1 && v.Group.DateArrival <= date2).ToList();
+
+            if (!String.IsNullOrEmpty(checkPoint))
+            {
+                _groups = _groups.Where(g => g.CheckPoint.Name.ToUpper() == checkPoint.ToUpper());
+                _visitors = _visitors.Where(v => v.Group != null && v.Group.CheckPoint.Name.ToUpper() == checkPoint.ToUpper());
+            }
+
+            string info = "Отчет ";
+            if (date1 == date2)
+            {
+                info += "на " + dateFrom.Value.ToShortDateString();
+            }
+            else if (date1 == DateTime.MinValue && date2 != DateTime.MaxValue)
+            {
+                info += "по " + date2.Value.ToShortDateString();
+            }
+            else if (date1 != DateTime.MinValue && date2 == DateTime.MaxValue)
+            {
+                info += "с " + date1.Value.ToShortDateString();
+            }
+            else if (date1 != DateTime.MinValue && date2 != DateTime.MaxValue)
+            {
+                info += "с " + date1.Value.ToShortDateString() + " по " + date2.Value.ToShortDateString();
+            }
+
+            if (!string.IsNullOrEmpty(checkPoint))
+            {
+                info += " в пункте пропуска - " + checkPoint;
+            }
 
             return new ReportDTO
             {
-                DateFrom = dateFrom.Value,
-                DateTo = dateTo.Value,
+                DateFrom = date1.Value,
+                DateTo = date2.Value,
+                Info = info,
 
                 AllRegistrated = GetAllRegistrated(),
                 AllArrived = GetAllArrived(),

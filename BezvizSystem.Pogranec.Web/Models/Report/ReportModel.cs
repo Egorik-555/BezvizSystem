@@ -10,6 +10,7 @@ namespace BezvizSystem.Pogranec.Web.Models.Report
     {
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }
+        public string Info { get; set; }
 
         public int? AllRegistrated { get; set; }
         public int? AllArrived { get; set; }

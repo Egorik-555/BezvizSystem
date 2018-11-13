@@ -20,6 +20,7 @@ namespace BezvizSystem.Pogranec.Web.Models.Anketa
         public int? Count { get; set; }
         public DateTime? ArriveFrom { get; set; }
         public DateTime? ArriveTo { get; set; }
+        public string Info { get; set; }
 
         public IEnumerable<ArrivedInfo> Infoes { get; set; }
 

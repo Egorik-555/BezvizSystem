@@ -7,23 +7,50 @@
 
 <td class="two_column2" valign="top">
 
-    <table class="text_only">
-        @using (Html.BeginForm())
-        {
-            <thead>
-                <tr>
-                    <td>
-                        <input type="button" style="width:100%" class="simply_form_red marbot20" id="dates" name="dates" value="Выбор диапазона дат" />
-                    </td>
 
-                    <td id="panelDates" style="display: none">
-                        <input type="text" name="dateFrom" autocomplete="off" class="datepicker" value="@(((DateTime)ViewBag.dateFrom).ToString("dd.MM.yyyy"))" />
-                        <input type="text" name="dateTo" autocomplete="off" class="datepicker" value="@(((DateTime)ViewBag.dateTo).ToString("dd.MM.yyyy"))" />
-                        <input type="submit" class="simply_form_red marbot20" style="height:auto; width:95px" value="Найти" />
-                    </td>
-                </tr>
-            </thead>
-        }
+    @using (Html.BeginForm())
+    {
+        <table id="panelReport" style="display:none" class="in_table7">
+
+            <tr>
+                <td class="left no_border">
+                    <label for="dateFrom">Дата прибытия с</label>
+                    <input type="text" id="dateFrom" autocomplete="off" name="dateFrom" class="datepicker form-control" 
+                           value="@(ViewBag.dateFrom != null ? ((DateTime)ViewBag.dateFrom).ToString("dd.MM.yyyy") : "" )" />
+                </td>
+                <td class="left no_border" align="right">
+                    <label for="dateTo">по</label>
+                    <input type="text" id="dateTo" autocomplete="off" name="dateTo" class="datepicker form-control" 
+                           value="@(ViewBag.dateTo != null ? ((DateTime)ViewBag.dateTo).ToString("dd.MM.yyyy") : "" )" />
+                </td>
+            </tr>
+            <tr>
+                <td class="no_border">
+                    <label>Пункт пропуска</label>
+                    @Html.DropDownList("CheckPoint", ViewBag.CheckPoints as SelectList, new { @class = "form-control punkt", @value = ViewBag.checkPoint })
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <input type="submit" class="simply_form_red marbot20" style="height:auto; width:95px" value="Найти" />
+                </td>
+            </tr>
+        </table>
+    }
+
+
+
+    <table class="text_only">
+
+        <thead>
+
+            <tr>
+                <td class="no_border">
+                    <input id="filterBtn" type="button" class="simply_form_red marbot20 buttonParameters" style="width:100%" value="Фильтр" />
+                </td>
+            </tr>
+        </thead>
 
         <tbody id="data">
             @Html.Partial("DataReport", Model)
@@ -37,29 +64,15 @@
 
     <script src="~/Scripts/MyScripts/ShowPanels.js"></script>
     <script>
-        showPanel('dates', 'panelDates')
+        showPanel('filterBtn', 'panelReport')
     </script>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jquery-ui")
     <script src="~/Scripts/MyScripts/pikaday.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="~/Scripts/MyScripts/combobox.js"></script>
 
-    @*<script>
-        var buttonTable1 = document.getElementById("Table1");
-        buttonTable1.onclick = makeRequest;
-    
-        function makeRequest() {
-            $.get({
-                url: "@Url.Action("InExcel")",
-                data: { id: '@list' },
-                
-                contentType: 'application/vnd.ms-excel',
-                success: function (data) { alert(data) }
-                
-            });
-        }
-    </script>*@
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <script>
 
