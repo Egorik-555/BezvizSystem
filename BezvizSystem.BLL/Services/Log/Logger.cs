@@ -16,6 +16,9 @@ namespace BezvizSystem.BLL.Services.Log
         public Logger(IUnitOfWork uow)
         {
             _base = uow;
+              
+
+
         }
 
         public LogDTO Read()
