@@ -19,9 +19,6 @@ namespace BezvizSystem.BLL.DTO
         public string Operator { get; set; }
 
         public ICollection<VisitorDTO> Visitors { get; set; }
-
-        //public DateTime? DateInSystem { get; set; }
-        //public string UserInSystem { get; set; }
       
         public AnketaDTO()
         {

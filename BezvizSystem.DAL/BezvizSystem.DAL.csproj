@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="Entities\Gender.cs" />
     <Compile Include="Entities\XMLDispatch.cs" />
+    <Compile Include="Helpers\LogType.cs" />
     <Compile Include="Helpers\Operation.cs" />
     <Compile Include="Helpers\Status.cs" />
     <Compile Include="Interfaces\IOperatorManager.cs" />
