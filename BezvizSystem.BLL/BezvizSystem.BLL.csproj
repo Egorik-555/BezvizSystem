@@ -88,6 +88,7 @@
     <Compile Include="Services\GroupService.cs" />
     <Compile Include="Interfaces\IDictionaryService.cs" />
     <Compile Include="Services\Log\Logger.cs" />
+    <Compile Include="Services\Log\MapperLogLProfile.cs" />
     <Compile Include="Services\ReportService.cs" />
     <Compile Include="Services\ServiceCreator.cs" />
     <Compile Include="Services\UserService.cs" />

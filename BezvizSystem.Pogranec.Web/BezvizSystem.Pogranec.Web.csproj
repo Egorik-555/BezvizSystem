@@ -270,6 +270,8 @@
     <Compile Include="Controllers\AnketaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Filters\ActionLogger.cs" />
+    <Compile Include="Filters\LoginException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -438,6 +440,10 @@
     <ProjectReference Include="..\BezvizSystem.BLL\BezvizSystem.BLL.csproj">
       <Project>{467be8d4-6e9d-442a-8371-ff690e18d74f}</Project>
       <Name>BezvizSystem.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BezvizSystem.DAL\BezvizSystem.DAL.csproj">
+      <Project>{C01E9E88-181D-4A27-9741-D82C26A29CDA}</Project>
+      <Name>BezvizSystem.DAL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

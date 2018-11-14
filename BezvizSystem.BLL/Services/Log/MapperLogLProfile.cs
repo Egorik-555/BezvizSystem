@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BezvizSystem.BLL.Services.Log
 {
-    class MapperLogLProfile : Profile
+    public class MapperLogLProfile : Profile
     {
          
         public MapperLogLProfile()

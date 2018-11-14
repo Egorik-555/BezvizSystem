@@ -23,6 +23,7 @@ namespace BezvizSystem.DAL.Repositories
         private IRepository<Visitor, int> visitorManager;
         private IRepository<GroupVisitor, int> groupManager;
         private IRepository<XMLDispatch, int> xmlDispatchManager;
+        private IRepository<Log, int> logManager;
 
         private IRepository<CheckPoint, int> checkPoints;
         private IRepository<Nationality, int> nationalities;
@@ -39,6 +40,7 @@ namespace BezvizSystem.DAL.Repositories
             visitorManager = new VisitorManager(context);
             groupManager = new GroupManager(context);
             xmlDispatchManager = new XMLDispatchManager(context);
+            logManager = new LogManager(context);
 
             checkPoints = new CheckPointManager(context);
             nationalities = new NationalityManager(context);
@@ -52,6 +54,7 @@ namespace BezvizSystem.DAL.Repositories
         public IRepository<Visitor, int> VisitorManager => visitorManager;
         public IRepository<GroupVisitor, int> GroupManager => groupManager;
         public IRepository<XMLDispatch, int> XMLDispatchManager => xmlDispatchManager;
+        public IRepository<Log, int> LogManager => logManager;
 
         public IRepository<Nationality, int> Nationalities => nationalities;
         public IRepository<CheckPoint, int> CheckPoints => checkPoints;
@@ -71,6 +74,7 @@ namespace BezvizSystem.DAL.Repositories
                     visitorManager.Dispose();
                     groupManager.Dispose();
                     xmlDispatchManager.Dispose();
+                    logManager.Dispose();
 
                     checkPoints.Dispose();
                     nationalities.Dispose();

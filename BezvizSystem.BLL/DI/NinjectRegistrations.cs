@@ -1,8 +1,10 @@
 ﻿using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.DTO.Dictionary;
 using BezvizSystem.BLL.Interfaces;
+using BezvizSystem.BLL.Interfaces.Log;
 using BezvizSystem.BLL.Interfaces.XML;
 using BezvizSystem.BLL.Services;
+using BezvizSystem.BLL.Services.Log;
 using BezvizSystem.BLL.Services.XML;
 using BezvizSystem.DAL.Interfaces;
 using BezvizSystem.DAL.Repositories;
@@ -24,6 +26,8 @@ namespace BezvizSystem.BLL.DI
             Bind<IService<VisitorDTO>>().To<VisitorService>();
             Bind<IService<GroupVisitorDTO>>().To<GroupService>();
             Bind<IService<AnketaDTO>>().To<AnketaService>();
+            Bind<IService<AnketaDTO>>().To<AnketaService>();
+            Bind<ILogger>().To<Logger>();
 
             Bind<IDictionaryService<CheckPointDTO>>().To<DictionaryService<CheckPointDTO>>();
             Bind<IDictionaryService<NationalityDTO>>().To<DictionaryService<NationalityDTO>>();

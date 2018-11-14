@@ -1,4 +1,6 @@
-﻿using BezvizSystem.BLL.DTO.Log;
+﻿using AutoMapper;
+using BezvizSystem.BLL.DTO.Log;
+using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.BLL.Interfaces.Log;
 using BezvizSystem.DAL.Interfaces;
 using System;
@@ -12,23 +14,55 @@ namespace BezvizSystem.BLL.Services.Log
     public class Logger : ILogger
     {
         private IUnitOfWork _base;
+        private IMapper _mapper;
 
         public Logger(IUnitOfWork uow)
         {
             _base = uow;
-              
-
-
+            MapperConfiguration config = new MapperConfiguration(cfg => cfg.AddProfile(new MapperLogLProfile()));
+            _mapper = config.CreateMapper();
         }
 
-        public LogDTO Read()
+        public IEnumerable<LogDTO> GetAll()
         {
-            throw new NotImplementedException();
+            var logs = _base.LogManager.GetAll();
+            var model = _mapper.Map<IEnumerable<DAL.Entities.Log>,IEnumerable<LogDTO>>(logs);
+            return model;
         }
 
-        public void WriteLog(LogDTO log)
+        public LogDTO GetById(int id)
         {
-            throw new NotImplementedException();
+            var log = _base.LogManager.GetById(id);
+            var model = _mapper.Map<BezvizSystem.DAL.Entities.Log, LogDTO>(log);
+            return model;
+        }
+
+        public async Task<LogDTO> GetByIdAsync(int id)
+        {
+            var log = await _base.LogManager.GetByIdAsync(id);
+            var model = _mapper.Map<BezvizSystem.DAL.Entities.Log, LogDTO>(log);
+            return model;
+        }
+
+        public IEnumerable<LogDTO> GetByUserName(string name)
+        {
+            var logs = _base.LogManager.GetAll().Where(l => l.UserName.ToUpper() == name.ToUpper());
+            var model = _mapper.Map<IEnumerable<DAL.Entities.Log>, IEnumerable<LogDTO>>(logs);
+            return model;
+        }
+
+        public OperationDetails WriteLog(LogDTO log)
+        {
+            try
+            {
+                var model = _mapper.Map<LogDTO, BezvizSystem.DAL.Entities.Log>(log);          
+                var newLog = _base.LogManager.Create(model);
+                return new OperationDetails(true, "Лог добавлен", "");
+            }
+            catch (Exception ex)
+            {
+                return new OperationDetails(false, ex.Message, "");
+            }
         }
     }
 }

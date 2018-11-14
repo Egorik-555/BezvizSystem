@@ -45,12 +45,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestServises\UserManagerTest.cs" />
+    <Compile Include="UnitTestLogService.cs" />
     <Compile Include="UnitTestGroupServiceWithXmlDispatcher.cs" />
     <Compile Include="UnitTestVisitorServiceWithXmlDispatcher.cs" />
     <Compile Include="UnitTestXMLDispacher.cs" />
     <Compile Include="UnitTestDictionaryService.cs" />
     <Compile Include="TestServises\CreateTestRepositories.cs" />
-    <Compile Include="TestUnitOfWork.cs" />
+    <Compile Include="UnitTestOfWork.cs" />
     <Compile Include="ExcelTest.cs" />
     <Compile Include="UnitTestReportService.cs" />
     <Compile Include="UnitTestXmlCreatorService.cs" />

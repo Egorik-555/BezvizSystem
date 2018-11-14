@@ -7,14 +7,16 @@ using System.Threading.Tasks;
 using BezvizSystem.DAL.Entities;
 using BezvizSystem.DAL.Identity;
 using Moq;
+using BezvizSystem.DAL.Helpers;
 
 namespace BezvizSystem.BLL.Tests
 {
-    class TestUnitOfWork : IUnitOfWork
+    class UnitTestOfWork : IUnitOfWork
     {     
         Mock<IRepository<Nationality, int>> nationalityManager;
         Mock<IRepository<CheckPoint, int>> checkPointManager;
         Mock<IRepository<GroupVisitor, int>> groupManger;
+        Mock<IRepository<Log, int>> logManager;
 
         List<Nationality> nationalities = new List<Nationality>
         {
@@ -40,7 +42,21 @@ namespace BezvizSystem.BLL.Tests
             new GroupVisitor{ Visitors = new List<Visitor>{ new Visitor { Surname = "surname1_group2"}, new Visitor { Surname = "surname2_group2"} },  Group = true,  DateArrival = DateTime.Parse("01.07.2018") }
         };
 
-        public TestUnitOfWork()
+        List<Log> logs = new List<Log>
+        {
+            new Log{Id = 1, Type = LogType.Enter, Ip = "test", UserName = "TEST", DateActivity  = DateTime.Now, TextActivity = "text activity bla bla bla"},
+            new Log{Id = 2, Type = LogType.Exit, Ip = "test exit", UserName = "Test", DateActivity  = DateTime.Now, TextActivity = "text activity for exit"},
+        };
+
+        public void SetupLogManager()
+        {
+            logManager = new Mock<IRepository<Log, int>>();
+            logManager.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => logs.FirstOrDefault(l => l.Id == id));
+            logManager.Setup(m => m.Create(It.IsAny<Log>())).Returns<Log>(l => { logs.Add(l); return l;  });
+            logManager.Setup(m => m.GetAll()).Returns(() => logs);
+        }
+
+        public UnitTestOfWork()
         {         
             nationalityManager = new Mock<IRepository<Nationality, int>>();
             nationalityManager.Setup(m => m.GetAll()).Returns(nationalities);
@@ -50,6 +66,8 @@ namespace BezvizSystem.BLL.Tests
 
             groupManger = new Mock<IRepository<GroupVisitor, int>>();
             groupManger.Setup(m => m.GetAll()).Returns(groups);
+
+            SetupLogManager();
         }
 
         public BezvizUserManager UserManager => throw new NotImplementedException();
@@ -59,6 +77,7 @@ namespace BezvizSystem.BLL.Tests
         public IRepository<Visitor, int> VisitorManager => throw new NotImplementedException();
         public IRepository<GroupVisitor, int> GroupManager => groupManger.Object;
         public IRepository<XMLDispatch, int> XMLDispatchManager => throw new NotImplementedException();
+        public IRepository<Log, int> LogManager => logManager.Object;
 
         //Dictionaries
         public IRepository<Nationality, int> Nationalities => nationalityManager.Object;
