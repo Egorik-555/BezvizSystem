@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Gender.cs" />
+    <Compile Include="Entities\Log.cs" />
     <Compile Include="Entities\XMLDispatch.cs" />
     <Compile Include="Helpers\LogType.cs" />
     <Compile Include="Helpers\Operation.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Repositories\IdentityUnitOfWork.cs" />
     <Compile Include="Repositories\NationalityManager.cs" />
     <Compile Include="Repositories\OperatorManager.cs" />
+    <Compile Include="Repositories\LogManager.cs" />
     <Compile Include="Repositories\VisitorManager.cs" />
     <Compile Include="Repositories\XMLDispatchManager.cs" />
   </ItemGroup>

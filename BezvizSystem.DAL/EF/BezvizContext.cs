@@ -26,6 +26,7 @@ namespace BezvizSystem.DAL.EF
         public DbSet<Visitor> Visitors { get; set; }
         public DbSet<GroupVisitor> GroupsVisitors { get; set; }
         public DbSet<XMLDispatch> XMLDispatches { get; set; }
+        public DbSet<Log> Logs { get; set; }
 
         // Dictionaries
         public DbSet<CheckPoint> CheckPoints { get; set; }
