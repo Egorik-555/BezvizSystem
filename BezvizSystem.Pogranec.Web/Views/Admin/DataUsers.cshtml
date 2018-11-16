@@ -4,6 +4,13 @@
 
 @model IndexViewModel<DisplayUser>
 
+@{ 
+    AjaxOptions opt = new AjaxOptions
+    {
+        UpdateTargetId = "tabledata"//,
+       // Url = Url.Action("DataUsers", new { id = ViewBag.Id })
+    };
+}
 
 @foreach (var item in Model.Models)
 {
@@ -22,6 +29,7 @@
 
 <tr>
     <td style="border:none" colspan="3"> 
-        @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { id = ViewBag.Id, page = x }))
+        @*@Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { id = ViewBag.Id, page = x }))*@   
+        @Ajax.PageLinks(Model.PageInfo, x => Url.Action("DataUsers", new { id = ViewBag.Id, page = x }), opt)
     </td>
 </tr>

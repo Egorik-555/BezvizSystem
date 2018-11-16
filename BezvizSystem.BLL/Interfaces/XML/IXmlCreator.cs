@@ -10,6 +10,10 @@ namespace BezvizSystem.BLL.Interfaces.XML
 {
     public interface IXmlCreator
     {
+
+        int Count();
+        int ExtraCount();
+
         Task<OperationDetails> SaveNew(string name, SaveOptions options);
         Task<OperationDetails> SaveNew(string name);
 

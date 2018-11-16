@@ -24,13 +24,23 @@ namespace BezvizSystem.Pogranec.Web.Filters
             _logger = kernel.Get<ILogger>();
         }
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            var request = filterContext.HttpContext.Request;
+            var context = filterContext.HttpContext;
+
+            if (Type == LogType.CreateUser || Type == LogType.DeleteUser || Type == LogType.EditUser)
+            {
+                TextActivity += " - " + context.Items["user"];
+            }
+            else if(Type == LogType.LoadXML || Type == LogType.ExtraLoadXML)
+            {
+                TextActivity += " Файл - " + context.Items["file"];
+            }
+
 
             LogDTO log = new LogDTO
             {
-                Ip = request.ServerVariables["HTTP_X_FORWARDED_FOR"] ?? request.UserHostAddress,
+                Ip = context.Request.ServerVariables["HTTP_X_FORWARDED_FOR"] ?? context.Request.UserHostAddress,
                 UserName = filterContext.HttpContext.User.Identity.Name,
                 Type = Type,
                 TextActivity = TextActivity,

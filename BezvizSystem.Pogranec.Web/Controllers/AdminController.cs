@@ -2,6 +2,7 @@
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.BLL.Interfaces;
+using BezvizSystem.Pogranec.Web.Filters;
 using BezvizSystem.Pogranec.Web.Infrastructure;
 using BezvizSystem.Pogranec.Web.Mapper;
 using BezvizSystem.Pogranec.Web.Models.Admin;
@@ -60,7 +61,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                 CleverSeach(id, ref model);
             }
 
-            int pageSize = 10;
+            int pageSize = 3;
             var modelForPaging = model.Skip((page - 1) * pageSize).Take(pageSize);
             PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = model.Count() };
             IndexViewModel<DisplayUser> ivm = new IndexViewModel<DisplayUser> { PageInfo = pageInfo, Models = modelForPaging };
@@ -117,11 +118,12 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         }
 
         [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle")]
+        [ActionLogger(Type = DAL.Helpers.LogType.CreateUser, TextActivity = "Создан пользователь")]
         [HttpPost]
         public async Task<ActionResult> Create(CreateUser model)
         {
             if (ModelState.IsValid)
-            {
+            {              
                 model.UserInSystem = User.Identity.Name;
                 model.DateInSystem = DateTime.Now;
                 var user = _mapper.Map<CreateUser, UserDTO>(model);
@@ -130,7 +132,10 @@ namespace BezvizSystem.Pogranec.Web.Controllers
 
                 var result = await _userService.Create(user);
                 if (result.Succedeed)
+                {
+                    HttpContext.Items["user"] = model.UserName;
                     return RedirectToAction("Index");
+                }
                 else
                 {
                     ModelState.AddModelError("", result.Message);
@@ -141,7 +146,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         }
 
 
-        [Authorize(Roles = "GPKSuperAdmin, GPKAdmin")]
+        [Authorize(Roles = "GPKSuperAdmin, GPKAdmin")]      
         public async Task<ActionResult> Delete(string id)
         {
             var user = await _userService.GetByIdAsync(id);
@@ -153,12 +158,14 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         }
 
         [Authorize(Roles = "GPKSuperAdmin, GPKAdmin")]
+        [ActionLogger(Type = DAL.Helpers.LogType.DeleteUser, TextActivity = "Удален пользователь")]
         [HttpPost]
         public async Task<ActionResult> Delete(DeleteUser model)
         {
             var user = _mapper.Map<DeleteUser, UserDTO>(model);
 
-            await _userService.Delete(user);
+            var result = await _userService.Delete(user);
+            HttpContext.Items["user"] = model.UserName;
             return RedirectToAction("Index");
         }
 
@@ -175,6 +182,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         }
 
         [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle")]
+        [ActionLogger(Type = DAL.Helpers.LogType.EditUser, TextActivity = "Изменен пользователь")]
         [HttpPost]
         public async Task<ActionResult> Edit(EditUser model)
         {
@@ -187,7 +195,10 @@ namespace BezvizSystem.Pogranec.Web.Controllers
 
                 var result = await _userService.Update(user);
                 if (result.Succedeed)
+                {
+                    HttpContext.Items["user"] = model.UserName;
                     return RedirectToAction("Index");
+                }
                 else
                 {
                     ModelState.AddModelError("", result.Message);

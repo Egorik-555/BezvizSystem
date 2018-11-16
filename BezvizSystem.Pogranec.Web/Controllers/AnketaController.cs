@@ -3,6 +3,7 @@ using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.DTO.Dictionary;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Interfaces.XML;
+using BezvizSystem.Pogranec.Web.Filters;
 using BezvizSystem.Pogranec.Web.Models.Anketa;
 using System;
 using System.Collections.Generic;
@@ -70,7 +71,9 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                 Info = info,
                 Count = group.Sum(a => a.Count),
                 ArriveFrom = dateFrom,
-                ArriveTo = dateTo
+                ArriveTo = dateTo,
+                Xmls = _xmlService.Count(),
+                ExtraXmls = _xmlService.ExtraCount()
             };
             return PartialView(model);
         }
@@ -103,34 +106,40 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             return list.Where(a => a.DateArrival.Value <= date2 && a.DateArrival >= date1);
         }
 
-        public async Task<ActionResult> GetAnketasDefault()
+        [ActionLogger(Type = DAL.Helpers.LogType.LoadXML, TextActivity = "Выгрузка анкет.")]
+        public async Task<string> GetXMLFileName()
         {
-            string file = HostingEnvironment.MapPath("~/App_Data/fileDefault.xml");
+            string date = DateTime.Now.ToFileTime().ToString();
+            string fileName = "DefaultXml_" + date + ".xml";
+            string file = HostingEnvironment.MapPath("~/App_Data/XMLs/" + fileName);
+            HttpContext.Items["file"] = file;
             var result = await _xmlService.SaveNew(file);
 
-            string contentType = "application/xml";
-
             if (result.Succedeed)
-                return File(file, contentType, Path.GetFileName(file));
-            else
-            {
-                return RedirectToAction("Index");
-            }
+                return fileName;
+            else return "";
         }
-
-        public async Task<ActionResult> GetAnketasExtra()
+       
+        [ActionLogger(Type = DAL.Helpers.LogType.ExtraLoadXML, TextActivity = "Экстренная выгрузка анкет.")]
+        public async Task<string> GetExtraXMLFileName()
         {
-            string file = HostingEnvironment.MapPath("~/App_Data/fileExtra.xml");
+            string date = DateTime.Now.ToFileTime().ToString();
+            string fileName = "ExtraXml_" + date + ".xml";
+            string file = HostingEnvironment.MapPath("~/App_Data/XMLs/" + fileName);
+            HttpContext.Items["file"] = file;
             var result = await _xmlService.SaveExtra(file);
 
-            string contentType = "application/xml";
-
             if (result.Succedeed)
-                return File(file, contentType, Path.GetFileName(file));
-            else
-            {
-                return RedirectToAction("Index");
-            }
+                return fileName;
+            else return "";
+        }
+
+        public ActionResult GetAnketas(string fileName)
+        {
+            string contentType = "application/xml";
+            string file = HostingEnvironment.MapPath("~/App_Data/XMLs/" + fileName);
+
+            return File(file, contentType, Path.GetFileName(file));
         }
 
         private SelectList CheckPoints()

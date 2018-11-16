@@ -132,6 +132,7 @@ namespace BezvizSystem.BLL.Services.XML
             try
             {
                 var list = GetItems().Where(x => x.TypeOperation == 1 || x.TypeOperation == 2 || x.TypeOperation == 3);
+
                 if (list.Count() == 0)
                     return new OperationDetails(false, "Нет анкет для выгрузки", "");
 
@@ -176,6 +177,16 @@ namespace BezvizSystem.BLL.Services.XML
         public async Task<OperationDetails> SaveExtra(string name)
         {
             return await SaveExtra(name, SaveOptions.None);
+        }
+
+        public int Count()
+        {
+            return GetItems().Count(x => x.TypeOperation == 1 || x.TypeOperation == 2 || x.TypeOperation == 3);
+        }
+
+        public int ExtraCount()
+        {
+            return GetItems().Count(x => (x.TypeOperation == 1 || x.TypeOperation == 2 || x.TypeOperation == 3) && x.ExtraSend);
         }
     }
 }

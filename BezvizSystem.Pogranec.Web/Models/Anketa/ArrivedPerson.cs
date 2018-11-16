@@ -21,6 +21,8 @@ namespace BezvizSystem.Pogranec.Web.Models.Anketa
         public DateTime? ArriveFrom { get; set; }
         public DateTime? ArriveTo { get; set; }
         public string Info { get; set; }
+        public int Xmls { get; set; }
+        public int ExtraXmls { get; set; }
 
         public IEnumerable<ArrivedInfo> Infoes { get; set; }
 

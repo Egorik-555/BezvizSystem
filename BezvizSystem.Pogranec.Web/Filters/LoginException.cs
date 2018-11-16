@@ -34,7 +34,7 @@ namespace BezvizSystem.Pogranec.Web.Filters
                     Ip = request.ServerVariables["HTTP_X_FORWARDED_FOR"] ?? request.UserHostAddress,
                     UserName = (string)controller.TempData["userName"],
                     Type = LogType.Enter,
-                    TextActivity = (string)msg,
+                    TextActivity = "Попытка входа в систему. " + (string)msg,
                     DateActivity = DateTime.Now
                 };
 

@@ -26,7 +26,6 @@ namespace BezvizSystem.BLL.DI
             Bind<IService<VisitorDTO>>().To<VisitorService>();
             Bind<IService<GroupVisitorDTO>>().To<GroupService>();
             Bind<IService<AnketaDTO>>().To<AnketaService>();
-            Bind<IService<AnketaDTO>>().To<AnketaService>();
             Bind<ILogger>().To<Logger>();
 
             Bind<IDictionaryService<CheckPointDTO>>().To<DictionaryService<CheckPointDTO>>();

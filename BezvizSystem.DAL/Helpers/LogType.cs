@@ -9,6 +9,11 @@ namespace BezvizSystem.DAL.Helpers
     public enum LogType
     {
         Enter,
-        Exit
+        Exit,
+        LoadXML,
+        ExtraLoadXML,
+        CreateUser,
+        EditUser,
+        DeleteUser
     }
 }
