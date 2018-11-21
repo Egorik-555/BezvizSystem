@@ -269,6 +269,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AnketaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Filters\ActionLogger.cs" />
     <Compile Include="Filters\LoginException.cs" />
@@ -282,6 +283,7 @@
     <Compile Include="Models\Admin\UserPogran.cs" />
     <Compile Include="Models\Anketa\ArrivedPerson.cs" />
     <Compile Include="Models\Login\Model.cs" />
+    <Compile Include="Models\Log\LogModel.cs" />
     <Compile Include="Models\Report\CountByCheckPointModelExcel.cs" />
     <Compile Include="Models\Report\CountByDaysModelExcel.cs" />
     <Compile Include="Models\Report\CountByCheckPointModel.cs" />
@@ -428,10 +430,11 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
     <Content Include="Views\Anketa\DataAnketa.cshtml" />
+    <Content Include="Views\Log\Index.cshtml" />
+    <Content Include="Views\Log\DataLogs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\XMLs\" />
-    <Folder Include="Views\Log\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

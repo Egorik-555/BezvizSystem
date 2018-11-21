@@ -11,6 +11,7 @@ namespace BezvizSystem.DAL.Entities
     {
         public int Id { get; set; }
         public string UserName { get; set; }
+        public UserLevel UserRole { get; set; }
         public LogType Type { get; set; }
 
         public string Ip { get; set; }

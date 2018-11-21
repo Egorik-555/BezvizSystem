@@ -1,9 +1,9 @@
 ﻿@{
-    ViewBag.Title = "Пользователи";
+    ViewBag.Title = "История активности";
     AjaxOptions opt = new AjaxOptions
     {
         UpdateTargetId = "tabledata",
-        Url = Url.Action("DataUsers")
+        Url = Url.Action("DataLogs")
     };
 }
 
@@ -14,10 +14,12 @@
 
             <tr class="no_border">
                 <td class="no_border">
-                    <input type="text" class="form-control" style="width:65%; height:45px" name="id" value="@ViewBag.Id" />
+                    <input type="text" class="form-control" style="width:65%; height:45px" name="id" @*value="@ViewBag.Id"*@ />
                     <input type="submit" class="simply_form_red marbot20 buttonParameters" style="width:32%" value="Найти" />
                 </td>
-                <td class="no_border">@Html.ActionLink("Добавить", "Create", null, new { @class = "simply_form_red marbot20 linkParameters", style = "width:100%" })</td>
+                <td class="no_border"></td>
+                <td class="no_border"></td>
+                <td class="no_border"></td>
                 <td class="no_border"></td>
             </tr>
             <tr>
@@ -25,14 +27,20 @@
                     @Html.DisplayName("Логин")
                 </td>
                 <td class="orange" style="width:30%">
-                    @Html.DisplayName("ФИО сотрудника")
+                    @Html.DisplayName("Тип операции")
                 </td>
                 <td class="orange" style="width:30%">
                     @Html.DisplayName("Ip-адрес")
                 </td>
+                <td class="orange" style="width:30%">
+                    @Html.DisplayName("Время активности")
+                </td>
+                <td class="orange" style="width:30%">
+                    @Html.DisplayName("Описание").
+                </td>
             </tr>
             <tbody id="tabledata">
-                @Html.Action("DataUsers", new { id = Model })
+                @Html.Action("DataLogs", new { id = Model })
             </tbody>
 
         </table>

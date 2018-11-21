@@ -2,6 +2,7 @@
 using BezvizSystem.BLL.DTO.Log;
 using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.BLL.Interfaces.Log;
+using BezvizSystem.DAL.Helpers;
 using BezvizSystem.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -49,6 +50,15 @@ namespace BezvizSystem.BLL.Services.Log
             var logs = _base.LogManager.GetAll().Where(l => l.UserName.ToUpper() == name.ToUpper());
             var model = _mapper.Map<IEnumerable<DAL.Entities.Log>, IEnumerable<LogDTO>>(logs);
             return model;
+        }
+
+        public IEnumerable<LogDTO> GetForRole(UserLevel role)
+        {
+            var logs = _base.LogManager.GetAll().AsQueryable();
+
+            logs = logs.Where(l => l.UserRole > role);
+
+            return _mapper.Map<IEnumerable<DAL.Entities.Log>, IEnumerable<LogDTO>>(logs);
         }
 
         public OperationDetails WriteLog(LogDTO log)

@@ -1,5 +1,5 @@
 ﻿@using BezvizSystem.BLL.Interfaces
-@using BezvizSystem.BLL.Infrastructure
+@using BezvizSystem.DAL.Helpers
 @using BezvizSystem.Pogranec.Web.Infrastructure
 
 <!DOCTYPE html>
@@ -24,14 +24,14 @@
 
                     @if (User.IsRole(UserLevel.GPKAdmin, UserLevel.GPKSuperAdmin))
                     {
-                        <input class="simply_form" type="button" value="История активности" onclick="location.href='@Url.Action("Index", "Anketa")'" />
+                        <input class="simply_form" type="button" value="История активности" onclick="location.href='@Url.Action("Index", "Log")'" />
                     }
 
                     @if (User.IsRole(UserLevel.GPKAdmin, UserLevel.GPKSuperAdmin, UserLevel.GPKMiddle))
                     {
                         <input class="simply_form" type="button" value="Администрирование пользователей" onclick="location.href='@Url.Action("Index", "Admin", new {id = UrlParameter.Optional})'" />
                     }
-                    <input class="simply_form" type="button" value="Выход" onclick="location.href='@Url.Action("Logout", "Home")'" />
+                    <input class="simply_form" type="button" value="Выход" onclick="location.href='@Url.Action("Index", "Home")'"/>
 
                     <img src="/Content/img/sho.png" style="width: 100%">
 
@@ -52,6 +52,16 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jquery-ui")
     @RenderSection("scripts", required: false)
+
+    <script>
+
+        @*window.onbeforeunload = function () {
+            $.ajax(
+                {
+                    url: '@Url.Action("Logout", "Home")',
+                });
+        };*@
+    </script>
 
 </body>
 </html>

@@ -1,35 +1,39 @@
 ﻿
 @using BezvizSystem.Pogranec.Web.Views.Helpers.Pagging
-@using BezvizSystem.Pogranec.Web.Models.Admin
+@using BezvizSystem.Pogranec.Web.Models.Log
 
-@model IndexViewModel<DisplayUser>
+@model IndexViewModel<LogModel>
 
-@{ 
+@{
     AjaxOptions opt = new AjaxOptions
     {
-        UpdateTargetId = "tabledata"//,
-       // Url = Url.Action("DataUsers", new { id = ViewBag.Id })
+        UpdateTargetId = "tabledata"
     };
 }
 
 @foreach (var item in Model.Models)
 {
-    <tr class="visitor_str" id="@item.Id" onclick="onRowClickHandler(event);">
+    <tr class="visitor_str">
         <td>
             @Html.DisplayFor(modelItem => item.UserName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ProfileUserTranscript)
+            @Html.DisplayFor(modelItem => item.Type)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ProfileUserIp)
+            @Html.DisplayFor(modelItem => item.Ip)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateActivity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TextActivity)
         </td>
     </tr>
 }
 
 <tr>
-    <td style="border:none" colspan="3"> 
-        @*@Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { id = ViewBag.Id, page = x }))*@   
-        @Ajax.PageLinks(Model.PageInfo, x => Url.Action("DataUsers", new { id = ViewBag.Id, page = x }), opt)
+    <td style="border:none" colspan="3">
+        @Ajax.PageLinks(Model.PageInfo, x => Url.Action("DataLogs", new { id = ViewBag.Id, page = x }), opt)
     </td>
 </tr>

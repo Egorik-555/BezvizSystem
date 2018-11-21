@@ -113,6 +113,7 @@
     <Compile Include="Helpers\LogType.cs" />
     <Compile Include="Helpers\Operation.cs" />
     <Compile Include="Helpers\Status.cs" />
+    <Compile Include="Helpers\UserLevel.cs" />
     <Compile Include="Interfaces\IOperatorManager.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />

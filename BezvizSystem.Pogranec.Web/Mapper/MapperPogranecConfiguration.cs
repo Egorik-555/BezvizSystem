@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.Configuration;
+using BezvizSystem.BLL.DTO.Log;
 using BezvizSystem.BLL.DTO.Report;
 using BezvizSystem.BLL.Report.DTO;
+using BezvizSystem.Pogranec.Web.Models.Log;
 using BezvizSystem.Pogranec.Web.Models.Report;
 using System;
 
@@ -35,6 +37,8 @@ namespace BezvizSystem.Pogranec.Web.Mapper
                 cfg.CreateMap<ReportModel, ReportDTO>();
 
                 cfg.CreateMap<NatAndAgeModel, NatAndAgeExcel>();
+
+                cfg.CreateMap<LogDTO, LogModel>();
             })
         {   
         }

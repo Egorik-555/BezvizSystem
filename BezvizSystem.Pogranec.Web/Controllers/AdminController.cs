@@ -2,6 +2,7 @@
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.BLL.Interfaces;
+using BezvizSystem.DAL.Helpers;
 using BezvizSystem.Pogranec.Web.Filters;
 using BezvizSystem.Pogranec.Web.Infrastructure;
 using BezvizSystem.Pogranec.Web.Mapper;
@@ -134,6 +135,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                 if (result.Succedeed)
                 {
                     HttpContext.Items["user"] = model.UserName;
+                    HttpContext.Items["role"] = _userService.GetRoleByUser(User.Identity.Name);
                     return RedirectToAction("Index");
                 }
                 else
@@ -166,6 +168,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
 
             var result = await _userService.Delete(user);
             HttpContext.Items["user"] = model.UserName;
+            HttpContext.Items["role"] = _userService.GetRoleByUser(User.Identity.Name);
             return RedirectToAction("Index");
         }
 
@@ -197,6 +200,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                 if (result.Succedeed)
                 {
                     HttpContext.Items["user"] = model.UserName;
+                    HttpContext.Items["role"] = _userService.GetRoleByUser(User.Identity.Name);
                     return RedirectToAction("Index");
                 }
                 else

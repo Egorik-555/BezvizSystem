@@ -1,6 +1,7 @@
 ﻿using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.DAL;
+using BezvizSystem.DAL.Helpers;
 using BezvizSystem.DAL.Identity;
 using System;
 using System.Collections.Generic;
@@ -29,5 +30,6 @@ namespace BezvizSystem.BLL.Interfaces
         UserDTO GetByName(string name);
         IEnumerable<UserDTO> GetByRole(string roleName);
         IEnumerable<UserDTO> GetAll();
+        UserLevel GetRoleByUser(string name);
     }
 }

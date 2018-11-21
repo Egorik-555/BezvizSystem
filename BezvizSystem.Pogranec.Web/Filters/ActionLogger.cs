@@ -37,11 +37,13 @@ namespace BezvizSystem.Pogranec.Web.Filters
                 TextActivity += " Файл - " + context.Items["file"];
             }
 
-
+            var role = (UserLevel)context.Items["role"];
+           
             LogDTO log = new LogDTO
             {
                 Ip = context.Request.ServerVariables["HTTP_X_FORWARDED_FOR"] ?? context.Request.UserHostAddress,
                 UserName = filterContext.HttpContext.User.Identity.Name,
+                UserRole = role,
                 Type = Type,
                 TextActivity = TextActivity,
                 DateActivity = DateTime.Now

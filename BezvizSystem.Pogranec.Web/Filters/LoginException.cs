@@ -29,11 +29,17 @@ namespace BezvizSystem.Pogranec.Web.Filters
 
             if (msg != null)
             {
+                UserLevel role;
+                if (controller.TempData["role"] == null)
+                    role = UserLevel.GPKUser;
+                else role = (UserLevel)controller.TempData["role"];
+
                 LogDTO log = new LogDTO
                 {
                     Ip = request.ServerVariables["HTTP_X_FORWARDED_FOR"] ?? request.UserHostAddress,
                     UserName = (string)controller.TempData["userName"],
                     Type = LogType.Enter,
+                    UserRole = role,
                     TextActivity = "Попытка входа в систему. " + (string)msg,
                     DateActivity = DateTime.Now
                 };

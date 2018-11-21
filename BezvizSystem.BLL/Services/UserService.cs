@@ -5,6 +5,7 @@ using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Mapper;
 using BezvizSystem.DAL;
 using BezvizSystem.DAL.Entities;
+using BezvizSystem.DAL.Helpers;
 using BezvizSystem.DAL.Identity;
 using BezvizSystem.DAL.Interfaces;
 using Microsoft.AspNet.Identity;
@@ -267,6 +268,21 @@ namespace BezvizSystem.BLL.Services
                 return users.Where(u => u.ProfileUser != null ? u.ProfileUser.Role.ToUpper() == roleName.ToUpper() : false);
 
             return users;
+        }
+
+        public UserLevel GetRoleByUser(string name)
+        {
+            var user = GetByName(name);
+
+            if (user == null)
+                return UserLevel.GPKUser;
+
+            string value = user.ProfileUser.Role;
+            
+            if (!Enum.TryParse<UserLevel>(value, out UserLevel role))
+                return UserLevel.GPKUser;
+
+            return role;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BezvizSystem.BLL.DTO.Log;
 using BezvizSystem.BLL.Infrastructure;
+using BezvizSystem.DAL.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace BezvizSystem.BLL.Interfaces.Log
         Task<LogDTO> GetByIdAsync(int id);
 
         IEnumerable<LogDTO> GetByUserName(string name);
+        IEnumerable<LogDTO> GetForRole(UserLevel role);
         IEnumerable<LogDTO> GetAll();
     }
 }
