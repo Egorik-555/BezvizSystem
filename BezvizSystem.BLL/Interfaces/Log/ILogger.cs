@@ -16,7 +16,7 @@ namespace BezvizSystem.BLL.Interfaces.Log
         Task<LogDTO> GetByIdAsync(int id);
 
         IEnumerable<LogDTO> GetByUserName(string name);
-        IEnumerable<LogDTO> GetForRole(UserLevel role);
+        IEnumerable<LogDTO> GetForUserAndRole(string user, UserLevel role);
         IEnumerable<LogDTO> GetAll();
     }
 }

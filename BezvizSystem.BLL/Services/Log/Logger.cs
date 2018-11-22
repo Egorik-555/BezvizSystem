@@ -52,11 +52,11 @@ namespace BezvizSystem.BLL.Services.Log
             return model;
         }
 
-        public IEnumerable<LogDTO> GetForRole(UserLevel role)
+        public IEnumerable<LogDTO> GetForUserAndRole(string user, UserLevel role)
         {
             var logs = _base.LogManager.GetAll().AsQueryable();
 
-            logs = logs.Where(l => l.UserRole > role);
+            logs = logs.Where(l => l.UserRole > role || user.ToUpper() == l.UserName.ToUpper());
 
             return _mapper.Map<IEnumerable<DAL.Entities.Log>, IEnumerable<LogDTO>>(logs);
         }

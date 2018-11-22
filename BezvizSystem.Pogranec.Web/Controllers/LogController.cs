@@ -37,25 +37,17 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         public ActionResult DataLogs(string id, int page = 1)
         {
             ViewBag.Id = id;
-            var user = _userService.GetByName(User.Identity.Name);
 
-            if (user == null) return new EmptyResult();
-          
-            string roleInString = _userService.GetByName(User.Identity.Name).ProfileUser.Role;
-            var role = (UserLevel)Enum.Parse(typeof(UserLevel), roleInString);
-
-            var logs = _logger.GetForRole(role);
+            var role = _userService.GetRoleByUser(User.Identity.Name);
+            var logs = _logger.GetForUserAndRole(User.Identity.Name, role);
 
             logs = logs.OrderByDescending(m => m.DateActivity);
-            var model = _mapper.Map<IEnumerable<LogDTO>, IEnumerable<LogModel>>(logs);
-
-            if (!String.IsNullOrEmpty(id))
-                model = model.Where(m => m.UserName.ToUpperInvariant() == id.ToUpperInvariant());
+            var model = _mapper.Map<IEnumerable<LogDTO>, IEnumerable<LogModel>>(logs);           
             
-            //if (!string.IsNullOrEmpty(id))
-            //{
-            //    CleverSeach(id, ref model);
-            //}
+            if (!string.IsNullOrEmpty(id))
+            {
+                CleverSeach(id, ref model);
+            }
 
             int pageSize = 3;
             var modelForPaging = model.Skip((page - 1) * pageSize).Take(pageSize);
@@ -63,6 +55,28 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             IndexViewModel<LogModel> ivm = new IndexViewModel<LogModel> { PageInfo = pageInfo, Models = modelForPaging };
 
             return PartialView(ivm);
+        }
+
+        private void CleverSeach(string id, ref IEnumerable<LogModel> model)
+        {
+            var temp = new List<LogModel>(model);
+
+            model = model.Where(m => m.UserName.ToUpper().Contains(id.ToUpper()));
+
+            if (model.Count() == 0)
+            {
+                model = temp.Where(m => m.Type.ToUpper().Contains(id.ToUpper()));
+            }
+
+            if (model.Count() == 0)
+            {
+                model = temp.Where(m => m.Ip.ToUpper().Contains(id.ToUpper()));
+            }
+
+            if (model.Count() == 0)
+            {
+                model = temp.Where(m => m.TextActivity.ToUpper().Contains(id.ToUpper()));
+            }
         }
     }
 }

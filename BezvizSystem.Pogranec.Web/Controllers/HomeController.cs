@@ -38,7 +38,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         }
 
         private void MakeATempDate(string msg, string userName, UserLevel role)
-        {           
+        {
             TempData["errorMsg"] = msg;
             TempData["userName"] = userName;
             TempData["role"] = role;
@@ -50,7 +50,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         public async Task<ActionResult> Login(LoginModel model)
         {
             string errorMsg = null;
-                
+
             if (ModelState.IsValid)
             {
                 await SetInitDataAsync();
@@ -94,7 +94,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         {
             HttpContext.Items["role"] = _userService.GetRoleByUser(User.Identity.Name);
             Authentication.SignOut();
-            return new EmptyResult();
+            return View();
         }
 
         [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle, GPKUser")]
