@@ -119,7 +119,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         }
 
         [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle")]
-        [ActionLogger(Type = DAL.Helpers.LogType.CreateUser, TextActivity = "Создан пользователь")]
+        [ActionLogger(Type = LogType.CreateUser, TextActivity = "Создан пользователь")]
         [HttpPost]
         public async Task<ActionResult> Create(CreateUser model)
         {
@@ -134,8 +134,6 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                 var result = await _userService.Create(user);
                 if (result.Succedeed)
                 {
-                    HttpContext.Items["user"] = model.UserName;
-                    HttpContext.Items["role"] = _userService.GetRoleByUser(User.Identity.Name);
                     return RedirectToAction("Index");
                 }
                 else
@@ -146,7 +144,6 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             ViewBag.Levels = GetLevels();
             return View(model);
         }
-
 
         [Authorize(Roles = "GPKSuperAdmin, GPKAdmin")]      
         public async Task<ActionResult> Delete(string id)
@@ -160,15 +157,13 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         }
 
         [Authorize(Roles = "GPKSuperAdmin, GPKAdmin")]
-        [ActionLogger(Type = DAL.Helpers.LogType.DeleteUser, TextActivity = "Удален пользователь")]
+        [ActionLogger(Type = LogType.DeleteUser, TextActivity = "Удален пользователь")]
         [HttpPost]
         public async Task<ActionResult> Delete(DeleteUser model)
         {
             var user = _mapper.Map<DeleteUser, UserDTO>(model);
 
             var result = await _userService.Delete(user);
-            HttpContext.Items["user"] = model.UserName;
-            HttpContext.Items["role"] = _userService.GetRoleByUser(User.Identity.Name);
             return RedirectToAction("Index");
         }
 
@@ -185,7 +180,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         }
 
         [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle")]
-        [ActionLogger(Type = DAL.Helpers.LogType.EditUser, TextActivity = "Изменен пользователь")]
+        [ActionLogger(Type = LogType.EditUser, TextActivity = "Изменен пользователь")]
         [HttpPost]
         public async Task<ActionResult> Edit(EditUser model)
         {
@@ -199,8 +194,6 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                 var result = await _userService.Update(user);
                 if (result.Succedeed)
                 {
-                    HttpContext.Items["user"] = model.UserName;
-                    HttpContext.Items["role"] = _userService.GetRoleByUser(User.Identity.Name);
                     return RedirectToAction("Index");
                 }
                 else

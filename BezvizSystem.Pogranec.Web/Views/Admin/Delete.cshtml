@@ -31,6 +31,7 @@
             @using (Html.BeginForm())
             {
                 @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.UserName)
                 <td colspan="2" style="border:none;">
                     <input type="submit" value="Удалить" class="simply_form_red sfr_auto" style="background-color:red; border: 1px solid red;" />
                 </td>

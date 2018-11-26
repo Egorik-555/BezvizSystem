@@ -20,12 +20,14 @@ namespace BezvizSystem.Pogranec.Web.Controllers
     public class AnketaController : Controller
     {
         IService<AnketaDTO> _anketaService;
+        private IUserService _userService;
         private IDictionaryService<CheckPointDTO> _checkPointService;
         IXmlCreator _xmlService;
 
-        public AnketaController(IService<AnketaDTO> anketaService, IDictionaryService<CheckPointDTO> checkPointService, IXmlCreator xmlService)
+        public AnketaController(IService<AnketaDTO> anketaService, IDictionaryService<CheckPointDTO> checkPointService, IXmlCreator xmlService, IUserService userService)
         {
             _checkPointService = checkPointService;
+            _userService = userService;
             _anketaService = anketaService;
             _xmlService = xmlService;
         }
@@ -112,11 +114,10 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             string date = DateTime.Now.ToFileTime().ToString();
             string fileName = "DefaultXml_" + date + ".xml";
             string file = HostingEnvironment.MapPath("~/App_Data/XMLs/" + fileName);
-            HttpContext.Items["file"] = file;
             var result = await _xmlService.SaveNew(file);
 
-            if (result.Succedeed)
-                return fileName;
+            if (result.Succedeed)                       
+                return fileName;                       
             else return "";
         }
        
@@ -126,10 +127,9 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             string date = DateTime.Now.ToFileTime().ToString();
             string fileName = "ExtraXml_" + date + ".xml";
             string file = HostingEnvironment.MapPath("~/App_Data/XMLs/" + fileName);
-            HttpContext.Items["file"] = file;
             var result = await _xmlService.SaveExtra(file);
 
-            if (result.Succedeed)
+            if (result.Succedeed)         
                 return fileName;
             else return "";
         }

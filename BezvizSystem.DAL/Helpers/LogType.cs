@@ -8,6 +8,7 @@ namespace BezvizSystem.DAL.Helpers
 {
     public enum LogType
     {
+        Validation,
         Enter,
         Exit,
         LoadXML,

@@ -6,11 +6,18 @@ using BezvizSystem.BLL.DI;
 using Ninject;
 using Ninject.Web.Mvc;
 using BezvizSystem.BLL.Interfaces;
+using System;
+using BezvizSystem.BLL.Interfaces.Log;
+using BezvizSystem.BLL.DTO.Log;
+using System.Diagnostics;
 
 namespace BezvizSystem.Pogranec.Web
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        private NinjectModule registrations;
+        private StandardKernel kernel;
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -18,11 +25,14 @@ namespace BezvizSystem.Pogranec.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            NinjectModule registrations = new NinjectRegistrations();
-            var kernel = new StandardKernel(registrations);
+            registrations = new NinjectRegistrations();
+            kernel = new StandardKernel(registrations);
             DependencyResolver.SetResolver(new NinjectDependencyResolver(kernel));
-
-           // GlobalFilters.Filters.Add(new TrackLoginFilter(kernel.Get<ILogger<UserActivityDTO>>()));
         }
-    }
+
+        //protected void Session_End(Object sender, EventArgs e)
+        //{
+        //    Debug.WriteLine("protected void Session_End();");
+        //}
+}
 }

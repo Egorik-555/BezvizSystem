@@ -272,7 +272,7 @@
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Filters\ActionLogger.cs" />
-    <Compile Include="Filters\LoginException.cs" />
+    <Compile Include="Filters\LoginException_.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

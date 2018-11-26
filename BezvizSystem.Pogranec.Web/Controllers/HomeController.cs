@@ -13,6 +13,7 @@ using BezvizSystem.Pogranec.Web.Infrastructure;
 using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.Pogranec.Web.Filters;
 using BezvizSystem.DAL.Helpers;
+using System.Threading;
 
 namespace BezvizSystem.Pogranec.Web.Controllers
 {
@@ -43,10 +44,10 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             TempData["userName"] = userName;
             TempData["role"] = role;
         }
-
-        [LoginException]
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ActionLogger(Type = LogType.Validation, TextActivity = "Вход в систему")]
         public async Task<ActionResult> Login(LoginModel model)
         {
             string errorMsg = null;
@@ -60,8 +61,6 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                 if (claim == null)
                 {
                     errorMsg = "Неверный логин или пароль";
-                    MakeATempDate(errorMsg, model.Name, UserLevel.GPKUser);
-
                     ModelState.AddModelError("", errorMsg);
                     return View(model);
                 }
@@ -71,7 +70,6 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                 if (!findUser.ProfileUser.Active && (!findUser.ProfileUser.NotActiveToDate.HasValue || findUser.ProfileUser.NotActiveToDate > DateTime.Now))
                 {
                     errorMsg = "Пользователь заблокирован";
-                    MakeATempDate(errorMsg, model.Name, UserLevel.GPKUser);
                     ModelState.AddModelError("", errorMsg);
                     return View(model);
                 }
@@ -88,21 +86,17 @@ namespace BezvizSystem.Pogranec.Web.Controllers
             return View(model);
         }
 
-
         [ActionLogger(Type = LogType.Exit, TextActivity = "Выход из системы")]
         public ActionResult Logout()
         {
-            HttpContext.Items["role"] = _userService.GetRoleByUser(User.Identity.Name);
             Authentication.SignOut();
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle, GPKUser")]
-        [ActionLogger(Type = DAL.Helpers.LogType.Enter, TextActivity = "Вход в систему")]
+        [ActionLogger(Type = LogType.Enter, TextActivity = "Вход в систему")]
         public ActionResult Index()
         {
-            HttpContext.Items["role"] = _userService.GetRoleByUser(User.Identity.Name);
-
             return View();
         }
 

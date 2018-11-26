@@ -10,11 +10,11 @@ using System.Web.Mvc;
 
 namespace BezvizSystem.Pogranec.Web.Filters
 {
-    public class LoginExceptionAttribute : ActionFilterAttribute
+    public class LoginException11Attribute : ActionFilterAttribute
     {
         private ILogger _logger;
 
-        public LoginExceptionAttribute()
+        public LoginException11Attribute()
         {
             NinjectModule registrations = new NinjectRegistrations();
             var kernel = new StandardKernel(registrations);

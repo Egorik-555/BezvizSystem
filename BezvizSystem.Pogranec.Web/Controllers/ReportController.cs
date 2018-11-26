@@ -23,7 +23,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers.Api
     [Authorize(Roles = "GPKSuperAdmin, GPKAdmin, GPKMiddle, GPKUser")]
     public class ReportController : Controller
     {
-        private IReport _report;
+        private IReport _report;        
         private IDictionaryService<CheckPointDTO> _checkPointService;
         IMapper _mapper;
 

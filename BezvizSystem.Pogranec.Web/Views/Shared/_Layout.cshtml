@@ -53,15 +53,31 @@
     @Scripts.Render("~/bundles/jquery-ui")
     @RenderSection("scripts", required: false)
 
-    <script>
+    @*<script>
 
-        @*window.onbeforeunload = function () {
-            $.ajax(
+        var preventUnloadPrompt;
+        var messageBeforeUnload = "my message here - Are you sure you want to leave this page?";
+        //var redirectAfterPrompt = "http://www.google.co.in";
+        $(document).on('click', 'a', function () { preventUnloadPrompt = true; });
+        $(document).on('click', 'input', function () { preventUnloadPrompt = true; });
+        $(document).on('submit', 'form', function () { preventUnloadPrompt = true; });
+        $(document).on('click', 'tr', function () { preventUnloadPrompt = true; });
+        $(window).bind("beforeunload", function (e) {
+            var rval;
+            if (preventUnloadPrompt) {
+                return;
+            }
+            else
+            {
+                $.ajax(
                 {
                     url: '@Url.Action("Logout", "Home")',
                 });
-        };*@
-    </script>
+            }
+            return rval;
+        })
+
+    </script>*@
 
 </body>
 </html>
