@@ -11,6 +11,9 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/Content/jqcss")
+    <link href="~/Content/css/simplePagination.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/MyScripts/jquery.simplePagination.js"></script>
 </head>
 <body>
     <table class="header"></table>
@@ -49,7 +52,6 @@
         </tr>
     </table>
 
-    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jquery-ui")
     @RenderSection("scripts", required: false)
 

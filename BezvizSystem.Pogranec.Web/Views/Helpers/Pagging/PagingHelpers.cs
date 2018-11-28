@@ -32,7 +32,7 @@ namespace BezvizSystem.Pogranec.Web.Views.Helpers.Pagging
         }
 
         public static MvcHtmlString PageLinks(this AjaxHelper html,
-            PageInfo pageInfo, Func<int, string> pageUrl, AjaxOptions opt)
+                                              PageInfo pageInfo, Func<int, string> pageUrl, AjaxOptions opt)
         {
             StringBuilder result = new StringBuilder();
             for (int i = 1; i <= pageInfo.TotalPages; i++)
@@ -55,5 +55,6 @@ namespace BezvizSystem.Pogranec.Web.Views.Helpers.Pagging
             }
             return MvcHtmlString.Create(result.ToString());
         }
+
     }
 }

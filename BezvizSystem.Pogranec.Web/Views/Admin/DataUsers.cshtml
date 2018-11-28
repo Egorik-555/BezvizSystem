@@ -4,11 +4,10 @@
 
 @model IndexViewModel<DisplayUser>
 
-@{ 
+@{
     AjaxOptions opt = new AjaxOptions
     {
-        UpdateTargetId = "tabledata"//,
-       // Url = Url.Action("DataUsers", new { id = ViewBag.Id })
+        UpdateTargetId = "tabledata"
     };
 }
 
@@ -28,8 +27,23 @@
 }
 
 <tr>
-    <td style="border:none" colspan="3"> 
-        @*@Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { id = ViewBag.Id, page = x }))*@   
-        @Ajax.PageLinks(Model.PageInfo, x => Url.Action("DataUsers", new { id = ViewBag.Id, page = x }), opt)
+    <td style="border:none" colspan="3">
+        @*@Ajax.PageLinks(Model.PageInfo, x => Url.Action("DataUsers", new { id = ViewBag.Id, page = x }), opt)*@
+        <div id="compact-pagination" class="pagination"></div>
     </td>
 </tr>
+
+<script>
+     //paging options
+     $(function() {
+         $('#compact-pagination').pagination({
+             items: @Model.PageInfo.TotalItems,
+             itemsOnPage: @Model.PageInfo.PageSize,       
+             currentPage: @Model.PageInfo.PageNumber,
+             cssStyle: 'compact-theme',
+             hrefTextPrefix: '@Url.Action("DataUsers")?id=@ViewBag.id&page=',
+             prevText: 'Пред.',
+             nextText: 'След.'
+         });
+     });
+</script>

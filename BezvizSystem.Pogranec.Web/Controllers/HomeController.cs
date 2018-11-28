@@ -37,13 +37,6 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         {
             return View();
         }
-
-        private void MakeATempDate(string msg, string userName, UserLevel role)
-        {
-            TempData["errorMsg"] = msg;
-            TempData["userName"] = userName;
-            TempData["role"] = role;
-        }
       
         [HttpPost]
         [ValidateAntiForgeryToken]

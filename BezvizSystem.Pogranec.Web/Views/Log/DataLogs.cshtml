@@ -34,6 +34,24 @@
 
 <tr>
     <td style="border:none" colspan="5">
-        @Ajax.PageLinks(Model.PageInfo, x => Url.Action("DataLogs", new { id = ViewBag.Id, page = x }), opt)
+        @*@Ajax.PageLinks(Model.PageInfo, x => Url.Action("DataLogs", new { id = ViewBag.Id, page = x }), opt)*@
+        <div id="compact-pagination" class="pagination"></div>
     </td>
 </tr>
+
+<script>
+     //paging options
+     $(function() {
+         $('#compact-pagination').pagination({
+             @*pages: @Model.PageInfo.TotalPages,*@
+             items: @Model.PageInfo.TotalItems,
+             itemsOnPage: @Model.PageInfo.PageSize,
+             currentPage: @Model.PageInfo.PageNumber,
+             displayedPages: 4,
+             cssStyle: 'compact-theme',
+             hrefTextPrefix: '@Url.Action("DataLogs")?id=@ViewBag.id&page=',
+             prevText: 'Пред.',
+             nextText: 'След.'
+         });
+     });
+</script>

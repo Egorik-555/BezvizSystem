@@ -307,6 +307,7 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\simplePagination.css" />
     <Content Include="Content\css\style.css" />
     <Content Include="Content\css\validate.css" />
     <Content Include="Content\css\_style.css" />
@@ -378,6 +379,7 @@
     <Content Include="Scripts\MyScripts\combobox.js" />
     <Content Include="Scripts\MyScripts\EditHelper.js" />
     <Content Include="Scripts\MyScripts\helper.js" />
+    <Content Include="Scripts\MyScripts\jquery.simplePagination.js" />
     <Content Include="Scripts\MyScripts\pikaday.js" />
     <Content Include="Scripts\MyScripts\ShowPanels.js" />
     <Content Include="Scripts\popper-utils.js" />
