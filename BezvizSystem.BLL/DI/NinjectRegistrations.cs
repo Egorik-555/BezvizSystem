@@ -6,6 +6,7 @@ using BezvizSystem.BLL.Interfaces.XML;
 using BezvizSystem.BLL.Services;
 using BezvizSystem.BLL.Services.Log;
 using BezvizSystem.BLL.Services.XML;
+using BezvizSystem.BLL.Utils;
 using BezvizSystem.DAL.Interfaces;
 using BezvizSystem.DAL.Repositories;
 using Ninject.Modules;
@@ -27,6 +28,7 @@ namespace BezvizSystem.BLL.DI
             Bind<IService<GroupVisitorDTO>>().To<GroupService>();
             Bind<IService<AnketaDTO>>().To<AnketaService>();
             Bind<ILogger>().To<Logger>();
+            Bind<IDocumentGenerator>().To<DocumentGenerator>();
 
             Bind<IDictionaryService<CheckPointDTO>>().To<DictionaryService<CheckPointDTO>>();
             Bind<IDictionaryService<NationalityDTO>>().To<DictionaryService<NationalityDTO>>();

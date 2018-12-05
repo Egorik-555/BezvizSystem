@@ -41,10 +41,10 @@ function f(whereInsert) {
     var count = lastNumber(lastTr) + 1;
 
     //create fragment of TR
-    let fragmentSurname = createFragmentOfInput(count, 'Surname', 'Фамилия', 'Укажите фамилию туриста');
-    let fragmentName = createFragmentOfInput(count, 'Name', 'Имя','Укажите имя туриста');
+    let fragmentSurname = createFragmentOfInput(count, 'Surname', 'Фамилия', 'Укажите фамилию туриста', "text-transform: uppercase");
+    let fragmentName = createFragmentOfInput(count, 'Name', 'Имя', 'Укажите имя туриста', "text-transform: uppercase");
     let fragmentPassport = createFragmentOfInput(count, 'SerialAndNumber', 'Серия и номер паспорта','Укажите серию и номер паспорта туриста');
-    let fragmentNationality = createFragmentOfInput(count, 'Nationality', 'Гражданство', '', true);
+    let fragmentNationality = createFragmentOfInput(count, 'Nationality', 'Гражданство', '', true, "text-transform: uppercase");
 //let fragmnetSpan = createFragmentOfSpan();
 
 
@@ -76,21 +76,21 @@ function createFragmentOfSpan() {
     return span.cloneNode(true);
 }
 
-function createFragmentOfInput(id, field, caption, msg, select){
+function createFragmentOfInput(id, field, caption, msg, select, style){
 
-    let label = createLabel(id, field,'control-label', caption );
+    let label = createLabel(id, field,'control-label', caption);
     let input;
     if (select) {
         input = createByClone(id, field, 'form-control');
         input.value = '';
     }
-    else input = createInput(id, field, 'text-box single-line', 'true', msg);
+    else input = createInput(id, field, 'text-box single-line', 'true', msg, style);
 
     let td = document.createElement('td');
     td.setAttribute('colspan', '2');
 
     if (field == 'Surname'){
-        let idInput = createInput(id, 'Id', '', 'true', 'Требуется поле Id.');
+        let idInput = createInput(id, 'Id', '', 'true', 'Требуется поле Id.', style);
         idInput.setAttribute('type', 'hidden');
         idInput.value = '0';
         td.appendChild(idInput);
@@ -151,7 +151,7 @@ function createLabel(id, field, nameClass, caption) {
     return label;
 }
 
-function createInput(id, field, nameClass, dataVal, dataValRequired) {
+function createInput(id, field, nameClass, dataVal, dataValRequired, style) {
     let attrId = makeId(id, field);
     let attrName = makeName(id, field);
     var input = document.createElement("input");
@@ -159,6 +159,7 @@ function createInput(id, field, nameClass, dataVal, dataValRequired) {
     input.setAttribute('data-val-required', dataValRequired);
     input.setAttribute('id', attrId);
     input.setAttribute('name', attrName);
+    input.setAttribute('style', style);
     input.className = nameClass;
     return input;
 }
@@ -175,7 +176,7 @@ function createByClone(id, field, nameClass){
     let attrName = makeName(id, field);
     newSelect.setAttribute('name', attrName);
     newSelect.setAttribute('class', nameClass);
-
+   
     return newSelect;
 }
 

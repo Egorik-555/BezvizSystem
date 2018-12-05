@@ -8,9 +8,11 @@ using BezvizSystem.Web.Mapper;
 using BezvizSystem.Web.Models.Anketa;
 using BezvizSystem.Web.Models.Group;
 using BezvizSystem.Web.Models.Visitor;
+using ClosedXML.Excel;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -27,16 +29,19 @@ namespace BezvizSystem.Web.Controllers
         private IDictionaryService<CheckPointDTO> _checkPointService;
         private IDictionaryService<NationalityDTO> _nationalityService;
         private IDictionaryService<GenderDTO> _genderService;
+        IDocumentGenerator _document;
 
         public AnketaController(IService<AnketaDTO> anketaService, IService<GroupVisitorDTO> groupService,
                                 IDictionaryService<CheckPointDTO> checkPointService, IDictionaryService<NationalityDTO> nationalityService,
-                                IDictionaryService<GenderDTO> genderService)
+                                IDictionaryService<GenderDTO> genderService,
+                                IDocumentGenerator document)
         {
             _anketaService = anketaService;
             _groupService = groupService;
             _checkPointService = checkPointService;
             _nationalityService = nationalityService;
             _genderService = genderService;
+            _document = document;
 
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
@@ -102,6 +107,28 @@ namespace BezvizSystem.Web.Controllers
             }
         }
 
+        private MemoryStream GetMemoryDocumentVisitor(string name, GroupVisitorDTO visitor)
+        {
+            string template = Server.MapPath(name);
+            XLWorkbook book = _document.GenerateDocumentVisitor(template, visitor);
+            MemoryStream stream = new MemoryStream();
+            book.SaveAs(stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
+        private MemoryStream GetMemoryDocumentGroup(string name, GroupVisitorDTO visitor)
+        {
+            string template = Server.MapPath(name);
+            XLWorkbook book = _document.GenerateDocumentGroup(template, visitor);
+            MemoryStream stream = new MemoryStream();
+            book.SaveAs(stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+
         [HttpPost]
         public async Task<ActionResult> EditVisitor(EditVisitorModel model, string button)
         {
@@ -109,10 +136,16 @@ namespace BezvizSystem.Web.Controllers
             if (ModelState.IsValid)
             {
                 model.UserEdit = User.Identity.Name;
+                var visitor = mapper.Map<EditVisitorModel, GroupVisitorDTO>(model);
+
                 if (button == "Extra") model.ExtraSend = true;
                 else model.ExtraSend = false;
 
-                var visitor = mapper.Map<EditVisitorModel, GroupVisitorDTO>(model);
+                if (button == "Document")
+                {
+                    return new DocumentResult(GetMemoryDocumentVisitor("~/App_Data/templateVisitor.xlsx", visitor), "Документ на посещение.xlsx");
+                }
+                
                 var result = await _groupService.Update(visitor);
 
                 if (result.Succedeed)
@@ -134,11 +167,18 @@ namespace BezvizSystem.Web.Controllers
             if (ModelState.IsValid)
             {
                 model.UserEdit = User.Identity.Name;
+                var group = mapper.Map<EditGroupModel, GroupVisitorDTO>(model);
                 model.Group = true;
+
+                if (button == "Document")
+                {
+                    return new DocumentResult(GetMemoryDocumentGroup("~/App_Data/templateGroup.xlsx", group), "Документ на посещение.xlsx");
+                }
+
                 if (button == "Extra") model.ExtraSend = true;
                 else model.ExtraSend = false;
 
-                var group = mapper.Map<EditGroupModel, GroupVisitorDTO>(model);
+                          
                 var result = await _groupService.Update(group);
 
                 if (result.Succedeed)

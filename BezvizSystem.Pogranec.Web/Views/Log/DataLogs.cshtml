@@ -33,9 +33,9 @@
 }
 
 <tr>
-    <td style="border:none" colspan="5">
+    <td style="border:none; text-align: right" colspan="5">
         @*@Ajax.PageLinks(Model.PageInfo, x => Url.Action("DataLogs", new { id = ViewBag.Id, page = x }), opt)*@
-        <div id="compact-pagination" class="pagination"></div>
+        <div style="display: inline-block" id="compact-pagination" class="pagination"></div>
     </td>
 </tr>
 
