@@ -28,14 +28,14 @@ namespace BezvizSystem.BLL.Services
         }
 
         public IEnumerable<AnketaDTO> GetAll()
-        {        
-            var groups = _database.GroupManager.GetAll().ToList();         
+        {
+            var groups = _database.GroupManager.GetAll().ToList();
             var anketaGroup = _mapper.Map<IEnumerable<GroupVisitor>, IEnumerable<AnketaDTO>>(groups);
             return anketaGroup;
         }
 
         public async Task<IEnumerable<AnketaDTO>> GetForUserAsync(string username)
-        {                   
+        {
             var user = await _database.UserManager.FindByNameAsync(username);
             if (user != null)
             {
@@ -49,7 +49,21 @@ namespace BezvizSystem.BLL.Services
             }
             else
                 return await Task.Run(() => (IEnumerable<AnketaDTO>)(new List<AnketaDTO>()));
-        }    
+        }
+
+        public IEnumerable<AnketaDTO> GetForUser(string username)
+        {
+            if (username != null)
+            {
+                var groups = _database.GroupManager.GetAll().ToList();
+                groups = groups.Where(g => g.UserInSystem == username).ToList();
+
+                var anketaGroup = _mapper.Map<IEnumerable<GroupVisitor>, IEnumerable<AnketaDTO>>(groups);
+                return anketaGroup;
+            }
+            else
+                return new List<AnketaDTO>();
+        }
 
         public AnketaDTO GetById(int id)
         {
@@ -63,7 +77,7 @@ namespace BezvizSystem.BLL.Services
             var group = await _database.GroupManager.GetByIdAsync(id);
             var anketa = _mapper.Map<GroupVisitor, AnketaDTO>(group);
             return anketa;
-        }  
+        }
 
         public void Dispose()
         {
@@ -83,6 +97,6 @@ namespace BezvizSystem.BLL.Services
         public Task<OperationDetails> Delete(int id)
         {
             throw new NotImplementedException();
-        }     
+        }
     }
 }

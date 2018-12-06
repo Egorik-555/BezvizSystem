@@ -10,7 +10,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/Content/jqcss")
-
+    @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
     <table class="header">
@@ -51,7 +51,8 @@
         </tr>
     </table>
 
-    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery-ui")
+    @*@Scripts.Render("~/bundles/jquery")*@
     @RenderSection("scripts", required: false)
 
 </body>

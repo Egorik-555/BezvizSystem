@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EXPORT>
+  <FORM_BORDER_INFORM>
+    <SECTION1>
+      <ORGANIZATION>1</ORGANIZATION>
+      <TYPE_OPERATION>1</TYPE_OPERATION>
+      <UNIQUE_ID>1</UNIQUE_ID>
+    </SECTION1>
+    <SECTION2>
+      <LAT_SURNAME>surname</LAT_SURNAME>
+      <LAT_NAME>name</LAT_NAME>
+      <BITH_DATE>
+        <DAY>1</DAY>
+        <MONTH>12</MONTH>
+        <YEAR>2018</YEAR>
+      </BITH_DATE>
+      <SEX>
+        <TEXT_SEX>Мужчина</TEXT_SEX>
+        <CODE_SEX>1</CODE_SEX>
+      </SEX>
+      <DOC>
+        <DOC_NUM>aaaaa</DOC_NUM>
+        <DOC_VALID>
+          <DAY />
+          <MONTH />
+          <YEAR />
+        </DOC_VALID>
+      </DOC>
+      <AUTHORIZED_DAY>5</AUTHORIZED_DAY>
+      <DATE_ENTRY>
+        <DAY>1</DAY>
+        <MONTH>12</MONTH>
+        <YEAR>2018</YEAR>
+      </DATE_ENTRY>
+    </SECTION2>
+  </FORM_BORDER_INFORM>
+  <FORM_BORDER_INFORM>
+    <SECTION1>
+      <ORGANIZATION>1</ORGANIZATION>
+      <TYPE_OPERATION>1</TYPE_OPERATION>
+      <UNIQUE_ID>2</UNIQUE_ID>
+    </SECTION1>
+    <SECTION2>
+      <LAT_SURNAME>surname1</LAT_SURNAME>
+      <LAT_NAME>name1</LAT_NAME>
+      <BITH_DATE>
+        <DAY>1</DAY>
+        <MONTH>12</MONTH>
+        <YEAR>2018</YEAR>
+      </BITH_DATE>
+      <SEX>
+        <TEXT_SEX>Мужчина</TEXT_SEX>
+        <CODE_SEX>1</CODE_SEX>
+      </SEX>
+      <DOC>
+        <DOC_NUM>bbbbb</DOC_NUM>
+        <DOC_VALID>
+          <DAY />
+          <MONTH />
+          <YEAR />
+        </DOC_VALID>
+      </DOC>
+      <AUTHORIZED_DAY>5</AUTHORIZED_DAY>
+      <DATE_ENTRY>
+        <DAY>1</DAY>
+        <MONTH>12</MONTH>
+        <YEAR>2018</YEAR>
+      </DATE_ENTRY>
+    </SECTION2>
+  </FORM_BORDER_INFORM>
+  <FORM_BORDER_INFORM>
+    <SECTION1>
+      <ORGANIZATION>1</ORGANIZATION>
+      <TYPE_OPERATION>1</TYPE_OPERATION>
+      <UNIQUE_ID>3</UNIQUE_ID>
+    </SECTION1>
+    <SECTION2>
+      <LAT_SURNAME>surname2</LAT_SURNAME>
+      <LAT_NAME>name2</LAT_NAME>
+      <BITH_DATE>
+        <DAY>1</DAY>
+        <MONTH>12</MONTH>
+        <YEAR>2018</YEAR>
+      </BITH_DATE>
+      <SEX>
+        <TEXT_SEX>Мужчина</TEXT_SEX>
+        <CODE_SEX>1</CODE_SEX>
+      </SEX>
+      <DOC>
+        <DOC_NUM>dddddddd44444</DOC_NUM>
+        <DOC_VALID>
+          <DAY />
+          <MONTH />
+          <YEAR />
+        </DOC_VALID>
+      </DOC>
+      <AUTHORIZED_DAY>5</AUTHORIZED_DAY>
+      <DATE_ENTRY>
+        <DAY>1</DAY>
+        <MONTH>12</MONTH>
+        <YEAR>2018</YEAR>
+      </DATE_ENTRY>
+    </SECTION2>
+  </FORM_BORDER_INFORM>
+</EXPORT>

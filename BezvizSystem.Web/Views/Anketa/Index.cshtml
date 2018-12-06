@@ -1,64 +1,68 @@
-﻿@model IEnumerable<BezvizSystem.Web.Models.Anketa.ViewAnketaModel>
-
-@{
+﻿@{
     ViewBag.Title = "Зарегистрированные анкеты";
     AjaxOptions opt = new AjaxOptions
     {
-        UpdateTargetId = "tabledata",
-        Url = Url.Action("DataOperators")
+        UpdateTargetId = "data",
+        Url = Url.Action("GroupData")
     };
 }
 
 <td class="two_column2" valign="top">
-    <table class="in_table3">
 
-        @using (Ajax.BeginForm(opt))
-        {
-            <tr class="no_border">
-                <td id="panel" style="display: none">
-                    <input type="text" name="dateFrom" class="datepicker" value="" />
-                    <input type="text" name="dateTo" class="datepicker" value="" />
+
+    @using (Ajax.BeginForm(opt))
+    {
+        <table id="panel" style="display:none" class="in_table7">
+
+            <tr>
+                <td class="no_border">
+                    <label for="name">ФИО туриста</label>
+                    <input type="text" id="name" autocomplete="off" name="name" class="form-control" />
+                </td>
+            </tr>
+
+            <tr>
+                <td class="left no_border">
+                    <label for="dateFrom">Дата прибытия с</label>
+                    <input type="text" id="dateFrom" autocomplete="off" name="dateFrom" class="datepicker form-control" />
+                </td>
+                <td class="left no_border" align="right">
+                    <label for="dateTo">по</label>
+                    <input type="text" id="dateTo" autocomplete="off" name="dateTo" class="datepicker form-control" />
+                </td>
+            </tr>
+            <tr>
+                <td class="no_border">
+                    <label>Пункт пропуска</label>
+                    @Html.DropDownList("CheckPoint", ViewBag.CheckPoints as SelectList, new { @class = "form-control" })
+                </td>
+            </tr>
+
+            <tr>
+                <td>
                     <input type="submit" class="simply_form_red marbot20" style="height:auto; width:95px" value="Найти" />
                 </td>
-
             </tr>
+        </table>
 
-            <tr class="no_border">
-                <td class="no_border" colspan="2">@*<input id="filter" type="submit" class="simply_form_red marbot20 buttonParameters" style="width:100%" value="Фильтр" />*@</td>
-                <td class="no_border"></td>
-                <td class="no_border"></td>
-                <td class="no_border"></td>
-                <td class="no_border"></td>
-                <td class="no_border">@Html.ActionLink("Экспортировать", "InExcel", null, new { @class = "simply_form_red marbot20 linkParameters" })</td>
-            </tr>
-            Html.RenderPartial("GroupData", Model);
-        }
-    </table>
+
+        <table class="in_table2" id="data">
+            @Html.Action("GroupData", new { id = Model })
+        </table>
+
+    }
+
 </td>
 
 
 @section scripts
 {
-    <script src="~/Scripts/MyScripts/ShowPanels.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    @*<script src="~/Scripts/MyScripts/ShowPanels.js"></script>*@
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/MyScripts/pikaday.js"></script>
+    <script src="~/Scripts/MyScripts/combobox.js"></script>
 
     <script>
-
-        var added = "@ViewBag.Add";
-
-        if (added == "Visitor") {
-            alert("Турист успешно добавлен.");
-        }
-        else if (added == "Group") {
-            alert("Группа успешно добавлена.");
-        }
-        else if (added == "EditVisitor") {
-            alert("Турист успешно изменен.");
-        }
-        else if (added == "EditGroup") {
-            alert("Группа успешно изменена.");
-        }
 
         var table = document.getElementsByTagName('table')[0];
 
@@ -88,5 +92,5 @@
 
             });
         }
-    </script>
+    </script>    
 }

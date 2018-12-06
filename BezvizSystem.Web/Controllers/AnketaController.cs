@@ -5,6 +5,7 @@ using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Utils;
 using BezvizSystem.Web.Infrustructure;
 using BezvizSystem.Web.Mapper;
+using BezvizSystem.Web.Models;
 using BezvizSystem.Web.Models.Anketa;
 using BezvizSystem.Web.Models.Group;
 using BezvizSystem.Web.Models.Visitor;
@@ -46,12 +47,39 @@ namespace BezvizSystem.Web.Controllers
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
     
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            var anketas = await _anketaService.GetForUserAsync(User != null ? User.Identity.Name : null);
-            var model = mapper.Map<IEnumerable<AnketaDTO>, IEnumerable<ViewAnketaModel>>(anketas.OrderBy(m => m.DateArrival));
+            ViewBag.CheckPoints = CheckPoints();
+            return View();
+        }
 
-            return View(model);
+        public ActionResult GroupData(SearchModel model)
+        {
+            var anketas = _anketaService.GetForUser(User?.Identity.Name);
+
+            if(model != null)
+            {
+                if ( !String.IsNullOrEmpty(model.Name))
+                    anketas = anketas.Where(a => a.Visitors.Count(v => v.Surname.ToUpper().Contains(model.Name.ToUpper())) != 0);
+
+                DateTime dateFrom, dateTo;
+                if (!model.DateFrom.HasValue)
+                    dateFrom = DateTime.MinValue;
+                else dateFrom = model.DateFrom.Value;
+
+                if (!model.DateTo.HasValue)
+                    dateTo = DateTime.MaxValue;
+                else dateTo = model.DateTo.Value;
+
+                anketas = anketas.Where(a => a.DateArrival >= dateFrom && a.DateArrival <= dateTo);
+
+                if (!String.IsNullOrEmpty(model.CheckPoint))
+                    anketas = anketas.Where(a => a.CheckPoint.ToUpper() == model.CheckPoint.ToUpper());
+            }
+
+            var result = mapper.Map<IOrderedEnumerable<AnketaDTO>, IEnumerable<ViewAnketaModel>>(anketas.OrderBy(m => m.DateArrival));
+
+            return PartialView(result);
         }
 
         [HttpGet]

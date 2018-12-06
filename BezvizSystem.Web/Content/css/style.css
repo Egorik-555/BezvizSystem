@@ -843,10 +843,23 @@ table.td.th.a.footer-brain {
     font-size: 20px;
 }
 
-#panelDates input {
+#panelDates input {   
     height: 45px;
     text-align: center;
 }
+
+#panel input {
+    width: 93%;
+    height: 45px;
+    text-align: center;
+}
+
+#panel select {
+    width: 92%;
+    height: 45px;
+    text-align: center;
+}
+
 
 .trSpace {
     height: 20px;

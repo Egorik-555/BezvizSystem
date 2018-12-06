@@ -17,5 +17,6 @@ namespace BezvizSystem.BLL.Interfaces
         Task<T> GetByIdAsync(int id);
         IEnumerable<T> GetAll();
         Task<IEnumerable<T>> GetForUserAsync(string username);
+        IEnumerable<T> GetForUser(string username);
     }
 }

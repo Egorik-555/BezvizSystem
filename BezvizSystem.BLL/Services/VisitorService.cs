@@ -114,5 +114,10 @@ namespace BezvizSystem.BLL.Services
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<VisitorDTO> GetForUser(string username)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

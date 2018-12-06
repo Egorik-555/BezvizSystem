@@ -1,4 +1,15 @@
 ﻿@model IEnumerable<BezvizSystem.Web.Models.Anketa.ViewAnketaModel>
+
+
+<tr class="no_border">
+    <td class="no_border" colspan="2"><input id="filterBtn" type="button" class="simply_form_red marbot20 buttonParameters" style="width:100%" value="Фильтр" /></td>
+    <td class="no_border"></td>
+    <td class="no_border"></td>
+    <td class="no_border"></td>
+    <td class="no_border"></td>
+    <td class="no_border">@Html.ActionLink("Экспортировать", "InExcel", null, new { @class = "simply_form_red marbot20 linkParameters" })</td>
+</tr>
+
 <tr>
     @{
         int i = 0;
@@ -53,3 +64,8 @@
         </td>
     </tr>
 }
+
+<script src="~/Scripts/MyScripts/ShowPanels.js"></script>
+<script>
+    showPanel('filterBtn', 'panel');
+</script>

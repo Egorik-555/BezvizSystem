@@ -285,6 +285,7 @@
     <Compile Include="Infrustructure\JSONDeserialise.cs" />
     <Compile Include="Infrustructure\PastDateAttribute.cs" />
     <Compile Include="Mapper\FromBLLToWebProfile.cs" />
+    <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\Anketa\ViewAnketaExcel.cs" />
     <Compile Include="Models\Anketa\ViewAnketaModel.cs" />
     <Compile Include="Models\Group\EditGroupModel.cs" />

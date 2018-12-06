@@ -1,16 +1,67 @@
-﻿@model IEnumerable<BezvizSystem.Web.Models.Mark.ViewMarkModel>
-
-@{
+﻿@{
     ViewBag.Title = "Отметка о прибытии";
     ViewBag.SubTitle = "Отметка о прибытии";
+
+    AjaxOptions opt = new AjaxOptions
+    {
+        UpdateTargetId = "data",
+        Url = Url.Action("GroupData")
+    };
 }
 
-@{ Html.RenderPartial("GroupData", Model); }
+<td class="two_column2" valign="top">
+
+
+    @using (Ajax.BeginForm(opt))
+    {
+        <table id="panel" style="display:none" class="in_table7">
+
+            <tr>
+                <td class="no_border">
+                    <label for="name">ФИО туриста</label>
+                    <input type="text" id="name" autocomplete="off" name="name" class="form-control" />
+                </td>
+            </tr>
+
+            <tr>
+                <td class="left no_border">
+                    <label for="dateFrom">Дата прибытия с</label>
+                    <input type="text" id="dateFrom" autocomplete="off" name="dateFrom" class="datepicker form-control" />
+                </td>
+                <td class="left no_border" align="right">
+                    <label for="dateTo">по</label>
+                    <input type="text" id="dateTo" autocomplete="off" name="dateTo" class="datepicker form-control" />
+                </td>
+            </tr>
+            <tr>
+                <td class="no_border">
+                    <label>Пункт пропуска</label>
+                    @Html.DropDownList("CheckPoint", ViewBag.CheckPoints as SelectList, new { @class = "form-control" })
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <input type="submit" class="simply_form_red marbot20" style="height:auto; width:95px" value="Найти" />
+                </td>
+            </tr>
+        </table>
+
+
+        <table class="in_table2" id="data">
+            @Html.Action("GroupData", new { id = Model })
+        </table>
+
+    }
+
+</td>
 
 
 @section scripts
 {
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/MyScripts/pikaday.js"></script>
+    <script src="~/Scripts/MyScripts/combobox.js"></script>
 
     <script>
 
