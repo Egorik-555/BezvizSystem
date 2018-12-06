@@ -15,6 +15,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 using BezvizSystem.BLL.DTO.Dictionary;
+using System.Collections.Generic;
 
 [assembly: OwinStartup(typeof(BezvizSystem.Web.App_Start.Startup))]
 
@@ -23,72 +24,46 @@ namespace BezvizSystem.Web.App_Start
     public class Startup
     {
         IServiceCreator serviceCreator = new ServiceCreator();
-        string CONNECTION = "BezvizContext";
+        string CONNECTION = "BezvizContext";       
 
         public void Configuration(IAppBuilder app)
         {
             app.CreatePerOwinContext<BezvizContext>(CreateContext);
-            //app.CreatePerOwinContext<IUserService>(CreateUserService);
             app.CreatePerOwinContext<BezvizUserManager>(BezvizUserManager.Create);
-
-            //app.CreatePerOwinContext<IService<VisitorDTO>>(CreateVisitorService);
-            //app.CreatePerOwinContext<IService<GroupVisitorDTO>>(CreateGroupService);
-            //app.CreatePerOwinContext<IService<AnketaDTO>>(CreateAnketaService);          
-            //app.CreatePerOwinContext<IDictionaryService<CheckPointDTO>>(CreateCheckPointService);
-            //app.CreatePerOwinContext<IDictionaryService<NationalityDTO>>(CreateNationalityService);
-            //app.CreatePerOwinContext<IDictionaryService<GenderDTO>>(CreateGenderService);
-            //app.CreatePerOwinContext<IReport>(CreateReportService);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login")
             });
-        }
 
-        //private IUserService CreateUserService()
-        //{
-        //    return serviceCreator.CreateUserService(CONNECTION);
-        //}
+            app.Use(typeof(MyMiddlewareClass));
+ 
+        }
 
         private BezvizContext CreateContext()
         {
             return serviceCreator.CreateContext(CONNECTION);
         }
 
-        //private IService<VisitorDTO> CreateVisitorService()
-        //{
-        //    return serviceCreator.CreateVisitorService(CONNECTION);
-        //}
-
-        //private IService<GroupVisitorDTO> CreateGroupService()
-        //{
-        //    return serviceCreator.CreateGroupService(CONNECTION);
-        //}
-
-        //private IService<AnketaDTO> CreateAnketaService()
-        //{
-        //    return serviceCreator.CreateAnketaService(CONNECTION);
-        //}     
-
-        //private IDictionaryService<NationalityDTO> CreateNationalityService()
-        //{
-        //    return serviceCreator.CreateNationalityService(CONNECTION);
-        //}
-
-        //private IDictionaryService<CheckPointDTO> CreateCheckPointService()
-        //{
-        //    return serviceCreator.CreateCheckPointService(CONNECTION);
-        //}
-
-        //private IDictionaryService<GenderDTO> CreateGenderService()
-        //{
-        //    return serviceCreator.CreateGenderService(CONNECTION);
-        //}
-
-        //private IReport CreateReportService()
-        //{
-        //    return serviceCreator.CreateReport(CONNECTION);
-        //}
     }
+
+    public class MyMiddlewareClass : OwinMiddleware
+    {
+        DateTime DATE = new DateTime(2018, 12, 30);
+
+        public MyMiddlewareClass(OwinMiddleware next)
+            : base(next)
+        {
+
+        }
+
+        public async override Task Invoke(IOwinContext context)
+        {
+            if (DateTime.Now > DATE)
+                await context.Response.WriteAsync($"The term of the application expired ({DATE.ToShortDateString()})!!!");
+            else await Next.Invoke(context);        
+        }
+    }
+
 }

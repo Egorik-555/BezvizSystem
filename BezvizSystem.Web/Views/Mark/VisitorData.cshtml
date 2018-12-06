@@ -7,7 +7,7 @@
 
 <td class="two_column2" valign="top">
     <table class="in_table3">
-       
+
         <tr>
             <td class="no_border"></td>
             <td class="no_border"></td>
@@ -16,7 +16,7 @@
             <td class="no_border"></td>
             <td class="no_border"> @Html.ActionLink("Назад", "Index", null, new { @class = "simply_form_red  marbot20 linkParameters" })</td>
         </tr>
-        
+
         <tr>
             @{
                 int i = 0;
@@ -88,6 +88,15 @@
                 });
             }
         };
+
+        $(window).bind("beforeunload", function () {
+
+            $.ajax(
+                {
+                    url: '@Url.Action("Index", "Mark")',
+                });
+
+        });
 
     </script>
 

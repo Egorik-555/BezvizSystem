@@ -35,7 +35,7 @@ namespace BezvizSystem.Web.Controllers
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }   
         
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             //var anketas = await _anketaService.GetForUserAsync(User.Identity.Name);
             //var model = mapper.Map<IEnumerable<AnketaDTO>, IEnumerable<ViewMarkModel>>(anketas);
