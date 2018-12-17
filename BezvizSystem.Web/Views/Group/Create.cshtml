@@ -48,12 +48,13 @@
                 <td colspan="2">
                     @Html.LabelFor(model => model.PlaceOfRecidense, htmlAttributes: new { @class = "control-label" })
                     @Html.EditorFor(model => model.PlaceOfRecidense, new { htmlAttributes = new { @class = "form-control bg_in" } })
-                    <p class="no_need">*Не обязательно к заполнению если турист не проживает в специализированных средствах размещения</p>
+                    <p class="no_need">* Не обязательно к заполнению если турист не проживает в специализированных средствах размещения</p>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
                     <h3 class="red">Информация о туристах</h3>
+                    <p class="no_need">* Первый турист является руководителем группы</p>
                 </td>
             </tr>
 
@@ -105,7 +106,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <button type="submit" name="button" value="Document" class="simply_form_red sfr_auto" style="background-color:brown; width:101%; border: 1px solid brown;">Скачать документ</button>
+                    @*<button type="submit" name="button" value="Document" class="simply_form_red sfr_auto" style="background-color:brown; width:101%; border: 1px solid brown;">Скачать документ</button>*@
                     <input type="submit" value="Сохранить" class="simply_form_red sfr_auto" />
                 </td>
             </tr>

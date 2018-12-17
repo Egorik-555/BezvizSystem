@@ -139,7 +139,7 @@ namespace BezvizSystem.BLL.Services
 
         private IEnumerable<NatAndAge> GetByNatAndAge(DateTime? dateMoment)
         {
-            var visitors = _visitors.GroupBy(v => v.Nationality.ShortName)
+            var visitors = _visitors.GroupBy(v => v.Nationality)
                                                             .Select(g =>
                                                                 new NatAndAge
                                                                 {

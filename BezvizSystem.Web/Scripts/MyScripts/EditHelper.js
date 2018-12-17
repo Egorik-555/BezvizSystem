@@ -23,7 +23,7 @@ function removeFunction(fromWhere) {
     let list = document.getElementsByName(fromWhere);
     let lastTr = list[list.length - 1];
     let count = lastNumber(lastTr);
-    if (count == 0) return;
+    if (count === 0) return;
 
     removeTR(count, 'Surname');
     removeTR(count, 'Name');
@@ -34,7 +34,7 @@ function removeFunction(fromWhere) {
 
 function f(whereInsert) {
     var list = document.getElementsByName(whereInsert);
-    if (list.length == 0) return;
+    if (list.length === 0) return;
     // last element
     var lastTr = list[list.length - 1];
     // last number of visitors
@@ -43,8 +43,8 @@ function f(whereInsert) {
     //create fragment of TR
     let fragmentSurname = createFragmentOfInput(count, 'Surname', 'Фамилия', 'Укажите фамилию туриста', "text-transform: uppercase");
     let fragmentName = createFragmentOfInput(count, 'Name', 'Имя', 'Укажите имя туриста', "text-transform: uppercase");
-    let fragmentPassport = createFragmentOfInput(count, 'SerialAndNumber', 'Серия и номер паспорта','Укажите серию и номер паспорта туриста');
-    let fragmentNationality = createFragmentOfInput(count, 'Nationality', 'Гражданство', '', true, "text-transform: uppercase");
+    let fragmentPassport = createFragmentOfInput(count, 'SerialAndNumber', 'Серия и номер паспорта', 'Укажите серию и номер паспорта туриста', "text-transform: uppercase");
+    let fragmentNationality = createFragmentOfInput(count, 'Nationality', 'Гражданство', 'Укажите гражданство туриста', "text-transform: uppercase");
 //let fragmnetSpan = createFragmentOfSpan();
 
 
@@ -57,12 +57,17 @@ function f(whereInsert) {
 
     tbody.insertBefore(fragment, lastTr.nextSibling);
 
-    var id = makeId(count, 'Nationality');
+    //var id = makeId(count, 'Nationality');
+    //$(function () {
+    //    $("#"+id).combobox();
+    //    $("#toggle").click(function () {
+    //        $("#" + id).toggle();
+    //    });
+    //});
+
     $(function () {
-        $("#"+id).combobox();
-        $("#toggle").click(function () {
-            $("#" + id).toggle();
-        });
+        //задание заполнителя с помощью параметра placeholder
+        $(".datepicker").mask("99.99.9999", { placeholder: "дд.мм.гггг" });
     });
 
     $(".datepicker").datepicker({
@@ -89,7 +94,7 @@ function createFragmentOfInput(id, field, caption, msg, select, style){
     let td = document.createElement('td');
     td.setAttribute('colspan', '2');
 
-    if (field == 'Surname'){
+    if (field === 'Surname'){
         let idInput = createInput(id, 'Id', '', 'true', 'Требуется поле Id.', style);
         idInput.setAttribute('type', 'hidden');
         idInput.value = '0';
@@ -97,14 +102,7 @@ function createFragmentOfInput(id, field, caption, msg, select, style){
     }
     td.appendChild(label);
 
-    td.appendChild(input);
-
-    //if (field == "Nationality") {
-        
-    //    input.className += " nationality";
-    //    var span = createFragmentOfSpan();
-    //    td.appendChild(span);
-    //}    
+    td.appendChild(input); 
 
     let tr = document.createElement('tr');
     tr.setAttribute('name','lastTr');

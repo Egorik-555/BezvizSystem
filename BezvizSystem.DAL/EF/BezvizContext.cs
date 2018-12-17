@@ -39,24 +39,25 @@ namespace BezvizSystem.DAL.EF
     {
         protected override void Seed(BezvizContext context)
         {
-            List<Nationality> nationalities = new List<Nationality>
-            {
-                new Nationality {Code = 1, Name = "AUSTRALIA", ShortName = "AUS", Active = true },
-                new Nationality {Code = 2, Name = "AUSTRIA", ShortName = "AUT", Active = true },
-               new Nationality {Code = 3, Name = "ALBANIA", ShortName = "ALB", Active = true },
-               new Nationality {Code = 4, Name = "ANDORRA", ShortName = "AND", Active = true },
-               new Nationality {Code = 5, Name = "ANTIGUA AND BARBUDA", ShortName = "ATG", Active = true },
-               new Nationality {Code = 6, Name = "BARBADOS", ShortName = "BRB", Active = true },
-               new Nationality {Code = 7, Name = "BAHRAIN", ShortName = "BHR", Active = true },
-               new Nationality {Code = 8, Name = "BELGIUM", ShortName = "BEL", Active = true },
-               new Nationality {Code = 9, Name = "BULGARIA", ShortName = "BGR", Active = true },
-               new Nationality {Code = 10, Name = "BOSNIA AND HERZEGOVINA", ShortName = "BIH", Active = true }
-            };
-            context.Nationalities.AddRange(nationalities);
+            //List<Nationality> nationalities = new List<Nationality>
+            //{
+            //    new Nationality {Code = 1, Name = "AUSTRALIA", ShortName = "AUS", Active = true },
+            //    new Nationality {Code = 2, Name = "AUSTRIA", ShortName = "AUT", Active = true },
+            //   new Nationality {Code = 3, Name = "ALBANIA", ShortName = "ALB", Active = true },
+            //   new Nationality {Code = 4, Name = "ANDORRA", ShortName = "AND", Active = true },
+            //   new Nationality {Code = 5, Name = "ANTIGUA AND BARBUDA", ShortName = "ATG", Active = true },
+            //   new Nationality {Code = 6, Name = "BARBADOS", ShortName = "BRB", Active = true },
+            //   new Nationality {Code = 7, Name = "BAHRAIN", ShortName = "BHR", Active = true },
+            //   new Nationality {Code = 8, Name = "BELGIUM", ShortName = "BEL", Active = true },
+            //   new Nationality {Code = 9, Name = "BULGARIA", ShortName = "BGR", Active = true },
+            //   new Nationality {Code = 10, Name = "BOSNIA AND HERZEGOVINA", ShortName = "BIH", Active = true }
+            //};
+            //context.Nationalities.AddRange(nationalities);
 
             List<CheckPoint> checkPoints = new List<CheckPoint>
             {
-               new CheckPoint { Name = "Брест (Тересполь)", Active = true},
+               new CheckPoint { Name = "Брест (Тересполь) авто", Active = true},
+               new CheckPoint { Name = "Брест (Тересполь) ж/д", Active = true},
                new CheckPoint { Name = "Домачево (Словатичи)", Active = true},
                new CheckPoint { Name = "Песчатка (Половцы)", Active = true},
                new CheckPoint { Name = "Переров (Беловежа)", Active = true},
@@ -66,8 +67,8 @@ namespace BezvizSystem.DAL.EF
 
             List<Gender> genders = new List<Gender>
             {
-               new Gender {Code = 1, Name = "Мужчина", Active = true},
-               new Gender {Code = 2, Name = "Женщина", Active = true}
+               new Gender {Code = 1, Name = "M", Active = true},
+               new Gender {Code = 2, Name = "F", Active = true}
             };
             context.Genders.AddRange(genders);
 

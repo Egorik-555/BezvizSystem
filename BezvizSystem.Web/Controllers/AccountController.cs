@@ -76,6 +76,7 @@ namespace BezvizSystem.Web.Controllers
                                               protocol: Request.Url.Scheme);
 
                 _service.ManagerForChangePass = UserManager;
+                user.Email = model.Email;
                 var result = await _service.Registrate(user, callbackUrl, new SimpleGeneratePass());
 
                 if (result.Succedeed)
@@ -147,7 +148,8 @@ namespace BezvizSystem.Web.Controllers
                     return View(model);
                 }
 
-                if (findUser.ProfileUser.Role == "operator" && !findUser.EmailConfirmed)
+                if ((findUser.ProfileUser.Role != UserLevel.OBLSuperAdmin.ToString() &&
+                     findUser.ProfileUser.Role != UserLevel.OBLAdmin.ToString()) && !findUser.EmailConfirmed)
                 {
                     ModelState.AddModelError("", "Email не подтвержден");
                     return View(model);

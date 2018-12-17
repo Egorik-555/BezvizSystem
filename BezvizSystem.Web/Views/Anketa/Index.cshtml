@@ -2,7 +2,7 @@
     ViewBag.Title = "Зарегистрированные анкеты";
     AjaxOptions opt = new AjaxOptions
     {
-        UpdateTargetId = "data",
+        UpdateTargetId = "tabledata",
         Url = Url.Action("GroupData")
     };
 }
@@ -16,7 +16,7 @@
 
             <tr>
                 <td class="no_border">
-                    <label for="name">ФИО туриста</label>
+                    <label for="name">Фамилия туриста</label>
                     <input type="text" id="name" autocomplete="off" name="name" class="form-control" />
                 </td>
             </tr>
@@ -45,19 +45,16 @@
             </tr>
         </table>
 
-
-        <table class="in_table2" id="data">
-            @Html.Action("GroupData", new { id = Model })
+        <table class="in_table2" id="tabledata">
+            @Html.Action("GroupData", new { model = Model })
         </table>
 
     }
 
 </td>
 
-
 @section scripts
 {
-    @*<script src="~/Scripts/MyScripts/ShowPanels.js"></script>*@
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Scripts/MyScripts/pikaday.js"></script>
     <script src="~/Scripts/MyScripts/combobox.js"></script>

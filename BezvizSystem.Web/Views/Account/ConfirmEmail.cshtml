@@ -4,12 +4,14 @@
     Layout = "~/Views/Shared/_LayoutEnter.cshtml";
 }
 
-<h2>Подтверждение Email</h2>
+<tr>
+    <td colspan="2">
+        Для завершение регистрации проверьте электронную почту.
+    </td>
+</tr>
 
-<div class="form-group">
-    Для завершение регистрации проверьте электронную почту.
-</div>
-
-<div>
-    @Html.ActionLink("Назад", "Login", "Account")
-</div>
+<tr>
+    <td colspan="2">
+        @Html.ActionLink("Назад", "Login", "Account")
+    </td>
+</tr>

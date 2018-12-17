@@ -133,9 +133,9 @@ $(function () {
     });
 });
 
-$(function () {
-    $(".nationality").combobox();
-    $("#toggle").click(function () {
-        $(".nationality").toggle();
-    });
-});
+//$(function () {
+//    $(".nationality").combobox();
+//    $("#toggle").click(function () {
+//        $(".nationality").toggle();
+//    });
+//});

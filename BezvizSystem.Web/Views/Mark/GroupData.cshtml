@@ -1,4 +1,7 @@
-﻿@model IEnumerable<BezvizSystem.Web.Models.Mark.ViewMarkModel>
+﻿@using BezvizSystem.Web.Views.Helpers.Pagging
+@using BezvizSystem.Web.Models.Mark
+
+@model IndexViewModel<ViewMarkModel>
 
 @{
     int i = 0;
@@ -19,29 +22,29 @@
         №
     </td>
     <td class="coly2">
-        @Html.DisplayNameFor(model => model.DateArrival)
+        @Html.DisplayName("Дата прибытия")
     </td>
     <td class=" coly1">
-        @Html.DisplayNameFor(model => model.DaysOfStay)
+        @Html.DisplayName("Количество дней пребывания")
     </td>
     <td class=" coly2">
-        @Html.DisplayNameFor(model => model.CheckPoint)
+        @Html.DisplayName("Пункт пропуска для въезда")
     </td>
     <td class="coly1">
-        @Html.DisplayNameFor(model => model.CountMembers)
+        @Html.DisplayName("Количество участников")
     </td>
     <td class="coly2">
-        @Html.DisplayNameFor(model => model.Status)
+        @Html.DisplayName("Статус")
     </td>
     <td class="coly2">
-        @Html.DisplayNameFor(model => model.Operator)
+        @Html.DisplayName("Туроператор")
     </td>
     <td class="coly1">
-        @Html.DisplayNameFor(model => model.Arrived)
+        @Html.DisplayName("Отметка о прибытии")
     </td>
 </tr>
 
-@foreach (var item in Model)
+@foreach (var item in Model.Models)
 {
     <tr class="visitor_str mainTableRow" id="@item.Id" onclick="onRowClickHandler(event);">
         <td class="mainTableRow">
@@ -84,8 +87,32 @@
     </tr>
 }
 
+<tr>
+    <td style="border:none; text-align: right" colspan="8">
+        <div style="display: inline-block" id="compact-pagination" class="pagination"></div>
+    </td>
+</tr>
+
 
 <script src="~/Scripts/MyScripts/ShowPanels.js"></script>
 <script>
     showPanel('filterBtn', 'panel');
+
+    @{
+        var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+        var search = serializer.Serialize(ViewBag.SearchModel);
+    }
+
+    //paging options
+     $(function() {
+         $('#compact-pagination').pagination({
+            items: @Model.PageInfo.TotalItems,
+             itemsOnPage: @Model.PageInfo.PageSize,
+             currentPage: @Model.PageInfo.PageNumber,
+             cssStyle: 'compact-theme',
+             hrefTextPrefix: '@Url.Action("GroupData")?search=@search&page=',
+             prevText: 'Пред.',
+             nextText: 'След.'
+         });
+     });
 </script>

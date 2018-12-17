@@ -45,7 +45,7 @@ namespace BezvizSystem.DAL.Identity
         public Task SendAsync(IdentityMessage message)
         {
             var from = "egorik-555@yandex.ru";
-            var pass = "575757Egor";
+            var pass = "Heorhi26071987";
 
             SmtpClient client = new SmtpClient("smtp.yandex.ru", 25);
 

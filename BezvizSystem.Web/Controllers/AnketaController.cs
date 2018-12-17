@@ -9,12 +9,16 @@ using BezvizSystem.Web.Models;
 using BezvizSystem.Web.Models.Anketa;
 using BezvizSystem.Web.Models.Group;
 using BezvizSystem.Web.Models.Visitor;
+using BezvizSystem.Web.Views.Helpers.Pagging;
 using ClosedXML.Excel;
 using Microsoft.AspNet.Identity.Owin;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -47,14 +51,40 @@ namespace BezvizSystem.Web.Controllers
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
     
-        public ActionResult Index()
+        public ActionResult Index(SearchModel model)
         {
+            //ViewBag.SearchModel = model;
             ViewBag.CheckPoints = CheckPoints();
-            return View();
+            return View(model);
         }
 
-        public ActionResult GroupData(SearchModel model)
+        private bool IsNullProperties(SearchModel obj)
         {
+            var type = obj.GetType();
+            var properties = type.GetProperties();
+
+            foreach(var prop in properties)
+            {
+                var value = prop.GetValue(obj);
+                if (value != null) return false;
+            }
+            return true;
+        }
+
+        public ActionResult GroupData(SearchModel model, string search, int page = 1)
+        {
+            if (!IsNullProperties(model))
+            {
+                ViewBag.SearchModel = model;
+            }
+            else if (search != null && search != "null")
+            {
+                model = JsonConvert.DeserializeObject<SearchModel>(search);
+                model.DateFrom = model.DateFrom.HasValue ? model.DateFrom.Value.ToLocalTime() : default(DateTime);
+                model.DateTo = model.DateTo.HasValue ? model.DateTo.Value.ToLocalTime() : default(DateTime);
+                ViewBag.SearchModel = model;
+            }
+
             var anketas = _anketaService.GetForUser(User?.Identity.Name);
 
             if(model != null)
@@ -79,7 +109,12 @@ namespace BezvizSystem.Web.Controllers
 
             var result = mapper.Map<IOrderedEnumerable<AnketaDTO>, IEnumerable<ViewAnketaModel>>(anketas.OrderBy(m => m.DateArrival));
 
-            return PartialView(result);
+            int pageSize = 10;
+            var modelForPaging = result.Skip((page - 1) * pageSize).Take(pageSize);
+            PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = result.Count() };
+            IndexViewModel<ViewAnketaModel> ivm = new IndexViewModel<ViewAnketaModel> { PageInfo = pageInfo, Models = modelForPaging };
+
+            return PartialView(ivm);
         }
 
         [HttpGet]

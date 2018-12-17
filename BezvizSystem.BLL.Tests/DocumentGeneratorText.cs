@@ -14,11 +14,12 @@ namespace BezvizSystem.BLL.Tests
         [TestMethod]
         public void Generate_Visitor_Document_Test()
         {
-            IDocumentGenerator writer = new DocumentGenerator();
+            IDocumentGenerator writer = new DocumentGenerator(new Barcode());
 
             //string file = HostingEnvironment.MapPath("~/App_Data/XMLs/" + fileName);
             GroupVisitorDTO visitor = new GroupVisitorDTO
             {
+                Id = 123,
                 Visitors = new List<VisitorDTO> { new VisitorDTO {
                     Surname = "Surname", Name = "Name", BithDate = DateTime.Now, Nationality = "POLAND", Gender = "Мужчина", SerialAndNumber = "AB 123456"} },
                 DateArrival = new DateTime(2018, 05, 06),
@@ -39,10 +40,11 @@ namespace BezvizSystem.BLL.Tests
         [TestMethod]
         public void Generate_Group_Document_Test()
         {
-            IDocumentGenerator writer = new DocumentGenerator();
+            IDocumentGenerator writer = new DocumentGenerator(new Barcode());
 
             GroupVisitorDTO group = new GroupVisitorDTO
             {
+                Id = 1234567,
                 Visitors = new List<VisitorDTO> {
                     new VisitorDTO { Surname = "Surname1", Name = "Name1", BithDate = DateTime.Now, Nationality = "POLAND1", Gender = "Мужчина1", SerialAndNumber = "AB 111"},
                     new VisitorDTO { Surname = "Surname2", Name = "Name2", BithDate = DateTime.Now, Nationality = "POLAND2", Gender = "Мужчина2", SerialAndNumber = "AB 222"},

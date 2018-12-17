@@ -19,7 +19,7 @@
             </tr>
 
             <tr>
-                <td><h2 class="top">Общие сведения</h2></td>            
+                <td><h2 class="top">Общие сведения</h2></td>
             </tr>
 
             <tr>
@@ -65,6 +65,14 @@
                     @Html.EditorFor(model => model.ProgramOfTravel, new { htmlAttributes = new { @class = "form-control bg_in_long" } })
                 </td>
             </tr>
+
+            <tr>
+                <td colspan="2">
+                    <h3 class="red">Справочная информация</h3>
+                    <p class="no_need">*Не обязательно к заполнению</p>
+                </td>
+            </tr>
+
             <tr>
                 <td colspan="2">
                     @Html.LabelFor(model => model.TimeOfWork, htmlAttributes: new { @class = "control-label" })
@@ -73,7 +81,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <h3 class="red">Информация о туристическом операторе:</h3>
+                    @Html.Label("Информация о туристическом операторе:")
                 </td>
             </tr>
             <tr>
@@ -96,7 +104,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <button type="submit" name="button" value="Document" class="simply_form_red sfr_auto" style="background-color:brown; width:101%; border: 1px solid brown;">Скачать документ</button>
+                    @*<button type="submit" name="button" value="Document" class="simply_form_red sfr_auto" style="background-color:brown; width:101%; border: 1px solid brown;">Скачать документ</button>*@
                     <input type="submit" value="Сохранить" class="simply_form_red sfr_auto" />
                 </td>
             </tr>

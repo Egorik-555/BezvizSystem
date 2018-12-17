@@ -33,7 +33,7 @@ namespace BezvizSystem.Web.Models.Visitor
         [Display(Name = "Пункт пропуска для пребывания")]
         public string CheckPoint { get; set; }
 
-        [Display(Name = "Инфо о месте пребывания")]
+        [Display(Name = "Инфо о предполагаемом месте пребывания")]
         public string PlaceOfRecidense { get; set; }
 
         //[Required(ErrorMessage = "Программа путешествия не введена")]

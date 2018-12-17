@@ -21,7 +21,23 @@
 }
 
 <tr>
-    <td style="border:none" colspan="3"> 
-        @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { id = ViewBag.Id, page = x }))
+    <td style="border:none; text-align: right" colspan="3">
+        @*@Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { id = ViewBag.Id, page = x }))*@
+        <div style="display: inline-block" id="compact-pagination" class="pagination"></div>
     </td>
 </tr>
+
+<script>
+    //paging options
+     $(function() {
+         $('#compact-pagination').pagination({
+            items: @Model.PageInfo.TotalItems,
+             itemsOnPage: @Model.PageInfo.PageSize,
+             currentPage: @Model.PageInfo.PageNumber,
+             cssStyle: 'compact-theme',
+             hrefTextPrefix: '@Url.Action("DataOperators", new { id = ViewBag.id})?page=',
+             prevText: 'Пред.',
+             nextText: 'След.'
+         });
+     });
+</script>

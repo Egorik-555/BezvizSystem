@@ -112,6 +112,7 @@ table.second form.pad_cent_red {
 .simply_form {
     width: 220px;
     height: 55px;
+    white-space: inherit;
     line-height: 50px;
     background-color: #fff;
     color: #313131;
@@ -121,6 +122,7 @@ table.second form.pad_cent_red {
     text-transform: uppercase;
     font-size: 15px;
 }
+
 
 .field-validation-error {
     color: red;
@@ -174,7 +176,7 @@ table.second form.pad_cent_red {
 }
 
 .pad_cent {
-    width: 208px;
+    /*width: 208px;*/
     height: 55px;
     white-space: inherit;
     background-color: #fff;

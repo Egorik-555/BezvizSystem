@@ -41,11 +41,11 @@ namespace BezvizSystem.BLL.Mapper
             //visitors
             CreateMap<Visitor, VisitorDTO>().
                ForMember(dest => dest.Group, opt => opt.Ignore()).
-               ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name)).
+               //ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality)).
                ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Name));
 
             CreateMap<VisitorDTO, Visitor>().
-                ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => database.Nationalities.GetAll().SingleOrDefault(n => n.Name == src.Nationality))).
+                //ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => database.Nationalities.GetAll().SingleOrDefault(n => n.Name == src.Nationality))).
                 ForMember(dest => dest.Gender, opt => opt.MapFrom(src => database.Genders.GetAll().SingleOrDefault(n => n.Name == src.Gender)));
             /////
 
@@ -129,24 +129,24 @@ namespace BezvizSystem.BLL.Mapper
         {
             CreateMap<VisitorDTO, Visitor>().
                ForMember(dest => dest.Group, opt => opt.MapFrom(src => _database.GroupManager.GetById(src.Group.Id))).
-               ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => _database.Nationalities.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
+               //ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => _database.Nationalities.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
                ForMember(dest => dest.Gender, opt => opt.MapFrom(src => _database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
 
             CreateMap<Visitor, VisitorDTO>().
-               ForMember(dest => dest.Group, opt => opt.Ignore()).
-               ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name));
+               ForMember(dest => dest.Group, opt => opt.Ignore());
+               //ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name));
         }
 
         public FromDALToBLLProfileWithModelVisitor(IUnitOfWork _database, Visitor model)
         {
             CreateMap<VisitorDTO, Visitor>().ConstructUsing(v => model).
                ForMember(dest => dest.Group, opt => opt.Ignore()).
-               ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => _database.Nationalities.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
+               //ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => _database.Nationalities.GetAll().Where(n => n.Name == src.Nationality).FirstOrDefault())).
                ForMember(dest => dest.Gender, opt => opt.MapFrom(src => _database.Genders.GetAll().Where(n => n.Name == src.Gender).FirstOrDefault()));
 
             CreateMap<Visitor, VisitorDTO>().
-              ForMember(dest => dest.Group, opt => opt.Ignore()).
-              ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name));
+              ForMember(dest => dest.Group, opt => opt.Ignore());
+              //ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name));
         }
     }
 

@@ -316,6 +316,7 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\simplePagination.css" />
     <Content Include="Content\css\style.css" />
     <Content Include="Content\css\validate.css" />
     <Content Include="Content\images\ui-icons_444444_256x240.png" />
@@ -387,6 +388,8 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <Content Include="Scripts\jquery-ui.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.maskedinput.js" />
+    <Content Include="Scripts\jquery.maskedinput.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -396,6 +399,7 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\MyScripts\combobox.js" />
     <Content Include="Scripts\MyScripts\EditHelper.js" />
+    <Content Include="Scripts\MyScripts\jquery.simplePagination.js" />
     <Content Include="Scripts\MyScripts\pikaday.js" />
     <Content Include="Scripts\MyScripts\ShowPanels.js" />
     <Content Include="Scripts\popper-utils.js" />

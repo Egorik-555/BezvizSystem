@@ -50,7 +50,7 @@ namespace BezvizSystem.Web.App_Start
 
     public class MyMiddlewareClass : OwinMiddleware
     {
-        DateTime DATE = new DateTime(2018, 12, 30);
+        DateTime DATE = new DateTime(2019, 01, 05);
 
         public MyMiddlewareClass(OwinMiddleware next)
             : base(next)
@@ -61,7 +61,7 @@ namespace BezvizSystem.Web.App_Start
         public async override Task Invoke(IOwinContext context)
         {
             if (DateTime.Now > DATE)
-                await context.Response.WriteAsync($"The term of the application expired ({DATE.ToShortDateString()})!!!");
+                await context.Response.WriteAsync($"The term of the application expired ({DATE.ToShortDateString()})  :((");
             else await Next.Invoke(context);        
         }
     }

@@ -23,19 +23,19 @@ namespace BezvizSystem.Web.Controllers
 
         private IService<GroupVisitorDTO> _groupService;
         private IDictionaryService<CheckPointDTO> _checkPointService;
-        private IDictionaryService<NationalityDTO> _nationalityService;
+        //private IDictionaryService<NationalityDTO> _nationalityService;
         private IDictionaryService<GenderDTO> _genderService;
         IDocumentGenerator _document;
 
         IMapper mapper;
 
         public VisitorController(IService<GroupVisitorDTO> groupService, IDictionaryService<CheckPointDTO> checkPointService,
-                                 IDictionaryService<NationalityDTO> nationalityService, IDictionaryService<GenderDTO> genderService,
+                                 IDictionaryService<GenderDTO> genderService,
                                  IDocumentGenerator document)
         {
             _groupService = groupService;
             _checkPointService = checkPointService;
-            _nationalityService = nationalityService;
+            //_nationalityService = nationalityService;
             _genderService = genderService;
             _document = document;
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
@@ -45,7 +45,7 @@ namespace BezvizSystem.Web.Controllers
         {
             ViewBag.Genders = Gender();
             ViewBag.CheckPoints = CheckPoints();
-            ViewBag.Nationalities = Nationalities();
+            //ViewBag.Nationalities = Nationalities();
             return View();
         }
 
@@ -84,7 +84,7 @@ namespace BezvizSystem.Web.Controllers
             }
             ViewBag.Genders = Gender();
             ViewBag.CheckPoints = CheckPoints();
-            ViewBag.Nationalities = Nationalities();
+            //ViewBag.Nationalities = Nationalities();
             return View(model);
         }
 
@@ -95,12 +95,12 @@ namespace BezvizSystem.Web.Controllers
             return new SelectList(list, "");
         }
 
-        private SelectList Nationalities()
-        {
-            List<string> list = new List<string>(_nationalityService.Get().Select(c => c.Name));
-            list.Insert(0, "");
-            return new SelectList(list, "");
-        }
+        //private SelectList Nationalities()
+        //{
+        //    List<string> list = new List<string>(_nationalityService.Get().Select(c => c.Name));
+        //    list.Insert(0, "");
+        //    return new SelectList(list, "");
+        //}
 
         private SelectList Gender()
         {

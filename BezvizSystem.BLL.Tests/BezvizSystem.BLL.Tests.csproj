@@ -61,6 +61,7 @@
     <Compile Include="UnitTestVisitorService.cs" />
     <Compile Include="UnitTestUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UtilsTest\BarcodeTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

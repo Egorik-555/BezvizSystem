@@ -5,7 +5,9 @@ using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.Web.Mapper;
 using BezvizSystem.Web.Models;
 using BezvizSystem.Web.Models.Mark;
+using BezvizSystem.Web.Views.Helpers.Pagging;
 using Microsoft.AspNet.Identity.Owin;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,8 +45,33 @@ namespace BezvizSystem.Web.Controllers
             return View();
         }
 
-        public ActionResult GroupData(SearchModel model)
+        private bool IsNullProperties(SearchModel obj)
         {
+            var type = obj.GetType();
+            var properties = type.GetProperties();
+
+            foreach (var prop in properties)
+            {
+                var value = prop.GetValue(obj);
+                if (value != null) return false;
+            }
+            return true;
+        }
+
+        public ActionResult GroupData(SearchModel model, string search, int page = 1)
+        {
+            if (!IsNullProperties(model))
+            {
+                ViewBag.SearchModel = model;
+            }
+            else if (search != null && search != "null")
+            {
+                model = JsonConvert.DeserializeObject<SearchModel>(search);
+                model.DateFrom = model.DateFrom.HasValue ? model.DateFrom.Value.ToLocalTime() : default(DateTime);
+                model.DateTo = model.DateTo.HasValue ? model.DateTo.Value.ToLocalTime() : default(DateTime);
+                ViewBag.SearchModel = model;
+            }
+
             var anketas = _anketaService.GetForUser(User?.Identity.Name);
 
             if (model != null)
@@ -69,7 +96,12 @@ namespace BezvizSystem.Web.Controllers
 
             var result = mapper.Map<IEnumerable<AnketaDTO>, IEnumerable<ViewMarkModel>>(anketas.OrderBy(a => a.DateArrival));
 
-            return PartialView(result);
+            int pageSize = 10;
+            var modelForPaging = result.Skip((page - 1) * pageSize).Take(pageSize);
+            PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = result.Count() };
+            IndexViewModel<ViewMarkModel> ivm = new IndexViewModel<ViewMarkModel> { PageInfo = pageInfo, Models = modelForPaging };
+
+            return PartialView(ivm);
         }
 
 

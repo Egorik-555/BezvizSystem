@@ -25,7 +25,8 @@ namespace BezvizSystem.Web
                       "~/Content/css/validate.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
-                      "~/Scripts/jquery-ui.js"));
+                      "~/Scripts/jquery-ui.js").Include(
+                       "~/Scripts/jquery.maskedinput.min.js"));
             bundles.Add(new StyleBundle("~/Content/jqcss").Include(
                       "~/Content/jquery-ui.css"));
 

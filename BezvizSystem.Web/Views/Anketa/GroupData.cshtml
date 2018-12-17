@@ -1,5 +1,7 @@
-﻿@model IEnumerable<BezvizSystem.Web.Models.Anketa.ViewAnketaModel>
+﻿@using BezvizSystem.Web.Views.Helpers.Pagging
+@using BezvizSystem.Web.Models.Anketa
 
+@model IndexViewModel<ViewAnketaModel>
 
 <tr class="no_border">
     <td class="no_border" colspan="2"><input id="filterBtn" type="button" class="simply_form_red marbot20 buttonParameters" style="width:100%" value="Фильтр" /></td>
@@ -18,26 +20,26 @@
         №
     </td>
     <td class="orange coly2">
-        @Html.DisplayNameFor(model => model.DateArrival)
+        @Html.DisplayName("Дата прибытия")
     </td>
     <td class="orange coly1">
-        @Html.DisplayNameFor(model => model.DaysOfStay)
+        @Html.DisplayName("Количество дней пребывания")
     </td>
     <td class="orange coly2">
-        @Html.DisplayNameFor(model => model.CheckPoint)
+        @Html.DisplayName("Пункт пропуска для въезда")
     </td>
     <td class="orange coly1">
-        @Html.DisplayNameFor(model => model.CountMembers)
+        @Html.DisplayName("Количество участников")
     </td>
     <td class="orange coly2">
-        @Html.DisplayNameFor(model => model.Status)
+        @Html.DisplayName("Статус")
     </td>
     <td class="orange coly3">
-        @Html.DisplayNameFor(model => model.Operator)
+        @Html.DisplayName("Туроператор")
     </td>
 </tr>
 
-@foreach (var item in Model)
+@foreach (var item in Model.Models)
 {
     <tr class="visitor_str mainTableRow" id="@item.Id" onclick="onRowClickHandler(event);">
         <td>
@@ -65,7 +67,31 @@
     </tr>
 }
 
+<tr>
+    <td style="border:none; text-align: right" colspan="7">
+        <div style="display: inline-block" id="compact-pagination" class="pagination"></div>
+    </td>
+</tr>
+
 <script src="~/Scripts/MyScripts/ShowPanels.js"></script>
 <script>
     showPanel('filterBtn', 'panel');
+
+    @{ 
+        var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();      
+        var search = serializer.Serialize(ViewBag.SearchModel);
+    }
+
+    //paging options
+     $(function() {
+         $('#compact-pagination').pagination({
+            items: @Model.PageInfo.TotalItems,
+             itemsOnPage: @Model.PageInfo.PageSize,
+             currentPage: @Model.PageInfo.PageNumber,
+             cssStyle: 'compact-theme',
+             hrefTextPrefix: '@Url.Action("GroupData")?search=@search&page=',
+             prevText: 'Пред.',
+             nextText: 'След.'
+         });
+     });
 </script>

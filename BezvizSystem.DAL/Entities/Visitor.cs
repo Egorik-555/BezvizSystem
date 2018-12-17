@@ -17,9 +17,10 @@ namespace BezvizSystem.DAL.Entities
         public string Name { get; set; }
         public string SerialAndNumber { get; set; }
         public DateTime? DocValid { get; set; }
-        public virtual Gender Gender { get; set; }
+        public virtual Gender Gender { get; set; }     
         public DateTime? BithDate { get; set; }
-        public virtual Nationality Nationality { get; set; }
+        //public virtual Nationality Nationality { get; set; }
+        public string Nationality { get; set; }
 
         public bool Arrived { get; set; }
 

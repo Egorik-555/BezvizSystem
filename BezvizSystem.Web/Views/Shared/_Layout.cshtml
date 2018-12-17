@@ -11,6 +11,8 @@
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/Content/jqcss")
     @Scripts.Render("~/bundles/jquery")
+    <link href="~/Content/css/simplePagination.css" rel="stylesheet" />
+    <script src="~/Scripts/MyScripts/jquery.simplePagination.js"></script>
 </head>
 <body>
     <table class="header">
@@ -52,8 +54,16 @@
     </table>
 
     @Scripts.Render("~/bundles/jquery-ui")
-    @*@Scripts.Render("~/bundles/jquery")*@
     @RenderSection("scripts", required: false)
+
+
+    <script>
+        $(function () {
+            //задание заполнителя с помощью параметра placeholder
+            $(".datepicker").mask("99.99.9999", { placeholder: "дд.мм.гггг" });
+        });
+
+    </script>
 
 </body>
 </html>
