@@ -47,6 +47,10 @@ namespace BezvizSystem.Web.Models.Operator
         [DataType(DataType.Password)]
         public string ConfirmePassword { get; set; }
 
+        [Display(Name = "Адрес")]
+        [Required(ErrorMessage = "Укажите адрес")]
+        public string ProfileUserAddress { get; set; }
+
         [Display(Name = "Активен")]
         public bool ProfileUserActive { get; set; }
 

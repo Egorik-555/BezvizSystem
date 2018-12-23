@@ -17,7 +17,7 @@
             <tr>
                 <td class="no_border">
                     <label for="name">Фамилия туриста</label>
-                    <input type="text" id="name" autocomplete="off" name="name" class="form-control" />
+                    <input type="text" id="name" autocomplete="off" name="name" class="form-control asci_only" style="text-transform: uppercase" />
                 </td>
             </tr>
 
@@ -34,7 +34,7 @@
             <tr>
                 <td class="no_border">
                     <label>Пункт пропуска</label>
-                    @Html.DropDownList("CheckPoint", ViewBag.CheckPoints as SelectList, new { @class = "form-control" })
+                    @Html.DropDownList("CheckPoint", ViewBag.CheckPoints as SelectList, new { @class = "form-control", id = "cp"})
                 </td>
             </tr>
 
@@ -77,17 +77,6 @@
             }
         }
 
-        function makeRequest() {
-            // Отправка асинхронного запроса на сервер.
-            // url - адрес ресурса, которому направляется запрос.
-            // type - HTTP метод используемый для отправки запроса.
-            // data - данные передаваемые на сервер.
-            // success - функция, которая запустится при успешной обработке запроса.
-            $.ajax({
-                url: "@Url.Action("InExcel")",
-                type: "POST"
-
-            });
-        }
+  
     </script>    
 }

@@ -34,12 +34,14 @@ namespace BezvizSystem.Web.Controllers
         private IDictionaryService<CheckPointDTO> _checkPointService;
         private IDictionaryService<NationalityDTO> _nationalityService;
         private IDictionaryService<GenderDTO> _genderService;
+        private IUserService _userService;
         IDocumentGenerator _document;
 
         public AnketaController(IService<AnketaDTO> anketaService, IService<GroupVisitorDTO> groupService,
                                 IDictionaryService<CheckPointDTO> checkPointService, IDictionaryService<NationalityDTO> nationalityService,
                                 IDictionaryService<GenderDTO> genderService,
-                                IDocumentGenerator document)
+                                IDocumentGenerator document,
+                                IUserService userService)
         {
             _anketaService = anketaService;
             _groupService = groupService;
@@ -47,10 +49,11 @@ namespace BezvizSystem.Web.Controllers
             _nationalityService = nationalityService;
             _genderService = genderService;
             _document = document;
+            _userService = userService;
 
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromBLLToWebProfile())).CreateMapper();
         }
-    
+
         public ActionResult Index(SearchModel model)
         {
             //ViewBag.SearchModel = model;
@@ -58,38 +61,11 @@ namespace BezvizSystem.Web.Controllers
             return View(model);
         }
 
-        private bool IsNullProperties(SearchModel obj)
+        private IEnumerable<AnketaDTO> Filter(IEnumerable<AnketaDTO> anketas, SearchModel model)
         {
-            var type = obj.GetType();
-            var properties = type.GetProperties();
-
-            foreach(var prop in properties)
+            if (model != null)
             {
-                var value = prop.GetValue(obj);
-                if (value != null) return false;
-            }
-            return true;
-        }
-
-        public ActionResult GroupData(SearchModel model, string search, int page = 1)
-        {
-            if (!IsNullProperties(model))
-            {
-                ViewBag.SearchModel = model;
-            }
-            else if (search != null && search != "null")
-            {
-                model = JsonConvert.DeserializeObject<SearchModel>(search);
-                model.DateFrom = model.DateFrom.HasValue ? model.DateFrom.Value.ToLocalTime() : default(DateTime);
-                model.DateTo = model.DateTo.HasValue ? model.DateTo.Value.ToLocalTime() : default(DateTime);
-                ViewBag.SearchModel = model;
-            }
-
-            var anketas = _anketaService.GetForUser(User?.Identity.Name);
-
-            if(model != null)
-            {
-                if ( !String.IsNullOrEmpty(model.Name))
+                if (!String.IsNullOrEmpty(model.Name))
                     anketas = anketas.Where(a => a.Visitors.Count(v => v.Surname.ToUpper().Contains(model.Name.ToUpper())) != 0);
 
                 DateTime dateFrom, dateTo;
@@ -107,8 +83,18 @@ namespace BezvizSystem.Web.Controllers
                     anketas = anketas.Where(a => a.CheckPoint.ToUpper() == model.CheckPoint.ToUpper());
             }
 
-            var result = mapper.Map<IOrderedEnumerable<AnketaDTO>, IEnumerable<ViewAnketaModel>>(anketas.OrderBy(m => m.DateArrival));
+            return anketas;         
+        }
 
+        public ActionResult GroupData(SearchModel model, int page = 1)
+        {
+            ViewBag.SearchModel = model;
+
+            var anketas = _anketaService.GetForUser(User?.Identity.Name);
+            anketas = Filter(anketas, model);
+
+            var result = mapper.Map<IOrderedEnumerable<AnketaDTO>, IEnumerable<ViewAnketaModel>>(anketas.OrderBy(m => m.DateArrival));
+           
             int pageSize = 10;
             var modelForPaging = result.Skip((page - 1) * pageSize).Take(pageSize);
             PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = result.Count() };
@@ -118,9 +104,10 @@ namespace BezvizSystem.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> InExcel()
-        {         
+        public async Task<ActionResult> InExcel(SearchModel searchModel)
+        {
             var anketas = await _anketaService.GetForUserAsync(User.Identity.Name);
+            anketas = Filter(anketas, searchModel);
 
             //список всех туристов
             var visitors = new List<ViewAnketaExcel>();
@@ -129,20 +116,20 @@ namespace BezvizSystem.Web.Controllers
                 foreach (var visitor in item.Visitors)
                 {
                     var v = mapper.Map<AnketaDTO, ViewAnketaExcel>(item);
-                    v.Surname = visitor.Surname;
-                    v.Name = visitor.Name;
-                    v.SerialAndNumber = visitor.SerialAndNumber;
-                    v.Nationality = visitor.Nationality;
+                    v.Surname = visitor.Surname.ToUpper();
+                    v.Name = visitor.Name.ToUpper();
+                    v.SerialAndNumber = visitor.SerialAndNumber.ToUpper();
+                    v.Nationality = visitor.Nationality.ToUpper();
                     v.Gender = visitor.Gender;
                     v.BithDate = visitor.BithDate;
                     visitors.Add(v);
                 }
             }
-                  
-            IExcel<string> print = new Excel();
-            string workString = await print.InExcelAsync<ViewAnketaExcel>(visitors);
 
-            return new ExcelResult("Зарегистрированные анкеты.xls", workString);
+            IExcel<XLWorkbook> print = new CloseXmlExcel();
+            XLWorkbook book = await print.InExcelAsync<ViewAnketaExcel>(visitors);
+
+            return new ExcelResult("Зарегистрированные анкеты.xlsx", book);
         }
 
 
@@ -165,7 +152,7 @@ namespace BezvizSystem.Web.Controllers
             }
             else
             {
-                var model = mapper.Map<GroupVisitorDTO, EditGroupModel>(group);             
+                var model = mapper.Map<GroupVisitorDTO, EditGroupModel>(group);
                 return View("EditGroup", model);
             }
         }
@@ -206,9 +193,11 @@ namespace BezvizSystem.Web.Controllers
 
                 if (button == "Document")
                 {
+                    var user = await _userService.GetByNameAsync(model.UserInSystem);
+                    visitor.AddressUser = user?.ProfileUser?.Address;
                     return new DocumentResult(GetMemoryDocumentVisitor("~/App_Data/templateVisitor.xlsx", visitor), "Документ на посещение.xlsx");
                 }
-                
+
                 var result = await _groupService.Update(visitor);
 
                 if (result.Succedeed)
@@ -220,7 +209,7 @@ namespace BezvizSystem.Web.Controllers
 
             ViewBag.Genders = Gender();
             ViewBag.CheckPoints = CheckPoints();
-            ViewBag.Nationalities = Nationalities();           
+            ViewBag.Nationalities = Nationalities();
             return View(model);
         }
 
@@ -241,7 +230,7 @@ namespace BezvizSystem.Web.Controllers
                 if (button == "Extra") model.ExtraSend = true;
                 else model.ExtraSend = false;
 
-                          
+
                 var result = await _groupService.Update(group);
 
                 if (result.Succedeed)

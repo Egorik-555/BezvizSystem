@@ -43,7 +43,7 @@ namespace BezvizSystem.BLL.Utils
             book = new XLWorkbook(template);
             sheet = book.Worksheet(1);
 
-            var visitors = group.Visitors;
+            var visitors = group.Visitors.ToList();
             var formen = visitors.FirstOrDefault();
 
             sheet.Cell("L14").Value = group.Name;
@@ -57,7 +57,7 @@ namespace BezvizSystem.BLL.Utils
 
             if (group.NumberOfContract != null)
             {
-                var contract = "договор - " + group.NumberOfContract;
+                var contract = "договор " + group.NumberOfContract;
                 if (group.DateOfContract.HasValue) contract += " от " + group.DateOfContract.Value.ToShortDateString();
                 sheet.Cell("B" + row.ToString()).Value = contract;
             }
@@ -67,30 +67,24 @@ namespace BezvizSystem.BLL.Utils
             //Руководитель
             sheet.Cell("I29").SetValue(formen?.Surname.ToUpper() + " " + formen?.Name.ToUpper() + ", ");
 
-            row = 31;
+            String result = "";
             if ((bool)formen?.BithDate.HasValue)
-            {
-                string dateBith = formen?.BithDate.Value.ToShortDateString() + " дата рождения, ";
-                sheet.Cell("B" + row.ToString()).Value = dateBith;
-                row += 2;
-            }
+                result += formen?.BithDate.Value.ToShortDateString();
 
             if (formen?.Nationality != null)
-            {
-                string nat = "гражданство - " + formen?.Nationality.ToUpper();               
-                string pass = formen?.SerialAndNumber.ToUpper();
-                string gender = formen?.Gender.ToUpper();
+                result += ", " + formen.Nationality.ToUpper();
 
-                var result = nat != null ? nat : null;
-                result += pass != null ? ", " + pass : "";
-                result += gender != null ? ", " + gender : "";
+            if (formen?.SerialAndNumber != null)
+                result += ", " + formen.SerialAndNumber.ToUpper();
 
-                sheet.Cell("B" + row.ToString()).Value = result;
-            }
-         
+            if (formen?.Gender != null)
+                result += ", " + formen?.Gender.ToUpper();
+
+            sheet.Cell("B31").Value = result;        
+
             //добавление туристов
             row = 36;
-            foreach (var visitor in visitors)
+            for (int i = 1; i < visitors.Count; i++)
             {
                 sheet.Row(row).InsertRowsBelow(1);
                 row++;
@@ -99,11 +93,11 @@ namespace BezvizSystem.BLL.Utils
                 sheet.Range("I" + row + ":L" + row).Merge();
                 sheet.Range("M" + row + ":P" + row).Merge();
 
-                sheet.Cell("B" + row.ToString()).Value = visitor.Name.ToUpper() + " " + visitor.Surname.ToUpper();
-                sheet.Cell("F" + row.ToString()).Value = visitor.Nationality.ToUpper();
-                sheet.Cell("I" + row.ToString()).Value = visitor.SerialAndNumber.ToUpper();
-                sheet.Cell("M" + row.ToString()).Value = visitor.BithDate.Value.ToShortDateString();
-                sheet.Cell("Q" + row.ToString()).Value = visitor.Gender.ToUpper();
+                sheet.Cell("B" + row.ToString()).Value = visitors[i].Name.ToUpper() + " " + visitors[i].Surname.ToUpper();
+                sheet.Cell("F" + row.ToString()).Value = visitors[i].Nationality.ToUpper();
+                sheet.Cell("I" + row.ToString()).Value = visitors[i].SerialAndNumber.ToUpper();
+                sheet.Cell("M" + row.ToString()).Value = visitors[i].BithDate.Value.ToShortDateString();
+                sheet.Cell("Q" + row.ToString()).Value = visitors[i].Gender.ToUpper();
             }
 
             sheet.Cell("I" + (row + 1).ToString()).Value = group.OtherInfo;
@@ -123,28 +117,20 @@ namespace BezvizSystem.BLL.Utils
 
             sheet.Cell("J14").SetValue(visitor?.Surname.ToUpper() + " " + visitor?.Name.ToUpper() + ", ");
 
-            int row = 16;
+            String result = "";
             if ((bool)visitor?.BithDate.HasValue)
-            {
-                string dateBith = visitor?.BithDate.Value.ToShortDateString() + " дата рождения, ";
-                sheet.Cell("B" + row.ToString()).Value = dateBith;
-                row += 2;
-            }
+                result += visitor?.BithDate.Value.ToShortDateString();
 
             if (visitor?.Nationality != null)
-            {
-                string nat = "гражданство - " + visitor.Nationality.ToUpper() + ", ";
-                sheet.Cell("B" + row.ToString()).Value = nat;
-                row += 2;
-            }
+                result += ", " + visitor.Nationality.ToUpper();
 
             if (visitor?.SerialAndNumber != null)
-            {
-                string pass = visitor.SerialAndNumber.ToUpper() + ", ";
-                string gender = visitor?.Gender.ToUpper();
-                sheet.Cell("B" + row.ToString()).Value = pass + gender;
-                row += 2;
-            }
+                result += ", " + visitor.SerialAndNumber.ToUpper();
+
+            if (visitor?.Gender != null)
+                result += ", " + visitor?.Gender.ToUpper();
+
+            sheet.Cell("B16").Value = result;
 
             if (group.DateArrival.HasValue)
             {
@@ -166,22 +152,31 @@ namespace BezvizSystem.BLL.Utils
 
             sheet.Cell("I36").Value = group.TranscriptUser;
 
-            row = 38;
-            string tel = null, site = null;
+            int row = 38;
+            result = "";
+
+            if (group.AddressUser != null)
+            {
+                result = group.AddressUser;
+            }
             if (group.TelNumber != null)
             {
-                tel = "тел. " + group.TelNumber + " ";
-            }
-
+                result += ", " + group.TelNumber;
+            }        
             if (group.SiteOfOperator != null)
             {
-                tel = "сайт - " + group.SiteOfOperator;
+                result += ", " + group.SiteOfOperator;
+            }
+            if (!String.IsNullOrEmpty(result))
+            {
+                sheet.Cell("B" + row.ToString()).Value = result;
+                row += 2;
             }
 
-            sheet.Cell("B" + row.ToString()).Value = tel + site;
-            if (tel != null || site != null) row += 2;
-
-            sheet.Cell("B" + row.ToString()).Value = group.Email;
+            if (group.Email != null)
+            {
+                sheet.Cell("B" + row.ToString()).Value = group.Email;
+            }
 
             AddBarcodePic(group.Id);
 

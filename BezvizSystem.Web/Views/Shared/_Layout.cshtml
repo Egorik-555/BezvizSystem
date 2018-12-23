@@ -38,7 +38,7 @@
                         <input type="button" class="pad_cent" id="btn2" value="Администрирование туроператоров" onclick="location.href='@Url.Action("Index", "Operator")'" />
                     }
                     <input type="button" class="pad_cent" value="Выход" onclick="location.href='@Url.Action("Logout", "Account")'" />
-                    <img src="/content/img/sho.png" style="width: 100%">
+                    @*<img src="/content/img/sho.png" style="width: 100%">*@
                 </ul>
             </td>
             @RenderBody()
@@ -54,6 +54,7 @@
     </table>
 
     @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/other-scripts")
     @RenderSection("scripts", required: false)
 
 
@@ -62,8 +63,8 @@
             //задание заполнителя с помощью параметра placeholder
             $(".datepicker").mask("99.99.9999", { placeholder: "дд.мм.гггг" });
         });
-
     </script>
+
 
 </body>
 </html>

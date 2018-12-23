@@ -18,7 +18,7 @@ namespace BezvizSystem.Web.Models.Visitor
         [Display(Name = "Дата прибытия")]
         [Required(ErrorMessage = "Укажите дату прибытия")]
         [LessThanOtherDate("DateDeparture", ErrorMessage = "Укажите дату прибытия меньше либо равной дате убытия")]
-        //[FutureDate(ErrorMessage = "Укажите дату прибытия, относящуюся к будущему")]
+        [FutureDate(ErrorMessage = "Укажите дату прибытия, относящуюся к будущему")]
         public DateTime? DateArrival { get; set; }
 
         [Required(ErrorMessage = "Укажите дату убытия")]

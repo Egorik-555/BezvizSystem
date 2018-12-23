@@ -27,6 +27,10 @@ namespace BezvizSystem.Web
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
                       "~/Scripts/jquery-ui.js").Include(
                        "~/Scripts/jquery.maskedinput.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/other-scripts").Include(
+                      "~/Scripts/MyScripts/OnlyLatinLetter.js"));
+
             bundles.Add(new StyleBundle("~/Content/jqcss").Include(
                       "~/Content/jquery-ui.css"));
 

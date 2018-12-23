@@ -1,4 +1,6 @@
 ﻿using BezvizSystem.BLL.DI;
+using BezvizSystem.Web.Infrustructure.ModelBinders;
+using BezvizSystem.Web.Models;
 using Ninject;
 using Ninject.Modules;
 using Ninject.Web.Mvc;
@@ -20,6 +22,8 @@ namespace BezvizSystem.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            ModelBinders.Binders.Add(typeof(SearchModel), new SearchModelBinder());
 
             NinjectModule registrations = new NinjectRegistrations();
             var kernel = new StandardKernel(registrations);

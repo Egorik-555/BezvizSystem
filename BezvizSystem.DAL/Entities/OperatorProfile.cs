@@ -22,6 +22,7 @@ namespace BezvizSystem.DAL.Entities
         public string Ip { get; set; }
         public string Role { get; set; }
         public bool Active { get; set; }
+        public string Address { get; set; }
         public DateTime? NotActiveToDate { get; set; }
 
         public DateTime? DateInSystem { get; set; }
