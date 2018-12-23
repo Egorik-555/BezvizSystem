@@ -12,41 +12,48 @@
     {
         @Html.AntiForgeryToken()
 
-        <table class="second" cellpadding="0" cellspacing="15">
-            <tr>
-                <td colspan="2">
-                    @Html.ValidationSummary(false, "")
-                </td>
-            </tr>
+    <table class="second" cellpadding="0" cellspacing="15">
+        <tr>
+            <td colspan="2">
+                @Html.ValidationSummary(false, "")
+            </td>
+        </tr>
 
-            <tr>
-                <td colspan="2">
-                    @Html.LabelFor(model => model.Transcript, htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.EditorFor(model => model.Transcript, new { htmlAttributes = new { @class = "form-control" } })
-                </td>
-            </tr>
+        <tr>
+            <td colspan="2">
+                @Html.LabelFor(model => model.Transcript, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Transcript, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
 
-            <tr>
-                <td colspan="2">
-                    @Html.LabelFor(model => model.UNP, htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.EditorFor(model => model.UNP, new { htmlAttributes = new { @class = "form-control" } })
-                </td>
-            </tr>
+        <tr>
+            <td colspan="2">
+                @Html.LabelFor(model => model.UNP, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.UNP, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
 
-            <tr>
-                <td colspan="2">
-                    @Html.LabelFor(model => model.OKPO, htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.EditorFor(model => model.OKPO, new { htmlAttributes = new { @class = "form-control" } })
-                </td>
-            </tr>
+        <tr>
+            <td colspan="2">
+                @Html.LabelFor(model => model.OKPO, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.OKPO, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
 
-            <tr>
-                <td colspan="2">
-                    <input type="submit" value="Сохранить" class="simply_form_red" />
-                </td>
-            </tr>
+        <tr>
+            <td colspan="2">
+                @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
 
-        </table>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Сохранить" class="simply_form_red" />
+            </td>
+        </tr>
+
+    </table>
     }
 </td>
 

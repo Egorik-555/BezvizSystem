@@ -10,12 +10,12 @@ namespace BezvizSystem.DAL
 {
     public class BezvizUser : IdentityUser
     {
-        public BezvizUser()
-        {
-            Groups = new List<GroupVisitor>();
-        }
+        //public BezvizUser()
+        //{
+        //    Groups = new List<GroupVisitor>();
+        //}
 
         public virtual OperatorProfile OperatorProfile { get; set; }
-        public virtual ICollection<GroupVisitor> Groups { get; set; }    
+        //public virtual ICollection<GroupVisitor> Groups { get; set; }    
     }
 }

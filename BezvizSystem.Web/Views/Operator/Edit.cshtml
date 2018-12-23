@@ -28,17 +28,24 @@
                 </td>
             </tr>
 
-            @*<tr>
-                <td colspan="2">
-                    @Html.LabelFor(model => model.ProfileUserUNP, htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.EditorFor(model => model.ProfileUserUNP, new { htmlAttributes = new { @class = "form-control", @readonly="readonly" } })
-                </td>
-            </tr>*@
+            <tr>
+                    <td colspan="2">
+                        @Html.LabelFor(model => model.ProfileUserUNP, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.EditorFor(model => model.ProfileUserUNP, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </td>
+                </tr>
 
             <tr>
                 <td colspan="2">
                     @Html.LabelFor(model => model.ProfileUserOKPO, htmlAttributes: new { @class = "control-label col-md-2" })
                     @Html.EditorFor(model => model.ProfileUserOKPO, new { htmlAttributes = new { @class = "form-control" } })
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    @Html.LabelFor(model => model.ProfileUserAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.ProfileUserAddress, new { htmlAttributes = new { @class = "form-control" } })
                 </td>
             </tr>
 

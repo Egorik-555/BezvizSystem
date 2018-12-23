@@ -13,6 +13,12 @@
 
             <tr>
                 <td colspan="2">
+                    <img src="/content/img/sho.png" style="width: 100%">
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
                     @Html.ValidationSummary(false, "")
                 </td>
             </tr>
@@ -23,6 +29,8 @@
             <tr>
                 <td class="left">
                     @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.TranscriptUser)
+                    @Html.HiddenFor(model => model.UserInSystem)
                     @Html.LabelFor(model => model.DateArrival, htmlAttributes: new { @class = "control-label" })
                     @Html.EditorFor(model => model.DateArrival, "Date", new { htmlAttributes = new { @class = "form-control datepicker", autocomplete = "off" } })
                 </td>
@@ -47,7 +55,7 @@
                 <td colspan="2">
                     @Html.LabelFor(model => model.PlaceOfRecidense, htmlAttributes: new { @class = "control-label" })
                     @Html.EditorFor(model => model.PlaceOfRecidense, new { htmlAttributes = new { @class = "form-control bg_in" } })
-                    <p class="no_need">*Не обязательно к заполнению если турист не проживает в специализированных средствах размещения</p>
+                    <p class="no_need">* не обязательно к заполнению если турист не проживает в специализированных средствах размещения</p>
                 </td>
             </tr>
 
@@ -69,7 +77,6 @@
             <tr>
                 <td colspan="2">
                     <h3 class="red">Справочная информация</h3>
-                    <p class="no_need">*Не обязательно к заполнению</p>
                 </td>
             </tr>
 
@@ -77,6 +84,7 @@
                 <td colspan="2">
                     @Html.LabelFor(model => model.TimeOfWork, htmlAttributes: new { @class = "control-label" })
                     @Html.EditorFor(model => model.TimeOfWork, new { htmlAttributes = new { @class = "form-control bg_in" } })
+                    <p class="no_need">* не обязательно к заполнению</p>
                 </td>
             </tr>
             <tr>

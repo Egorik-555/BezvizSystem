@@ -15,6 +15,7 @@ namespace BezvizSystem.BLL.DTO
         public string Transcript { get; set; }
         public string Ip { get; set; }
         public bool Active { get; set; }
+        public string Address { get; set; }
         public DateTime? NotActiveToDate { get; set; }
         public string Role { get; set; }
         

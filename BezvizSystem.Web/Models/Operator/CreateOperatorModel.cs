@@ -29,6 +29,10 @@ namespace BezvizSystem.Web.Models.Operator
         [Display(Name = "ОКПО")]
         public string OKPO { get; set; }
 
+        [Display(Name = "Адрес")]
+        [Required(ErrorMessage = "Укажите адрес")]
+        public string Address { get; set; }
+
         public string Role { get; set; }
         public string Password { get; set; }
         public bool Active { get; set; }

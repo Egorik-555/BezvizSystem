@@ -3,13 +3,18 @@
 
 @model IndexViewModel<ViewAnketaModel>
 
+@{
+    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    var search = serializer.Serialize(ViewBag.SearchModel);
+}
+
 <tr class="no_border">
     <td class="no_border" colspan="2"><input id="filterBtn" type="button" class="simply_form_red marbot20 buttonParameters" style="width:100%" value="Фильтр" /></td>
     <td class="no_border"></td>
     <td class="no_border"></td>
     <td class="no_border"></td>
     <td class="no_border"></td>
-    <td class="no_border">@Html.ActionLink("Экспортировать", "InExcel", null, new { @class = "simply_form_red marbot20 linkParameters" })</td>
+    <td class="no_border">@Html.ActionLink("Экспортировать", "InExcel", new { search = search}, new { @class = "simply_form_red marbot20 linkParameters" })</td>
 </tr>
 
 <tr>
@@ -76,11 +81,6 @@
 <script src="~/Scripts/MyScripts/ShowPanels.js"></script>
 <script>
     showPanel('filterBtn', 'panel');
-
-    @{ 
-        var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();      
-        var search = serializer.Serialize(ViewBag.SearchModel);
-    }
 
     //paging options
      $(function() {

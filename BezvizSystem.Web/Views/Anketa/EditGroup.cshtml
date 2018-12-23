@@ -48,7 +48,7 @@
                 <td colspan="2">
                     @Html.LabelFor(model => model.PlaceOfRecidense, htmlAttributes: new { @class = "control-label" })
                     @Html.EditorFor(model => model.PlaceOfRecidense, new { htmlAttributes = new { @class = "form-control bg_in" } })
-                    <p class="no_need">*Не обязательно к заполнению если турист не проживает в специализированных средствах размещения</p>
+                    <p class="no_need">* не обязательно к заполнению если турист не проживает в специализированных средствах размещения</p>
                 </td>
             </tr>
 
@@ -104,6 +104,7 @@
                 <td colspan="2">
                     @Html.LabelFor(model => model.OtherInfo, htmlAttributes: new { @class = "control-label" })
                     @Html.EditorFor(model => model.OtherInfo, new { htmlAttributes = new { @class = "form-control bg_in" } })
+                    <p class="no_need">* не обязательно к заполнению</p>
                 </td>
             </tr>
             <tr>
