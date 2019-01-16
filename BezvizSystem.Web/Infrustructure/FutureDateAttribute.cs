@@ -10,7 +10,7 @@ namespace BezvizSystem.Web.Infrustructure
     {
         public override bool IsValid(object value)
         {
-            return base.IsValid(value) && ((DateTime) value).Date >= DateTime.Now.Date;
+            return base.IsValid(value) && ((DateTime) value).Date > DateTime.Now.Date;
         }
     }
 }

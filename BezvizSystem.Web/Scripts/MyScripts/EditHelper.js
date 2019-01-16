@@ -57,17 +57,12 @@ function f(whereInsert) {
 
     tbody.insertBefore(fragment, lastTr.nextSibling);
 
-    //var id = makeId(count, 'Nationality');
-    //$(function () {
-    //    $("#"+id).combobox();
-    //    $("#toggle").click(function () {
-    //        $("#" + id).toggle();
-    //    });
-    //});
+    
 
     $(function () {
         //задание заполнителя с помощью параметра placeholder
         $(".datepicker").mask("99.99.9999", { placeholder: "дд.мм.гггг" });
+        addNumber();
     });
 
     $(".datepicker").datepicker({

@@ -49,7 +49,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
                 CleverSeach(id, ref model);
             }
 
-            int pageSize = 3;
+            int pageSize = 15;
             var modelForPaging = model.Skip((page - 1) * pageSize).Take(pageSize);
             PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = model.Count() };
             IndexViewModel<LogModel> ivm = new IndexViewModel<LogModel> { PageInfo = pageInfo, Models = modelForPaging };

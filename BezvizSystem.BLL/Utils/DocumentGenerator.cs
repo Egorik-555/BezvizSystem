@@ -46,15 +46,10 @@ namespace BezvizSystem.BLL.Utils
             var visitors = group.Visitors.ToList();
             var formen = visitors.FirstOrDefault();
 
-            sheet.Cell("L14").Value = group.Name;
+            sheet.Cell("L8").Value = (group.OrganizeForm != null ? group.OrganizeForm + " " : "") + group.Name;
 
-            var row = 16;
-            if (group.OrganizeForm != null)
-            {
-                sheet.Cell("B" + row.ToString()).Value = group.OrganizeForm;
-                row += 2;
-            }
-
+            var row = 10;
+            
             if (group.NumberOfContract != null)
             {
                 var contract = "договор " + group.NumberOfContract;
@@ -62,10 +57,10 @@ namespace BezvizSystem.BLL.Utils
                 sheet.Cell("B" + row.ToString()).Value = contract;
             }
 
-            sheet.Cell("B26").Value = group.ProgramOfTravel;
+            sheet.Cell("B20").Value = group.ProgramOfTravel;
 
             //Руководитель
-            sheet.Cell("I29").SetValue(formen?.Surname.ToUpper() + " " + formen?.Name.ToUpper() + ", ");
+            sheet.Cell("I23").SetValue(formen?.Surname.ToUpper() + " " + formen?.Name.ToUpper() + ", ");
 
             String result = "";
             if ((bool)formen?.BithDate.HasValue)
@@ -80,10 +75,10 @@ namespace BezvizSystem.BLL.Utils
             if (formen?.Gender != null)
                 result += ", " + formen?.Gender.ToUpper();
 
-            sheet.Cell("B31").Value = result;        
+            sheet.Cell("B25").Value = result;        
 
             //добавление туристов
-            row = 36;
+            row = 30;
             for (int i = 1; i < visitors.Count; i++)
             {
                 sheet.Row(row).InsertRowsBelow(1);
@@ -93,7 +88,7 @@ namespace BezvizSystem.BLL.Utils
                 sheet.Range("I" + row + ":L" + row).Merge();
                 sheet.Range("M" + row + ":P" + row).Merge();
 
-                sheet.Cell("B" + row.ToString()).Value = visitors[i].Name.ToUpper() + " " + visitors[i].Surname.ToUpper();
+                sheet.Cell("B" + row.ToString()).Value = visitors[i].Surname.ToUpper() + " " + visitors[i].Name.ToUpper();
                 sheet.Cell("F" + row.ToString()).Value = visitors[i].Nationality.ToUpper();
                 sheet.Cell("I" + row.ToString()).Value = visitors[i].SerialAndNumber.ToUpper();
                 sheet.Cell("M" + row.ToString()).Value = visitors[i].BithDate.Value.ToShortDateString();
@@ -115,7 +110,7 @@ namespace BezvizSystem.BLL.Utils
 
             var visitor = group.Visitors.FirstOrDefault();
 
-            sheet.Cell("J14").SetValue(visitor?.Surname.ToUpper() + " " + visitor?.Name.ToUpper() + ", ");
+            sheet.Cell("J8").SetValue(visitor?.Surname.ToUpper() + " " + visitor?.Name.ToUpper() + ", ");
 
             String result = "";
             if ((bool)visitor?.BithDate.HasValue)
@@ -130,29 +125,29 @@ namespace BezvizSystem.BLL.Utils
             if (visitor?.Gender != null)
                 result += ", " + visitor?.Gender.ToUpper();
 
-            sheet.Cell("B16").Value = result;
+            sheet.Cell("B10").Value = result;
 
             if (group.DateArrival.HasValue)
             {
-                sheet.Cell("F26").Value = group.DateArrival.Value.Day;
-                sheet.Cell("H26").Value = group.DateArrival.Value.Month;
-                sheet.Cell("J26").Value = group.DateArrival.Value.Year;
+                sheet.Cell("F20").Value = group.DateArrival.Value.Day;
+                sheet.Cell("H20").Value = group.DateArrival.Value.Month;
+                sheet.Cell("J20").Value = group.DateArrival.Value.Year;
             }
 
             if (group.DateDeparture.HasValue)
             {
-                sheet.Cell("L26").Value = group.DateDeparture.Value.Day;
-                sheet.Cell("N26").Value = group.DateDeparture.Value.Month;
-                sheet.Cell("P26").Value = group.DateDeparture.Value.Year;
+                sheet.Cell("L20").Value = group.DateDeparture.Value.Day;
+                sheet.Cell("N20").Value = group.DateDeparture.Value.Month;
+                sheet.Cell("P20").Value = group.DateDeparture.Value.Year;
             }
 
-            sheet.Cell("B29").Value = group.PlaceOfRecidense;
-            sheet.Cell("B32").Value = group.ProgramOfTravel;
-            sheet.Cell("I35").Value = group.TimeOfWork;
+            sheet.Cell("B23").Value = group.PlaceOfRecidense;
+            sheet.Cell("B26").Value = group.ProgramOfTravel;
+            sheet.Cell("I29").Value = group.TimeOfWork;
 
-            sheet.Cell("I36").Value = group.TranscriptUser;
+            sheet.Cell("I30").Value = group.TranscriptUser;
 
-            int row = 38;
+            int row = 32;
             result = "";
 
             if (group.AddressUser != null)

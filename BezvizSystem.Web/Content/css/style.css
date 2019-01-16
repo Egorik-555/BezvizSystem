@@ -943,3 +943,12 @@ a:hover.pagination:not(.active) {
     margin: 0;
     padding: 0.3em;
 }
+
+.number {
+    display: inline-block;
+    border: #0a9200 2px solid;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 20px;
+    text-align: center;
+}

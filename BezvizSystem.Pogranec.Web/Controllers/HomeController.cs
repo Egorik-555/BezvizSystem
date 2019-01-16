@@ -47,33 +47,41 @@ namespace BezvizSystem.Pogranec.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                await SetInitDataAsync();
-
-                UserDTO user = new UserDTO { UserName = model.Name, Password = model.Password };
-                var claim = await _userService.Authenticate(user);
-                if (claim == null)
+                try
                 {
-                    errorMsg = "Неверный логин или пароль";
-                    ModelState.AddModelError("", errorMsg);
+                    await SetInitDataAsync();
+
+                    UserDTO user = new UserDTO { UserName = model.Name, Password = model.Password };
+                    var claim = await _userService.Authenticate(user);
+                    if (claim == null)
+                    {
+                        errorMsg = "Неверный логин или пароль";
+                        ModelState.AddModelError("", errorMsg);
+                        return View(model);
+                    }
+
+                    var findUser = await _userService.GetByNameAsync(user.UserName);
+
+                    if (!findUser.ProfileUser.Active && (!findUser.ProfileUser.NotActiveToDate.HasValue || findUser.ProfileUser.NotActiveToDate > DateTime.Now))
+                    {
+                        errorMsg = "Пользователь заблокирован";
+                        ModelState.AddModelError("", errorMsg);
+                        return View(model);
+                    }
+
+                    Authentication.SignOut();
+                    Authentication.SignIn(new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                    }, claim);
+
+                    return RedirectToAction("Index", "Home");
+                }
+                catch (Exception e)
+                {
+                    ModelState.AddModelError("", e.Message + e.InnerException != null ? " " + e.InnerException.Message : "");
                     return View(model);
                 }
-
-                var findUser = await _userService.GetByNameAsync(user.UserName);
-
-                if (!findUser.ProfileUser.Active && (!findUser.ProfileUser.NotActiveToDate.HasValue || findUser.ProfileUser.NotActiveToDate > DateTime.Now))
-                {
-                    errorMsg = "Пользователь заблокирован";
-                    ModelState.AddModelError("", errorMsg);
-                    return View(model);
-                }
-
-                Authentication.SignOut();
-                Authentication.SignIn(new AuthenticationProperties
-                {
-                    IsPersistent = true,
-                }, claim);
-
-                return RedirectToAction("Index", "Home");
             }
 
             return View(model);

@@ -3,6 +3,7 @@ using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.DTO.Dictionary;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Utils;
+using BezvizSystem.DAL.Helpers;
 using BezvizSystem.Web.Infrustructure;
 using BezvizSystem.Web.Mapper;
 using BezvizSystem.Web.Models;
@@ -90,7 +91,12 @@ namespace BezvizSystem.Web.Controllers
         {
             ViewBag.SearchModel = model;
 
-            var anketas = _anketaService.GetForUser(User?.Identity.Name);
+            IEnumerable<AnketaDTO> anketas;
+
+            if (!User.IsRole(UserLevel.OBLSuperAdmin, UserLevel.OBLAdmin))
+                anketas = _anketaService.GetForUser(User?.Identity.Name);
+            else anketas = _anketaService.GetAll();
+
             anketas = Filter(anketas, model);
 
             var result = mapper.Map<IOrderedEnumerable<AnketaDTO>, IEnumerable<ViewAnketaModel>>(anketas.OrderBy(m => m.DateArrival));

@@ -48,16 +48,16 @@
                     @(++i)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Surname)
+                    @item.Surname.ToUpper()
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    @item.Name.ToUpper()
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Nationality)
+                    @item.Nationality.ToUpper()
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.SerialAndNumber)
+                    @item.SerialAndNumber.ToUpper()
                 </td>
                 <td>
                     @Html.CheckBox("[" + @i + "].Arrived", item.Arrived, new { dataId = item.Id, onclick = "onClickInput(event);" })

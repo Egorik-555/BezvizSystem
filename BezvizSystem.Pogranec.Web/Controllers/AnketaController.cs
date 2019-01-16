@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BezvizSystem.BLL.DTO;
 using BezvizSystem.BLL.DTO.Dictionary;
+using BezvizSystem.BLL.Infrastructure;
 using BezvizSystem.BLL.Interfaces;
 using BezvizSystem.BLL.Interfaces.XML;
 using BezvizSystem.Pogranec.Web.Filters;
@@ -109,29 +110,31 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         }
 
         [ActionLogger(Type = DAL.Helpers.LogType.LoadXML, TextActivity = "Выгрузка анкет.")]
-        public async Task<string> GetXMLFileName()
+        public async Task<JsonResult> GetXMLFileName()
         {
             string date = DateTime.Now.ToFileTime().ToString();
             string fileName = "DefaultXml_" + date + ".xml";
             string file = HostingEnvironment.MapPath("~/App_Data/XMLs/" + fileName);
             var result = await _xmlService.SaveNew(file);
 
-            if (result.Succedeed)                       
-                return fileName;                       
-            else return "";
+            if (result.Succedeed)
+                return Json(new OperationDetails(true, fileName), JsonRequestBehavior.AllowGet);
+            else
+                return Json(result, JsonRequestBehavior.AllowGet);
         }
        
         [ActionLogger(Type = DAL.Helpers.LogType.ExtraLoadXML, TextActivity = "Экстренная выгрузка анкет.")]
-        public async Task<string> GetExtraXMLFileName()
+        public async Task<JsonResult> GetExtraXMLFileName()
         {
             string date = DateTime.Now.ToFileTime().ToString();
             string fileName = "ExtraXml_" + date + ".xml";
             string file = HostingEnvironment.MapPath("~/App_Data/XMLs/" + fileName);
             var result = await _xmlService.SaveExtra(file);
 
-            if (result.Succedeed)         
-                return fileName;
-            else return "";
+            if (result.Succedeed)
+                return Json(new OperationDetails(true, fileName), JsonRequestBehavior.AllowGet);
+            else
+                return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetAnketas(string fileName)

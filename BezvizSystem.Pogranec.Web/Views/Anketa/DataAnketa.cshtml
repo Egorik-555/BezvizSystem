@@ -51,3 +51,37 @@
     </tr>
 }
 
+    <script>
+        var xml = document.getElementById('loadXml');
+        var extraXml = document.getElementById('extraLoadXml');
+        xml.onclick = function () {
+
+            $.ajax({
+                url: '@Url.Action("GetXMLFileName")',
+                success: function (data) {
+                    xml.value = "Получение анкет";
+                    if (!data.Succedeed) alert(data.Message)
+                    else location.href = "@Url.Action("GetAnketas", "Anketa")?fileName=" + data.Message;
+                },
+                error: function () {
+                    alert("Возникла ошибка при выгрузке xml.")
+                }
+            });
+        }
+
+        extraXml.onclick = function () {
+
+            $.ajax({
+                url: '@Url.Action("GetExtraXMLFileName")',
+                success: function (data) {
+                    extraXml.value = "Экстренное получение";
+                    if (!data.Succedeed) alert(data.Message)
+                    else location.href = "@Url.Action("GetAnketas", "Anketa")?fileName=" + data.Message;
+                },
+                error: function () {
+                    alert("Возникла ошибка при выгрузке xml.")
+                }
+            });
+        }
+    </script>
+
