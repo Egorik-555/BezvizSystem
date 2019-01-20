@@ -24,7 +24,7 @@ namespace BezvizSystem.Web.Models.Operator
         public string UNP { get; set; }
 
         [Required(ErrorMessage = "Укажите ОКПО")]
-        [StringLength(14, MinimumLength = 3, ErrorMessage = "Длина ОКПО должна быть от 3 до 10 символов")]
+        [StringLength(14, MinimumLength = 3, ErrorMessage = "Длина ОКПО должна быть от 3 до 14 символов")]
         [RegularExpression(@"[0-9]*", ErrorMessage = "В ОКПО допустимы только цифровые символы")]
         [Display(Name = "ОКПО")]
         public string OKPO { get; set; }
