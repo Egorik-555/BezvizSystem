@@ -113,7 +113,7 @@ namespace BezvizSystem.Pogranec.Web.Controllers
         public async Task<JsonResult> GetXMLFileName()
         {
             string date = DateTime.Now.ToFileTime().ToString();
-            string fileName = "DefaultXml_" + date + ".xml";
+            string fileName = "Xml_" + date + ".xml";
             string file = HostingEnvironment.MapPath("~/App_Data/XMLs/" + fileName);
             var result = await _xmlService.SaveNew(file);
 

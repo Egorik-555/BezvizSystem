@@ -1,4 +1,7 @@
-﻿@model BezvizSystem.Web.Models.Group.EditGroupModel
+﻿@using BezvizSystem.Web.Infrustructure
+@using BezvizSystem.DAL.Helpers
+
+@model BezvizSystem.Web.Models.Group.EditGroupModel
 
 @{
     ViewBag.Title = "Группа туристов";
@@ -116,7 +119,11 @@
             <tr>
                 <td colspan="2">
                     <button type="submit" name="button" value="Document" class="simply_form_red sfr_auto" style="background-color:brown; width:101%; border: 1px solid brown;">Скачать документ</button>
-                    <button type="submit" name="button" value="Extra" class="simply_form_red sfr_auto" style="background-color:#ffba00; width:101%; border: 1px solid #ffba00;">Экстренная передача</button>
+
+                    @if (User.IsRole(UserLevel.OBLSuperAdmin, UserLevel.OBLAdmin))
+                    {
+                        <button type="submit" name="button" value="Extra" class="simply_form_red sfr_auto" style="background-color:#ffba00; width:101%; border: 1px solid #ffba00;">Экстренная передача</button>
+                    }
 
                     <input type="submit" class="simply_form_red sfr_auto" style="height:50px;" value="Сохранить" />
                     @Html.ActionLink("Удалить", "Delete", new { id = Model.Id }, new { @class = "simply_form_red sfr_auto", style = "background-color:red; width:100%; padding:0;display: block; border: 1px solid red; font-family:Arial;" })

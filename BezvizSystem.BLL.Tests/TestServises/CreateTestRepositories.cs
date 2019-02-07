@@ -44,17 +44,22 @@ namespace BezvizSystem.BLL.Tests.TestServises
         Visitor visitor1;
         Visitor visitor2;
         Visitor visitor3;
+        Visitor visitor4;
+        Visitor visitor5;
 
         GroupVisitor group1;
         GroupVisitor group2;
+        GroupVisitor group3;
 
         CheckPoint check1 = new CheckPoint { Id = 1, Name = "check1", Active = true };
         CheckPoint check2 = new CheckPoint { Id = 2, Name = "check2" };
         CheckPoint check3 = new CheckPoint { Id = 3, Name = "check3", Active = true };
         CheckPoint check4 = new CheckPoint { Id = 4, Name = "check4", Active = true };
 
-        XMLDispatch dispatch1 = new XMLDispatch { Id = 1, Status = Status.New, Operation = Operation.Add, DateInSystem = DateTime.Now };
+        XMLDispatch dispatch1 = new XMLDispatch { Id = 1, Status = Status.New, Operation = Operation.Add, DateInSystem = DateTime.Now };    
         XMLDispatch dispatch2 = new XMLDispatch { Id = 2, Status = Status.Send, Operation = Operation.Done, DateInSystem = DateTime.Now };
+        XMLDispatch dispatch4 = new XMLDispatch { Id = 4, Status = Status.New, Operation = Operation.Add, DateInSystem = DateTime.Now };
+        XMLDispatch dispatch5 = new XMLDispatch { Id = 5, Status = Status.New, Operation = Operation.Add, DateInSystem = DateTime.Now };
 
         List<Visitor> listOfVisitorsForVisitorService;
 
@@ -67,9 +72,9 @@ namespace BezvizSystem.BLL.Tests.TestServises
             {
                 Id = 1,
                 Surname = "surname1",
-                BithDate = new DateTime(1987, 07, 01),
+                BithDate = new DateTime(1987, 07, 10),
                 SerialAndNumber = "aa1234567",
-                Nationality = nat1,
+                Nationality = "nat1",
                 Gender = gender1,
                 DateInSystem = new DateTime(2018, 07, 01),
                 UserInSystem = "Test"
@@ -83,9 +88,31 @@ namespace BezvizSystem.BLL.Tests.TestServises
                 Gender = gender2,
                 BithDate = new DateTime(2005, 1, 1),
                 SerialAndNumber = "aa9999999",
-                Nationality = nat2,
+                Nationality = "nat2",
                 DateInSystem = new DateTime(2018, 07, 02),
                 UserInSystem = "Test"
+            };
+
+            visitor4 = new Visitor
+            {
+                Id = 4,
+                Group = group3,
+                Surname = "surname4",
+                Name = "Name4",
+                Gender = gender1,
+                BithDate = new DateTime(2000, 1, 1),
+                Nationality = "nat2"
+            };
+
+            visitor5 = new Visitor
+            {
+                Id = 5,
+                Group = group3,
+                Surname = "surname5",
+                Name = "Name5",
+                Gender = gender1,
+                BithDate = new DateTime(2010, 1, 1),
+                Nationality = "nat5"
             };
 
             group1 = new GroupVisitor
@@ -103,10 +130,26 @@ namespace BezvizSystem.BLL.Tests.TestServises
                 UserInSystem = "Test1"
             };
 
+            group2 = new GroupVisitor
+            {
+                Id = 2,
+                Group = true,
+                PlaceOfRecidense = "place 2",
+                CheckPoint = check2,
+                DateArrival = new DateTime(2018, 7, 30),
+                Visitors = new List<Visitor> { visitor4, visitor5 },
+
+                DateInSystem = new DateTime(2018, 05, 02),
+                TranscriptUser = "transcript test",
+                UserInSystem = "Test1"
+            };
+
             visitor1.Group = group1;
             visitor2.Group = group1;
+            visitor4.Group = group2;
+            visitor5.Group = group2;
 
-            listOfVisitorsForVisitorService = new List<Visitor> { visitor1, visitor2 };
+            listOfVisitorsForVisitorService = new List<Visitor> { visitor1, visitor2, visitor4, visitor5 };
         }
 
         private void ListForGroupVisitorService()
@@ -116,8 +159,8 @@ namespace BezvizSystem.BLL.Tests.TestServises
                 Id = 1,
                 Group = group1,
                 Surname = "surname1",
-                BithDate = new DateTime(1987, 07, 01),
-                Nationality = nat1,
+                BithDate = new DateTime(1987, 07, 10),
+                Nationality = "nat2",
                 Gender = gender1,
                 DateInSystem = new DateTime(2018, 07, 01),
                 UserInSystem = "Test1",
@@ -132,7 +175,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
                 Name = "Name2",
                 Gender = gender2,
                 BithDate = new DateTime(2005, 1, 1),
-                Nationality = nat2,
+                Nationality = "nat2",
                 DateInSystem = new DateTime(2018, 07, 02),
                 UserInSystem = "Test1",
                 Arrived = true
@@ -146,10 +189,10 @@ namespace BezvizSystem.BLL.Tests.TestServises
                 Name = "Name3",
                 Gender = gender1,
                 BithDate = new DateTime(2000, 1, 1),
-                Nationality = nat2,
+                Nationality = "nat2",
                 DateInSystem = new DateTime(2017, 01, 01),
                 UserInSystem = "Test2"
-            };
+            };         
 
             group1 = new GroupVisitor
             {
@@ -157,7 +200,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
                 Group = false,
                 PlaceOfRecidense = "place 1",
                 CheckPoint = check1,
-                DateArrival = new DateTime(2018, 6, 1),
+                DateArrival = new DateTime(2018, 10, 1),
                 Visitors = new List<Visitor> { visitor1 },
 
                 DateInSystem = new DateTime(2018, 07, 02),
@@ -178,10 +221,11 @@ namespace BezvizSystem.BLL.Tests.TestServises
                 TranscriptUser = "transcript test",
                 UserInSystem = "Test1"
             };
-
+         
             visitor1.Group = group1;
             visitor2.Group = group2;
             visitor3.Group = group2;
+  
 
             listOfVisitorsForGroupService = new List<Visitor> { visitor1, visitor2, visitor3 };
             listOfGroupsForGroupService = new List<GroupVisitor> { group1, group2 };
@@ -335,7 +379,7 @@ namespace BezvizSystem.BLL.Tests.TestServises
 
         private IRepository<XMLDispatch, int> CreateXMLDispatcherManager()
         {
-            List<XMLDispatch> list = new List<XMLDispatch> { dispatch1, dispatch2 };
+            List<XMLDispatch> list = new List<XMLDispatch> { dispatch1, dispatch2, dispatch4, dispatch5 };
             Mock<IRepository<XMLDispatch, int>> mock = new Mock<IRepository<XMLDispatch, int>>();
             mock.Setup(m => m.GetById(It.IsAny<int>())).Returns<int>(id => list.SingleOrDefault(v => v.Id == id));
             mock.Setup(m => m.GetByIdAsync(It.IsAny<int>())).Returns<int>(id =>

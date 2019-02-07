@@ -12,6 +12,10 @@ using System.Threading.Tasks;
 using BezvizSystem.DAL.Interfaces;
 using BezvizSystem.DAL.Entities;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
+using Ionic.Zip;
+using System.Xml.Linq;
 
 namespace BezvizSystem.BLL.Tests
 {
@@ -19,7 +23,7 @@ namespace BezvizSystem.BLL.Tests
     public class UnitTestXmlCreatorService
     {
         IUnitOfWork repo;
-        IXmlCreator _service;       
+        IXmlCreator _service;
         IXMLDispatcher _xmlDispatcher;
 
         public UnitTestXmlCreatorService()
@@ -27,18 +31,36 @@ namespace BezvizSystem.BLL.Tests
             CreateTestRepositories repoes = new CreateTestRepositories();
             repo = repoes.CreateIoWManager();
 
-            _service = new XmlCreatorPogran(repo);         
+            _service = new XmlCreatorPogran(repo);
             _xmlDispatcher = new XMLDispatcher(repo);
         }
 
         [TestMethod]
-        public async Task Test_Save_New_with_one_argument()
+        public void Test_ZipArchieve()
         {
+            XElement form = new XElement("EXPORT", "test");
+            var doc = new XDocument(form);
+
+        
+            doc.Save("file1.xml");
+
+
+            ZipFile zipFile = new ZipFile("test.zip");
+            zipFile.AddFile("file1.xml");
+            zipFile.Save();
+
+            File.Delete("file1.xml");
+            
+
+        }
+        [TestMethod]
+        public async Task Test_Save_New_with_one_argument()
+        {        
             var visitors1 = _xmlDispatcher.GetAdded().ToList();
             var result1 = await _service.SaveNew("test.xml");
             var visitors2 = _xmlDispatcher.GetAdded().ToList();
 
-            Assert.AreEqual(1, visitors1.Count());
+            Assert.AreEqual(3, visitors1.Count());
             Assert.AreEqual(0, visitors2.Count());
             Assert.IsTrue(result1.Succedeed);
         }
@@ -48,7 +70,7 @@ namespace BezvizSystem.BLL.Tests
         {
             Visitor visitor = new Visitor
             {
-                Id = 3,
+                Id = 10,
                 Name = "testName",
                 Surname = "testSurname",
                 BithDate = new DateTime(1965, 1, 1)
@@ -59,21 +81,21 @@ namespace BezvizSystem.BLL.Tests
                 ExtraSend = true,
                 DaysOfStay = 1,
                 DateArrival = new DateTime(2018, 9, 1),
-                Visitors = new List<Visitor> { visitor},
+                Visitors = new List<Visitor> { visitor },
                 UserInSystem = "Test1"
             };
 
             visitor.Group = group;
             repo.VisitorManager.Create(visitor);
             repo.GroupManager.Create(group);
-            repo.XMLDispatchManager.Create(new XMLDispatch {Id = 3, Operation = Operation.Add, Status = Status.New});
+            repo.XMLDispatchManager.Create(new XMLDispatch { Id = 10, Operation = Operation.Add, Status = Status.New });
 
             var visitors1 = _xmlDispatcher.GetAdded().ToList();
             var result1 = await _service.SaveExtra("test.xml");
             var visitors2 = _xmlDispatcher.GetAdded().ToList();
 
-            Assert.AreEqual(2, visitors1.Count());
-            Assert.AreEqual(1, visitors2.Count());
+            Assert.AreEqual(4, visitors1.Count());
+            Assert.AreEqual(3, visitors2.Count());
             Assert.IsTrue(result1.Succedeed);
         }
 
@@ -116,7 +138,7 @@ namespace BezvizSystem.BLL.Tests
         {
             Visitor visitor = new Visitor
             {
-                Id = 3,
+                Id = 10,
                 Name = "testName",
                 Surname = "testSurname",
                 BithDate = new DateTime(1965, 1, 1)
@@ -134,7 +156,7 @@ namespace BezvizSystem.BLL.Tests
             visitor.Group = group;
             repo.VisitorManager.Create(visitor);
             repo.GroupManager.Create(group);
-            repo.XMLDispatchManager.Create(new XMLDispatch { Id = 3, Operation = Operation.Edit, Status = Status.Send });
+            repo.XMLDispatchManager.Create(new XMLDispatch { Id = 10, Operation = Operation.Edit, Status = Status.Send });
 
             var visitors1 = _xmlDispatcher.GetUpdated().ToList();
             var result1 = await _service.SaveExtra("test.xml");
@@ -147,9 +169,11 @@ namespace BezvizSystem.BLL.Tests
 
         [TestMethod]
         public async Task Test_Unload_Removed_Item_with_one_argument()
-        {                     
-            repo.XMLDispatchManager.Create(new XMLDispatch { Id = 3, Operation = Operation.Remove, Status = Status.Send });
-            repo.XMLDispatchManager.Create(new XMLDispatch { Id = 4, Operation = Operation.Remove, Status = Status.Send });
+        {
+            File.Delete("test.zip");
+
+            repo.XMLDispatchManager.Create(new XMLDispatch { Id = 6, Operation = Operation.Remove, Status = Status.Send });
+            repo.XMLDispatchManager.Create(new XMLDispatch { Id = 7, Operation = Operation.Remove, Status = Status.Send });
 
             var visitors1 = _xmlDispatcher.GetRemoved().ToList();
             var result1 = await _service.SaveNew("test.xml");

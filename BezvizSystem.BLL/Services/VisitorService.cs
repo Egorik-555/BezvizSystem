@@ -27,12 +27,22 @@ namespace BezvizSystem.BLL.Services
             _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfile(_database))).CreateMapper();
         }
 
+        private void UpperCase(VisitorDTO visitor)
+        {
+            visitor.Surname = visitor.Surname.ToUpper();
+            visitor.Name = visitor.Name.ToUpper();
+            visitor.SerialAndNumber = visitor.SerialAndNumber.ToUpper();
+            visitor.Gender = visitor.Gender.ToUpper();
+            visitor.Nationality = visitor.Nationality.ToUpper();
+        }
+
         public async Task<OperationDetails> Create(VisitorDTO visitor)
         {
             try
-            {              
+            {
+                UpperCase(visitor);
                 var model = _mapper.Map<VisitorDTO, Visitor>(visitor);
-                await _xmlDispatcher.New(model);
+                await _xmlDispatcher.New(model);          
                 var newVisitor = _database.VisitorManager.Create(model);          
                 return new OperationDetails(true, "Турист создан", "");
             }
@@ -68,6 +78,7 @@ namespace BezvizSystem.BLL.Services
                 var model = await _database.VisitorManager.GetByIdAsync(visitor.Id);
                 if (model != null)
                 {
+                    UpperCase(visitor);
                     var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new FromDALToBLLProfileWithModelVisitor(_database, model))).CreateMapper();
                     var m = mapper.Map<VisitorDTO, Visitor>(visitor);
 

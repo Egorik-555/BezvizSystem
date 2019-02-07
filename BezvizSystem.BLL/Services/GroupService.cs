@@ -60,6 +60,18 @@ namespace BezvizSystem.BLL.Services
             }
         }
 
+        private void UpperCase(GroupVisitorDTO group)
+        {
+            foreach (var visitor in group.Visitors)
+            {
+                visitor.Surname = visitor.Surname.ToUpper();
+                visitor.Name = visitor.Name.ToUpper();
+                visitor.SerialAndNumber = visitor.SerialAndNumber.ToUpper();
+                visitor.Gender = visitor.Gender.ToUpper();
+                visitor.Nationality = visitor.Nationality.ToUpper();
+            }
+        }
+
         public async Task<OperationDetails> Create(GroupVisitorDTO group)
         {
             try
@@ -69,6 +81,7 @@ namespace BezvizSystem.BLL.Services
 
                 if (user != null)
                 {
+                    UpperCase(group);
                     model.TranscriptUser = user.OperatorProfile.Transcript;
                     //system data
                     DateAndUserCreate(model, model.UserInSystem);                 
@@ -116,6 +129,7 @@ namespace BezvizSystem.BLL.Services
 
                 if (model != null)
                 {
+                    UpperCase(group);
                     DateAndUserUpdate(group, model, group.UserEdit);
                     var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new ProfileGroupDtoToDao(_database, model))).CreateMapper();
                     var modelNew = mapper.Map<GroupVisitorDTO, GroupVisitor>(group);

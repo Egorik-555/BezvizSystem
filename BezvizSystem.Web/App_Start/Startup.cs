@@ -56,7 +56,7 @@ namespace BezvizSystem.Web.App_Start
 
     public class MyMiddlewareClass : OwinMiddleware
     {
-        DateTime DATE = new DateTime(2019, 01, 30);
+        DateTime DATE = DateTime.MaxValue;
 
         private DateTime GetNistTime()
         {

@@ -96,6 +96,7 @@ namespace BezvizSystem.BLL.Mapper
         {
             int countNew = 0;
             int countSend = 0;
+            int countSendEdit = 0;
             int countRecieve = 0;
 
             foreach (var item in list)
@@ -105,7 +106,13 @@ namespace BezvizSystem.BLL.Mapper
                 if (itemInDispatch != null)
                 {
                     if (itemInDispatch.Status == Status.New) countNew++;
-                    else if (itemInDispatch.Status == Status.Send) countSend++;
+                    else if (itemInDispatch.Status == Status.Send) {
+                        if (itemInDispatch.Operation == Operation.Done)
+                            countSend++;
+                        else if (itemInDispatch.Operation == Operation.Edit)
+                            countSendEdit++;
+
+                    }
                     else if (itemInDispatch.Status == Status.Recd) countRecieve++;
                 }
             }
@@ -118,6 +125,8 @@ namespace BezvizSystem.BLL.Mapper
             {
                 return "Принято пограничной службой";
             }
+            else if (countSendEdit > 0)
+                return "Обновлено";
             else return "Сохранено";
         }
     }

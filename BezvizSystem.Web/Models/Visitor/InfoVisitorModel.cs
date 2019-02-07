@@ -13,12 +13,12 @@ namespace BezvizSystem.Web.Models.Visitor
 
         [Required(ErrorMessage = "Укажите фамилию туриста")]
         [Display(Name = "Фамилия")]
-        [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Укажите фамилию только латинскими символами")]
+        [RegularExpression(@"^[A-Za-z0-9\-\s]+$", ErrorMessage = "Укажите фамилию только латинскими символами")]
         public string Surname { get; set; }
 
         [Required(ErrorMessage = "Укажите имя туриста")]
         [Display(Name = "Имя")]
-        [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Укажите имя только латинскими символами")]
+        [RegularExpression(@"^[A-Za-z0-9\-\s]+$", ErrorMessage = "Укажите имя только латинскими символами")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Укажите серию и номер паспорта туриста")]

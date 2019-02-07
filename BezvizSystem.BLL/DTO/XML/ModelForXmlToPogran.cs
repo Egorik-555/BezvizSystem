@@ -9,6 +9,7 @@ namespace BezvizSystem.BLL.DTO.XML
     public class ModelForXmlToPogran
     {
         public int Id { get; set; }
+        public int IdGroup { get; set; }
 
         public int Organization { get; set; }
 

@@ -48,41 +48,7 @@
     <script src="~/Scripts/MyScripts/pikaday.js"></script>
     <script src="~/Scripts/MyScripts/combobox.js"></script>
 
-    @*<script>
-        var xml = document.getElementById('loadXml');
-        var extraXml = document.getElementById('extraLoadXml');
-        xml.onclick = function () {
-
-            $.ajax({
-                url: '@Url.Action("GetXMLFileName")',
-                success: function (data) {
-                    xml.value = "Получение анкет";
-                    if (!data) alert("Нет анкет для выгрузки.")
-                    else location.href = "/Anketa/GetAnketas?fileName=" + data;
-                },
-                error: function () {
-                    alert("Возникла ошибка при выгрузке xml.")
-                }
-            });
-        }
-
-        extraXml.onclick = function () {
-
-            $.ajax({
-                url: '@Url.Action("GetExtraXMLFileName")',
-                success: function (data) {
-                    extraXml.value = "Экстренное получение";
-                    if (!data) alert("Нет анкет для выгрузки.")
-                    else location.href = "/Anketa/GetAnketas?fileName=" + data;
-                },
-                error: function () {
-                    alert("Возникла ошибка при выгрузке xml.")
-                }
-            });
-        }
-    </script>*@
-
-
+  
     <script src="~/Scripts/MyScripts/ShowPanels.js"></script>
     <script>
         showPanel('filterBtn', 'panelReport');
