@@ -47,7 +47,7 @@ namespace BezvizSystem.BLL.Services.XML
             IEnumerable<ModelForXmlToPogran> visitors;
             try
             {
-                visitors = _database.VisitorManager.GetAll().Join(_database.XMLDispatchManager.GetAll(),
+                visitors = _database.VisitorManager.GetAll().ToList().Join(_database.XMLDispatchManager.GetAll(),
                    v => v.Id,
                    x => x.Id,
                    (v, x) => new ModelForXmlToPogran
@@ -77,9 +77,9 @@ namespace BezvizSystem.BLL.Services.XML
                        DayArrival = v.Group.DateArrival.HasValue ? GetNumberWithZero(v.Group.DateArrival.Value.Day) : null,
                        MonthArrival = v.Group.DateArrival.HasValue ? GetNumberWithZero(v.Group.DateArrival.Value.Month) : null,
                        YearArrival = v.Group.DateArrival.HasValue ? v.Group.DateArrival.Value.Year.ToString() : null
-                   }).Where(x => x.TypeOperation == 1 || x.TypeOperation == 2 || x.TypeOperation == 3);
+                   }).Where(x => x.TypeOperation == 1 || x.TypeOperation == 2 || x.TypeOperation == 3).ToList();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 visitors = new List<ModelForXmlToPogran>();
             }
@@ -193,12 +193,14 @@ namespace BezvizSystem.BLL.Services.XML
 
         public int Count()
         {
-            return GetItems().Count(x => x.TypeOperation == 1 || x.TypeOperation == 2 || x.TypeOperation == 3);
+
+            return _database.XMLDispatchManager.GetAll().Count(x => x.Operation == Operation.Add || x.Operation == Operation.Edit || x.Operation == Operation.Remove);
+                //GetItems().Count();
         }
 
         public int ExtraCount()
         {
-            return GetItems().Count(x => (x.TypeOperation == 1 || x.TypeOperation == 2 || x.TypeOperation == 3) && x.ExtraSend);
+            return 0;//GetItems().Count(x => x.ExtraSend);
         }
     }
 }
