@@ -45,7 +45,7 @@ function f(whereInsert) {
     let fragmentName = createFragmentOfInput(count, 'Name', 'Имя', 'Укажите имя туриста', "text-transform: uppercase");
     let fragmentPassport = createFragmentOfInput(count, 'SerialAndNumber', 'Серия и номер паспорта', 'Укажите серию и номер паспорта туриста', "text-transform: uppercase");
     let fragmentNationality = createFragmentOfInput(count, 'Nationality', 'Гражданство', 'Укажите гражданство туриста', "text-transform: uppercase");
-//let fragmnetSpan = createFragmentOfSpan();
+    //let fragmnetSpan = createFragmentOfSpan();
 
 
     let fragment = document.createDocumentFragment();
@@ -58,7 +58,6 @@ function f(whereInsert) {
     tbody.insertBefore(fragment, lastTr.nextSibling);
 
     
-
     $(function () {
         //задание заполнителя с помощью параметра placeholder
         $(".datepicker").mask("99.99.9999", { placeholder: "дд.мм.гггг" });
@@ -69,6 +68,13 @@ function f(whereInsert) {
         monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
         dayNamesMin: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'], dateFormat: 'dd.mm.yy'
     });
+
+    $("input.form-control").addClass('asci_only');
+    $('input.asci_only').keyup(limitInput);
+
+    function limitInput() {
+        this.value = this.value.replace(/[^a-zA-Z0-9 -]/ig, '');
+    }
 }
 
 function createFragmentOfSpan() {
@@ -84,13 +90,13 @@ function createFragmentOfInput(id, field, caption, msg, select, style){
         input = createByClone(id, field, 'form-control');
         input.value = '';
     }
-    else input = createInput(id, field, 'text-box single-line', 'true', msg, style);
+    else input = createInput(id, field, 'text-box single-line asci_only', 'true', msg, style);
 
     let td = document.createElement('td');
     td.setAttribute('colspan', '2');
 
     if (field === 'Surname'){
-        let idInput = createInput(id, 'Id', '', 'true', 'Требуется поле Id.', style);
+        let idInput = createInput(id, 'Id', 'text-box single-line asci_only', 'true', 'Требуется поле Id.', style);
         idInput.setAttribute('type', 'hidden');
         idInput.value = '0';
         td.appendChild(idInput);
